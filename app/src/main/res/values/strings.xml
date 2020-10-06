@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BangumiInstrumentalityProject</string>
+    <string name="home">首页</string>
+    <string name="bangumi">番剧</string>
+    <string name="dynamic">动态</string>
+    <string name="profile">账户</string>
 </resources>

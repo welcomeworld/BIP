@@ -5,14 +5,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/main_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/color_E4EAF8"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/main_bottom"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_bottom"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent">
+        <View
+            android:id="@+id/main_bottom_bg"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/color_white"
+            />
+        <TextView
+            android:id="@+id/main_bottom_home"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/home"
+            android:background="?selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="@id/main_bottom_bg"
+            app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/main_bottom_bangumi"/>
+        <TextView
+            android:id="@+id/main_bottom_bangumi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/bangumi"
+            android:textAlignment="center"
+            android:background="?selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="@id/main_bottom_bg"
+            app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
+            app:layout_constraintStart_toEndOf="@id/main_bottom_home"
+            app:layout_constraintEnd_toStartOf="@id/main_bottom_dynamic"/>
+        <TextView
+            android:id="@+id/main_bottom_dynamic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/dynamic"
+            android:background="?selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="@id/main_bottom_bg"
+            app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
+            app:layout_constraintStart_toEndOf="@id/main_bottom_bangumi"
+            app:layout_constraintEnd_toStartOf="@id/main_bottom_profile"/>
+        <TextView
+            android:id="@+id/main_bottom_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/profile"
+            android:textSize="14sp"
+            android:background="?selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="@id/main_bottom_bg"
+            app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
+            app:layout_constraintStart_toEndOf="@id/main_bottom_dynamic"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
