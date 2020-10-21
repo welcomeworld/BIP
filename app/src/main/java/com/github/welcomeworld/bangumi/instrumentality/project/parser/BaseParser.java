@@ -12,5 +12,9 @@ public abstract class BaseParser {
 
     public abstract List<VideoListBean> getMoreRecommend();
 
+    public abstract VideoListBean parseVideoListRealInfo(VideoListBean videoListBean);
+
+    public abstract boolean isMatchParser(String key);
+
 
 }

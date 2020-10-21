@@ -40,4 +40,12 @@ public class ParserManager {
     public void addParser(BaseParser parser){
         mParsers.put(parser.getTag(),parser);
     }
+
+    public void parseVideoListRealInfo(VideoListBean videoListBean){
+        for(BaseParser parser:mParsers.values()){
+            if(parser.isMatchParser(videoListBean.getSourceName())){
+                parser.parseVideoListRealInfo(videoListBean);
+            }
+        }
+    }
 }

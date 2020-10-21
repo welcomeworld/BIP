@@ -1,4 +1,4 @@
-package com.github.welcomeworld.bangumi.instrumentality.project.parser.net.retrofit;
+package com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit;
 
 
 import retrofit2.Call;

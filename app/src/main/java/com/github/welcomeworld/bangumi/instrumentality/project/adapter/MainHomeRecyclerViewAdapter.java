@@ -1,7 +1,9 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.VideoPlayActivity;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 
 import java.util.ArrayList;
@@ -28,6 +33,14 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     List<VideoListBean> data = new ArrayList<>();
     Context context;
+
+    private static int ITEM_TYPE = 0;
+    private static int FOOTER_TYPE = 1;
+    Activity activity;
+
+    public MainHomeRecyclerViewAdapter(Activity activity){
+        this.activity = activity;
+    }
 
     public void replaceAll(List<VideoListBean> data){
         this.data.clear();
@@ -48,13 +61,28 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType == FOOTER_TYPE){
+            View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_footer,parent,false);
+            return new FooterViewHolder(view);
+        }
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_item,parent,false);
         context=parent.getContext();
         return new MyInnerViewHolder(view);
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if(position == getItemCount()-1){
+            return FOOTER_TYPE;
+        }
+        return ITEM_TYPE;
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+        if(position == data.size()){
+            return;
+        }
         MyInnerViewHolder holder = (MyInnerViewHolder) viewHolder;
         VideoListBean currentData=data.get(position);
         holder.titleView.setText(currentData.getTitle());
@@ -66,15 +94,20 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent playIntent=new Intent("com.github.welcomeworld.simplebili.action.VIDEODETAIL");
-                context.startActivity(playIntent);
+                Bundle bundle = new Bundle();
+                ArrayList<VideoListBean> videoListBeans = new ArrayList<>();
+                videoListBeans.add(currentData);
+                bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN,videoListBeans);
+                IntentUtil.intentToVideoPlay(activity,bundle);
+//                Intent playIntent=new Intent("com.github.welcomeworld.simplebili.action.VIDEODETAIL");
+//                context.startActivity(playIntent);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return data.size()+1;
     }
 
     public static class MyInnerViewHolder extends RecyclerView.ViewHolder{
@@ -96,5 +129,24 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
+    }
+
+    public static class FooterViewHolder extends RecyclerView.ViewHolder{
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this,itemView);
+        }
+    }
+
+
+    private GridLayoutManager.SpanSizeLookup spanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
+        @Override
+        public int getSpanSize(int position) {
+            return position == data.size()?2:1;
+        }
+    };
+
+    public GridLayoutManager.SpanSizeLookup getSizeLookup(){
+        return spanSizeLookup;
     }
 }

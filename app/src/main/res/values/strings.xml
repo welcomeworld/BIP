@@ -4,4 +4,5 @@
     <string name="bangumi">番剧</string>
     <string name="dynamic">动态</string>
     <string name="profile">账户</string>
+    <string name="error_toast">我指腚是不行了</string>
 </resources>

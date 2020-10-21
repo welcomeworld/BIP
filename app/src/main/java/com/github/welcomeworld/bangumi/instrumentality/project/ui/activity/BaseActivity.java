@@ -4,11 +4,14 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.lang.reflect.Method;
 
 import butterknife.ButterKnife;
 
@@ -32,6 +35,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(isNotch()){
+            setXiaoMiInNotouch();
+        }
         setContentView(getLayoutId());
         initViews(savedInstanceState);
     }
@@ -75,5 +81,25 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public boolean isResume() {
         return isResume;
+    }
+
+    private void setXiaoMiInNotouch(){
+        int flag = 0x00000100 | 0x00000200 | 0x00000400;
+        try {
+            Method method = Window.class.getMethod("addExtraFlags",
+                    int.class);
+            method.invoke(getWindow(), flag);
+        } catch (Exception ignore) {
+        }
+    }
+
+    private static boolean isNotch() {
+        try {
+            Method getInt = Class.forName("android.os.SystemProperties").getMethod("getInt", String.class, int.class);
+            int notch = (int) getInt.invoke(null, "ro.miui.notch", 0);
+            return notch == 1;
+        } catch (Throwable ignore) {
+        }
+        return false;
     }
 }

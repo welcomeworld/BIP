@@ -1,4 +1,4 @@
-package com.github.welcomeworld.bangumi.instrumentality.project.parser;
+package com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -15,7 +15,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SortAndSignInterceptor implements Interceptor {
+public class BiliSortAndSignInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request=chain.request();

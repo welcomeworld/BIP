@@ -1,4 +1,4 @@
-package com.github.welcomeworld.bangumi.instrumentality.project.parser;
+package com.github.welcomeworld.bangumi.instrumentality.project.parser.net.okhttp.interceptor;
 
 import java.io.IOException;
 import java.net.URLEncoder;
