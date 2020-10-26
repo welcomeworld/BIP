@@ -7,6 +7,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constants;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.BiliSortAndSignInterceptor;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.net.okhttp.interceptor.DynamicHeaderInterceptor;
@@ -91,6 +92,7 @@ public class BiliParser extends BaseParser {
                     VideoBean videoBean = new VideoBean();
                     videoBean.setTitle(moreData.get(i).getTitle());
                     videoBean.setCover(videoListBean.getCover());
+                    videoBean.setVideoKey(String.valueOf(moreData.get(i).getCid()));
                     videoBean.setUrl(moreData.get(i).getUri());
                     videoBeans.add(videoBean);
                     videoListBean.setVideoBeanList(videoBeans);
@@ -150,6 +152,7 @@ public class BiliParser extends BaseParser {
                     videoListBean.setCover(moreData.get(i).getCover()+"@320w_200h_1e_1c.webp");
                     ArrayList<VideoBean> videoBeans = new ArrayList<>();
                     VideoBean videoBean = new VideoBean();
+                    videoBean.setVideoKey(String.valueOf(moreData.get(i).getCid()));
                     videoBean.setTitle(moreData.get(i).getTitle());
                     videoBean.setCover(videoListBean.getCover());
                     videoBean.setUrl(moreData.get(i).getUri());
@@ -166,8 +169,10 @@ public class BiliParser extends BaseParser {
 
     @Override
     public VideoListBean parseVideoListRealInfo(VideoListBean videoListBean) {
-       Uri currentUri = Uri.parse(videoListBean.getCurrentVideoBean().getUrl());
+        VideoBean currentVideoBean = videoListBean.getCurrentVideoBean();
+       Uri currentUri = Uri.parse(currentVideoBean.getUrl());
         String currentAid = currentUri.getPath().substring(1);
+        int currentCid = Integer.parseInt(currentVideoBean.getVideoKey());
         currentAid = currentAid.substring(0,currentAid.contains("/")?currentAid.indexOf("/"):currentAid.length());
         Map<String,String> parameters=new HashMap<>();
         parameters.put("ad_extra","6BCCA2213B3B094292DFF9454EB02128A5CD624F226D40F0B86CA8263CE1D50C927F2F8DF2FD134C361A06FAA537402E66E53155D1C1F218BE42D2AFE4A6A701C496E5196401D81A1E390498A1CA24C20C25C97600C552962682D90C9D9DF8B9EDAD866490BE972EA37F92AA7A1040F2BEA5122D039B942437307F298336AAF27EFB5AF87961F6F852401DD8BBD0BFB92309D3B60C12E307ECD02D9BCBB19725E2964F77CDE07BFAC45A34884CE0167EEDBB0EBC8926A3CC9CB9B27536BF9C0DF87AB6DABAE86D1E6D4E714BC140A1D500E27446265DC85C226B381E10AF2299D961E06FA60A84EE34DFCB65E1253339112FD0D5ECE9C9C58C084D028DD7E26A70DC806C36C46E9D5C08169A2571B8BAC2BC0AE91AE8D36F3CBDCD2768950CD1CE9C3A3F53B5FE145A20B020435E79CA");
@@ -201,9 +206,25 @@ public class BiliParser extends BaseParser {
             }
             for(int i=0;i<response.body().getData().getPages().size();i++){
                 int cid = response.body().getData().getPages().get(i).getCid();
-                VideoDataSource videoDataSource=new VideoDataSource();
-                videoDataSource.setDanmakuSource(response.body().getData().getPages().get(i).getDmlink());
-                videoDataSource.setTitle(response.body().getData().getPages().get(i).getPart());
+                if(cid !=currentCid){
+                    VideoBean videoBean = new VideoBean();
+                    boolean haveData = false;
+                    for(VideoBean cacheBean:videoListBean.getVideoBeanList()){
+                        if(cacheBean.getVideoKey().equals(String.valueOf(cid))){
+                            videoBean = cacheBean;
+                            haveData = true;
+                            break;
+                        }
+                    }
+                    videoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
+                    videoBean.setTitle(response.body().getData().getPages().get(i).getPart());
+                    if(!haveData){
+                        videoListBean.getVideoBeanList().add(videoBean);
+                    }
+                    continue;
+                }
+                currentVideoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
+                currentVideoBean.setTitle(response.body().getData().getPages().get(i).getPart());
                 parameters.clear();
                 parameters.put("device","android");
                 parameters.put("aid",currentAid);
@@ -212,7 +233,7 @@ public class BiliParser extends BaseParser {
                 parameters.put("fnver","0");
                 parameters.put("otype","json");
                 parameters.put("force_host","0");
-                parameters.put("cid",response.body().getData().getPages().get(i).getCid()+"");
+                parameters.put("cid",currentCid+"");
                 parameters.put("npcybs","1");
                 parameters.put("ts",""+System.currentTimeMillis());
                 parameters.put("qn","32");
@@ -228,62 +249,41 @@ public class BiliParser extends BaseParser {
                         .build();
                         videoDetailNetAPI = retrofit.create(VideoDetailNetAPI.class);
                 Response<VideoUrlBean> urlResponse = videoDetailNetAPI.getVideoUrl().execute();
-
-                videoDetailNetAPI.getVideoUrl().enqueue(new Callback<VideoUrlBean>() {
-                    @Override
-                    public void onResponse(Call<VideoUrlBean> call, Response<VideoUrlBean> response) {
-                        String urlString;
-                        if(response.body().getData().getDash()!=null){
-                            if(cid == currentCid){
-                                currentUrl = response.body().getData().getDash().getVideo().get(0).getBase_url();
-                            }
-                            videoDataSource.setDash(true);
-                            ArrayList<String> videoSources=new ArrayList<>();
-                            ArrayList<String> descriptions=new ArrayList<>();
-                            ArrayList<String> audioSources=new ArrayList<>();
-                            for(int j=0;j<response.body().getData().getDash().getVideo().size();j++){
-                                videoSources.add(response.body().getData().getDash().getVideo().get(j).getBase_url());
-                                String description;
-                                switch (response.body().getData().getDash().getVideo().get(j).getId()){
-                                    case 16:
-                                        description="360P";
-                                        break;
-                                    case 32:
-                                        description="480P";
-                                        break;
-                                    case 64:
-                                        description="720P";
-                                        break;
-                                    default:
-                                        description="1080P";
-                                        break;
-                                }
-                                descriptions.add(description);
-                                audioSources.add(response.body().getData().getDash().getAudio().get(0).getBase_url());
-                            }
-                            videoDataSource.setVideoSources(videoSources);
-                            videoDataSource.setDescriptions(descriptions);
-                            videoDataSource.setAudioSources(audioSources);
-                        }else {
-                            if(cid == currentCid){
-                                currentUrl = response.body().getData().getDurl().get(0).getUrl();
-                            }
-                            videoDataSource.setDash(false);
-                            ArrayList<String> videoSources=new ArrayList<>();
-                            ArrayList<String> descriptions=new ArrayList<>();
-                            videoSources.add(response.body().getData().getDurl().get(0).getUrl());
-                            descriptions.add(response.body().getData().getFormat());
-                            videoDataSource.setVideoSources(videoSources);
-                            videoDataSource.setDescriptions(descriptions);
+                String urlString;
+                if(urlResponse.body() ==null||urlResponse.body().getCode() !=0){
+                    return videoListBean;
+                }
+                if(urlResponse.body().getData().getDash()!=null){
+                    currentVideoBean.setDash(true);
+                    for(int j=0;j<urlResponse.body().getData().getDash().getVideo().size();j++){
+                        VideoQualityBean qualityBean = new VideoQualityBean();
+                        qualityBean.setRealVideoUrl(urlResponse.body().getData().getDash().getVideo().get(j).getBase_url());
+                        String description;
+                        switch (urlResponse.body().getData().getDash().getVideo().get(j).getId()){
+                            case 16:
+                                description="360P";
+                                break;
+                            case 32:
+                                description="480P";
+                                break;
+                            case 64:
+                                description="720P";
+                                break;
+                            default:
+                                description="1080P";
+                                break;
                         }
-                        ijkMediaView.addVideoDataSource(videoDataSource);
+                        qualityBean.setQuality(description);
+                        qualityBean.setRealAudioUrl(urlResponse.body().getData().getDash().getAudio().get(0).getBase_url());
+                        currentVideoBean.getQualityBeans().add(qualityBean);
                     }
-
-                    @Override
-                    public void onFailure(Call<VideoUrlBean> call, Throwable t) {
-
-                    }
-                });
+                }else {
+                    currentVideoBean.setDash(false);
+                    VideoQualityBean qualityBean = new VideoQualityBean();
+                    qualityBean.setRealVideoUrl(urlResponse.body().getData().getDurl().get(0).getUrl());
+                    qualityBean.setQuality(urlResponse.body().getData().getFormat());
+                    currentVideoBean.getQualityBeans().add(qualityBean);
+                }
             }
         } catch (Exception e) {
             Log.e("BiliNextError","error:"+e.getMessage());

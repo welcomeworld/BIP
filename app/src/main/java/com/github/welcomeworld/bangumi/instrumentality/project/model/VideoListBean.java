@@ -11,7 +11,7 @@ public class VideoListBean implements Parcelable {
     private String cover;
     private int selectIndex;
     private String sourceName;
-    private ArrayList<VideoBean> videoBeanList;
+    private ArrayList<VideoBean> videoBeanList = new ArrayList<>();;
     private String sourceExternalData;
 
     public VideoListBean(){
@@ -88,6 +88,9 @@ public class VideoListBean implements Parcelable {
     }
 
     public ArrayList<VideoBean> getVideoBeanList() {
+        if(videoBeanList == null){
+            videoBeanList = new ArrayList<>();
+        }
         return videoBeanList;
     }
 

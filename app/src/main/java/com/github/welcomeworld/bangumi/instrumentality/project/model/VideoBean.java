@@ -3,29 +3,34 @@ package com.github.welcomeworld.bangumi.instrumentality.project.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 public class VideoBean implements Parcelable {
     private String title;
     private String url;
     private String cover;
-    private String realVideoUrl;
-    private String realAudioUrl;
     private boolean dash;
     private String videoKey;
     private String sourceExternalData;
+    private String danmakuUrl;
+    private ArrayList<VideoQualityBean> qualityBeans = new ArrayList<>();
+    private int currentQualityIndex;
 
     public VideoBean(){
 
     }
 
+
     protected VideoBean(Parcel in) {
         title = in.readString();
         url = in.readString();
         cover = in.readString();
-        realVideoUrl = in.readString();
-        realAudioUrl = in.readString();
         dash = in.readByte() != 0;
         videoKey = in.readString();
         sourceExternalData = in.readString();
+        danmakuUrl = in.readString();
+        qualityBeans = in.createTypedArrayList(VideoQualityBean.CREATOR);
+        currentQualityIndex = in.readInt();
     }
 
     public static final Creator<VideoBean> CREATOR = new Creator<VideoBean>() {
@@ -64,22 +69,6 @@ public class VideoBean implements Parcelable {
         this.cover = cover;
     }
 
-    public String getRealVideoUrl() {
-        return realVideoUrl;
-    }
-
-    public void setRealVideoUrl(String realVideoUrl) {
-        this.realVideoUrl = realVideoUrl;
-    }
-
-    public String getRealAudioUrl() {
-        return realAudioUrl;
-    }
-
-    public void setRealAudioUrl(String realAudioUrl) {
-        this.realAudioUrl = realAudioUrl;
-    }
-
     public boolean isDash() {
         return dash;
     }
@@ -98,11 +87,12 @@ public class VideoBean implements Parcelable {
         parcel.writeString(title);
         parcel.writeString(url);
         parcel.writeString(cover);
-        parcel.writeString(realVideoUrl);
-        parcel.writeString(realAudioUrl);
         parcel.writeByte((byte) (dash ? 1 : 0));
         parcel.writeString(videoKey);
         parcel.writeString(sourceExternalData);
+        parcel.writeString(danmakuUrl);
+        parcel.writeTypedList(qualityBeans);
+        parcel.writeInt(currentQualityIndex);
     }
 
     public String getVideoKey() {
@@ -119,5 +109,36 @@ public class VideoBean implements Parcelable {
 
     public void setSourceExternalData(String sourceExternalData) {
         this.sourceExternalData = sourceExternalData;
+    }
+
+    public String getDanmakuUrl() {
+        return danmakuUrl;
+    }
+
+    public void setDanmakuUrl(String danmakuUrl) {
+        this.danmakuUrl = danmakuUrl;
+    }
+
+    public ArrayList<VideoQualityBean> getQualityBeans() {
+        return qualityBeans;
+    }
+
+    public void setQualityBeans(ArrayList<VideoQualityBean> qualityBeans) {
+        this.qualityBeans = qualityBeans;
+    }
+
+    public int getCurrentQualityIndex() {
+        return currentQualityIndex;
+    }
+
+    public void setCurrentQualityIndex(int currentQualityIndex) {
+        this.currentQualityIndex = currentQualityIndex;
+    }
+
+    public VideoQualityBean getCurrentQualityBean(){
+        if(qualityBeans == null||qualityBeans.size()<=currentQualityIndex){
+            return null;
+        }
+        return qualityBeans.get(currentQualityIndex);
     }
 }
