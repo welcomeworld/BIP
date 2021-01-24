@@ -65,7 +65,7 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_footer,parent,false);
             return new FooterViewHolder(view);
         }
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_item,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_search_item,parent,false);
         context=parent.getContext();
         return new MyInnerViewHolder(view);
     }

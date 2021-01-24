@@ -10,6 +10,6 @@ import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 
 public interface SearchNetAPI {
-    @GET("x/v2/search?duration=0&channel=bili&from_source=app_search&highlight=1&is_org_query=0&ps=20&recommend=1")
+    @GET("x/v2/search?duration=0&channel=bili&from_source=app_search&highlight=0&is_org_query=0&ps=20&recommend=1")
     public Call<SearchResultBean> getSearchResult(@QueryMap Map<String,String> parameters);
 }

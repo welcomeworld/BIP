@@ -1,22 +1,16 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Space;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
-import com.github.welcomeworld.bangumi.instrumentality.project.adapter.MainHomeRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.SearchResultRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
@@ -57,9 +51,7 @@ public class SearchActivity extends BaseActivity {
         });
         adapter = new SearchResultRecyclerViewAdapter(this);
         resultRecyclerView.setAdapter(adapter);
-        GridLayoutManager gridLayoutManager=new GridLayoutManager(resultRecyclerView.getContext(),2,GridLayoutManager.VERTICAL,false);
-        gridLayoutManager.setSpanSizeLookup(adapter.getSizeLookup());
-        resultRecyclerView.setLayoutManager(gridLayoutManager);
+        resultRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         swiperefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

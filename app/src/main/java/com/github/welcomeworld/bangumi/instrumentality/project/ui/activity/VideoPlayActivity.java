@@ -1,6 +1,5 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -8,26 +7,17 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.RequestBuilder;
-import com.github.welcomeworld.bangumi.instrumentality.project.BIPApp;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.player.BIPPlayer;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliOkHttpClientManager;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BiliRetrofitManager;
+import com.github.welcomeworld.bangumi.instrumentality.project.player.IjkBIPPlayerImpl;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class VideoPlayActivity extends BaseActivity {
@@ -43,7 +33,7 @@ public class VideoPlayActivity extends BaseActivity {
     private int selectSourceIndex = 0;
     VideoListBean currentVideoListBean;
     VideoBean currentVideoBean;
-    BIPPlayer bipPlayer = new BIPPlayer();
+    BIPPlayer bipPlayer = new IjkBIPPlayerImpl();
     SurfaceHolder videoSurfaceHolder;
 
     @Override
@@ -79,16 +69,16 @@ public class VideoPlayActivity extends BaseActivity {
                         @Override
                         public void run() {
                             bipPlayer.setVideoQualityBean(currentVideoBean.getCurrentQualityBean());
-                            bipPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            bipPlayer.setOnPreparedListener(new BIPPlayer.OnPreparedListener() {
                                 @Override
-                                public void onPrepared(MediaPlayer mediaPlayer) {
+                                public void onPrepared(BIPPlayer mediaPlayer) {
                                     LogUtil.e("BIPPlayer","prepared");
-                                    mediaPlayer.start();
+//                                    mediaPlayer.start();
                                 }
                             });
-                            bipPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                            bipPlayer.setOnErrorListener(new BIPPlayer.OnErrorListener() {
                                 @Override
-                                public boolean onError(MediaPlayer mp, int what, int extra) {
+                                public boolean onError(BIPPlayer mp, int what, int extra) {
                                     LogUtil.e("BIPPlayer","error:"+what+"extra:"+extra);
 
                                     return false;
@@ -97,30 +87,17 @@ public class VideoPlayActivity extends BaseActivity {
                             bipPlayer.prepareAsync();
                         }
                     });
-//                    Request request = new Request.Builder().url(currentVideoBean.getCurrentQualityBean().getRealVideoUrl()).addHeader("user_agent","Bilibili Freedoooooom/MarkII").build();
-//                    try {
-//                        FileOutputStream fileOutputStream = new FileOutputStream(new File(BIPApp.getInstance().getExternalFilesDir(null),currentVideoListBean.getTitle()));
-//                        fileOutputStream.write(BiliOkHttpClientManager.getInstance().getOkHttpClient().newCall(request).execute().body().bytes());
-//                        fileOutputStream.flush();
-//                        fileOutputStream.close();
-//
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
                 }
             }).start();
         }else {
             bipPlayer.setVideoQualityBean(currentVideoBean.getCurrentQualityBean());
-            bipPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    LogUtil.e("BIPPlayer","prepared");
-                    mediaPlayer.start();
-                }
+            bipPlayer.setOnPreparedListener(mediaPlayer -> {
+                LogUtil.e("BIPPlayer","prepared");
+//                mediaPlayer.start();
             });
-            bipPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            bipPlayer.setOnErrorListener(new BIPPlayer.OnErrorListener() {
                 @Override
-                public boolean onError(MediaPlayer mp, int what, int extra) {
+                public boolean onError(BIPPlayer mp, int what, int extra) {
                     LogUtil.e("BIPPlayer","error:"+what+"extra:"+extra);
                     return false;
                 }

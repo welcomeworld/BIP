@@ -14,7 +14,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.BIPApp;
 import java.lang.reflect.Field;
 
 
-public class ToastUtils {
+public class ToastUtil {
 
     public static void showToast(CharSequence message) {
         if(Looper.getMainLooper() != Looper.myLooper()){
