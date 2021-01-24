@@ -6,9 +6,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.MainBangumiFragment;
-import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.MainDynamicFragment;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.MainCollectionFragment;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.MainHomeFragment;
-import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.MainProfileFragment;
 
 public class MainViewPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -23,9 +22,7 @@ public class MainViewPagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 return new MainBangumiFragment();
             case 2:
-                return new MainDynamicFragment();
-            case 3:
-                return new MainProfileFragment();
+                return new MainCollectionFragment();
             default:
                 return new MainHomeFragment();
         }
@@ -33,6 +30,6 @@ public class MainViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 }

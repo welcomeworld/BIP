@@ -14,6 +14,8 @@ public abstract class BaseParser {
 
     public abstract VideoListBean parseVideoListRealInfo(VideoListBean videoListBean);
 
+    public  abstract List<VideoListBean> search(String key,String pn);
+
     public abstract boolean isMatchParser(String key);
 
 

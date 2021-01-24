@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -81,6 +82,12 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if(position == data.size()){
+            FooterViewHolder footerViewHolder = (FooterViewHolder) viewHolder;
+            if(data.size()==0){
+                footerViewHolder.itemView.setVisibility(View.GONE);
+            }else {
+                footerViewHolder.itemView.setVisibility(View.VISIBLE);
+            }
             return;
         }
         MyInnerViewHolder holder = (MyInnerViewHolder) viewHolder;
@@ -132,6 +139,9 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public static class FooterViewHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.footer_progress)
+        ProgressBar progressBar;
+
         public FooterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

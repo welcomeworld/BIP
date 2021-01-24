@@ -5,12 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.MainActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_top"
+        android:background="@color/color_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+        <Space
+            android:id="@+id/top_space"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/main_search"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:gravity="center_vertical"
+            android:text="@string/search_hint"
+            android:paddingStart="12dp"
+            android:textSize="14sp"
+            android:paddingEnd="8dp"
+            android:background="@drawable/ic_home_search"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintTop_toBottomOf="@id/top_space"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/main_view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/color_E4EAF8"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_top"
         app:layout_constraintBottom_toTopOf="@id/main_bottom"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_bottom"
@@ -46,29 +73,17 @@
             app:layout_constraintTop_toTopOf="@id/main_bottom_bg"
             app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
             app:layout_constraintStart_toEndOf="@id/main_bottom_home"
-            app:layout_constraintEnd_toStartOf="@id/main_bottom_dynamic"/>
+            app:layout_constraintEnd_toStartOf="@id/main_bottom_collection"/>
         <TextView
-            android:id="@+id/main_bottom_dynamic"
+            android:id="@+id/main_bottom_collection"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/dynamic"
+            android:text="@string/collection"
             android:background="?selectableItemBackgroundBorderless"
             app:layout_constraintTop_toTopOf="@id/main_bottom_bg"
             app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
             app:layout_constraintStart_toEndOf="@id/main_bottom_bangumi"
-            app:layout_constraintEnd_toStartOf="@id/main_bottom_profile"/>
-        <TextView
-            android:id="@+id/main_bottom_profile"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/profile"
-            android:textSize="14sp"
-            android:background="?selectableItemBackgroundBorderless"
-            app:layout_constraintTop_toTopOf="@id/main_bottom_bg"
-            app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
-            app:layout_constraintStart_toEndOf="@id/main_bottom_dynamic"
             app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

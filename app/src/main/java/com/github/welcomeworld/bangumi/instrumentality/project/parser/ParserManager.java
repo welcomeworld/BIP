@@ -37,6 +37,14 @@ public class ParserManager {
         return result;
     }
 
+    public List<VideoListBean> search(String searchKey,String pn){
+        List<VideoListBean> result = new ArrayList<>();
+        for(BaseParser parser:mParsers.values()){
+            result.addAll(parser.search(searchKey,pn));
+        }
+        return result;
+    }
+
     public void addParser(BaseParser parser){
         mParsers.put(parser.getTag(),parser);
     }
