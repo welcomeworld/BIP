@@ -61,14 +61,23 @@ public class BiliParser extends BaseParser {
                     moreData.remove(i);
                     i--;
                 } else {
+                    LogUtil.e("DataLog", "RecommendData:" + moreData.get(i).toString());
                     VideoListBean videoListBean = new VideoListBean();
                     videoListBean.setSourceName(Constants.Source.BILI);
                     videoListBean.setTitle(moreData.get(i).getTitle());
+                    String tagName = moreData.get(i).getTname();
+                    IndexRecommendDataBean.TagBean tagBean = moreData.get(i).getTag();
+                    if (tagBean!=null) {
+                        tagName += "·"+tagBean.getTag_name();
+                    }
+                    videoListBean.setTag(tagName);
+                    videoListBean.setCoverPortrait(false);
                     videoListBean.setCover(moreData.get(i).getCover() + "@320w_200h_1e_1c.webp");
                     ArrayList<VideoBean> videoBeans = new ArrayList<>();
                     VideoBean videoBean = new VideoBean();
                     videoBean.setTitle(moreData.get(i).getTitle());
                     videoBean.setCover(videoListBean.getCover());
+                    videoBean.setDuration(moreData.get(i).getDuration());
                     videoBean.setVideoKey(String.valueOf(moreData.get(i).getCid()));
                     videoBean.setUrl(moreData.get(i).getUri());
                     videoBeans.add(videoBean);
@@ -106,11 +115,19 @@ public class BiliParser extends BaseParser {
                     VideoListBean videoListBean = new VideoListBean();
                     videoListBean.setTitle(moreData.get(i).getTitle());
                     videoListBean.setSourceName(Constants.Source.BILI);
+                    String tagName = moreData.get(i).getTname();
+                    IndexRecommendDataBean.TagBean tagBean = moreData.get(i).getTag();
+                    if (tagBean!=null) {
+                        tagName += "·"+tagBean.getTag_name();
+                    }
+                    videoListBean.setTag(tagName);
+                    videoListBean.setCoverPortrait(false);
                     videoListBean.setCover(moreData.get(i).getCover() + "@320w_200h_1e_1c.webp");
                     ArrayList<VideoBean> videoBeans = new ArrayList<>();
                     VideoBean videoBean = new VideoBean();
                     videoBean.setVideoKey(String.valueOf(moreData.get(i).getCid()));
                     videoBean.setTitle(moreData.get(i).getTitle());
+                    videoBean.setDuration(moreData.get(i).getDuration());
                     videoBean.setCover(videoListBean.getCover());
                     videoBean.setUrl(moreData.get(i).getUri());
                     videoBeans.add(videoBean);
@@ -128,13 +145,13 @@ public class BiliParser extends BaseParser {
     public VideoListBean parseVideoListRealInfo(VideoListBean videoListBean) {
         VideoBean currentVideoBean = videoListBean.getCurrentVideoBean();
         Uri currentUri = Uri.parse(currentVideoBean.getUrl());
-        LogUtil.e("BiliParser","uri:"+currentUri);
+        LogUtil.e("BiliParser", "uri:" + currentUri);
         String currentAid = currentUri.getPath().substring(1);
-        LogUtil.e("BiliParser","aid:"+currentAid);
+        LogUtil.e("BiliParser", "aid:" + currentAid);
         int currentCid = Integer.parseInt(currentVideoBean.getVideoKey());
-        LogUtil.e("BiliParser","cid:"+currentCid);
+        LogUtil.e("BiliParser", "cid:" + currentCid);
         currentAid = currentAid.substring(0, currentAid.contains("/") ? currentAid.indexOf("/") : currentAid.length());
-        LogUtil.e("BiliParser","final aid:"+currentAid);
+        LogUtil.e("BiliParser", "final aid:" + currentAid);
         Map<String, String> parameters = new HashMap<>();
         parameters.put("aid", currentAid);
         parameters.put("ts", "" + System.currentTimeMillis());
@@ -142,12 +159,13 @@ public class BiliParser extends BaseParser {
         try {
             Response<VideoDetailPageBean> response = videoDetailNetAPI.getVideoDetailPageInfo(parameters).execute();
             if (response.body() == null || response.body().getCode() != 0) {
-                LogUtil.e("BiliParser","response error:"+response.body().getCode());
+                LogUtil.e("BiliParser", "response error:" + response.body().getCode());
                 return videoListBean;
             }
             boolean matchCid = false;
             videoListBean.getVideoBeanList().clear();
             for (int i = 0; i < response.body().getData().getPages().size(); i++) {
+                LogUtil.e("BiliParser", "parse Data:" + response.body().getData().getPages().get(i));
                 int cid = response.body().getData().getPages().get(i).getCid();
                 if (cid != currentCid) {
                     VideoBean videoBean = new VideoBean();
@@ -214,16 +232,20 @@ public class BiliParser extends BaseParser {
                 }
                 videoListBean.getVideoBeanList().add(currentVideoBean);
             }
-            if(!matchCid&&videoListBean.getVideoBeanList().size()>0){
+            if (!matchCid && videoListBean.getVideoBeanList().size() > 0) {
                 videoListBean.setSelectIndex(0);
                 currentVideoBean = videoListBean.getCurrentVideoBean();
+                LogUtil.e("BiliParser", "get ErrorData:" + currentVideoBean);
+                LogUtil.e("BiliParser", "get VideoKey:" + currentVideoBean.getVideoKey());
                 currentCid = Integer.parseInt(currentVideoBean.getVideoKey());
+                LogUtil.e("BiliParser", "not here error");
                 parameters.clear();
                 parameters.put("aid", currentAid);
                 parameters.put("cid", currentCid + "");
                 parameters.put("ts", "" + System.currentTimeMillis());
                 videoDetailNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(VideoDetailNetAPI.class);
                 Response<VideoUrlBean> urlResponse = videoDetailNetAPI.getVideoUrl(parameters).execute();
+                LogUtil.e("BiliParser", "after get response");
                 String urlString;
                 if (urlResponse.body() == null || urlResponse.body().getCode() != 0) {
                     return videoListBean;
@@ -253,26 +275,29 @@ public class BiliParser extends BaseParser {
                         currentVideoBean.getQualityBeans().add(qualityBean);
                     }
                 } else {
+                    LogUtil.e("BiliParser", "set not dash");
                     currentVideoBean.setDash(false);
                     VideoQualityBean qualityBean = new VideoQualityBean();
                     qualityBean.setRealVideoUrl(urlResponse.body().getData().getDurl().get(0).getUrl());
                     qualityBean.setQuality(urlResponse.body().getData().getFormat());
+                    LogUtil.e("BiliParser", "after set dash");
                     currentVideoBean.getQualityBeans().add(qualityBean);
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Log.e("BiliNextError", "error:" + e.getMessage());
         }
         return videoListBean;
     }
 
     @Override
-    public List<VideoListBean> search(String searchKey,String pn) {
+    public List<VideoListBean> search(String searchKey, String pn) {
         List<VideoListBean> result = new ArrayList<>();
-        Map<String,String> parameters=new HashMap<>();
-        parameters.put("pn",pn);
-        parameters.put("keyword",searchKey);
-        parameters.put("ts",""+System.currentTimeMillis());
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("pn", pn);
+        parameters.put("keyword", searchKey);
+        parameters.put("ts", "" + System.currentTimeMillis());
         SearchNetAPI searchNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(SearchNetAPI.class);
         try {
             Response<SearchResultBean> response = searchNetAPI.getSearchResult(parameters).execute();
@@ -287,10 +312,13 @@ public class BiliParser extends BaseParser {
                     moreData.remove(i);
                     i--;
                 } else {
-                    LogUtil.e("BiliParser",moreData.get(i).toString());
+                    LogUtil.e("DataLog", "SearchData:" + moreData.get(i).toString());
+//                    LogUtil.e("BiliParser", moreData.get(i).toString());
                     VideoListBean videoListBean = new VideoListBean();
                     videoListBean.setSourceName(Constants.Source.BILI);
                     videoListBean.setTitle(moreData.get(i).getTitle());
+                    videoListBean.setTag(moreData.get(i).getAuthor());
+                    videoListBean.setCoverPortrait(false);
                     videoListBean.setCover(moreData.get(i).getCover() + "@320w_200h_1e_1c.webp");
                     ArrayList<VideoBean> videoBeans = new ArrayList<>();
                     VideoBean videoBean = new VideoBean();
@@ -298,9 +326,10 @@ public class BiliParser extends BaseParser {
                     videoBean.setCover(videoListBean.getCover());
                     Uri currentUri = Uri.parse(moreData.get(i).getUri());
                     String currentAid = currentUri.getPath().substring(1);
-                    currentAid = currentAid.substring(0,currentAid.contains("/")?currentAid.indexOf("/"):currentAid.length());
+                    currentAid = currentAid.substring(0, currentAid.contains("/") ? currentAid.indexOf("/") : currentAid.length());
                     videoBean.setVideoKey(currentAid);
                     videoBean.setUrl(moreData.get(i).getUri());
+                    videoBean.setDuration(parseDuration(moreData.get(i).getDuration()));
                     videoBeans.add(videoBean);
                     videoListBean.setVideoBeanList(videoBeans);
                     result.add(videoListBean);
@@ -315,5 +344,25 @@ public class BiliParser extends BaseParser {
     @Override
     public boolean isMatchParser(String key) {
         return Constants.Source.BILI.equals(key);
+    }
+
+    private int parseDuration(String duration){
+        int result = 0;
+        if(duration.contains(":")){
+            try {
+                String min = duration.substring(0,duration.indexOf(':'));
+                result += Integer.parseInt(min)*60;
+                result += Integer.parseInt(duration.substring(duration.indexOf(':')+1));
+            }catch (Exception e){
+                //ignore
+            }
+        }else {
+            try {
+                result += Integer.parseInt(duration);
+            }catch (Exception e){
+                //ignore
+            }
+        }
+        return result;
     }
 }

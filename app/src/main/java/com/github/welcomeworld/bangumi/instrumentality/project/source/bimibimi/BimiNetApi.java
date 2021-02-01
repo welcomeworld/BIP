@@ -6,6 +6,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constan
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendDataBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 
 import org.jsoup.Connection;
@@ -43,6 +44,13 @@ public class BimiNetApi {
                     videoListBean.setSourceName(Constants.Source.BIMI);
                     Element linkItem = searchItem.selectFirst("a");
                     videoListBean.setTitle(linkItem.attr("title"));
+                    videoListBean.setCoverPortrait(true);
+                    String tagName = "番剧";
+                    Element tagBean = searchItem.selectFirst("div p");
+                    if (tagBean!=null) {
+                        tagName = tagBean.attr("title");
+                    }
+                    videoListBean.setTag(tagName);
                     videoListBean.setCover(linkItem.selectFirst("img").attr("src"));
                     ArrayList<VideoBean> videoBeans = new ArrayList<>();
                     VideoBean videoBean = new VideoBean();

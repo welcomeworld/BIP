@@ -206,8 +206,8 @@ public class VideoUrlBean {
 
         public static class DurlBean {
             private int order;
-            private int length;
-            private int size;
+            private long length;
+            private long size;
             private String url;
             private List<String> backup_url;
 
@@ -219,19 +219,19 @@ public class VideoUrlBean {
                 this.order = order;
             }
 
-            public int getLength() {
+            public long getLength() {
                 return length;
             }
 
-            public void setLength(int length) {
+            public void setLength(long length) {
                 this.length = length;
             }
 
-            public int getSize() {
+            public long getSize() {
                 return size;
             }
 
-            public void setSize(int size) {
+            public void setSize(long size) {
                 this.size = size;
             }
 

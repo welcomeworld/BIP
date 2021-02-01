@@ -1565,6 +1565,24 @@ public class VideoDetailPageBean {
                     this.size = size;
                 }
             }
+
+            @Override
+            public String toString() {
+                return "PagesBean{" +
+                        "cid=" + cid +
+                        ", page=" + page +
+                        ", from='" + from + '\'' +
+                        ", part='" + part + '\'' +
+                        ", duration=" + duration +
+                        ", vid='" + vid + '\'' +
+                        ", weblink='" + weblink + '\'' +
+                        ", dimension=" + dimension +
+                        ", dmlink='" + dmlink + '\'' +
+                        ", audio=" + audio +
+                        ", dm=" + dm +
+                        ", metas=" + metas +
+                        '}';
+            }
         }
 
         public static class TagBean {

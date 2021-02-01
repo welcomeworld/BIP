@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,10 +15,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.VideoPlayActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 
 import java.util.ArrayList;
@@ -34,8 +35,9 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     List<VideoListBean> data = new ArrayList<>();
     Context context;
 
-    private static int ITEM_TYPE = 0;
+    private static int ITEM_PORTRAIT_TYPE = 0;
     private static int FOOTER_TYPE = 1;
+    private static int ITEM_LANDSCAPE_TYPE = 2;
     Activity activity;
 
     public SearchResultRecyclerViewAdapter(Activity activity){
@@ -61,11 +63,15 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
         if(viewType == FOOTER_TYPE){
-            View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_footer,parent,false);
+            view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_footer,parent,false);
             return new FooterViewHolder(view);
+        }else if(viewType == ITEM_PORTRAIT_TYPE){
+            view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_search_portrait_item,parent,false);
+        }else {
+            view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_search_landscape_item,parent,false);
         }
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_search_item,parent,false);
         context=parent.getContext();
         return new MyInnerViewHolder(view);
     }
@@ -75,7 +81,7 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         if(position == getItemCount()-1){
             return FOOTER_TYPE;
         }
-        return ITEM_TYPE;
+        return data.get(position).isCoverPortrait()?ITEM_PORTRAIT_TYPE:ITEM_LANDSCAPE_TYPE;
     }
 
     @Override
@@ -92,12 +98,20 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         MyInnerViewHolder holder = (MyInnerViewHolder) viewHolder;
         VideoListBean currentData=data.get(position);
         holder.titleView.setText(currentData.getTitle());
-        holder.tagView.setText(String.format(Locale.CHINA,"%s·%s","鬼畜","鬼畜调教"));
-        Glide.with(context).load(currentData.getCover()).into(holder.coverView);
-        holder.danmakuView.setText(StringUtil.formatNumber(199));
-        holder.playView.setText(StringUtil.formatNumber(33));
-        holder.durationView.setText(StringUtil.formatTime(69,StringUtil.SECOND));
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        if(StringUtil.isEmpty(currentData.getTag())){
+            holder.tagView.setVisibility(View.INVISIBLE);
+        }else {
+            holder.tagView.setVisibility(View.VISIBLE);
+            holder.tagView.setText(currentData.getTag());
+        }
+        Glide.with(context).load(currentData.getCover()).transform(new RoundedCorners(ScreenUtil.dp2px(context,4))).into(holder.coverView);
+        if(currentData.getCurrentVideoBean()==null||currentData.getCurrentVideoBean().getDuration()==0){
+            holder.durationView.setVisibility(View.INVISIBLE);
+        }else {
+            holder.durationView.setVisibility(View.VISIBLE);
+            holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(),StringUtil.SECOND));
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -121,14 +135,8 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         TextView tagView;
         @BindView(R.id.card_video_cover)
         ImageView coverView;
-        @BindView(R.id.card_video_danmaku_num)
-        TextView danmakuView;
-        @BindView(R.id.card_video_play_num)
-        TextView playView;
         @BindView(R.id.card_video_duration)
         TextView durationView;
-        @BindView(R.id.recommend_card)
-        FrameLayout cardView;
         public MyInnerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

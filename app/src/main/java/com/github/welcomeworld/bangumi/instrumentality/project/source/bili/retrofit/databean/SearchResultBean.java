@@ -531,6 +531,21 @@ public class SearchResultBean {
                 public void setDuration(String duration) {
                     this.duration = duration;
                 }
+
+                @Override
+                public String toString() {
+                    return "AvItemsBean{" +
+                            "title='" + title + '\'' +
+                            ", cover='" + cover + '\'' +
+                            ", uri='" + uri + '\'' +
+                            ", param='" + param + '\'' +
+                            ", gotoX='" + gotoX + '\'' +
+                            ", play=" + play +
+                            ", danmaku=" + danmaku +
+                            ", ctime=" + ctime +
+                            ", duration='" + duration + '\'' +
+                            '}';
+                }
             }
 
             public static class NewRecTagsBean {
@@ -614,6 +629,20 @@ public class SearchResultBean {
                 public void setBgStyle(int bgStyle) {
                     this.bgStyle = bgStyle;
                 }
+
+                @Override
+                public String toString() {
+                    return "NewRecTagsBean{" +
+                            "text='" + text + '\'' +
+                            ", textColor='" + textColor + '\'' +
+                            ", textColorNight='" + textColorNight + '\'' +
+                            ", bgColor='" + bgColor + '\'' +
+                            ", bgColorNight='" + bgColorNight + '\'' +
+                            ", borderColor='" + borderColor + '\'' +
+                            ", borderColorNight='" + borderColorNight + '\'' +
+                            ", bgStyle=" + bgStyle +
+                            '}';
+                }
             }
 
             public static class ListBean {
@@ -656,6 +685,16 @@ public class SearchResultBean {
 
                 public void setFromSource(String fromSource) {
                     this.fromSource = fromSource;
+                }
+
+                @Override
+                public String toString() {
+                    return "ListBean{" +
+                            "title='" + title + '\'' +
+                            ", param='" + param + '\'' +
+                            ", type='" + type + '\'' +
+                            ", fromSource='" + fromSource + '\'' +
+                            '}';
                 }
             }
 

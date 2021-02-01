@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -44,9 +45,9 @@ public class MainHomeFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         adapter = new MainHomeRecyclerViewAdapter(getActivity());
         recyclerView.setAdapter(adapter);
-        GridLayoutManager gridLayoutManager=new GridLayoutManager(recyclerView.getContext(),2,GridLayoutManager.VERTICAL,false);
-        gridLayoutManager.setSpanSizeLookup(adapter.getSizeLookup());
-        recyclerView.setLayoutManager(gridLayoutManager);
+//        GridLayoutManager gridLayoutManager=new GridLayoutManager(recyclerView.getContext(),2,GridLayoutManager.VERTICAL,false);
+//        gridLayoutManager.setSpanSizeLookup(adapter.getSizeLookup());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

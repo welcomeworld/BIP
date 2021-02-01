@@ -319,6 +319,22 @@ public class IndexRecommendDataBean {
             public void setAtten(int atten) {
                 this.atten = atten;
             }
+
+            @Override
+            public String toString() {
+                return "CountBean{" +
+                        "atten=" + atten +
+                        '}';
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "TagBean{" +
+                    "tag_id=" + tag_id +
+                    ", tag_name='" + tag_name + '\'' +
+                    ", count=" + count +
+                    '}';
         }
     }
 
@@ -341,6 +357,14 @@ public class IndexRecommendDataBean {
 
         public void setTitle(String title) {
             this.title = title;
+        }
+
+        @Override
+        public String toString() {
+            return "OfficialBean{" +
+                    "role=" + role +
+                    ", title='" + title + '\'' +
+                    '}';
         }
     }
 
@@ -382,6 +406,16 @@ public class IndexRecommendDataBean {
         public void setIcon_location(String icon_location) {
             this.icon_location = icon_location;
         }
+
+        @Override
+        public String toString() {
+            return "RcmdReasonBean{" +
+                    "id=" + id +
+                    ", content='" + content + '\'' +
+                    ", bg_color='" + bg_color + '\'' +
+                    ", icon_location='" + icon_location + '\'' +
+                    '}';
+        }
     }
 
     public static class DislikeReasonsBean {
@@ -404,5 +438,49 @@ public class IndexRecommendDataBean {
         public void setReason_name(String reason_name) {
             this.reason_name = reason_name;
         }
+
+        @Override
+        public String toString() {
+            return "DislikeReasonsBean{" +
+                    "reason_id=" + reason_id +
+                    ", reason_name='" + reason_name + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "IndexRecommendDataBean{" +
+                "param='" + param + '\'' +
+                ", gotoX='" + gotoX + '\'' +
+                ", idx=" + idx +
+                ", autoplay_card=" + autoplay_card +
+                ", title='" + title + '\'' +
+                ", cover='" + cover + '\'' +
+                ", uri='" + uri + '\'' +
+                ", desc='" + desc + '\'' +
+                ", play=" + play +
+                ", danmaku=" + danmaku +
+                ", reply=" + reply +
+                ", favorite=" + favorite +
+                ", coin=" + coin +
+                ", share=" + share +
+                ", like=" + like +
+                ", duration=" + duration +
+                ", cid=" + cid +
+                ", tid=" + tid +
+                ", tname='" + tname + '\'' +
+                ", tag=" + tag +
+                ", ctime=" + ctime +
+                ", autoplay=" + autoplay +
+                ", mid=" + mid +
+                ", name='" + name + '\'' +
+                ", face='" + face + '\'' +
+                ", official=" + official +
+                ", rcmd_reason=" + rcmd_reason +
+                ", badge='" + badge + '\'' +
+                ", square='" + square + '\'' +
+                ", dislike_reasons=" + dislike_reasons +
+                '}';
     }
 }

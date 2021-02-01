@@ -17,10 +17,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.VideoPlayActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 
 import java.util.ArrayList;
@@ -93,12 +95,20 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         MyInnerViewHolder holder = (MyInnerViewHolder) viewHolder;
         VideoListBean currentData=data.get(position);
         holder.titleView.setText(currentData.getTitle());
-        holder.tagView.setText(String.format(Locale.CHINA,"%s·%s","鬼畜","鬼畜调教"));
-        Glide.with(context).load(currentData.getCover()).into(holder.coverView);
-        holder.danmakuView.setText(StringUtil.formatNumber(199));
-        holder.playView.setText(StringUtil.formatNumber(33));
-        holder.durationView.setText(StringUtil.formatTime(69,StringUtil.SECOND));
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        if(StringUtil.isEmpty(currentData.getTag())){
+            holder.tagView.setVisibility(View.INVISIBLE);
+        }else {
+            holder.tagView.setVisibility(View.VISIBLE);
+            holder.tagView.setText(currentData.getTag());
+        }
+        Glide.with(context).load(currentData.getCover()).transform(new RoundedCorners(ScreenUtil.dp2px(context,4))).into(holder.coverView);
+        if(currentData.getCurrentVideoBean()==null||currentData.getCurrentVideoBean().getDuration()==0){
+            holder.durationView.setVisibility(View.INVISIBLE);
+        }else {
+            holder.durationView.setVisibility(View.VISIBLE);
+            holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(),StringUtil.SECOND));
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -124,14 +134,8 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         TextView tagView;
         @BindView(R.id.card_video_cover)
         ImageView coverView;
-        @BindView(R.id.card_video_danmaku_num)
-        TextView danmakuView;
-        @BindView(R.id.card_video_play_num)
-        TextView playView;
         @BindView(R.id.card_video_duration)
         TextView durationView;
-        @BindView(R.id.recommend_card)
-        FrameLayout cardView;
         public MyInnerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

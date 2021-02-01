@@ -15,6 +15,7 @@ public class VideoBean implements Parcelable {
     private String danmakuUrl;
     private ArrayList<VideoQualityBean> qualityBeans = new ArrayList<>();
     private int currentQualityIndex;
+    private long duration;
 
     public VideoBean(){
 
@@ -31,6 +32,7 @@ public class VideoBean implements Parcelable {
         danmakuUrl = in.readString();
         qualityBeans = in.createTypedArrayList(VideoQualityBean.CREATOR);
         currentQualityIndex = in.readInt();
+        duration = in.readLong();
     }
 
     public static final Creator<VideoBean> CREATOR = new Creator<VideoBean>() {
@@ -93,6 +95,7 @@ public class VideoBean implements Parcelable {
         parcel.writeString(danmakuUrl);
         parcel.writeTypedList(qualityBeans);
         parcel.writeInt(currentQualityIndex);
+        parcel.writeLong(duration);
     }
 
     public String getVideoKey() {
@@ -140,5 +143,29 @@ public class VideoBean implements Parcelable {
             return null;
         }
         return qualityBeans.get(currentQualityIndex);
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    @Override
+    public String toString() {
+        return "VideoBean{" +
+                "title='" + title + '\'' +
+                ", url='" + url + '\'' +
+                ", cover='" + cover + '\'' +
+                ", dash=" + dash +
+                ", videoKey='" + videoKey + '\'' +
+                ", sourceExternalData='" + sourceExternalData + '\'' +
+                ", danmakuUrl='" + danmakuUrl + '\'' +
+                ", qualityBeans=" + qualityBeans +
+                ", currentQualityIndex=" + currentQualityIndex +
+                ", duration=" + duration +
+                '}';
     }
 }
