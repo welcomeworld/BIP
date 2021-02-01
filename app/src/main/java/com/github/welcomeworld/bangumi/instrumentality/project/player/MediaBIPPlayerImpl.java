@@ -113,4 +113,14 @@ public class MediaBIPPlayerImpl implements BIPPlayer{
     public void start() {
 
     }
+
+    @Override
+    public void reset() {
+
+    }
+
+    @Override
+    public void updatePlayer() {
+
+    }
 }

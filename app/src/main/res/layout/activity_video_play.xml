@@ -12,10 +12,31 @@
         app:layout_constraintTop_toTopOf="parent"/>
     <TextView
         android:id="@+id/video_play_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/color_black"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/color_2A364C"
+        android:textSize="16sp"
         tools:text="video title"
         app:layout_constraintTop_toBottomOf="@id/video_play_surface_view"
         app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+        android:id="@+id/video_play_des"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        android:textColor="@color/color_575F75"
+        tools:text="video desc"
+        app:layout_constraintTop_toBottomOf="@id/video_play_title"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/video_play_item_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/video_play_des"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

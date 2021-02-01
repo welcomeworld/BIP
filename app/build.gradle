@@ -5,7 +5,7 @@ android {
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "com.github.welcomeworld.bangumi.instrumentality.project"
+        applicationId "com.github.welcomeworld.bangumi.instrumentality.project.skip"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -68,5 +68,9 @@ dependencies {
     implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
 
     implementation 'org.jsoup:jsoup:1.13.1'
+
+    implementation 'org.jdeferred:jdeferred-android-aar:1.2.4'
+    
+    implementation 'com.jonathanfinerty.once:once:1.0.3'
 
 }

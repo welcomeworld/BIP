@@ -21,6 +21,8 @@ public interface BIPPlayer {
 
     void start();
 
+    void reset();
+
     public interface OnPreparedListener {
         void onPrepared(BIPPlayer bp);
     }
@@ -28,5 +30,7 @@ public interface BIPPlayer {
     public interface OnErrorListener {
         boolean onError(BIPPlayer bp, int what, int extra);
     }
+
+    void updatePlayer();
 
 }

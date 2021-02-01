@@ -178,6 +178,7 @@ public class BiliParser extends BaseParser {
                         }
                     }
                     videoBean.setVideoKey(String.valueOf(cid));
+                    videoBean.setUrl(currentVideoBean.getUrl());
                     videoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
                     videoBean.setTitle(response.body().getData().getPages().get(i).getPart());
                     if (!haveData) {
@@ -307,6 +308,9 @@ public class BiliParser extends BaseParser {
             }
             List<SearchResultBean.DataBean.ItemBean> moreData;
             moreData = response.body().getData().getItem();
+            if(moreData == null||moreData.size() == 0){
+                return result;
+            }
             for (int i = 0; i < moreData.size(); i++) {
                 if (!moreData.get(i).getGotoX().equalsIgnoreCase("av")) {
                     moreData.remove(i);

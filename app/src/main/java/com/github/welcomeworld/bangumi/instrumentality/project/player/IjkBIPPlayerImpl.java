@@ -12,18 +12,19 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 public class IjkBIPPlayerImpl implements BIPPlayer{
     VideoQualityBean videoQualityBean;
     IjkMediaPlayer ijkMediaPlayer;
+    Surface surface;
 
     public IjkBIPPlayerImpl(){
-        createPlayer();
+        updatePlayer();
     }
 
-    private void createPlayer() {
+    public void updatePlayer() {
         if (ijkMediaPlayer != null) {
             ijkMediaPlayer.stop();
-            ijkMediaPlayer.setDisplay(null);
-            ijkMediaPlayer.release();
+            ijkMediaPlayer.reset();
+        }else {
+            ijkMediaPlayer = new IjkMediaPlayer();
         }
-        ijkMediaPlayer = new IjkMediaPlayer();
         IjkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
         //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"max-buffer-size",500*1024);
@@ -35,6 +36,9 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
         //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"http_proxy","192.168.0.107");
         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "user_agent", "Bilibili Freedoooooom/MarkII");
         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"framedrop",5);
+        if(this.surface!=null){
+            ijkMediaPlayer.setSurface(surface);
+        }
     }
 
 
@@ -55,6 +59,7 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
 
     @Override
     public void setSurface(Surface surface) {
+        this.surface = surface;
         ijkMediaPlayer.setSurface(surface);
     }
 
@@ -86,5 +91,10 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
     @Override
     public void start() {
         ijkMediaPlayer.start();
+    }
+
+    @Override
+    public void reset() {
+        ijkMediaPlayer.reset();
     }
 }
