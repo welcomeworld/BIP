@@ -15,6 +15,7 @@ public class VideoListBean implements Parcelable {
     private String sourceExternalData;
     private boolean coverPortrait;
     private String tag;
+    private String VideoListDes;
 
     public VideoListBean(){
 
@@ -30,6 +31,7 @@ public class VideoListBean implements Parcelable {
         sourceExternalData = in.readString();
         coverPortrait = in.readByte() == 1;
         tag = in.readString();
+        VideoListDes = in.readString();
     }
 
     @Override
@@ -42,6 +44,7 @@ public class VideoListBean implements Parcelable {
         dest.writeString(sourceExternalData);
         dest.writeByte(coverPortrait?(byte) 1:0);
         dest.writeString(tag);
+        dest.writeString(VideoListDes);
     }
 
     @Override
@@ -133,5 +136,13 @@ public class VideoListBean implements Parcelable {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getVideoListDes() {
+        return VideoListDes;
+    }
+
+    public void setVideoListDes(String videoListDes) {
+        VideoListDes = videoListDes;
     }
 }

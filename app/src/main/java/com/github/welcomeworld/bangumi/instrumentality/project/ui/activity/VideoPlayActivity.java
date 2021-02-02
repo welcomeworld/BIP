@@ -17,6 +17,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserMana
 import com.github.welcomeworld.bangumi.instrumentality.project.player.BIPPlayer;
 import com.github.welcomeworld.bangumi.instrumentality.project.player.IjkBIPPlayerImpl;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 public class VideoPlayActivity extends BaseActivity {
     @BindView(R.id.video_play_title)
     TextView titleView;
+    @BindView(R.id.video_play_des)
+    TextView desView;
     @BindView(R.id.video_play_surface_view)
     SurfaceView videoSurfaceView;
     @BindView(R.id.video_play_item_rv)
@@ -64,6 +67,9 @@ public class VideoPlayActivity extends BaseActivity {
         }
         currentVideoListBean = videoListBeans.get(selectSourceIndex);
         titleView.setText(currentVideoListBean.getTitle());
+        if(!StringUtil.isEmpty(currentVideoListBean.getVideoListDes())){
+            desView.setText(currentVideoListBean.getVideoListDes());
+        }
         currentVideoBean = currentVideoListBean.getCurrentVideoBean();
         videoSurfaceView.getHolder().addCallback(surfaceHolderCallback);
         itemAdapter.setData(currentVideoListBean);
@@ -96,6 +102,12 @@ public class VideoPlayActivity extends BaseActivity {
             }).done((result)->{
                 LogUtil.e("BIPPlayer","finish parse");
                 itemAdapter.notifyDataSetChanged();
+                if(!StringUtil.isEmpty(currentVideoListBean.getVideoListDes())){
+                    desView.setText(currentVideoListBean.getVideoListDes());
+                }
+                if(currentVideoBean.getCurrentQualityBean() == null){
+                    return;
+                }
                 bipPlayer.setVideoQualityBean(currentVideoBean.getCurrentQualityBean());
                 bipPlayer.setOnPreparedListener(new BIPPlayer.OnPreparedListener() {
                     @Override
