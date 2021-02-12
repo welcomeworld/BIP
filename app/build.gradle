@@ -5,7 +5,7 @@ android {
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "com.github.welcomeworld.bangumi.instrumentality.project.skip"
+        applicationId "com.github.welcomeworld.bangumi.instrumentality.project"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
