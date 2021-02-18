@@ -1,6 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.player;
 
 import android.view.Surface;
+import android.view.SurfaceHolder;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
 
@@ -32,5 +33,23 @@ public interface BIPPlayer {
     }
 
     void updatePlayer();
+
+    boolean isPlaying();
+
+    void pause();
+
+    long getDuration();
+
+    long getCurrentPosition();
+
+    int getVideoWidth();
+
+    int getVideoHeight();
+
+     void setDisplay(SurfaceHolder sh);
+
+    void setScreenOnWhilePlaying(boolean screenOn);
+
+    void seekTo(long time);
 
 }

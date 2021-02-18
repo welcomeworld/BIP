@@ -1,6 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.player;
 
 import android.view.Surface;
+import android.view.SurfaceHolder;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
 
@@ -13,6 +14,7 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
     VideoQualityBean videoQualityBean;
     IjkMediaPlayer ijkMediaPlayer;
     Surface surface;
+    SurfaceHolder surfaceHolder;
 
     public IjkBIPPlayerImpl(){
         updatePlayer();
@@ -26,6 +28,7 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
             ijkMediaPlayer = new IjkMediaPlayer();
         }
         IjkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
+        ijkMediaPlayer.setScreenOnWhilePlaying(true);
 //        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"max-buffer-size",500*1024);
         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "min-frames", 100);
@@ -43,6 +46,9 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"framedrop",5);
         if(this.surface!=null){
             ijkMediaPlayer.setSurface(surface);
+        }
+        if(this.surfaceHolder!=null){
+            ijkMediaPlayer.setDisplay(this.surfaceHolder);
         }
     }
 
@@ -101,5 +107,51 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
     @Override
     public void reset() {
         ijkMediaPlayer.reset();
+    }
+
+    @Override
+    public boolean isPlaying(){
+        return ijkMediaPlayer.isPlaying();
+    }
+
+    @Override
+    public void pause() {
+        ijkMediaPlayer.pause();
+    }
+
+    @Override
+    public long getDuration() {
+        return ijkMediaPlayer.getDuration();
+    }
+
+    @Override
+    public long getCurrentPosition() {
+        return ijkMediaPlayer.getCurrentPosition();
+    }
+
+    @Override
+    public int getVideoHeight() {
+        return ijkMediaPlayer.getVideoHeight();
+    }
+
+    @Override
+    public int getVideoWidth() {
+        return ijkMediaPlayer.getVideoWidth();
+    }
+
+    @Override
+    public void setDisplay(SurfaceHolder sh) {
+        surfaceHolder = sh;
+        ijkMediaPlayer.setDisplay(sh);
+    }
+
+    @Override
+    public void setScreenOnWhilePlaying(boolean screenOn) {
+        ijkMediaPlayer.setScreenOnWhilePlaying(screenOn);
+    }
+
+    @Override
+    public void seekTo(long time) {
+        ijkMediaPlayer.seekTo(time);
     }
 }

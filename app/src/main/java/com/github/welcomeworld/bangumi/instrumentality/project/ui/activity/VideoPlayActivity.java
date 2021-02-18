@@ -1,8 +1,11 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,7 +19,9 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBe
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.player.BIPPlayer;
 import com.github.welcomeworld.bangumi.instrumentality.project.player.IjkBIPPlayerImpl;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
 
@@ -30,10 +35,12 @@ public class VideoPlayActivity extends BaseActivity {
     TextView titleView;
     @BindView(R.id.video_play_des)
     TextView desView;
-    @BindView(R.id.video_play_surface_view)
-    SurfaceView videoSurfaceView;
     @BindView(R.id.video_play_item_rv)
     RecyclerView playItemRv;
+    @BindView(R.id.video_play_view)
+    BipPlayView playView;
+    @BindView(R.id.video_play_top_space)
+    Space topSpace;
 
     VideoPlayItemAdapter itemAdapter = new VideoPlayItemAdapter();
 
@@ -45,7 +52,6 @@ public class VideoPlayActivity extends BaseActivity {
     VideoListBean currentVideoListBean;
     VideoBean currentVideoBean;
     BIPPlayer bipPlayer = new IjkBIPPlayerImpl();
-    SurfaceHolder videoSurfaceHolder;
 
     @Override
     protected int getLayoutId() {
@@ -54,6 +60,7 @@ public class VideoPlayActivity extends BaseActivity {
 
     @Override
     protected void initViews(@Nullable Bundle savedInstanceState) {
+        topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(this);
         videoListBeans = getIntent().getParcelableArrayListExtra(EXTRA_VIDEO_LIST_BEAN);
         if(videoListBeans==null||videoListBeans.size() == 0){
             finish();
@@ -65,13 +72,13 @@ public class VideoPlayActivity extends BaseActivity {
         } catch (Exception e) {
             this.finish();
         }
+        playView.setBipPlayer(bipPlayer);
         currentVideoListBean = videoListBeans.get(selectSourceIndex);
         titleView.setText(currentVideoListBean.getTitle());
         if(!StringUtil.isEmpty(currentVideoListBean.getVideoListDes())){
             desView.setText(currentVideoListBean.getVideoListDes());
         }
         currentVideoBean = currentVideoListBean.getCurrentVideoBean();
-        videoSurfaceView.getHolder().addCallback(surfaceHolderCallback);
         itemAdapter.setData(currentVideoListBean);
         itemAdapter.setItemClickListener(new VideoPlayItemAdapter.ItemClickListener() {
             @Override
@@ -109,60 +116,15 @@ public class VideoPlayActivity extends BaseActivity {
                     return;
                 }
                 bipPlayer.setVideoQualityBean(currentVideoBean.getCurrentQualityBean());
-                bipPlayer.setOnPreparedListener(new BIPPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(BIPPlayer mediaPlayer) {
-                        LogUtil.e("BIPPlayer","prepared");
-//                                    mediaPlayer.start();
-                    }
-                });
-                bipPlayer.setOnErrorListener(new BIPPlayer.OnErrorListener() {
-                    @Override
-                    public boolean onError(BIPPlayer mp, int what, int extra) {
-                        LogUtil.e("BIPPlayer","error:"+what+"extra:"+extra);
-
-                        return false;
-                    }
-                });
                 bipPlayer.prepareAsync();
             });
         }else {
             LogUtil.e("BIPPlayer","prepared directly");
             bipPlayer.setVideoQualityBean(currentVideoBean.getCurrentQualityBean());
-            bipPlayer.setOnPreparedListener(mediaPlayer -> {
-                LogUtil.e("BIPPlayer","prepared");
-//                mediaPlayer.start();
-            });
-            bipPlayer.setOnErrorListener(new BIPPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(BIPPlayer mp, int what, int extra) {
-                    LogUtil.e("BIPPlayer","error:"+what+"extra:"+extra);
-                    return false;
-                }
-            });
             bipPlayer.prepareAsync();
             //todo
         }
     }
-
-    SurfaceHolder.Callback surfaceHolderCallback = new SurfaceHolder.Callback() {
-        @Override
-        public void surfaceCreated(SurfaceHolder holder) {
-            videoSurfaceHolder = holder;
-            bipPlayer.setSurface(holder.getSurface());
-        }
-
-        @Override
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            videoSurfaceHolder = holder;
-            bipPlayer.setSurface(holder.getSurface());
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder holder) {
-//            bipPlayer.pause();
-        }
-    };
 
     @Override
     protected void onDestroy() {
@@ -170,6 +132,41 @@ public class VideoPlayActivity extends BaseActivity {
         if(bipPlayer!=null){
             bipPlayer.release();
             bipPlayer = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(playView.isFullScreen()){
+            playView.setFullScreen(false);
+        }else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void refreshSystemUIVisibility() {
+        if(playView.isFullScreen()){
+            topSpace.setVisibility(View.GONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//android6.0以后可以对状态栏文字颜色和图标进行修改
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                getWindow().setStatusBarColor(Color.TRANSPARENT);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//android6.0以后可以对状态栏文字颜色和图标进行修改
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                getWindow().setStatusBarColor(Color.TRANSPARENT);
+            } else {//4.4到5.0
+                WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+                localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+            }
+        }else {
+            topSpace.setVisibility(View.VISIBLE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//android6.0以后可以对状态栏文字颜色和图标进行修改
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                getWindow().setStatusBarColor(Color.BLACK);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//android6.0以后可以对状态栏文字颜色和图标进行修改
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                getWindow().setStatusBarColor(Color.BLACK);
+            }
         }
     }
 }

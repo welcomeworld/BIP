@@ -9,6 +9,10 @@
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 
+    <style name="videoSeekTheme">
+        <item name="android:progressDrawable">@drawable/progress_video_seek</item>
+    </style>
+
 
 
 </resources>

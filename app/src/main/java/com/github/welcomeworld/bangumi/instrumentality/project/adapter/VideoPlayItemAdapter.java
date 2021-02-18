@@ -47,7 +47,7 @@ public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return data == null||data.getVideoBeanList() == null?0:data.getVideoBeanList().size();
+        return data == null||data.getVideoBeanList() == null||data.getVideoBeanList().size()<=1?0:data.getVideoBeanList().size();
     }
 
     public VideoListBean getData() {
