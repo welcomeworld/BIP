@@ -89,6 +89,7 @@ public class BipPlayView extends ConstraintLayout {
                     long targetTime = seekBar.getProgress() * bipPlayer.getDuration() / 1000;
                     videoPositionView.setText(StringUtil.formatTime(targetTime));
                     bipPlayer.seekTo(targetTime);
+                    videoBottomProgressView.setProgress(seekBar.getProgress());
                 }
             }
         });
@@ -307,10 +308,18 @@ public class BipPlayView extends ConstraintLayout {
                 videoFullScreenView.setVisibility(VISIBLE);
             }
             LogUtil.e("BIPPlayer", "prepared");
+            post(progressChangeRunnable);
         });
         bipPlayer.setOnErrorListener((mp, what, extra) -> {
             LogUtil.e("BIPPlayer", "error:" + what + "extra:" + extra);
+            removeCallbacks(progressChangeRunnable);
             return false;
+        });
+        bipPlayer.setOnCompletionListener(new BIPPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(BIPPlayer bp) {
+                removeCallbacks(progressChangeRunnable);
+            }
         });
         if (videoSurfaceHolder != null) {
             bipPlayer.setDisplay(videoSurfaceHolder);
@@ -345,4 +354,16 @@ public class BipPlayView extends ConstraintLayout {
         }
         resizeWithVideoSize(videoWidth, videoHeight);
     }
+
+    private Runnable progressChangeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (bipPlayer != null && bipPlayer.getDuration() > 0) {
+                videoPositionView.setText(StringUtil.formatTime(bipPlayer.getCurrentPosition()));
+                videoSeekView.setProgress((int) (bipPlayer.getCurrentPosition()*1000/bipPlayer.getDuration()));
+                videoBottomProgressView.setProgress((int) (bipPlayer.getCurrentPosition()*1000/bipPlayer.getDuration()));
+            }
+            postDelayed(this,400);
+        }
+    };
 }

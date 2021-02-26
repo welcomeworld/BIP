@@ -24,12 +24,17 @@ public interface BIPPlayer {
 
     void reset();
 
-    public interface OnPreparedListener {
+    interface OnPreparedListener {
         void onPrepared(BIPPlayer bp);
     }
 
-    public interface OnErrorListener {
+    interface OnErrorListener {
         boolean onError(BIPPlayer bp, int what, int extra);
+    }
+
+    interface OnCompletionListener
+    {
+        void onCompletion(BIPPlayer bp);
     }
 
     void updatePlayer();
@@ -51,5 +56,7 @@ public interface BIPPlayer {
     void setScreenOnWhilePlaying(boolean screenOn);
 
     void seekTo(long time);
+
+    void setOnCompletionListener(OnCompletionListener listener);
 
 }

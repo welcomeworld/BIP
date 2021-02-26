@@ -50,6 +50,12 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
         if(this.surfaceHolder!=null){
             ijkMediaPlayer.setDisplay(this.surfaceHolder);
         }
+        ijkMediaPlayer.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
+            @Override
+            public void onSeekComplete(IMediaPlayer iMediaPlayer) {
+                ijkMediaPlayer.start();
+            }
+        });
     }
 
 
@@ -66,6 +72,16 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
     @Override
     public void setOnPreparedListener(OnPreparedListener listener) {
         ijkMediaPlayer.setOnPreparedListener(iMediaPlayer -> listener.onPrepared(IjkBIPPlayerImpl.this));
+    }
+
+    @Override
+    public void setOnCompletionListener(OnCompletionListener listener) {
+        ijkMediaPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(IMediaPlayer iMediaPlayer) {
+                listener.onCompletion(IjkBIPPlayerImpl.this);
+            }
+        });
     }
 
     @Override
