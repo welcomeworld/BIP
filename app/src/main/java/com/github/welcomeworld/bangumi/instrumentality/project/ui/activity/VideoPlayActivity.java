@@ -62,7 +62,7 @@ public class VideoPlayActivity extends BaseActivity {
     protected void initViews(@Nullable Bundle savedInstanceState) {
         topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(this);
         videoListBeans = getIntent().getParcelableArrayListExtra(EXTRA_VIDEO_LIST_BEAN);
-        if(videoListBeans==null||videoListBeans.size() == 0){
+        if (videoListBeans == null || videoListBeans.size() == 0) {
             finish();
             return;
         }
@@ -75,7 +75,7 @@ public class VideoPlayActivity extends BaseActivity {
         playView.setBipPlayer(bipPlayer);
         currentVideoListBean = videoListBeans.get(selectSourceIndex);
         titleView.setText(currentVideoListBean.getTitle());
-        if(!StringUtil.isEmpty(currentVideoListBean.getVideoListDes())){
+        if (!StringUtil.isEmpty(currentVideoListBean.getVideoListDes())) {
             desView.setText(currentVideoListBean.getVideoListDes());
         }
         currentVideoBean = currentVideoListBean.getCurrentVideoBean();
@@ -90,36 +90,36 @@ public class VideoPlayActivity extends BaseActivity {
                 parseVideoBeanDetail();
             }
         });
-        playItemRv.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
+        playItemRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         playItemRv.setAdapter(itemAdapter);
         parseVideoBeanDetail();
 
     }
 
-    private void parseVideoBeanDetail(){
+    private void parseVideoBeanDetail() {
         bipPlayer.updatePlayer();
-        if(currentVideoBean.getQualityBeans()==null||currentVideoBean.getQualityBeans().size() == 0){
-            LogUtil.e("BIPPlayer","start parse");
-            ThreadUtil.defer().when(()->{
+        if (currentVideoBean.getQualityBeans() == null || currentVideoBean.getQualityBeans().size() == 0) {
+            LogUtil.e("BIPPlayer", "start parse");
+            ThreadUtil.defer().when(() -> {
                 ParserManager.getInstance().parseVideoListRealInfo(currentVideoListBean);
                 currentVideoBean = currentVideoListBean.getCurrentVideoBean();
-            }).fail((throwable)->{
+            }).fail((throwable) -> {
                 throwable.printStackTrace();
-                LogUtil.e("BIPPlayer","parse faile"+throwable.getMessage());
-            }).done((result)->{
-                LogUtil.e("BIPPlayer","finish parse");
+                LogUtil.e("BIPPlayer", "parse faile" + throwable.getMessage());
+            }).done((result) -> {
+                LogUtil.e("BIPPlayer", "finish parse");
                 itemAdapter.notifyDataSetChanged();
-                if(!StringUtil.isEmpty(currentVideoListBean.getVideoListDes())){
+                if (!StringUtil.isEmpty(currentVideoListBean.getVideoListDes())) {
                     desView.setText(currentVideoListBean.getVideoListDes());
                 }
-                if(currentVideoBean.getCurrentQualityBean() == null){
+                if (currentVideoBean == null || currentVideoBean.getCurrentQualityBean() == null) {
                     return;
                 }
                 bipPlayer.setVideoQualityBean(currentVideoBean.getCurrentQualityBean());
                 bipPlayer.prepareAsync();
             });
-        }else {
-            LogUtil.e("BIPPlayer","prepared directly");
+        } else {
+            LogUtil.e("BIPPlayer", "prepared directly");
             bipPlayer.setVideoQualityBean(currentVideoBean.getCurrentQualityBean());
             bipPlayer.prepareAsync();
             //todo
@@ -129,7 +129,7 @@ public class VideoPlayActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(bipPlayer!=null){
+        if (bipPlayer != null) {
             bipPlayer.release();
             bipPlayer = null;
         }
@@ -137,16 +137,16 @@ public class VideoPlayActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(playView.isFullScreen()){
+        if (playView.isFullScreen()) {
             playView.setFullScreen(false);
-        }else {
+        } else {
             super.onBackPressed();
         }
     }
 
     @Override
     public void refreshSystemUIVisibility() {
-        if(playView.isFullScreen()){
+        if (playView.isFullScreen()) {
             topSpace.setVisibility(View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//android6.0以后可以对状态栏文字颜色和图标进行修改
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
@@ -158,7 +158,7 @@ public class VideoPlayActivity extends BaseActivity {
                 WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
                 localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
             }
-        }else {
+        } else {
             topSpace.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//android6.0以后可以对状态栏文字颜色和图标进行修改
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
