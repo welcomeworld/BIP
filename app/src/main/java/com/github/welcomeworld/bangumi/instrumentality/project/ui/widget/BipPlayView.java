@@ -23,11 +23,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GestureDetectorCompat;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.player.BIPPlayer;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.BaseActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
 
 public class BipPlayView extends ConstraintLayout {
     ConstraintLayout controllerParent;
@@ -35,13 +37,16 @@ public class BipPlayView extends ConstraintLayout {
     private SeekBar videoSeekView;
     private TextView videoPositionView;
     private TextView videoDurationView;
+    private TextView videoQualityView;
     private ImageView videoFullScreenView;
     private ProgressBar videoBottomProgressView;
     private SurfaceView surfaceView;
     private SurfaceHolder videoSurfaceHolder;
     private BaseActivity detachActivity;
+    private TextView bottomShadowView;
     BIPPlayer bipPlayer;
     boolean isFullScreen;
+    VideoBean currentVideoBean;
 
     public BipPlayView(@NonNull Context context) {
         super(context);
@@ -93,10 +98,13 @@ public class BipPlayView extends ConstraintLayout {
                 }
             }
         });
+        bottomShadowView = itemView.findViewById(R.id.bip_play_view_bottom_shadow);
         videoPositionView = itemView.findViewById(R.id.bip_play_view_current_position);
         videoDurationView = itemView.findViewById(R.id.bip_play_view_duration);
         videoBottomProgressView = itemView.findViewById(R.id.bip_play_view_bottom_progress);
         controllerParent = itemView.findViewById(R.id.bip_play_view_controller_parent);
+        videoQualityView = itemView.findViewById(R.id.bip_play_view_quality);
+        videoQualityView.setOnClickListener(playItemClickListener);
         videoFullScreenView = itemView.findViewById(R.id.bip_play_view_fullscreen);
         videoFullScreenView.setOnClickListener(playItemClickListener);
         surfaceView = itemView.findViewById(R.id.bip_play_view_surface);
@@ -141,6 +149,8 @@ public class BipPlayView extends ConstraintLayout {
 
     private GestureDetectorCompat gestureDetectorCompat;
     private final GestureDetector.OnGestureListener gestureListener = new GestureDetector.OnGestureListener() {
+
+        long lastTapUpTime = 0;
         @Override
         public boolean onDown(MotionEvent e) {
             LogUtil.e("GestureTest", "Down");
@@ -155,13 +165,32 @@ public class BipPlayView extends ConstraintLayout {
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             LogUtil.e("GestureTest", "SingleTap");
+            long currentTime = System.currentTimeMillis();
+            if(currentTime-lastTapUpTime<500){
+                onDoubleTapUp(e);
+            }else {
+                ThreadUtil.postDelayed(100, new Runnable() {
+                    @Override
+                    public void run() {
+                        onRealSingleTapUp();
+                    }
+                });
+            }
+            lastTapUpTime = currentTime;
+            return false;
+        }
+
+        private void onRealSingleTapUp(){
             if (isControllerShowing()) {
                 hideController();
             } else {
                 showController();
                 playPauseView.setSelected(bipPlayer != null && bipPlayer.isPlaying());
             }
-            return false;
+        }
+
+        public void onDoubleTapUp(MotionEvent e){
+            playOrPause();
         }
 
         @Override
@@ -183,12 +212,14 @@ public class BipPlayView extends ConstraintLayout {
     private void hideController() {
         playPauseView.setVisibility(GONE);
         videoSeekView.setVisibility(GONE);
+        bottomShadowView.setVisibility(GONE);
         videoPositionView.setVisibility(GONE);
         videoDurationView.setVisibility(GONE);
         if (!isFullScreen) {
             videoBottomProgressView.setVisibility(VISIBLE);
         }
         videoFullScreenView.setVisibility(GONE);
+        videoQualityView.setVisibility(GONE);
     }
 
     private void showController() {
@@ -196,9 +227,13 @@ public class BipPlayView extends ConstraintLayout {
         videoSeekView.setVisibility(VISIBLE);
         videoPositionView.setVisibility(VISIBLE);
         videoDurationView.setVisibility(VISIBLE);
+        bottomShadowView.setVisibility(VISIBLE);
         videoBottomProgressView.setVisibility(GONE);
         if (!isFullScreen && bipPlayer != null && bipPlayer.getVideoWidth() > 0) {
             videoFullScreenView.setVisibility(VISIBLE);
+        }
+        if(isFullScreen && bipPlayer != null){
+            videoQualityView.setVisibility(VISIBLE);
         }
         playPauseView.removeCallbacks(hideControllerRunnable);
         playPauseView.postDelayed(hideControllerRunnable,3000);
@@ -221,18 +256,17 @@ public class BipPlayView extends ConstraintLayout {
         public void onClick(View v) {
             playPauseView.removeCallbacks(hideControllerRunnable);
             playPauseView.postDelayed(hideControllerRunnable,3000);
-            if (v.getId() == R.id.bip_play_view_play_pause) {
-                if (bipPlayer != null) {
-                    if (bipPlayer.isPlaying()) {
-                        bipPlayer.pause();
-                        playPauseView.setSelected(false);
-                    } else {
-                        bipPlayer.start();
-                        playPauseView.setSelected(true);
-                    }
-                }
-            } else if (v.getId() == R.id.bip_play_view_fullscreen) {
+            int vId = v.getId();
+            if (vId == R.id.bip_play_view_play_pause) {
+               playOrPause();
+            } else if (vId == R.id.bip_play_view_fullscreen) {
                 setFullScreen(!isFullScreen);
+            }else if(vId == R.id.bip_play_view_quality){
+                if(currentVideoBean!=null&&currentVideoBean.getQualityBeans()!=null&&currentVideoBean.getQualityBeans().size()>1){
+                    showQualityWindow();
+                }else {
+                    LogUtil.e("BipPlayView","Data not valid");
+                }
             }
         }
     };
@@ -334,8 +368,14 @@ public class BipPlayView extends ConstraintLayout {
         isFullScreen = fullScreen;
         if (isFullScreen) {
             videoFullScreenView.setVisibility(GONE);
-        } else if (isControllerShowing() && bipPlayer.getVideoWidth() > 0) {
-            videoFullScreenView.setVisibility(VISIBLE);
+            if(isControllerShowing()){
+                videoQualityView.setVisibility(VISIBLE);
+            }
+        } else {
+            videoQualityView.setVisibility(GONE);
+            if (isControllerShowing() && bipPlayer.getVideoWidth() > 0) {
+                videoFullScreenView.setVisibility(VISIBLE);
+            }
         }
         int videoWidth = bipPlayer.getVideoWidth();
         int videoHeight = bipPlayer.getVideoHeight();
@@ -366,4 +406,31 @@ public class BipPlayView extends ConstraintLayout {
             postDelayed(this,400);
         }
     };
+
+    public VideoBean getCurrentVideoBean() {
+        return currentVideoBean;
+    }
+
+    public void setCurrentVideoBean(VideoBean currentVideoBean) {
+        this.currentVideoBean = currentVideoBean;
+        if(currentVideoBean!=null&&currentVideoBean.getCurrentQualityBean()!=null){
+            videoQualityView.setText(currentVideoBean.getCurrentQualityBean().getQuality());
+        }
+    }
+
+    public void playOrPause(){
+        if (bipPlayer != null) {
+            if (bipPlayer.isPlaying()) {
+                bipPlayer.pause();
+                playPauseView.setSelected(false);
+            } else {
+                bipPlayer.start();
+                playPauseView.setSelected(true);
+            }
+        }
+    }
+
+    public void showQualityWindow(){
+        hideController();
+    }
 }

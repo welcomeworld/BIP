@@ -86,6 +86,7 @@ public class VideoPlayActivity extends BaseActivity {
                 int oldIndex = currentVideoListBean.getSelectIndex();
                 currentVideoListBean.setSelectIndex(position);
                 currentVideoBean = currentVideoListBean.getCurrentVideoBean();
+                playView.setCurrentVideoBean(currentVideoBean);
                 itemAdapter.notifyItemChanged(oldIndex);
                 parseVideoBeanDetail();
             }
@@ -112,6 +113,7 @@ public class VideoPlayActivity extends BaseActivity {
                 if (!StringUtil.isEmpty(currentVideoListBean.getVideoListDes())) {
                     desView.setText(currentVideoListBean.getVideoListDes());
                 }
+                playView.setCurrentVideoBean(currentVideoBean);
                 if (currentVideoBean == null || currentVideoBean.getCurrentQualityBean() == null) {
                     return;
                 }

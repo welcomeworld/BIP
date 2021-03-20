@@ -250,12 +250,12 @@ public class BiliParser extends BaseParser {
             if (urlResponse.body() == null || urlResponse.body().getCode() != 0) {
                 return;
             }
+            String description;
             if (urlResponse.body().getDash() != null) {
                 currentVideoBean.setDash(true);
                 for (int j = 0; j < urlResponse.body().getDash().getVideo().size(); j++) {
                     VideoQualityBean qualityBean = new VideoQualityBean();
                     qualityBean.setRealVideoUrl(urlResponse.body().getDash().getVideo().get(j).getBaseUrl());
-                    String description;
                     switch (urlResponse.body().getDash().getVideo().get(j).getId()) {
                         case 16:
                             description = "360P";
@@ -266,8 +266,11 @@ public class BiliParser extends BaseParser {
                         case 64:
                             description = "720P";
                             break;
-                        default:
+                        case 80:
                             description = "1080P";
+                            break;
+                        default:
+                            description = "1080P+";
                             break;
                     }
                     qualityBean.setQuality(description);
@@ -278,7 +281,24 @@ public class BiliParser extends BaseParser {
                 currentVideoBean.setDash(false);
                 VideoQualityBean qualityBean = new VideoQualityBean();
                 qualityBean.setRealVideoUrl(urlResponse.body().getDurl().get(0).getUrl());
-                qualityBean.setQuality(urlResponse.body().getFormat());
+                switch (urlResponse.body().getQuality()) {
+                    case 16:
+                        description = "360P";
+                        break;
+                    case 32:
+                        description = "480P";
+                        break;
+                    case 64:
+                        description = "720P";
+                        break;
+                    case 80:
+                        description = "1080P";
+                        break;
+                    default:
+                        description = "1080P+";
+                        break;
+                }
+                qualityBean.setQuality(description);
                 currentVideoBean.getQualityBeans().add(qualityBean);
             }
         } catch (Exception e) {
@@ -380,12 +400,12 @@ public class BiliParser extends BaseParser {
             if (urlResponse.body() == null || urlResponse.body().getCode() != 0) {
                 return;
             }
+            String description;
             if (urlResponse.body().getData().getDash() != null) {
                 currentVideoBean.setDash(true);
                 for (int j = 0; j < urlResponse.body().getData().getDash().getVideo().size(); j++) {
                     VideoQualityBean qualityBean = new VideoQualityBean();
                     qualityBean.setRealVideoUrl(urlResponse.body().getData().getDash().getVideo().get(j).getBase_url());
-                    String description;
                     switch (urlResponse.body().getData().getDash().getVideo().get(j).getId()) {
                         case 16:
                             description = "360P";
@@ -396,8 +416,11 @@ public class BiliParser extends BaseParser {
                         case 64:
                             description = "720P";
                             break;
-                        default:
+                        case 80:
                             description = "1080P";
+                            break;
+                        default:
+                            description = "1080P+";
                             break;
                     }
                     qualityBean.setQuality(description);
@@ -408,7 +431,24 @@ public class BiliParser extends BaseParser {
                 currentVideoBean.setDash(false);
                 VideoQualityBean qualityBean = new VideoQualityBean();
                 qualityBean.setRealVideoUrl(urlResponse.body().getData().getDurl().get(0).getUrl());
-                qualityBean.setQuality(urlResponse.body().getData().getFormat());
+                switch (urlResponse.body().getData().getQuality()) {
+                    case 16:
+                        description = "360P";
+                        break;
+                    case 32:
+                        description = "480P";
+                        break;
+                    case 64:
+                        description = "720P";
+                        break;
+                    case 80:
+                        description = "1080P";
+                        break;
+                    default:
+                        description = "1080P+";
+                        break;
+                }
+                qualityBean.setQuality(description);
                 currentVideoBean.getQualityBeans().add(qualityBean);
             }
         } catch (Exception e) {

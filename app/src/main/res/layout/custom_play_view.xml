@@ -24,6 +24,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:id="@+id/bip_play_view_bottom_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="81dp"
+            android:background="@drawable/bg_black60_transparent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
         <ImageView
             android:id="@+id/bip_play_view_play_pause"
             android:layout_width="64dp"
@@ -55,8 +61,8 @@
             android:gravity="center"
             android:visibility="gone"
             android:textColor="@color/color_29B6F6"
-            android:layout_marginStart="8dp"
-            app:layout_goneMarginStart="8dp"
+            android:layout_marginStart="16dp"
+            app:layout_goneMarginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/bip_play_view_seek_bar"
             app:layout_constraintTop_toTopOf="@id/bip_play_view_seek_bar"/>
@@ -64,10 +70,11 @@
             android:id="@+id/bip_play_view_seek_bar"
             android:layout_width="0dp"
             android:layout_height="36dp"
+            android:maxHeight="2dp"
             android:max="1000"
             android:progress="0"
             android:visibility="gone"
-            android:theme="@style/videoSeekTheme"
+            android:progressDrawable="@drawable/progress_video_seek"
             app:layout_constraintStart_toEndOf="@id/bip_play_view_current_position"
             app:layout_constraintEnd_toStartOf="@id/bip_play_view_duration"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -79,12 +86,19 @@
             android:textSize="14sp"
             android:gravity="center"
             android:visibility="gone"
-            android:textColor="@color/color_white"
             android:layout_marginEnd="8dp"
-            app:layout_goneMarginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@id/bip_play_view_fullscreen"
+            android:textColor="@color/color_white"
+            app:layout_constraintEnd_toStartOf="@id/full_quality_barrier"
             app:layout_constraintBottom_toBottomOf="@id/bip_play_view_seek_bar"
             app:layout_constraintTop_toTopOf="@id/bip_play_view_seek_bar"/>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/full_quality_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="start"
+            app:constraint_referenced_ids="bip_play_view_fullscreen,bip_play_view_quality"
+            />
         <ImageView
             android:id="@+id/bip_play_view_fullscreen"
             android:layout_width="24dp"
@@ -94,6 +108,24 @@
             android:layout_marginBottom="6dp"
             android:src="@drawable/ic_player_fullscreen"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/bip_play_view_quality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:maxWidth="92dp"
+            android:gravity="center"
+            tools:visibility="visible"
+            android:layout_marginEnd="8dp"
+            tools:text="高清"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimary"
+            android:paddingBottom="8dp"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/bip_play_view_duration"
             app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

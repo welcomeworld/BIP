@@ -12,6 +12,7 @@
     <color name="color_white_30">#4CFFFFFF</color>
     <color name="color_black">#000000</color>
     <color name="color_black_60">#99000000</color>
+    <color name="color_black_70">#BB000000</color>
 
     <color name="transparent">#00000000</color>
 
