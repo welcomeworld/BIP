@@ -14,7 +14,13 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters "armeabi-v7a"
+            abiFilters "armeabi-v7a","x86_64"
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
         }
     }
 
@@ -37,6 +43,10 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -44,14 +54,13 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    testImplementation 'junit:junit:4.12'
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.2.1'
-
-    implementation 'com.jakewharton:butterknife:10.2.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
@@ -60,17 +69,40 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
     implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
 
     implementation 'org.jsoup:jsoup:1.13.1'
 
     implementation 'org.jdeferred:jdeferred-android-aar:1.2.4'
-    
-    implementation 'com.jonathanfinerty.once:once:1.0.3'
+
+    implementation 'com.jonathanfinerty.once:once:1.2.2'
+
+    implementation 'com.dylanc:viewbinding-base-ktx:1.1.1'
+    implementation "androidx.room:room-runtime:2.2.6"
+    annotationProcessor 'androidx.room:room-compiler:2.2.6'
+//    implementation "androidx.room:room-rxjava3:2.2.6"
+//    implementation 'org.litepal.guolindev:core:3.2.3'
+
+    //友盟
+    implementation "com.umeng.umsdk:common:9.3.6"
+    implementation "com.umeng.umsdk:asms:1.2.0"
+
+    implementation "com.umeng.umsdk:apm:1.2.0"
+//    implementation  'com.umeng.umsdk:abtest:1.0.0'
+
+    implementation project(path:':devbase')
+
+    implementation 'com.alibaba:fastjson:1.1.72.android'
+
+    implementation 'com.eclipsesource.j2v8:j2v8:5.0.103@aar'
+
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
 
 }

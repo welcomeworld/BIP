@@ -16,6 +16,7 @@ public class VideoBean implements Parcelable {
     private ArrayList<VideoQualityBean> qualityBeans = new ArrayList<>();
     private int currentQualityIndex;
     private long duration;
+    private long playPosition;
 
     public VideoBean(){
 
@@ -33,6 +34,7 @@ public class VideoBean implements Parcelable {
         qualityBeans = in.createTypedArrayList(VideoQualityBean.CREATOR);
         currentQualityIndex = in.readInt();
         duration = in.readLong();
+        playPosition = in.readLong();
     }
 
     public static final Creator<VideoBean> CREATOR = new Creator<VideoBean>() {
@@ -96,6 +98,7 @@ public class VideoBean implements Parcelable {
         parcel.writeTypedList(qualityBeans);
         parcel.writeInt(currentQualityIndex);
         parcel.writeLong(duration);
+        parcel.writeLong(playPosition);
     }
 
     public String getVideoKey() {
@@ -139,10 +142,17 @@ public class VideoBean implements Parcelable {
     }
 
     public VideoQualityBean getCurrentQualityBean(){
-        if(qualityBeans == null||qualityBeans.size()<=currentQualityIndex){
+        if(qualityBeans == null){
             return null;
         }
-        return qualityBeans.get(currentQualityIndex);
+        if(qualityBeans.size()>0){
+            if(qualityBeans.size()<=currentQualityIndex){
+                currentQualityIndex = 0;
+            }
+            return qualityBeans.get(currentQualityIndex);
+        }else {
+            return null;
+        }
     }
 
     public long getDuration() {
@@ -167,5 +177,13 @@ public class VideoBean implements Parcelable {
                 ", currentQualityIndex=" + currentQualityIndex +
                 ", duration=" + duration +
                 '}';
+    }
+
+    public long getPlayPosition() {
+        return playPosition;
+    }
+
+    public void setPlayPosition(long playPosition) {
+        this.playPosition = playPosition;
     }
 }

@@ -2,12 +2,10 @@ package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,10 +25,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
@@ -128,27 +122,25 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public static class MyInnerViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.card_video_title)
         TextView titleView;
-        @BindView(R.id.card_video_label)
         TextView tagView;
-        @BindView(R.id.card_video_cover)
         ImageView coverView;
-        @BindView(R.id.card_video_duration)
         TextView durationView;
         public MyInnerViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            titleView = itemView.findViewById(R.id.card_video_title);
+            tagView = itemView.findViewById(R.id.card_video_label);
+            coverView = itemView.findViewById(R.id.card_video_cover);
+            durationView = itemView.findViewById(R.id.card_video_duration);
         }
     }
 
     public static class FooterViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.footer_progress)
         ProgressBar progressBar;
 
         public FooterViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            progressBar = itemView.findViewById(R.id.footer_progress);
         }
     }
 

@@ -1,10 +1,19 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment;
 
-import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import android.os.Bundle;
+import android.view.View;
 
-public class MainBangumiFragment extends BaseFragment {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentMainBangumiBinding;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.WebUtil;
+
+public class MainBangumiFragment extends BaseFragment<FragmentMainBangumiBinding> {
     @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_main_bangumi;
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        WebUtil.initNormalWebView(getViewBinding().bangumiWebview);
+        getViewBinding().bangumiWebview.loadUrl("https://web.age-spa.com:8443/#/catalog");
     }
 }

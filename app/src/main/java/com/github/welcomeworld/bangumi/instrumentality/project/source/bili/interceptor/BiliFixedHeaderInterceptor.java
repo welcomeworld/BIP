@@ -1,5 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor;
 
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.api.BiliParams;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -10,8 +12,8 @@ public class BiliFixedHeaderInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request.Builder requestBuilder =chain.request().newBuilder();
-        requestBuilder.addHeader("Buvid","Yh4vH3pDckBzQQExADZRZlYqGytOd0Z0R3VCinfoc");
-        requestBuilder.addHeader("User-Agent","Android/6.0 SimpleBili/1.0.0 (guduziyousiwang@gmail.com)");
+        requestBuilder.addHeader("Buvid",BiliParams.getBuvid());
+        requestBuilder.addHeader("User-Agent", BiliParams.getUserAgent());
         return chain.proceed(requestBuilder.build());
     }
 }

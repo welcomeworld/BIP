@@ -15,6 +15,15 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
     IjkMediaPlayer ijkMediaPlayer;
     Surface surface;
     SurfaceHolder surfaceHolder;
+    private OnSeekCompleteListener mSeeCompleteListener;
+    static {
+        try {
+            IjkMediaPlayer.loadLibrariesOnce(null);
+            IjkMediaPlayer.native_profileBegin("libijkplayer.so");
+        } catch (Exception e) {
+            //
+        }
+    }
 
     public IjkBIPPlayerImpl(){
         updatePlayer();
@@ -26,6 +35,15 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
             ijkMediaPlayer.reset();
         }else {
             ijkMediaPlayer = new IjkMediaPlayer();
+            ijkMediaPlayer.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
+                @Override
+                public void onSeekComplete(IMediaPlayer iMediaPlayer) {
+                    ijkMediaPlayer.start();
+                    if(mSeeCompleteListener!=null){
+                        mSeeCompleteListener.onSeekComplete(IjkBIPPlayerImpl.this);
+                    }
+                }
+            });
         }
         IjkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
         ijkMediaPlayer.setScreenOnWhilePlaying(true);
@@ -50,12 +68,6 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
         if(this.surfaceHolder!=null){
             ijkMediaPlayer.setDisplay(this.surfaceHolder);
         }
-        ijkMediaPlayer.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
-            @Override
-            public void onSeekComplete(IMediaPlayer iMediaPlayer) {
-                ijkMediaPlayer.start();
-            }
-        });
     }
 
 
@@ -169,5 +181,72 @@ public class IjkBIPPlayerImpl implements BIPPlayer{
     @Override
     public void seekTo(long time) {
         ijkMediaPlayer.seekTo(time);
+    }
+
+    IjkMediaPlayer tempMediaPlayer;
+    @Override
+    public void prepareQualityAsync(String path) {
+        if(tempMediaPlayer!=null){
+            tempMediaPlayer.stop();
+            tempMediaPlayer.reset();
+        }
+        tempMediaPlayer = new IjkMediaPlayer();
+        IjkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
+        tempMediaPlayer.setScreenOnWhilePlaying(true);
+//        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
+        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"max-buffer-size",500*1024);
+        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "min-frames", 100);
+        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"enable-accurate-seek",1);
+        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"reconnect",1);
+        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"safe",0);
+
+        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 1);   //需要准备好后自动播放
+        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);
+        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "protocol_whitelist", "rtmp,concat,ffconcat,file,subfile,http,https,tls,rtp,tcp,udp,crypto");
+        //tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"http_proxy","192.168.0.107");
+
+//        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "user_agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36");
+        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "user_agent", "Bilibili Freedoooooom/MarkII");
+        tempMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"framedrop",5);
+        tempMediaPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(IMediaPlayer iMediaPlayer) {
+                long currentPosition = ijkMediaPlayer.getCurrentPosition();
+                long duration = ijkMediaPlayer.getDuration();
+                if(duration>currentPosition+500){
+                    iMediaPlayer.seekTo(currentPosition+500);
+                }
+                iMediaPlayer.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
+                    @Override
+                    public void onSeekComplete(IMediaPlayer iMediaPlayer) {
+                        if(tempMediaPlayer!=null){
+                            ijkMediaPlayer.stop();
+                            ijkMediaPlayer.reset();
+                            ijkMediaPlayer = tempMediaPlayer;
+                            if(surface!=null){
+                                ijkMediaPlayer.setSurface(surface);
+                            }
+                            if(surfaceHolder!=null){
+                                ijkMediaPlayer.setDisplay(surfaceHolder);
+                            }
+                            tempMediaPlayer = null;
+                        }else {
+                            iMediaPlayer.start();
+                        }
+                    }
+                });
+            }
+        });
+        try {
+            tempMediaPlayer.setDataSource(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        tempMediaPlayer.prepareAsync();
+    }
+
+    @Override
+    public void setOnSeekCompleteListener(OnSeekCompleteListener listener) {
+        this.mSeeCompleteListener = listener;
     }
 }

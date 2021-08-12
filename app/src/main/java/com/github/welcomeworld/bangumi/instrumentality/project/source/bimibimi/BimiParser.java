@@ -28,8 +28,8 @@ public class BimiParser extends BaseParser {
     }
 
     @Override
-    public VideoListBean parseVideoListRealInfo(VideoListBean videoListBean) {
-        return BimiNetApi.parseVideoListRealInfo(videoListBean);
+    public List<VideoListBean> updateVideoList(List<VideoListBean> videoListBeans, int selectSourceIndex) {
+        return BimiNetApi.updateVideoList(videoListBeans,selectSourceIndex);
     }
 
     @Override

@@ -1,22 +1,33 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.source.bili;
 
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.CookieManager;
+
+import androidx.fragment.app.Fragment;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constants;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
+import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SettingConfig;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.api.BiliLocalStatus;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.fragment.LoginFragment;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BaseUrl;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BiliRetrofitManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.IndexNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.SearchNetAPI;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.UserNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.VideoDetailNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BangumiDetailPageBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BangumiUrlBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BvToAvBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendDataBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.LoginKeyBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.LoginResultBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.SearchResultBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoDetailPageBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoUrlBean;
@@ -28,11 +39,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
 public class BiliParser extends BaseParser {
+    private static BiliParser instance;
+
+    public static BiliParser getInstance() {
+        if (instance == null) {
+            instance = new BiliParser();
+        }
+        return instance;
+    }
+
     @Override
     public String getTag() {
         return "BiliParser";
@@ -43,7 +64,6 @@ public class BiliParser extends BaseParser {
         List<VideoListBean> result = new ArrayList<>();
         Map<String, String> parameters = new HashMap<>();
         parameters.put("pull", "true");
-        parameters.put("ts", "" + System.currentTimeMillis());
         IndexNetAPI indexNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(IndexNetAPI.class);
         Call<IndexRecommendBean> indexBeanCall = indexNetAPI.getIndexRecommend(parameters);
         try {
@@ -97,7 +117,6 @@ public class BiliParser extends BaseParser {
         List<VideoListBean> result = new ArrayList<>();
         Map<String, String> parameters = new HashMap<>();
         parameters.put("pull", "false");
-        parameters.put("ts", "" + System.currentTimeMillis());
         IndexNetAPI indexNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(IndexNetAPI.class);
         Call<IndexRecommendBean> indexBeanCall = indexNetAPI.getIndexRecommend(parameters);
         try {
@@ -145,104 +164,11 @@ public class BiliParser extends BaseParser {
         return result;
     }
 
-    @Override
-    public VideoListBean parseVideoListRealInfo(VideoListBean videoListBean) {
-        VideoBean currentVideoBean = videoListBean.getCurrentVideoBean();
-        HashMap<String, String> extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
-        if ("bangumi".equals(extraData.get("videoType"))) {
-            return parseVideoListRealInfoInnerBangumi(videoListBean);
-        } else {
-            return parseVideoListRealInfoInnerAv(videoListBean);
-        }
-    }
-
-    public VideoListBean parseVideoListRealInfoInnerBangumi(VideoListBean videoListBean) {
-        VideoBean currentVideoBean = videoListBean.getCurrentVideoBean();
-        HashMap<String, String> extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
-        String currentAid = extraData.get("aid");
-        String currentCid = extraData.get("cid");
-        if (currentAid != null && currentCid != null) {
-            queryBangumiItemDetail(currentVideoBean, currentAid, currentCid);
-            return videoListBean;
-        }
-        Uri currentUri = Uri.parse(currentVideoBean.getUrl());
-        LogUtil.e("BiliParser", "uri:" + currentUri);
-        Map<String, String> parameters = new HashMap<>();
-        if (currentUri.getPath() != null && currentUri.getPath().contains("ss")) {
-            LogUtil.e("BiliParser", "sid:" + currentVideoBean.getVideoKey());
-            parameters.put("season_id", currentVideoBean.getVideoKey());
-        } else if (currentUri.getPath() != null && currentUri.getPath().contains("ep")) {
-            LogUtil.e("BiliParser", "epid:" + currentVideoBean.getVideoKey());
-            parameters.put("ep_id", currentVideoBean.getVideoKey());
-        }
-        parameters.put("ts", "" + System.currentTimeMillis());
-        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APIURL).create(VideoDetailNetAPI.class);
-        try {
-            Response<BangumiDetailPageBean> response = videoDetailNetAPI.getBangumiDetailPageInfo(parameters).execute();
-            if (response.body() == null || response.body().getCode() != 0) {
-                LogUtil.e("BiliParser", "response error:" + response.body().getCode());
-                return videoListBean;
-            }
-            boolean matchCid = false;
-            BangumiDetailPageBean.ResultBean detailResult = response.body().getResult();
-            videoListBean.getVideoBeanList().clear();
-            videoListBean.setTitle(detailResult.getSeasonTitle());
-            videoListBean.setVideoListDes(detailResult.getEvaluate());
-            for (int i = 0; i < detailResult.getEpisodes().size(); i++) {
-                LogUtil.e("BiliParser", "parse Data:" + detailResult.getEpisodes().get(i));
-                long cid = detailResult.getEpisodes().get(i).getCid();
-                if (currentCid == null || !currentCid.equals("" + cid)) {
-                    VideoBean videoBean = new VideoBean();
-                    boolean haveData = false;
-                    for (VideoBean cacheBean : videoListBean.getVideoBeanList()) {
-                        if (cacheBean.getVideoKey().equals(String.valueOf(cid))) {
-                            videoBean = cacheBean;
-                            haveData = true;
-                            break;
-                        }
-                    }
-                    videoBean.setVideoKey(String.valueOf(cid));
-                    videoBean.setUrl(currentVideoBean.getUrl());
-                    extraData.put("aid", String.valueOf(detailResult.getEpisodes().get(i).getAid()));
-                    extraData.put("cid", String.valueOf(cid));
-                    videoBean.setSourceExternalData(new Gson().toJson(extraData));
-                    videoBean.setDanmakuUrl("http://comment.bilibili.com/" + cid + ".xml");
-                    videoBean.setTitle(detailResult.getEpisodes().get(i).getLongTitle());
-                    if (!haveData) {
-                        videoListBean.getVideoBeanList().add(videoBean);
-                    }
-                    continue;
-                }
-                matchCid = true;
-                videoListBean.setSelectIndex(i);
-                extraData.put("aid", String.valueOf(detailResult.getEpisodes().get(i).getAid()));
-                extraData.put("cid", String.valueOf(cid));
-                currentVideoBean.setSourceExternalData(new Gson().toJson(extraData));
-                currentVideoBean.setDanmakuUrl("http://comment.bilibili.com/" + cid + ".xml");
-                currentVideoBean.setTitle(detailResult.getEpisodes().get(i).getLongTitle());
-                videoListBean.getVideoBeanList().add(currentVideoBean);
-                queryBangumiItemDetail(currentVideoBean, extraData.get("aid"), extraData.get("cid"));
-            }
-            if (!matchCid && videoListBean.getVideoBeanList().size() > 0) {
-                videoListBean.setSelectIndex(0);
-                currentVideoBean = videoListBean.getCurrentVideoBean();
-                extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
-                currentAid = extraData.get("aid");
-                currentCid = extraData.get("cid");
-                queryBangumiItemDetail(currentVideoBean, currentAid, currentCid);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("BiliNextError", "error:" + e.getMessage());
-        }
-        return videoListBean;
-    }
-
     private void queryBangumiItemDetail(VideoBean currentVideoBean, String aid, String cid) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("aid", aid);
         parameters.put("cid", cid);
-        parameters.put("ts", "" + System.currentTimeMillis());
+        parameters.put("qn", getUserQuality());
         VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APIURL).create(VideoDetailNetAPI.class);
         try {
             Response<BangumiUrlBean> urlResponse = videoDetailNetAPI.getBangumiUrl(parameters).execute();
@@ -251,12 +177,48 @@ public class BiliParser extends BaseParser {
                 return;
             }
             String description;
+            if(currentVideoBean.getQualityBeans().size()<=1){
+                currentVideoBean.getQualityBeans().clear();
+                List<Integer> qualityList = urlResponse.body().getAcceptQuality();
+                TreeMap<Integer, String> qualityMap = new TreeMap<>();
+                for(Integer quality:qualityList){
+                    switch (quality) {
+                        case 16:
+                            qualityMap.put(16, "360P");
+                            break;
+                        case 32:
+                            qualityMap.put(32, "480P");
+                            break;
+                        case 64:
+                            qualityMap.put(64, "720P");
+                            break;
+                        case 80:
+                            qualityMap.put(80, "1080P");
+                            break;
+                        case 112:
+                        default:
+                            qualityMap.put(112, "1080P+");
+                            break;
+                    }
+                }
+                int selectIndex = 0;
+                for (String quality : qualityMap.values()) {
+                    VideoQualityBean videoQualityBean = new VideoQualityBean();
+                    videoQualityBean.setQuality(quality);
+                    currentVideoBean.getQualityBeans().add(videoQualityBean);
+                    if(quality.equals(SettingConfig.getCurrentQuality())){
+                        currentVideoBean.setCurrentQualityIndex(selectIndex);
+                    }
+                    selectIndex++;
+                }
+            }
             if (urlResponse.body().getDash() != null) {
                 currentVideoBean.setDash(true);
                 for (int j = 0; j < urlResponse.body().getDash().getVideo().size(); j++) {
                     VideoQualityBean qualityBean = new VideoQualityBean();
                     qualityBean.setRealVideoUrl(urlResponse.body().getDash().getVideo().get(j).getBaseUrl());
-                    switch (urlResponse.body().getDash().getVideo().get(j).getId()) {
+                    int quality = urlResponse.body().getDash().getVideo().get(j).getId();
+                    switch (quality) {
                         case 16:
                             description = "360P";
                             break;
@@ -269,6 +231,7 @@ public class BiliParser extends BaseParser {
                         case 80:
                             description = "1080P";
                             break;
+                        case 112:
                         default:
                             description = "1080P+";
                             break;
@@ -276,11 +239,13 @@ public class BiliParser extends BaseParser {
                     qualityBean.setQuality(description);
                     qualityBean.setRealAudioUrl(urlResponse.body().getDash().getAudio().get(0).getBaseUrl());
                     currentVideoBean.getQualityBeans().add(qualityBean);
+                    if (quality == urlResponse.body().getQuality()) {
+                        currentVideoBean.setCurrentQualityIndex(currentVideoBean.getQualityBeans().size() - 1);
+                    }
                 }
             } else {
                 currentVideoBean.setDash(false);
                 VideoQualityBean qualityBean = new VideoQualityBean();
-                qualityBean.setRealVideoUrl(urlResponse.body().getDurl().get(0).getUrl());
                 switch (urlResponse.body().getQuality()) {
                     case 16:
                         description = "360P";
@@ -294,106 +259,39 @@ public class BiliParser extends BaseParser {
                     case 80:
                         description = "1080P";
                         break;
+                    case 112:
                     default:
                         description = "1080P+";
                         break;
                 }
-                qualityBean.setQuality(description);
-                currentVideoBean.getQualityBeans().add(qualityBean);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("BiliNextError", "error:" + e.getMessage());
-        }
-    }
-
-    public VideoListBean parseVideoListRealInfoInnerAv(VideoListBean videoListBean) {
-        VideoBean currentVideoBean = videoListBean.getCurrentVideoBean();
-        HashMap<String, String> extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
-        String currentAid = extraData.get("aid");
-        String currentCid = extraData.get("cid");
-        if (currentAid != null && currentCid != null) {
-            queryAVItemDetail(currentVideoBean, currentAid, currentCid);
-            return videoListBean;
-        }
-        Uri currentUri = Uri.parse(currentVideoBean.getUrl());
-        LogUtil.e("BiliParser", "uri:" + currentUri);
-        currentAid = currentUri.getPath().substring(1);
-        try {
-            currentCid = currentVideoBean.getVideoKey();
-        } catch (Exception e) {
-            //ignore
-        }
-        LogUtil.e("BiliParser", "cid:" + currentCid);
-        currentAid = currentAid.substring(0, currentAid.contains("/") ? currentAid.indexOf("/") : currentAid.length());
-        LogUtil.e("BiliParser", "final aid:" + currentAid);
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("aid", currentAid);
-        parameters.put("ts", "" + System.currentTimeMillis());
-        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(VideoDetailNetAPI.class);
-        try {
-            Response<VideoDetailPageBean> response = videoDetailNetAPI.getAvDetailPageInfo(parameters).execute();
-            if (response.body() == null || response.body().getCode() != 0) {
-                LogUtil.e("BiliParser", "response error:" + response.body().getCode());
-                return videoListBean;
-            }
-            boolean matchCid = false;
-            videoListBean.setVideoListDes(response.body().getData().getDesc());
-            videoListBean.getVideoBeanList().clear();
-            for (int i = 0; i < response.body().getData().getPages().size(); i++) {
-                LogUtil.e("BiliParser", "parse Data:" + response.body().getData().getPages().get(i));
-                int cid = response.body().getData().getPages().get(i).getCid();
-                if (currentCid == null || !currentCid.equals("" + cid)) {
-                    VideoBean videoBean = new VideoBean();
-                    boolean haveData = false;
-                    for (VideoBean cacheBean : videoListBean.getVideoBeanList()) {
-                        if (cacheBean.getVideoKey().equals(String.valueOf(cid))) {
-                            videoBean = cacheBean;
-                            haveData = true;
-                            break;
-                        }
+                boolean qualityMatch = false;
+                for (int innerIndex = 0; innerIndex < currentVideoBean.getQualityBeans().size(); innerIndex++) {
+                    VideoQualityBean innerBean = currentVideoBean.getQualityBeans().get(innerIndex);
+                    if (description.equals(innerBean.getQuality())) {
+                        qualityBean = innerBean;
+                        qualityMatch = true;
+                        currentVideoBean.setCurrentQualityIndex(innerIndex);
+                        break;
                     }
-                    videoBean.setVideoKey(String.valueOf(cid));
-                    videoBean.setUrl(currentVideoBean.getUrl());
-                    extraData.put("aid", currentAid);
-                    extraData.put("cid", String.valueOf(cid));
-                    videoBean.setSourceExternalData(new Gson().toJson(extraData));
-                    videoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
-                    videoBean.setTitle(response.body().getData().getPages().get(i).getPart());
-                    if (!haveData) {
-                        videoListBean.getVideoBeanList().add(videoBean);
-                    }
-                    continue;
                 }
-                matchCid = true;
-                videoListBean.setSelectIndex(i);
-                extraData.put("aid", currentAid);
-                extraData.put("cid", String.valueOf(cid));
-                currentVideoBean.setSourceExternalData(new Gson().toJson(extraData));
-                currentVideoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
-                currentVideoBean.setTitle(response.body().getData().getPages().get(i).getPart());
-                videoListBean.getVideoBeanList().add(currentVideoBean);
-                queryAVItemDetail(currentVideoBean, extraData.get("aid"), extraData.get("cid"));
-            }
-            if (!matchCid && videoListBean.getVideoBeanList().size() > 0) {
-                videoListBean.setSelectIndex(0);
-                currentVideoBean = videoListBean.getCurrentVideoBean();
-                currentCid = currentVideoBean.getVideoKey();
-                LogUtil.e("BiliParser", "not here error");
-                queryAVItemDetail(currentVideoBean,currentAid,currentCid);
+                qualityBean.setRealVideoUrl(urlResponse.body().getDurl().get(0).getUrl());
+                qualityBean.setQuality(description);
+                LogUtil.e("DataLog", qualityBean.getRealVideoUrl());
+                if (!qualityMatch) {
+                    currentVideoBean.getQualityBeans().add(qualityBean);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("BiliNextError", "error:" + e.getMessage());
         }
-        return videoListBean;
     }
 
     private void queryAVItemDetail(VideoBean currentVideoBean, String aid, String cid) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("aid", aid);
         parameters.put("cid", cid + "");
-        parameters.put("ts", "" + System.currentTimeMillis());
+        parameters.put("qn", getUserQuality());
         VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(VideoDetailNetAPI.class);
         try {
             Response<VideoUrlBean> urlResponse = videoDetailNetAPI.getVideoUrl(parameters).execute();
@@ -401,11 +299,45 @@ public class BiliParser extends BaseParser {
                 return;
             }
             String description;
+            if(currentVideoBean.getQualityBeans().size()<=1){
+                currentVideoBean.getQualityBeans().clear();
+                List<Integer> qualityList = urlResponse.body().getData().getAccept_quality();
+                TreeMap<Integer, String> qualityMap = new TreeMap<>();
+                for(Integer quality:qualityList){
+                    switch (quality) {
+                        case 16:
+                            qualityMap.put(16, "360P");
+                            break;
+                        case 32:
+                            qualityMap.put(32, "480P");
+                            break;
+                        case 64:
+                            qualityMap.put(64, "720P");
+                            break;
+                        case 80:
+                            qualityMap.put(80, "1080P");
+                            break;
+                        case 112:
+                        default:
+                            qualityMap.put(112, "1080P+");
+                            break;
+                    }
+                }
+                int selectIndex = 0;
+                for (String quality : qualityMap.values()) {
+                    VideoQualityBean videoQualityBean = new VideoQualityBean();
+                    videoQualityBean.setQuality(quality);
+                    currentVideoBean.getQualityBeans().add(videoQualityBean);
+                    if(quality.equals(SettingConfig.getCurrentQuality())){
+                        currentVideoBean.setCurrentQualityIndex(selectIndex);
+                    }
+                    selectIndex++;
+                }
+            }
             if (urlResponse.body().getData().getDash() != null) {
                 currentVideoBean.setDash(true);
                 for (int j = 0; j < urlResponse.body().getData().getDash().getVideo().size(); j++) {
                     VideoQualityBean qualityBean = new VideoQualityBean();
-                    qualityBean.setRealVideoUrl(urlResponse.body().getData().getDash().getVideo().get(j).getBase_url());
                     switch (urlResponse.body().getData().getDash().getVideo().get(j).getId()) {
                         case 16:
                             description = "360P";
@@ -419,18 +351,32 @@ public class BiliParser extends BaseParser {
                         case 80:
                             description = "1080P";
                             break;
+                        case 112:
                         default:
                             description = "1080P+";
                             break;
                     }
+                    boolean qualityMatch = false;
+                    for (int innerIndex = 0; innerIndex < currentVideoBean.getQualityBeans().size(); innerIndex++) {
+                        VideoQualityBean innerBean = currentVideoBean.getQualityBeans().get(innerIndex);
+                        if (description.equals(innerBean.getQuality())) {
+                            qualityBean = innerBean;
+                            qualityMatch = true;
+                            currentVideoBean.setCurrentQualityIndex(innerIndex);
+                            break;
+                        }
+                    }
+                    qualityBean.setRealVideoUrl(urlResponse.body().getData().getDash().getVideo().get(j).getBase_url());
                     qualityBean.setQuality(description);
                     qualityBean.setRealAudioUrl(urlResponse.body().getData().getDash().getAudio().get(0).getBase_url());
-                    currentVideoBean.getQualityBeans().add(qualityBean);
+                    LogUtil.e("DataLog", qualityBean.getRealVideoUrl());
+                    if (!qualityMatch) {
+                        currentVideoBean.getQualityBeans().add(qualityBean);
+                    }
                 }
             } else {
                 currentVideoBean.setDash(false);
                 VideoQualityBean qualityBean = new VideoQualityBean();
-                qualityBean.setRealVideoUrl(urlResponse.body().getData().getDurl().get(0).getUrl());
                 switch (urlResponse.body().getData().getQuality()) {
                     case 16:
                         description = "360P";
@@ -444,12 +390,27 @@ public class BiliParser extends BaseParser {
                     case 80:
                         description = "1080P";
                         break;
+                    case 112:
                     default:
                         description = "1080P+";
                         break;
                 }
+                boolean qualityMatch = false;
+                for (int innerIndex = 0; innerIndex < currentVideoBean.getQualityBeans().size(); innerIndex++) {
+                    VideoQualityBean innerBean = currentVideoBean.getQualityBeans().get(innerIndex);
+                    if (description.equals(innerBean.getQuality())) {
+                        qualityBean = innerBean;
+                        qualityMatch = true;
+                        currentVideoBean.setCurrentQualityIndex(innerIndex);
+                        break;
+                    }
+                }
+                qualityBean.setRealVideoUrl(urlResponse.body().getData().getDurl().get(0).getUrl());
                 qualityBean.setQuality(description);
-                currentVideoBean.getQualityBeans().add(qualityBean);
+                LogUtil.e("DataLog", qualityBean.getRealVideoUrl());
+                if (!qualityMatch) {
+                    currentVideoBean.getQualityBeans().add(qualityBean);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -463,7 +424,6 @@ public class BiliParser extends BaseParser {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("pn", pn);
         parameters.put("keyword", searchKey);
-        parameters.put("ts", "" + System.currentTimeMillis());
         SearchNetAPI searchNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(SearchNetAPI.class);
         try {
             Response<SearchResultBean> response = searchNetAPI.getSearchResult(parameters).execute();
@@ -548,5 +508,338 @@ public class BiliParser extends BaseParser {
             }
         }
         return result;
+    }
+
+    public static String login(String userName, String rawPassword) {
+        if (BiliLocalStatus.isLogin()) {
+            Log.e("jsTest", "user already login");
+            return "success";
+        }
+        UserNetAPI userNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.PASSPORTURL).create(UserNetAPI.class);
+        try {
+            Response<LoginKeyBean> response = userNetAPI.getKey().execute();
+            if (response.body() == null || response.body().getData() == null) {
+                Log.e("jsTest", "key response is null");
+                return "";
+            }
+            Log.e("jsTest", "key response normal");
+            LoginKeyBean.AuthKey authKey = response.body().getData();
+            String password = authKey.encypt(authKey.getHash() + rawPassword, authKey.getKey());
+            Response<LoginResultBean> loginResponse = userNetAPI.login(userName, password, "device_meta", "dt", "main.homepage.avatar-nologin.all.click", "bilibili://live/home").execute();
+            return parseLoginResponse(loginResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //
+        }
+        return "";
+    }
+
+    public static String acquireAccessTokenV2(String code) {
+        Log.e("JsBridgeDispatcher", "acquireAccess by code" + code);
+        UserNetAPI userNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.PASSPORTURL).create(UserNetAPI.class);
+        try {
+            Response<LoginResultBean> loginResponse = userNetAPI.acquireAccessTokenV2(code, "authorization_code").execute();
+            return parseLoginResponse(loginResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //
+        }
+        return "";
+    }
+
+    private static String parseLoginResponse(Response<LoginResultBean> loginResponse) {
+        if (loginResponse.body() == null) {
+            Log.e("jsTest", "login response is null");
+            return "";
+        }
+        if (loginResponse.body().getCode() == 0) {
+            String redirectUrl = loginResponse.body().getData().getUrl();
+            if (redirectUrl != null && !redirectUrl.isEmpty()) {
+                return redirectUrl;
+            }
+            Log.e("LoginActivity", "登录成功" + loginResponse.body().getCode());
+            LoginResultBean.TokenInfoBean token = loginResponse.body().getData().getTokenInfo();
+            BiliLocalStatus.setLogin(true);
+            BiliLocalStatus.setAccessKey(token.getAccessToken());
+            BiliLocalStatus.setMid(token.getMid());
+            BiliLocalStatus.setToken(token);
+            CookieManager cookieManager = CookieManager.getInstance();
+            LoginResultBean.CookieInfoBean cookieInfoBean = loginResponse.body().getData().getCookieInfo();
+            for (String domain : cookieInfoBean.getDomains()) {
+                for (int i = 0; i < cookieInfoBean.getCookies().size(); i++) {
+                    cookieManager.setCookie(domain, cookieInfoBean.getCookies().get(i).getName() + "=" + cookieInfoBean.getCookies().get(i).getValue());
+                }
+            }
+            return "success";
+        } else if (loginResponse.body().getCode() == -105) {
+            Uri uri = Uri.parse(loginResponse.body().getData().getUrl());
+            Log.e("jsTest", "url:" + uri);
+            return loginResponse.body().getData().getUrl();
+        } else {
+            Log.e("LoginActivity", "fail:" + loginResponse.body().getCode());
+        }
+        return "";
+    }
+
+    @Override
+    public Fragment getLoginFragment() {
+        return new LoginFragment();
+    }
+
+    @Override
+    public List<VideoListBean> updateVideoList(List<VideoListBean> videoListBeans, int selectSourceIndex) {
+        VideoBean currentVideoBean = videoListBeans.get(selectSourceIndex).getCurrentVideoBean();
+        HashMap<String, String> extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
+        if ("bangumi".equals(extraData.get("videoType"))) {
+            return updateBangumiList(videoListBeans, selectSourceIndex);
+        } else {
+            return updateAvVideoList(videoListBeans, selectSourceIndex);
+        }
+    }
+
+    private List<VideoListBean> updateBangumiList(List<VideoListBean> videoListBeans, int selectSourceIndex) {
+        VideoListBean orignal = videoListBeans.get(selectSourceIndex);
+        VideoBean currentVideoBean = videoListBeans.get(selectSourceIndex).getCurrentVideoBean();
+        HashMap<String, String> extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
+        String currentAid = extraData.get("aid");
+        String currentCid = extraData.get("cid");
+        if (currentAid != null && currentCid != null) {
+            queryBangumiItemDetail(currentVideoBean, currentAid, currentCid);
+            return videoListBeans;
+        }
+        Uri currentUri = Uri.parse(currentVideoBean.getUrl());
+        LogUtil.e("BiliParser", "uri:" + currentUri);
+        Map<String, String> parameters = new HashMap<>();
+        if (currentUri.getPath() != null && currentUri.getPath().contains("ss")) {
+            LogUtil.e("BiliParser", "sid:" + currentVideoBean.getVideoKey());
+            parameters.put("season_id", currentVideoBean.getVideoKey());
+        } else if (currentUri.getPath() != null && currentUri.getPath().contains("ep")) {
+            LogUtil.e("BiliParser", "epid:" + currentVideoBean.getVideoKey());
+            parameters.put("ep_id", currentVideoBean.getVideoKey());
+        }
+        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APIURL).create(VideoDetailNetAPI.class);
+        try {
+            Response<BangumiDetailPageBean> response = videoDetailNetAPI.getBangumiDetailPageInfo(parameters).execute();
+            if (response.body() == null || response.body().getCode() != 0) {
+                LogUtil.e("BiliParser", "response error:" + response.body().getCode());
+                return videoListBeans;
+            }
+            BangumiDetailPageBean.Result detailResult = response.body().getResult();
+            videoListBeans.clear();
+            int loopIndex = 0;
+            for (BangumiDetailPageBean.Result.Modules module : detailResult.getModules()) {
+                boolean matchCid = false;
+                LogUtil.e("BiliParser", "parse Module:" + module.getTitle());
+                VideoListBean videoListBean = new VideoListBean();
+                videoListBean.setSourceName(Constants.Source.BILI);
+                videoListBean.setTag(orignal.getTag());
+                videoListBean.setCoverPortrait(orignal.isCoverPortrait());
+                videoListBean.setCover(orignal.getCover());
+                videoListBean.setTitle(detailResult.getTitle());
+                videoListBean.setSeasonTitle(module.getTitle());
+                videoListBean.setVideoListDes(detailResult.getEvaluate());
+                List<BangumiDetailPageBean.Result.Modules.Data.Episodes> episodes = module.getData().getEpisodes();
+                for (int i = 0; i < episodes.size(); i++) {
+                    String title = episodes.get(i).getTitle();
+                    if (!TextUtils.isEmpty(episodes.get(i).getLongTitle())) {
+                        title = title + " " + episodes.get(i).getLongTitle();
+                    }
+                    LogUtil.e("BiliParser", "parse Data:" + title);
+                    long cid = episodes.get(i).getCid();
+                    long aid = episodes.get(i).getAid();
+                    if (currentCid == null || !currentCid.equals("" + cid) || cid == 0) {
+                        String link = episodes.get(i).getLink();
+                        if (cid == 0 && link.contains("/BV")) {
+                            List<String> ids = getAvInfo(link.substring(link.lastIndexOf("/") + 1));
+                            if (ids.size() >= 2) {
+                                extraData.put("aid", ids.get(0));
+                                extraData.put("cid", ids.get(1));
+                                extraData.put("videoType", "av");
+                            }
+                        } else {
+                            extraData.put("aid", String.valueOf(aid));
+                            extraData.put("cid", String.valueOf(cid));
+                            extraData.put("videoType", "bangumi");
+                        }
+                        String finalCid = extraData.get("cid");
+                        VideoBean videoBean = new VideoBean();
+                        boolean haveData = false;
+                        for (VideoBean cacheBean : videoListBean.getVideoBeanList()) {
+                            if (cacheBean.getVideoKey().equals(finalCid)) {
+                                videoBean = cacheBean;
+                                haveData = true;
+                                break;
+                            }
+                        }
+                        videoBean.setVideoKey(finalCid);
+                        videoBean.setUrl(currentVideoBean.getUrl());
+                        videoBean.setSourceExternalData(new Gson().toJson(extraData));
+                        videoBean.setDanmakuUrl("http://comment.bilibili.com/" + cid + ".xml");
+                        videoBean.setTitle(title);
+                        if (!haveData) {
+                            videoListBean.getVideoBeanList().add(videoBean);
+                        }
+                        continue;
+                    }
+                    matchCid = true;
+                    videoListBean.setSelectIndex(i);
+                    extraData.put("aid", String.valueOf(episodes.get(i).getAid()));
+                    extraData.put("cid", String.valueOf(cid));
+                    extraData.put("videoType", "bangumi");
+                    currentVideoBean.setSourceExternalData(new Gson().toJson(extraData));
+                    currentVideoBean.setDanmakuUrl("http://comment.bilibili.com/" + cid + ".xml");
+                    currentVideoBean.setTitle(title);
+                    videoListBean.getVideoBeanList().add(currentVideoBean);
+                    queryBangumiItemDetail(currentVideoBean, extraData.get("aid"), extraData.get("cid"));
+                }
+                if (!matchCid && videoListBean.getVideoBeanList().size() > 0 && loopIndex == selectSourceIndex) {
+                    videoListBean.setSelectIndex(0);
+                    currentVideoBean = videoListBean.getCurrentVideoBean();
+                    extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
+                    currentAid = extraData.get("aid");
+                    currentCid = extraData.get("cid");
+                    queryBangumiItemDetail(currentVideoBean, currentAid, currentCid);
+                }
+                loopIndex++;
+                videoListBeans.add(videoListBean);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("BiliNextError", "error:" + e.getMessage());
+        }
+        return videoListBeans;
+    }
+
+    private List<VideoListBean> updateAvVideoList(List<VideoListBean> videoListBeans, int selectSourceIndex) {
+        VideoListBean orignal = videoListBeans.get(selectSourceIndex);
+        VideoBean currentVideoBean = videoListBeans.get(selectSourceIndex).getCurrentVideoBean();
+        HashMap<String, String> extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
+        String currentAid = extraData.get("aid");
+        String currentCid = extraData.get("cid");
+        if (currentAid != null && currentCid != null) {
+            queryAVItemDetail(currentVideoBean, currentAid, currentCid);
+            return videoListBeans;
+        }
+        Uri currentUri = Uri.parse(currentVideoBean.getUrl());
+        LogUtil.e("BiliParser", "uri:" + currentUri);
+        currentAid = currentUri.getPath().substring(1);
+        try {
+            currentCid = currentVideoBean.getVideoKey();
+        } catch (Exception e) {
+            //ignore
+        }
+        LogUtil.e("BiliParser", "cid:" + currentCid);
+        currentAid = currentAid.substring(0, currentAid.contains("/") ? currentAid.indexOf("/") : currentAid.length());
+        LogUtil.e("BiliParser", "final aid:" + currentAid);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("aid", currentAid);
+        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(VideoDetailNetAPI.class);
+        try {
+            Response<VideoDetailPageBean> response = videoDetailNetAPI.getAvDetailPageInfo(parameters).execute();
+            if (response.body() == null || response.body().getCode() != 0) {
+                LogUtil.e("BiliParser", "response error:" + response.body().getCode());
+                return videoListBeans;
+            }
+            boolean matchCid = false;
+            VideoListBean videoListBean = new VideoListBean();
+            videoListBean.setSourceName(Constants.Source.BILI);
+            videoListBean.setTag(orignal.getTag());
+            videoListBean.setCoverPortrait(orignal.isCoverPortrait());
+            videoListBean.setCover(orignal.getCover());
+            videoListBean.setTitle(response.body().getData().getTitle());
+            videoListBean.setSeasonTitle("选集");
+            videoListBean.setVideoListDes(response.body().getData().getDesc());
+            videoListBean.getVideoBeanList().clear();
+            boolean useListTitle = response.body().getData().getPages().size()<=1;
+            for (int i = 0; i < response.body().getData().getPages().size(); i++) {
+                LogUtil.e("BiliParser", "parse Data:" + response.body().getData().getPages().get(i));
+                int cid = response.body().getData().getPages().get(i).getCid();
+                if (currentCid == null || !currentCid.equals("" + cid)) {
+                    VideoBean videoBean = new VideoBean();
+                    boolean haveData = false;
+                    for (VideoBean cacheBean : videoListBean.getVideoBeanList()) {
+                        if (cacheBean.getVideoKey().equals(String.valueOf(cid))) {
+                            videoBean = cacheBean;
+                            haveData = true;
+                            break;
+                        }
+                    }
+                    videoBean.setVideoKey(String.valueOf(cid));
+                    videoBean.setUrl(currentVideoBean.getUrl());
+                    extraData.put("aid", currentAid);
+                    extraData.put("cid", String.valueOf(cid));
+                    videoBean.setSourceExternalData(new Gson().toJson(extraData));
+                    videoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
+                    if(useListTitle){
+                        videoBean.setTitle(videoListBean.getTitle());
+                    }else {
+                        videoBean.setTitle(response.body().getData().getPages().get(i).getPart());
+                    }
+                    if (!haveData) {
+                        videoListBean.getVideoBeanList().add(videoBean);
+                    }
+                    continue;
+                }
+                matchCid = true;
+                videoListBean.setSelectIndex(i);
+                extraData.put("aid", currentAid);
+                extraData.put("cid", String.valueOf(cid));
+                currentVideoBean.setSourceExternalData(new Gson().toJson(extraData));
+                currentVideoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
+                if(useListTitle){
+                    currentVideoBean.setTitle(videoListBean.getTitle());
+                }else {
+                    currentVideoBean.setTitle(response.body().getData().getPages().get(i).getPart());
+                }
+                videoListBean.getVideoBeanList().add(currentVideoBean);
+                queryAVItemDetail(currentVideoBean, extraData.get("aid"), extraData.get("cid"));
+            }
+            if (!matchCid && videoListBean.getVideoBeanList().size() > 0) {
+                videoListBean.setSelectIndex(0);
+                currentVideoBean = videoListBean.getCurrentVideoBean();
+                currentCid = currentVideoBean.getVideoKey();
+                LogUtil.e("BiliParser", "not here error");
+                queryAVItemDetail(currentVideoBean, currentAid, currentCid);
+            }
+            videoListBeans.clear();
+            videoListBeans.add(videoListBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("BiliNextError", "error:" + e.getMessage());
+        }
+        return videoListBeans;
+    }
+
+    private List<String> getAvInfo(String bvid) {
+        List<String> result = new ArrayList<>();
+        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoDetailNetAPI.class);
+        try {
+            Response<BvToAvBean> response = videoDetailNetAPI.getAvInfo(bvid).execute();
+            if (response.body() == null || response.body().getCode() != 0) {
+                LogUtil.e("BiliParser", "response error:" + response.body().getCode());
+                return result;
+            }
+            result.add("" + response.body().getData().getAid());
+            result.add("" + response.body().getData().getCid());
+        } catch (Exception e) {
+
+        }
+        return result;
+    }
+
+    private String getUserQuality() {
+        switch (SettingConfig.getCurrentQuality()) {
+            case "360P":
+                return "16";
+            case "480P":
+                return "32";
+            case "720P":
+                return "64";
+            case "1080P":
+                return "80";
+            case "1080P+":
+            default:
+                return "112";
+        }
     }
 }

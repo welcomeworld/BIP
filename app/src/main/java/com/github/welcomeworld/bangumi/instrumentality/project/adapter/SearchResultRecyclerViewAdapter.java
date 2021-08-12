@@ -25,10 +25,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -129,27 +125,25 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     }
 
     public static class MyInnerViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.card_video_title)
         TextView titleView;
-        @BindView(R.id.card_video_label)
         TextView tagView;
-        @BindView(R.id.card_video_cover)
         ImageView coverView;
-        @BindView(R.id.card_video_duration)
         TextView durationView;
         public MyInnerViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            titleView = itemView.findViewById(R.id.card_video_title);
+            tagView = itemView.findViewById(R.id.card_video_label);
+            coverView = itemView.findViewById(R.id.card_video_cover);
+            durationView = itemView.findViewById(R.id.card_video_duration);
         }
     }
 
     public static class FooterViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.footer_progress)
         ProgressBar progressBar;
 
         public FooterViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            progressBar = itemView.findViewById(R.id.footer_progress);
         }
     }
 

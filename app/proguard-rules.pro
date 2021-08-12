@@ -30,3 +30,22 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+
+#友盟开始
+-keep class com.umeng.** { *; }
+
+-keep class com.uc.** { *; }
+
+-keep class com.efs.** { *; }
+
+-keepclassmembers class*{
+     public<init>(org.json.JSONObject);
+}
+-keepclassmembers enum*{
+      publicstatic**[] values();
+      publicstatic** valueOf(java.lang.String);
+}
+-keep publicclass com.github.welcomeworld.bangumi.instrumentality.project.R$*{
+      publicstaticfinalint*;
+}
+#友盟结束

@@ -14,4 +14,12 @@ public class BiliRetrofitManager {
                 .client(BiliOkHttpClientManager.getInstance().getOkHttpClient())
                 .build();
     }
+
+    public static Retrofit getNormalRetrofit(String baseUrl){
+        return new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(BiliOkHttpClientManager.getInstance().getNormalOkHttpClient())
+                .build();
+    }
 }

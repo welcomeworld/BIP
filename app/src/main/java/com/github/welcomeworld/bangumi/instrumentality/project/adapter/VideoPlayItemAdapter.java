@@ -14,6 +14,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBe
 public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     VideoListBean data;
     ItemClickListener itemClickListener;
+    private int selectItemIndex = -1;
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -24,14 +25,12 @@ public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ItemHolder itemHolder = (ItemHolder) holder;
         itemHolder.videoItemNameView.setText(data.getVideoBeanList().get(position).getTitle());
-        itemHolder.videoItemNameView.setSelected(position == data.getSelectIndex());
-        itemHolder.videoItemNameView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.setSelected(true);
-                if(itemClickListener!=null){
-                    itemClickListener.onItemClick(position);
-                }
+        itemHolder.videoItemNameView.setSelected(position == selectItemIndex);
+        itemHolder.videoItemNameView.setOnClickListener(v -> {
+            v.setSelected(true);
+            selectItemIndex = position;
+            if(itemClickListener!=null){
+                itemClickListener.onItemClick(position);
             }
         });
     }
@@ -47,7 +46,7 @@ public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return data == null||data.getVideoBeanList() == null||data.getVideoBeanList().size()<=1?0:data.getVideoBeanList().size();
+        return data == null||data.getVideoBeanList() == null?0:data.getVideoBeanList().size();
     }
 
     public VideoListBean getData() {
@@ -68,5 +67,13 @@ public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public interface ItemClickListener{
         public void onItemClick(int position);
+    }
+
+    public int getSelectItemIndex() {
+        return selectItemIndex;
+    }
+
+    public void setSelectItemIndex(int selectItemIndex) {
+        this.selectItemIndex = selectItemIndex;
     }
 }

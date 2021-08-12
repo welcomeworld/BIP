@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class VideoListBean implements Parcelable {
     private String title;
@@ -16,6 +15,7 @@ public class VideoListBean implements Parcelable {
     private boolean coverPortrait;
     private String tag;
     private String VideoListDes;
+    private String seasonTitle;
 
     public VideoListBean(){
 
@@ -32,6 +32,7 @@ public class VideoListBean implements Parcelable {
         coverPortrait = in.readByte() == 1;
         tag = in.readString();
         VideoListDes = in.readString();
+        seasonTitle = in.readString();
     }
 
     @Override
@@ -45,6 +46,7 @@ public class VideoListBean implements Parcelable {
         dest.writeByte(coverPortrait?(byte) 1:0);
         dest.writeString(tag);
         dest.writeString(VideoListDes);
+        dest.writeString(seasonTitle);
     }
 
     @Override
@@ -144,5 +146,29 @@ public class VideoListBean implements Parcelable {
 
     public void setVideoListDes(String videoListDes) {
         VideoListDes = videoListDes;
+    }
+
+    public String getSeasonTitle() {
+        return seasonTitle;
+    }
+
+    public void setSeasonTitle(String seasonTitle) {
+        this.seasonTitle = seasonTitle;
+    }
+
+    @Override
+    public String toString() {
+        return "VideoListBean{" +
+                "title='" + title + '\'' +
+                ", cover='" + cover + '\'' +
+                ", selectIndex=" + selectIndex +
+                ", sourceName='" + sourceName + '\'' +
+                ", videoBeanList size=" + videoBeanList.size() +
+                ", sourceExternalData='" + sourceExternalData + '\'' +
+                ", coverPortrait=" + coverPortrait +
+                ", tag='" + tag + '\'' +
+                ", VideoListDes='" + VideoListDes + '\'' +
+                ", seasonTitle='" + seasonTitle + '\'' +
+                '}';
     }
 }

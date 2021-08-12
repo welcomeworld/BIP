@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.FavOrHistoryActivity;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.LoginContainerActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SearchActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.VideoPlayActivity;
 
@@ -23,4 +25,31 @@ public class IntentUtil {
         }
         context.startActivity(intent);
     }
+
+    public static void intentToHistory(Context context, Bundle bundle){
+        Intent intent = new Intent(context, FavOrHistoryActivity.class);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        context.startActivity(intent);
+    }
+
+    public static void intentToFav(Context context, Bundle bundle){
+        Intent intent = new Intent(context, FavOrHistoryActivity.class);
+        intent.putExtra(FavOrHistoryActivity.EXTRA_PAGE_INDEX,1);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        context.startActivity(intent);
+    }
+
+    public static void intentToLoginContainer(Context context, Bundle bundle){
+        Intent intent = new Intent(context, LoginContainerActivity.class);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        context.startActivity(intent);
+    }
+
+
 }

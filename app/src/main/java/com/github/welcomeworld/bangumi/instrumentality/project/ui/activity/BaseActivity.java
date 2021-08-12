@@ -9,10 +9,11 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewbinding.ViewBinding;
+
+import com.dylanc.viewbinding.base.ViewBindingUtil;
 
 import java.lang.reflect.Method;
-
-import butterknife.ButterKnife;
 
 
 /**
@@ -20,16 +21,9 @@ import butterknife.ButterKnife;
  * baseActivity
  */
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActivity {
     private boolean isResume;
-
-    protected abstract int getLayoutId();
-
-    /**
-     * 初始化布局
-     */
-    protected abstract void initViews(@Nullable Bundle savedInstanceState);
-
+    private VB viewBinding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,14 +31,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         if(isNotch()){
             setXiaoMiInNotouch();
         }
-        setContentView(getLayoutId());
-        initViews(savedInstanceState);
+        setContentView(0);
     }
 
     @Override
     public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        ButterKnife.bind(this);
+        viewBinding = ViewBindingUtil.inflateWithGeneric(this,getLayoutInflater());
+        setContentView(viewBinding.getRoot());
     }
 
     @Override
@@ -100,5 +93,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         } catch (Throwable ignore) {
         }
         return false;
+    }
+
+    public VB getViewBinding() {
+        return viewBinding;
     }
 }

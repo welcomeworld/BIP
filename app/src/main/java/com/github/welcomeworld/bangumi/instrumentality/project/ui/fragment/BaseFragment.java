@@ -8,18 +8,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewbinding.ViewBinding;
 
-import butterknife.ButterKnife;
+import com.dylanc.viewbinding.base.ViewBindingUtil;
 
-public abstract class BaseFragment extends Fragment {
 
-    protected abstract int getLayoutId();
+public abstract class BaseFragment<VB extends ViewBinding> extends Fragment {
+    private VB viewBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(getLayoutId(),container,false);
-        ButterKnife.bind(this,view);
-        return view;
+        viewBinding = ViewBindingUtil.inflateWithGeneric(this,getLayoutInflater());
+        return viewBinding.getRoot();
+    }
+
+
+    public VB getViewBinding() {
+        return viewBinding;
     }
 }

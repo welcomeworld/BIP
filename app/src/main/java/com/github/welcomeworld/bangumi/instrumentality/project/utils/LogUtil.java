@@ -11,4 +11,22 @@ public class LogUtil {
             Log.e(tag,msg);
         }
     }
+
+    public static void i(String tag, String msg) {
+        if(logSwitch){
+            Log.i(tag,msg);
+        }
+    }
+
+    public static void w(String tag, String msg) {
+        if(logSwitch){
+            Log.w(tag,msg);
+        }
+    }
+
+    public static void d(String tag, String msg) {
+        if(logSwitch){
+            Log.d(tag,msg);
+        }
+    }
 }

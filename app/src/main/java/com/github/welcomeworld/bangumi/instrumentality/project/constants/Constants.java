@@ -6,5 +6,6 @@ public class Constants {
     public static class Source{
         public static final String BILI = "bili";
         public static final String BIMI = "bimi";
+        public static final String AGEFANS = "agefans";
     }
 }

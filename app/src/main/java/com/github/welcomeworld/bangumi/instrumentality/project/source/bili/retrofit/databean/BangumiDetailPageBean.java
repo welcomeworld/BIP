@@ -4,21 +4,29 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class BangumiDetailPageBean {
+public class BangumiDetailPageBean{
 
     @SerializedName("code")
-    private int code;
+    private Integer code;
+    @SerializedName("data")
+    private Result result;
     @SerializedName("message")
     private String message;
-    @SerializedName("result")
-    private ResultBean result;
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(Integer code) {
         this.code = code;
+    }
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
     }
 
     public String getMessage() {
@@ -29,45 +37,73 @@ public class BangumiDetailPageBean {
         this.message = message;
     }
 
-    public ResultBean getResult() {
-        return result;
-    }
-
-    public void setResult(ResultBean result) {
-        this.result = result;
-    }
-
-    public static class ResultBean {
+    public static class Result {
+        @SerializedName("activity_tab")
+        private ActivityTab activityTab;
+        @SerializedName("actor")
+        private Actor actor;
+        @SerializedName("alias")
+        private String alias;
+        @SerializedName("all_buttons")
+        private AllButtons allButtons;
+        @SerializedName("all_up_infos")
+        private AllUpInfos allUpInfos;
+        @SerializedName("areas")
+        private List<Areas> areas;
+        @SerializedName("badge")
+        private String badge;
+        @SerializedName("badge_info")
+        private BadgeInfo badgeInfo;
+        @SerializedName("celebrity")
+        private List<Celebrity> celebrity;
         @SerializedName("cover")
         private String cover;
+        @SerializedName("detail")
+        private String detail;
+        @SerializedName("dynamic_subtitle")
+        private String dynamicSubtitle;
         @SerializedName("evaluate")
         private String evaluate;
         @SerializedName("link")
         private String link;
         @SerializedName("media_id")
-        private int mediaId;
+        private Integer mediaId;
         @SerializedName("mode")
-        private int mode;
+        private Integer mode;
+        @SerializedName("modules")
+        private List<Modules> modules;
         @SerializedName("new_ep")
-        private NewEpBean newEp;
+        private NewEp newEp;
+        @SerializedName("origin_name")
+        private String originName;
         @SerializedName("paster")
-        private PasterBean paster;
+        private Paster paster;
         @SerializedName("payment")
-        private PaymentBean payment;
+        private Payment payment;
+        @SerializedName("play_strategy")
+        private PlayStrategy playStrategy;
+        @SerializedName("player_icon")
+        private PlayerIcon playerIcon;
+        @SerializedName("premieres")
+        private List<?> premieres;
         @SerializedName("publish")
-        private PublishBean publish;
+        private Publish publish;
         @SerializedName("rating")
-        private RatingBean rating;
+        private Rating rating;
         @SerializedName("record")
         private String record;
+        @SerializedName("refine_cover")
+        private String refineCover;
+        @SerializedName("reserve")
+        private Reserve reserve;
         @SerializedName("rights")
-        private RightsBean rights;
+        private Rights rights;
         @SerializedName("season_id")
-        private int seasonId;
+        private Integer seasonId;
         @SerializedName("season_title")
         private String seasonTitle;
         @SerializedName("series")
-        private SeriesBean series;
+        private Series series;
         @SerializedName("share_copy")
         private String shareCopy;
         @SerializedName("share_url")
@@ -76,28 +112,106 @@ public class BangumiDetailPageBean {
         private String shortLink;
         @SerializedName("square_cover")
         private String squareCover;
+        @SerializedName("staff")
+        private Staff staff;
         @SerializedName("stat")
-        private StatBean stat;
+        private Stat stat;
         @SerializedName("status")
-        private int status;
+        private Integer status;
+        @SerializedName("styles")
+        private List<Styles> styles;
         @SerializedName("subtitle")
         private String subtitle;
+        @SerializedName("tags")
+        private List<?> tags;
+        @SerializedName("test_switch")
+        private TestSwitch testSwitch;
         @SerializedName("title")
         private String title;
         @SerializedName("total")
-        private int total;
+        private Integer total;
         @SerializedName("type")
-        private int type;
+        private Integer type;
+        @SerializedName("type_desc")
+        private String typeDesc;
+        @SerializedName("type_name")
+        private String typeName;
         @SerializedName("up_info")
-        private UpInfoBean upInfo;
+        private UpInfo upInfo;
         @SerializedName("user_status")
-        private UserStatusBean userStatus;
-        @SerializedName("episodes")
-        private List<EpisodesBean> episodes;
-        @SerializedName("seasons")
-        private List<SeasonsBean> seasons;
-        @SerializedName("section")
-        private List<SectionBean> section;
+        private UserStatus userStatus;
+
+        public ActivityTab getActivityTab() {
+            return activityTab;
+        }
+
+        public void setActivityTab(ActivityTab activityTab) {
+            this.activityTab = activityTab;
+        }
+
+        public Actor getActor() {
+            return actor;
+        }
+
+        public void setActor(Actor actor) {
+            this.actor = actor;
+        }
+
+        public String getAlias() {
+            return alias;
+        }
+
+        public void setAlias(String alias) {
+            this.alias = alias;
+        }
+
+        public AllButtons getAllButtons() {
+            return allButtons;
+        }
+
+        public void setAllButtons(AllButtons allButtons) {
+            this.allButtons = allButtons;
+        }
+
+        public AllUpInfos getAllUpInfos() {
+            return allUpInfos;
+        }
+
+        public void setAllUpInfos(AllUpInfos allUpInfos) {
+            this.allUpInfos = allUpInfos;
+        }
+
+        public List<Areas> getAreas() {
+            return areas;
+        }
+
+        public void setAreas(List<Areas> areas) {
+            this.areas = areas;
+        }
+
+        public String getBadge() {
+            return badge;
+        }
+
+        public void setBadge(String badge) {
+            this.badge = badge;
+        }
+
+        public BadgeInfo getBadgeInfo() {
+            return badgeInfo;
+        }
+
+        public void setBadgeInfo(BadgeInfo badgeInfo) {
+            this.badgeInfo = badgeInfo;
+        }
+
+        public List<Celebrity> getCelebrity() {
+            return celebrity;
+        }
+
+        public void setCelebrity(List<Celebrity> celebrity) {
+            this.celebrity = celebrity;
+        }
 
         public String getCover() {
             return cover;
@@ -105,6 +219,22 @@ public class BangumiDetailPageBean {
 
         public void setCover(String cover) {
             this.cover = cover;
+        }
+
+        public String getDetail() {
+            return detail;
+        }
+
+        public void setDetail(String detail) {
+            this.detail = detail;
+        }
+
+        public String getDynamicSubtitle() {
+            return dynamicSubtitle;
+        }
+
+        public void setDynamicSubtitle(String dynamicSubtitle) {
+            this.dynamicSubtitle = dynamicSubtitle;
         }
 
         public String getEvaluate() {
@@ -123,59 +253,99 @@ public class BangumiDetailPageBean {
             this.link = link;
         }
 
-        public int getMediaId() {
+        public Integer getMediaId() {
             return mediaId;
         }
 
-        public void setMediaId(int mediaId) {
+        public void setMediaId(Integer mediaId) {
             this.mediaId = mediaId;
         }
 
-        public int getMode() {
+        public Integer getMode() {
             return mode;
         }
 
-        public void setMode(int mode) {
+        public void setMode(Integer mode) {
             this.mode = mode;
         }
 
-        public NewEpBean getNewEp() {
+        public List<Modules> getModules() {
+            return modules;
+        }
+
+        public void setModules(List<Modules> modules) {
+            this.modules = modules;
+        }
+
+        public NewEp getNewEp() {
             return newEp;
         }
 
-        public void setNewEp(NewEpBean newEp) {
+        public void setNewEp(NewEp newEp) {
             this.newEp = newEp;
         }
 
-        public PasterBean getPaster() {
+        public String getOriginName() {
+            return originName;
+        }
+
+        public void setOriginName(String originName) {
+            this.originName = originName;
+        }
+
+        public Paster getPaster() {
             return paster;
         }
 
-        public void setPaster(PasterBean paster) {
+        public void setPaster(Paster paster) {
             this.paster = paster;
         }
 
-        public PaymentBean getPayment() {
+        public Payment getPayment() {
             return payment;
         }
 
-        public void setPayment(PaymentBean payment) {
+        public void setPayment(Payment payment) {
             this.payment = payment;
         }
 
-        public PublishBean getPublish() {
+        public PlayStrategy getPlayStrategy() {
+            return playStrategy;
+        }
+
+        public void setPlayStrategy(PlayStrategy playStrategy) {
+            this.playStrategy = playStrategy;
+        }
+
+        public PlayerIcon getPlayerIcon() {
+            return playerIcon;
+        }
+
+        public void setPlayerIcon(PlayerIcon playerIcon) {
+            this.playerIcon = playerIcon;
+        }
+
+        public List<?> getPremieres() {
+            return premieres;
+        }
+
+        public void setPremieres(List<?> premieres) {
+            this.premieres = premieres;
+        }
+
+        public Publish getPublish() {
             return publish;
         }
 
-        public void setPublish(PublishBean publish) {
+        public void setPublish(Publish publish) {
             this.publish = publish;
         }
 
-        public RatingBean getRating() {
+        public Rating getRating() {
             return rating;
         }
 
-        public void setRating(RatingBean rating) {
+        public void setRating(Rating rating) {
             this.rating = rating;
         }
 
@@ -187,19 +357,35 @@ public class BangumiDetailPageBean {
             this.record = record;
         }
 
-        public RightsBean getRights() {
+        public String getRefineCover() {
+            return refineCover;
+        }
+
+        public void setRefineCover(String refineCover) {
+            this.refineCover = refineCover;
+        }
+
+        public Reserve getReserve() {
+            return reserve;
+        }
+
+        public void setReserve(Reserve reserve) {
+            this.reserve = reserve;
+        }
+
+        public Rights getRights() {
             return rights;
         }
 
-        public void setRights(RightsBean rights) {
+        public void setRights(Rights rights) {
             this.rights = rights;
         }
 
-        public int getSeasonId() {
+        public Integer getSeasonId() {
             return seasonId;
         }
 
-        public void setSeasonId(int seasonId) {
+        public void setSeasonId(Integer seasonId) {
             this.seasonId = seasonId;
         }
 
@@ -211,11 +397,11 @@ public class BangumiDetailPageBean {
             this.seasonTitle = seasonTitle;
         }
 
-        public SeriesBean getSeries() {
+        public Series getSeries() {
             return series;
         }
 
-        public void setSeries(SeriesBean series) {
+        public void setSeries(Series series) {
             this.series = series;
         }
 
@@ -251,20 +437,36 @@ public class BangumiDetailPageBean {
             this.squareCover = squareCover;
         }
 
-        public StatBean getStat() {
+        public Staff getStaff() {
+            return staff;
+        }
+
+        public void setStaff(Staff staff) {
+            this.staff = staff;
+        }
+
+        public Stat getStat() {
             return stat;
         }
 
-        public void setStat(StatBean stat) {
+        public void setStat(Stat stat) {
             this.stat = stat;
         }
 
-        public int getStatus() {
+        public Integer getStatus() {
             return status;
         }
 
-        public void setStatus(int status) {
+        public void setStatus(Integer status) {
             this.status = status;
+        }
+
+        public List<Styles> getStyles() {
+            return styles;
+        }
+
+        public void setStyles(List<Styles> styles) {
+            this.styles = styles;
         }
 
         public String getSubtitle() {
@@ -275,6 +477,22 @@ public class BangumiDetailPageBean {
             this.subtitle = subtitle;
         }
 
+        public List<?> getTags() {
+            return tags;
+        }
+
+        public void setTags(List<?> tags) {
+            this.tags = tags;
+        }
+
+        public TestSwitch getTestSwitch() {
+            return testSwitch;
+        }
+
+        public void setTestSwitch(TestSwitch testSwitch) {
+            this.testSwitch = testSwitch;
+        }
+
         public String getTitle() {
             return title;
         }
@@ -283,69 +501,428 @@ public class BangumiDetailPageBean {
             this.title = title;
         }
 
-        public int getTotal() {
+        public Integer getTotal() {
             return total;
         }
 
-        public void setTotal(int total) {
+        public void setTotal(Integer total) {
             this.total = total;
         }
 
-        public int getType() {
+        public Integer getType() {
             return type;
         }
 
-        public void setType(int type) {
+        public void setType(Integer type) {
             this.type = type;
         }
 
-        public UpInfoBean getUpInfo() {
+        public String getTypeDesc() {
+            return typeDesc;
+        }
+
+        public void setTypeDesc(String typeDesc) {
+            this.typeDesc = typeDesc;
+        }
+
+        public String getTypeName() {
+            return typeName;
+        }
+
+        public void setTypeName(String typeName) {
+            this.typeName = typeName;
+        }
+
+        public UpInfo getUpInfo() {
             return upInfo;
         }
 
-        public void setUpInfo(UpInfoBean upInfo) {
+        public void setUpInfo(UpInfo upInfo) {
             this.upInfo = upInfo;
         }
 
-        public UserStatusBean getUserStatus() {
+        public UserStatus getUserStatus() {
             return userStatus;
         }
 
-        public void setUserStatus(UserStatusBean userStatus) {
+        public void setUserStatus(UserStatus userStatus) {
             this.userStatus = userStatus;
         }
 
-        public List<EpisodesBean> getEpisodes() {
-            return episodes;
+        public static class ActivityTab {
+            @SerializedName("h5_link")
+            private String h5Link;
+            @SerializedName("id")
+            private Integer id;
+            @SerializedName("link")
+            private String link;
+            @SerializedName("picurl")
+            private String picurl;
+            @SerializedName("picurl_selected")
+            private String picurlSelected;
+            @SerializedName("show_name")
+            private String showName;
+            @SerializedName("title")
+            private String title;
+            @SerializedName("type")
+            private Integer type;
+
+            public String getH5Link() {
+                return h5Link;
+            }
+
+            public void setH5Link(String h5Link) {
+                this.h5Link = h5Link;
+            }
+
+            public Integer getId() {
+                return id;
+            }
+
+            public void setId(Integer id) {
+                this.id = id;
+            }
+
+            public String getLink() {
+                return link;
+            }
+
+            public void setLink(String link) {
+                this.link = link;
+            }
+
+            public String getPicurl() {
+                return picurl;
+            }
+
+            public void setPicurl(String picurl) {
+                this.picurl = picurl;
+            }
+
+            public String getPicurlSelected() {
+                return picurlSelected;
+            }
+
+            public void setPicurlSelected(String picurlSelected) {
+                this.picurlSelected = picurlSelected;
+            }
+
+            public String getShowName() {
+                return showName;
+            }
+
+            public void setShowName(String showName) {
+                this.showName = showName;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public Integer getType() {
+                return type;
+            }
+
+            public void setType(Integer type) {
+                this.type = type;
+            }
         }
 
-        public void setEpisodes(List<EpisodesBean> episodes) {
-            this.episodes = episodes;
+        public static class Actor {
+            @SerializedName("info")
+            private String info;
+            @SerializedName("title")
+            private String title;
+
+            public String getInfo() {
+                return info;
+            }
+
+            public void setInfo(String info) {
+                this.info = info;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
         }
 
-        public List<SeasonsBean> getSeasons() {
-            return seasons;
+        public static class AllButtons {
+            @SerializedName("watch_formal")
+            private String watchFormal;
+
+            public String getWatchFormal() {
+                return watchFormal;
+            }
+
+            public void setWatchFormal(String watchFormal) {
+                this.watchFormal = watchFormal;
+            }
         }
 
-        public void setSeasons(List<SeasonsBean> seasons) {
-            this.seasons = seasons;
+        public static class AllUpInfos {
+            @SerializedName("181960")
+            private _$181960 $181960;
+            @SerializedName("5632230")
+            private _$5632230 $5632230;
+
+            public _$181960 get$181960() {
+                return $181960;
+            }
+
+            public void set$181960(_$181960 $181960) {
+                this.$181960 = $181960;
+            }
+
+            public _$5632230 get$5632230() {
+                return $5632230;
+            }
+
+            public void set$5632230(_$5632230 $5632230) {
+                this.$5632230 = $5632230;
+            }
+
+            public static class _$181960 {
+                @SerializedName("avatar")
+                private String avatar;
+                @SerializedName("follower")
+                private Integer follower;
+                @SerializedName("is_follow")
+                private Integer isFollow;
+                @SerializedName("mid")
+                private Integer mid;
+                @SerializedName("uname")
+                private String uname;
+                @SerializedName("vip_label")
+                private VipLabel vipLabel;
+
+                public String getAvatar() {
+                    return avatar;
+                }
+
+                public void setAvatar(String avatar) {
+                    this.avatar = avatar;
+                }
+
+                public Integer getFollower() {
+                    return follower;
+                }
+
+                public void setFollower(Integer follower) {
+                    this.follower = follower;
+                }
+
+                public Integer getIsFollow() {
+                    return isFollow;
+                }
+
+                public void setIsFollow(Integer isFollow) {
+                    this.isFollow = isFollow;
+                }
+
+                public Integer getMid() {
+                    return mid;
+                }
+
+                public void setMid(Integer mid) {
+                    this.mid = mid;
+                }
+
+                public String getUname() {
+                    return uname;
+                }
+
+                public void setUname(String uname) {
+                    this.uname = uname;
+                }
+
+                public VipLabel getVipLabel() {
+                    return vipLabel;
+                }
+
+                public void setVipLabel(VipLabel vipLabel) {
+                    this.vipLabel = vipLabel;
+                }
+
+                public static class VipLabel {
+                    @SerializedName("label_theme")
+                    private String labelTheme;
+                    @SerializedName("path")
+                    private String path;
+                    @SerializedName("text")
+                    private String text;
+
+                    public String getLabelTheme() {
+                        return labelTheme;
+                    }
+
+                    public void setLabelTheme(String labelTheme) {
+                        this.labelTheme = labelTheme;
+                    }
+
+                    public String getPath() {
+                        return path;
+                    }
+
+                    public void setPath(String path) {
+                        this.path = path;
+                    }
+
+                    public String getText() {
+                        return text;
+                    }
+
+                    public void setText(String text) {
+                        this.text = text;
+                    }
+                }
+            }
+
+            public static class _$5632230 {
+                @SerializedName("avatar")
+                private String avatar;
+                @SerializedName("follower")
+                private Integer follower;
+                @SerializedName("is_follow")
+                private Integer isFollow;
+                @SerializedName("mid")
+                private Integer mid;
+                @SerializedName("uname")
+                private String uname;
+                @SerializedName("vip_label")
+                private VipLabel vipLabel;
+
+                public String getAvatar() {
+                    return avatar;
+                }
+
+                public void setAvatar(String avatar) {
+                    this.avatar = avatar;
+                }
+
+                public Integer getFollower() {
+                    return follower;
+                }
+
+                public void setFollower(Integer follower) {
+                    this.follower = follower;
+                }
+
+                public Integer getIsFollow() {
+                    return isFollow;
+                }
+
+                public void setIsFollow(Integer isFollow) {
+                    this.isFollow = isFollow;
+                }
+
+                public Integer getMid() {
+                    return mid;
+                }
+
+                public void setMid(Integer mid) {
+                    this.mid = mid;
+                }
+
+                public String getUname() {
+                    return uname;
+                }
+
+                public void setUname(String uname) {
+                    this.uname = uname;
+                }
+
+                public VipLabel getVipLabel() {
+                    return vipLabel;
+                }
+
+                public void setVipLabel(VipLabel vipLabel) {
+                    this.vipLabel = vipLabel;
+                }
+
+                public static class VipLabel {
+                    @SerializedName("label_theme")
+                    private String labelTheme;
+                    @SerializedName("path")
+                    private String path;
+                    @SerializedName("text")
+                    private String text;
+
+                    public String getLabelTheme() {
+                        return labelTheme;
+                    }
+
+                    public void setLabelTheme(String labelTheme) {
+                        this.labelTheme = labelTheme;
+                    }
+
+                    public String getPath() {
+                        return path;
+                    }
+
+                    public void setPath(String path) {
+                        this.path = path;
+                    }
+
+                    public String getText() {
+                        return text;
+                    }
+
+                    public void setText(String text) {
+                        this.text = text;
+                    }
+                }
+            }
         }
 
-        public List<SectionBean> getSection() {
-            return section;
+        public static class BadgeInfo {
+            @SerializedName("bg_color")
+            private String bgColor;
+            @SerializedName("bg_color_night")
+            private String bgColorNight;
+            @SerializedName("text")
+            private String text;
+
+            public String getBgColor() {
+                return bgColor;
+            }
+
+            public void setBgColor(String bgColor) {
+                this.bgColor = bgColor;
+            }
+
+            public String getBgColorNight() {
+                return bgColorNight;
+            }
+
+            public void setBgColorNight(String bgColorNight) {
+                this.bgColorNight = bgColorNight;
+            }
+
+            public String getText() {
+                return text;
+            }
+
+            public void setText(String text) {
+                this.text = text;
+            }
         }
 
-        public void setSection(List<SectionBean> section) {
-            this.section = section;
-        }
-
-        public static class NewEpBean {
+        public static class NewEp {
             @SerializedName("desc")
             private String desc;
             @SerializedName("id")
-            private int id;
+            private Integer id;
             @SerializedName("is_new")
-            private int isNew;
+            private Integer isNew;
             @SerializedName("more")
             private String more;
             @SerializedName("title")
@@ -359,19 +936,19 @@ public class BangumiDetailPageBean {
                 this.desc = desc;
             }
 
-            public int getId() {
+            public Integer getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(Integer id) {
                 this.id = id;
             }
 
-            public int getIsNew() {
+            public Integer getIsNew() {
                 return isNew;
             }
 
-            public void setIsNew(int isNew) {
+            public void setIsNew(Integer isNew) {
                 this.isNew = isNew;
             }
 
@@ -392,57 +969,57 @@ public class BangumiDetailPageBean {
             }
         }
 
-        public static class PasterBean {
+        public static class Paster {
             @SerializedName("aid")
-            private int aid;
+            private Integer aid;
             @SerializedName("allow_jump")
-            private int allowJump;
+            private Integer allowJump;
             @SerializedName("cid")
-            private int cid;
+            private Integer cid;
             @SerializedName("duration")
-            private int duration;
+            private Integer duration;
             @SerializedName("type")
-            private int type;
+            private Integer type;
             @SerializedName("url")
             private String url;
 
-            public int getAid() {
+            public Integer getAid() {
                 return aid;
             }
 
-            public void setAid(int aid) {
+            public void setAid(Integer aid) {
                 this.aid = aid;
             }
 
-            public int getAllowJump() {
+            public Integer getAllowJump() {
                 return allowJump;
             }
 
-            public void setAllowJump(int allowJump) {
+            public void setAllowJump(Integer allowJump) {
                 this.allowJump = allowJump;
             }
 
-            public int getCid() {
+            public Integer getCid() {
                 return cid;
             }
 
-            public void setCid(int cid) {
+            public void setCid(Integer cid) {
                 this.cid = cid;
             }
 
-            public int getDuration() {
+            public Integer getDuration() {
                 return duration;
             }
 
-            public void setDuration(int duration) {
+            public void setDuration(Integer duration) {
                 this.duration = duration;
             }
 
-            public int getType() {
+            public Integer getType() {
                 return type;
             }
 
-            public void setType(int type) {
+            public void setType(Integer type) {
                 this.type = type;
             }
 
@@ -455,41 +1032,47 @@ public class BangumiDetailPageBean {
             }
         }
 
-        public static class PaymentBean {
+        public static class Payment {
             @SerializedName("dialog")
-            private DialogBean dialog;
+            private Dialog dialog;
             @SerializedName("pay_tip")
-            private PayTipBean payTip;
+            private PayTip payTip;
             @SerializedName("pay_type")
-            private PayTypeBean payType;
+            private PayType payType;
             @SerializedName("price")
             private String price;
+            @SerializedName("report_type")
+            private Integer reportType;
             @SerializedName("tv_price")
             private String tvPrice;
+            @SerializedName("vip_pay_link")
+            private String vipPayLink;
             @SerializedName("vip_promotion")
             private String vipPromotion;
+            @SerializedName("vip_report")
+            private VipReport vipReport;
 
-            public DialogBean getDialog() {
+            public Dialog getDialog() {
                 return dialog;
             }
 
-            public void setDialog(DialogBean dialog) {
+            public void setDialog(Dialog dialog) {
                 this.dialog = dialog;
             }
 
-            public PayTipBean getPayTip() {
+            public PayTip getPayTip() {
                 return payTip;
             }
 
-            public void setPayTip(PayTipBean payTip) {
+            public void setPayTip(PayTip payTip) {
                 this.payTip = payTip;
             }
 
-            public PayTypeBean getPayType() {
+            public PayType getPayType() {
                 return payType;
             }
 
-            public void setPayType(PayTypeBean payType) {
+            public void setPayType(PayType payType) {
                 this.payType = payType;
             }
 
@@ -501,12 +1084,28 @@ public class BangumiDetailPageBean {
                 this.price = price;
             }
 
+            public Integer getReportType() {
+                return reportType;
+            }
+
+            public void setReportType(Integer reportType) {
+                this.reportType = reportType;
+            }
+
             public String getTvPrice() {
                 return tvPrice;
             }
 
             public void setTvPrice(String tvPrice) {
                 this.tvPrice = tvPrice;
+            }
+
+            public String getVipPayLink() {
+                return vipPayLink;
+            }
+
+            public void setVipPayLink(String vipPayLink) {
+                this.vipPayLink = vipPayLink;
             }
 
             public String getVipPromotion() {
@@ -517,90 +1116,149 @@ public class BangumiDetailPageBean {
                 this.vipPromotion = vipPromotion;
             }
 
-            public static class DialogBean {
-                @SerializedName("btn_right")
-                private BtnRightBean btnRight;
-                @SerializedName("desc")
-                private String desc;
-                @SerializedName("title")
-                private String title;
-
-                public BtnRightBean getBtnRight() {
-                    return btnRight;
-                }
-
-                public void setBtnRight(BtnRightBean btnRight) {
-                    this.btnRight = btnRight;
-                }
-
-                public String getDesc() {
-                    return desc;
-                }
-
-                public void setDesc(String desc) {
-                    this.desc = desc;
-                }
-
-                public String getTitle() {
-                    return title;
-                }
-
-                public void setTitle(String title) {
-                    this.title = title;
-                }
-
-                public static class BtnRightBean {
-                    @SerializedName("title")
-                    private String title;
-                    @SerializedName("type")
-                    private String type;
-
-                    public String getTitle() {
-                        return title;
-                    }
-
-                    public void setTitle(String title) {
-                        this.title = title;
-                    }
-
-                    public String getType() {
-                        return type;
-                    }
-
-                    public void setType(String type) {
-                        this.type = type;
-                    }
-                }
+            public VipReport getVipReport() {
+                return vipReport;
             }
 
-            public static class PayTipBean {
-                @SerializedName("primary")
-                private PrimaryBean primary;
+            public void setVipReport(VipReport vipReport) {
+                this.vipReport = vipReport;
+            }
 
-                public PrimaryBean getPrimary() {
+            public static class Dialog {
+            }
+
+            public static class PayTip {
+                @SerializedName("primary")
+                private Primary primary;
+
+                public Primary getPrimary() {
                     return primary;
                 }
 
-                public void setPrimary(PrimaryBean primary) {
+                public void setPrimary(Primary primary) {
                     this.primary = primary;
                 }
 
-                public static class PrimaryBean {
-                    @SerializedName("sub_title")
-                    private String subTitle;
+                public static class Primary {
+                    @SerializedName("angle_style")
+                    private Integer angleStyle;
+                    @SerializedName("bg_day_color")
+                    private String bgDayColor;
+                    @SerializedName("bg_line_color")
+                    private String bgLineColor;
+                    @SerializedName("bg_night_color")
+                    private String bgNightColor;
+                    @SerializedName("bg_night_line_color")
+                    private String bgNightLineColor;
+                    @SerializedName("icon")
+                    private String icon;
+                    @SerializedName("report")
+                    private Report report;
+                    @SerializedName("showTypeEnum")
+                    private String showTypeEnum;
+                    @SerializedName("show_type")
+                    private Integer showType;
+                    @SerializedName("text_color")
+                    private String textColor;
+                    @SerializedName("text_night_color")
+                    private String textNightColor;
                     @SerializedName("title")
                     private String title;
                     @SerializedName("type")
-                    private int type;
+                    private Integer type;
                     @SerializedName("url")
                     private String url;
+                    @SerializedName("url_open_type")
+                    private Integer urlOpenType;
+                    @SerializedName("view_start_time")
+                    private Integer viewStartTime;
 
-                    public String getSubTitle() {
-                        return subTitle;
+                    public Integer getAngleStyle() {
+                        return angleStyle;
                     }
 
-                    public void setSubTitle(String subTitle) {
-                        this.subTitle = subTitle;
+                    public void setAngleStyle(Integer angleStyle) {
+                        this.angleStyle = angleStyle;
+                    }
+
+                    public String getBgDayColor() {
+                        return bgDayColor;
+                    }
+
+                    public void setBgDayColor(String bgDayColor) {
+                        this.bgDayColor = bgDayColor;
+                    }
+
+                    public String getBgLineColor() {
+                        return bgLineColor;
+                    }
+
+                    public void setBgLineColor(String bgLineColor) {
+                        this.bgLineColor = bgLineColor;
+                    }
+
+                    public String getBgNightColor() {
+                        return bgNightColor;
+                    }
+
+                    public void setBgNightColor(String bgNightColor) {
+                        this.bgNightColor = bgNightColor;
+                    }
+
+                    public String getBgNightLineColor() {
+                        return bgNightLineColor;
+                    }
+
+                    public void setBgNightLineColor(String bgNightLineColor) {
+                        this.bgNightLineColor = bgNightLineColor;
+                    }
+
+                    public String getIcon() {
+                        return icon;
+                    }
+
+                    public void setIcon(String icon) {
+                        this.icon = icon;
+                    }
+
+                    public Report getReport() {
+                        return report;
+                    }
+
+                    public void setReport(Report report) {
+                        this.report = report;
+                    }
+
+                    public String getShowTypeEnum() {
+                        return showTypeEnum;
+                    }
+
+                    public void setShowTypeEnum(String showTypeEnum) {
+                        this.showTypeEnum = showTypeEnum;
+                    }
+
+                    public Integer getShowType() {
+                        return showType;
+                    }
+
+                    public void setShowType(Integer showType) {
+                        this.showType = showType;
+                    }
+
+                    public String getTextColor() {
+                        return textColor;
+                    }
+
+                    public void setTextColor(String textColor) {
+                        this.textColor = textColor;
+                    }
+
+                    public String getTextNightColor() {
+                        return textNightColor;
+                    }
+
+                    public void setTextNightColor(String textNightColor) {
+                        this.textNightColor = textNightColor;
                     }
 
                     public String getTitle() {
@@ -611,11 +1269,11 @@ public class BangumiDetailPageBean {
                         this.title = title;
                     }
 
-                    public int getType() {
+                    public Integer getType() {
                         return type;
                     }
 
-                    public void setType(int type) {
+                    public void setType(Integer type) {
                         this.type = type;
                     }
 
@@ -626,48 +1284,285 @@ public class BangumiDetailPageBean {
                     public void setUrl(String url) {
                         this.url = url;
                     }
+
+                    public Integer getUrlOpenType() {
+                        return urlOpenType;
+                    }
+
+                    public void setUrlOpenType(Integer urlOpenType) {
+                        this.urlOpenType = urlOpenType;
+                    }
+
+                    public Integer getViewStartTime() {
+                        return viewStartTime;
+                    }
+
+                    public void setViewStartTime(Integer viewStartTime) {
+                        this.viewStartTime = viewStartTime;
+                    }
+
+                    public static class Report {
+                        @SerializedName("click_event_id")
+                        private String clickEventId;
+                        @SerializedName("extends")
+                        private Extends extendsX;
+                        @SerializedName("show_event_id")
+                        private String showEventId;
+
+                        public String getClickEventId() {
+                            return clickEventId;
+                        }
+
+                        public void setClickEventId(String clickEventId) {
+                            this.clickEventId = clickEventId;
+                        }
+
+                        public Extends getExtendsX() {
+                            return extendsX;
+                        }
+
+                        public void setExtendsX(Extends extendsX) {
+                            this.extendsX = extendsX;
+                        }
+
+                        public String getShowEventId() {
+                            return showEventId;
+                        }
+
+                        public void setShowEventId(String showEventId) {
+                            this.showEventId = showEventId;
+                        }
+
+                        public static class Extends {
+                            @SerializedName("season_type")
+                            private String seasonType;
+                            @SerializedName("season_id")
+                            private String seasonId;
+
+                            public String getSeasonType() {
+                                return seasonType;
+                            }
+
+                            public void setSeasonType(String seasonType) {
+                                this.seasonType = seasonType;
+                            }
+
+                            public String getSeasonId() {
+                                return seasonId;
+                            }
+
+                            public void setSeasonId(String seasonId) {
+                                this.seasonId = seasonId;
+                            }
+                        }
+                    }
                 }
             }
 
-            public static class PayTypeBean {
+            public static class PayType {
                 @SerializedName("allow_ticket")
-                private int allowTicket;
+                private Integer allowTicket;
 
-                public int getAllowTicket() {
+                public Integer getAllowTicket() {
                     return allowTicket;
                 }
 
-                public void setAllowTicket(int allowTicket) {
+                public void setAllowTicket(Integer allowTicket) {
                     this.allowTicket = allowTicket;
+                }
+            }
+
+            public static class VipReport {
+                @SerializedName("season_type")
+                private String seasonType;
+                @SerializedName("vip_type")
+                private String vipType;
+                @SerializedName("vip_status")
+                private String vipStatus;
+                @SerializedName("exp_tag")
+                private String expTag;
+                @SerializedName("season_id")
+                private String seasonId;
+                @SerializedName("tips_id")
+                private String tipsId;
+                @SerializedName("exp_group_tag")
+                private String expGroupTag;
+
+                public String getSeasonType() {
+                    return seasonType;
+                }
+
+                public void setSeasonType(String seasonType) {
+                    this.seasonType = seasonType;
+                }
+
+                public String getVipType() {
+                    return vipType;
+                }
+
+                public void setVipType(String vipType) {
+                    this.vipType = vipType;
+                }
+
+                public String getVipStatus() {
+                    return vipStatus;
+                }
+
+                public void setVipStatus(String vipStatus) {
+                    this.vipStatus = vipStatus;
+                }
+
+                public String getExpTag() {
+                    return expTag;
+                }
+
+                public void setExpTag(String expTag) {
+                    this.expTag = expTag;
+                }
+
+                public String getSeasonId() {
+                    return seasonId;
+                }
+
+                public void setSeasonId(String seasonId) {
+                    this.seasonId = seasonId;
+                }
+
+                public String getTipsId() {
+                    return tipsId;
+                }
+
+                public void setTipsId(String tipsId) {
+                    this.tipsId = tipsId;
+                }
+
+                public String getExpGroupTag() {
+                    return expGroupTag;
+                }
+
+                public void setExpGroupTag(String expGroupTag) {
+                    this.expGroupTag = expGroupTag;
                 }
             }
         }
 
-        public static class PublishBean {
+        public static class PlayStrategy {
+            @SerializedName("auto_play_toast")
+            private String autoPlayToast;
+            @SerializedName("recommend_show_strategy")
+            private Integer recommendShowStrategy;
+            @SerializedName("strategies")
+            private List<String> strategies;
+
+            public String getAutoPlayToast() {
+                return autoPlayToast;
+            }
+
+            public void setAutoPlayToast(String autoPlayToast) {
+                this.autoPlayToast = autoPlayToast;
+            }
+
+            public Integer getRecommendShowStrategy() {
+                return recommendShowStrategy;
+            }
+
+            public void setRecommendShowStrategy(Integer recommendShowStrategy) {
+                this.recommendShowStrategy = recommendShowStrategy;
+            }
+
+            public List<String> getStrategies() {
+                return strategies;
+            }
+
+            public void setStrategies(List<String> strategies) {
+                this.strategies = strategies;
+            }
+        }
+
+        public static class PlayerIcon {
+            @SerializedName("ctime")
+            private Integer ctime;
+            @SerializedName("hash1")
+            private String hash1;
+            @SerializedName("hash2")
+            private String hash2;
+            @SerializedName("url1")
+            private String url1;
+            @SerializedName("url2")
+            private String url2;
+
+            public Integer getCtime() {
+                return ctime;
+            }
+
+            public void setCtime(Integer ctime) {
+                this.ctime = ctime;
+            }
+
+            public String getHash1() {
+                return hash1;
+            }
+
+            public void setHash1(String hash1) {
+                this.hash1 = hash1;
+            }
+
+            public String getHash2() {
+                return hash2;
+            }
+
+            public void setHash2(String hash2) {
+                this.hash2 = hash2;
+            }
+
+            public String getUrl1() {
+                return url1;
+            }
+
+            public void setUrl1(String url1) {
+                this.url1 = url1;
+            }
+
+            public String getUrl2() {
+                return url2;
+            }
+
+            public void setUrl2(String url2) {
+                this.url2 = url2;
+            }
+        }
+
+        public static class Publish {
             @SerializedName("is_finish")
-            private int isFinish;
+            private Integer isFinish;
             @SerializedName("is_started")
-            private int isStarted;
+            private Integer isStarted;
             @SerializedName("pub_time")
             private String pubTime;
             @SerializedName("pub_time_show")
             private String pubTimeShow;
+            @SerializedName("release_date_show")
+            private String releaseDateShow;
+            @SerializedName("time_length_show")
+            private String timeLengthShow;
+            @SerializedName("unknow_pub_date")
+            private Integer unknowPubDate;
             @SerializedName("weekday")
-            private int weekday;
+            private Integer weekday;
 
-            public int getIsFinish() {
+            public Integer getIsFinish() {
                 return isFinish;
             }
 
-            public void setIsFinish(int isFinish) {
+            public void setIsFinish(Integer isFinish) {
                 this.isFinish = isFinish;
             }
 
-            public int getIsStarted() {
+            public Integer getIsStarted() {
                 return isStarted;
             }
 
-            public void setIsStarted(int isStarted) {
+            public void setIsStarted(Integer isStarted) {
                 this.isStarted = isStarted;
             }
 
@@ -687,106 +1582,171 @@ public class BangumiDetailPageBean {
                 this.pubTimeShow = pubTimeShow;
             }
 
-            public int getWeekday() {
+            public String getReleaseDateShow() {
+                return releaseDateShow;
+            }
+
+            public void setReleaseDateShow(String releaseDateShow) {
+                this.releaseDateShow = releaseDateShow;
+            }
+
+            public String getTimeLengthShow() {
+                return timeLengthShow;
+            }
+
+            public void setTimeLengthShow(String timeLengthShow) {
+                this.timeLengthShow = timeLengthShow;
+            }
+
+            public Integer getUnknowPubDate() {
+                return unknowPubDate;
+            }
+
+            public void setUnknowPubDate(Integer unknowPubDate) {
+                this.unknowPubDate = unknowPubDate;
+            }
+
+            public Integer getWeekday() {
                 return weekday;
             }
 
-            public void setWeekday(int weekday) {
+            public void setWeekday(Integer weekday) {
                 this.weekday = weekday;
             }
         }
 
-        public static class RatingBean {
+        public static class Rating {
             @SerializedName("count")
-            private int count;
+            private Integer count;
             @SerializedName("score")
-            private double score;
+            private Double score;
 
-            public int getCount() {
+            public Integer getCount() {
                 return count;
             }
 
-            public void setCount(int count) {
+            public void setCount(Integer count) {
                 this.count = count;
             }
 
-            public double getScore() {
+            public Double getScore() {
                 return score;
             }
 
-            public void setScore(double score) {
+            public void setScore(Double score) {
                 this.score = score;
             }
         }
 
-        public static class RightsBean {
+        public static class Reserve {
+            @SerializedName("episodes")
+            private List<?> episodes;
+            @SerializedName("tip")
+            private String tip;
+
+            public List<?> getEpisodes() {
+                return episodes;
+            }
+
+            public void setEpisodes(List<?> episodes) {
+                this.episodes = episodes;
+            }
+
+            public String getTip() {
+                return tip;
+            }
+
+            public void setTip(String tip) {
+                this.tip = tip;
+            }
+        }
+
+        public static class Rights {
             @SerializedName("allow_bp")
-            private int allowBp;
+            private Integer allowBp;
             @SerializedName("allow_bp_rank")
-            private int allowBpRank;
+            private Integer allowBpRank;
             @SerializedName("allow_download")
-            private int allowDownload;
+            private Integer allowDownload;
             @SerializedName("allow_review")
-            private int allowReview;
+            private Integer allowReview;
             @SerializedName("area_limit")
-            private int areaLimit;
+            private Integer areaLimit;
             @SerializedName("ban_area_show")
-            private int banAreaShow;
+            private Integer banAreaShow;
+            @SerializedName("can_watch")
+            private Integer canWatch;
             @SerializedName("copyright")
             private String copyright;
+            @SerializedName("copyright_name")
+            private String copyrightName;
+            @SerializedName("forbid_pre")
+            private Integer forbidPre;
             @SerializedName("is_cover_show")
-            private int isCoverShow;
+            private Integer isCoverShow;
             @SerializedName("is_preview")
-            private int isPreview;
+            private Integer isPreview;
+            @SerializedName("only_vip_download")
+            private Integer onlyVipDownload;
+            @SerializedName("resource")
+            private String resource;
             @SerializedName("watch_platform")
-            private int watchPlatform;
+            private Integer watchPlatform;
 
-            public int getAllowBp() {
+            public Integer getAllowBp() {
                 return allowBp;
             }
 
-            public void setAllowBp(int allowBp) {
+            public void setAllowBp(Integer allowBp) {
                 this.allowBp = allowBp;
             }
 
-            public int getAllowBpRank() {
+            public Integer getAllowBpRank() {
                 return allowBpRank;
             }
 
-            public void setAllowBpRank(int allowBpRank) {
+            public void setAllowBpRank(Integer allowBpRank) {
                 this.allowBpRank = allowBpRank;
             }
 
-            public int getAllowDownload() {
+            public Integer getAllowDownload() {
                 return allowDownload;
             }
 
-            public void setAllowDownload(int allowDownload) {
+            public void setAllowDownload(Integer allowDownload) {
                 this.allowDownload = allowDownload;
             }
 
-            public int getAllowReview() {
+            public Integer getAllowReview() {
                 return allowReview;
             }
 
-            public void setAllowReview(int allowReview) {
+            public void setAllowReview(Integer allowReview) {
                 this.allowReview = allowReview;
             }
 
-            public int getAreaLimit() {
+            public Integer getAreaLimit() {
                 return areaLimit;
             }
 
-            public void setAreaLimit(int areaLimit) {
+            public void setAreaLimit(Integer areaLimit) {
                 this.areaLimit = areaLimit;
             }
 
-            public int getBanAreaShow() {
+            public Integer getBanAreaShow() {
                 return banAreaShow;
             }
 
-            public void setBanAreaShow(int banAreaShow) {
+            public void setBanAreaShow(Integer banAreaShow) {
                 this.banAreaShow = banAreaShow;
+            }
+
+            public Integer getCanWatch() {
+                return canWatch;
+            }
+
+            public void setCanWatch(Integer canWatch) {
+                this.canWatch = canWatch;
             }
 
             public String getCopyright() {
@@ -797,42 +1757,74 @@ public class BangumiDetailPageBean {
                 this.copyright = copyright;
             }
 
-            public int getIsCoverShow() {
+            public String getCopyrightName() {
+                return copyrightName;
+            }
+
+            public void setCopyrightName(String copyrightName) {
+                this.copyrightName = copyrightName;
+            }
+
+            public Integer getForbidPre() {
+                return forbidPre;
+            }
+
+            public void setForbidPre(Integer forbidPre) {
+                this.forbidPre = forbidPre;
+            }
+
+            public Integer getIsCoverShow() {
                 return isCoverShow;
             }
 
-            public void setIsCoverShow(int isCoverShow) {
+            public void setIsCoverShow(Integer isCoverShow) {
                 this.isCoverShow = isCoverShow;
             }
 
-            public int getIsPreview() {
+            public Integer getIsPreview() {
                 return isPreview;
             }
 
-            public void setIsPreview(int isPreview) {
+            public void setIsPreview(Integer isPreview) {
                 this.isPreview = isPreview;
             }
 
-            public int getWatchPlatform() {
+            public Integer getOnlyVipDownload() {
+                return onlyVipDownload;
+            }
+
+            public void setOnlyVipDownload(Integer onlyVipDownload) {
+                this.onlyVipDownload = onlyVipDownload;
+            }
+
+            public String getResource() {
+                return resource;
+            }
+
+            public void setResource(String resource) {
+                this.resource = resource;
+            }
+
+            public Integer getWatchPlatform() {
                 return watchPlatform;
             }
 
-            public void setWatchPlatform(int watchPlatform) {
+            public void setWatchPlatform(Integer watchPlatform) {
                 this.watchPlatform = watchPlatform;
             }
         }
 
-        public static class SeriesBean {
+        public static class Series {
             @SerializedName("series_id")
-            private int seriesId;
+            private Integer seriesId;
             @SerializedName("series_title")
             private String seriesTitle;
 
-            public int getSeriesId() {
+            public Integer getSeriesId() {
                 return seriesId;
             }
 
-            public void setSeriesId(int seriesId) {
+            public void setSeriesId(Integer seriesId) {
                 this.seriesId = seriesId;
             }
 
@@ -845,88 +1837,198 @@ public class BangumiDetailPageBean {
             }
         }
 
-        public static class StatBean {
-            @SerializedName("coins")
-            private int coins;
-            @SerializedName("danmakus")
-            private int danmakus;
-            @SerializedName("favorites")
-            private int favorites;
-            @SerializedName("reply")
-            private int reply;
-            @SerializedName("share")
-            private int share;
-            @SerializedName("views")
-            private int views;
+        public static class Staff {
+            @SerializedName("info")
+            private String info;
+            @SerializedName("title")
+            private String title;
 
-            public int getCoins() {
+            public String getInfo() {
+                return info;
+            }
+
+            public void setInfo(String info) {
+                this.info = info;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+        }
+
+        public static class Stat {
+            @SerializedName("coins")
+            private Integer coins;
+            @SerializedName("danmakus")
+            private Integer danmakus;
+            @SerializedName("favorite")
+            private Integer favorite;
+            @SerializedName("favorites")
+            private Integer favorites;
+            @SerializedName("followers")
+            private String followers;
+            @SerializedName("likes")
+            private Integer likes;
+            @SerializedName("play")
+            private String play;
+            @SerializedName("reply")
+            private Integer reply;
+            @SerializedName("share")
+            private Integer share;
+            @SerializedName("views")
+            private Integer views;
+
+            public Integer getCoins() {
                 return coins;
             }
 
-            public void setCoins(int coins) {
+            public void setCoins(Integer coins) {
                 this.coins = coins;
             }
 
-            public int getDanmakus() {
+            public Integer getDanmakus() {
                 return danmakus;
             }
 
-            public void setDanmakus(int danmakus) {
+            public void setDanmakus(Integer danmakus) {
                 this.danmakus = danmakus;
             }
 
-            public int getFavorites() {
+            public Integer getFavorite() {
+                return favorite;
+            }
+
+            public void setFavorite(Integer favorite) {
+                this.favorite = favorite;
+            }
+
+            public Integer getFavorites() {
                 return favorites;
             }
 
-            public void setFavorites(int favorites) {
+            public void setFavorites(Integer favorites) {
                 this.favorites = favorites;
             }
 
-            public int getReply() {
+            public String getFollowers() {
+                return followers;
+            }
+
+            public void setFollowers(String followers) {
+                this.followers = followers;
+            }
+
+            public Integer getLikes() {
+                return likes;
+            }
+
+            public void setLikes(Integer likes) {
+                this.likes = likes;
+            }
+
+            public String getPlay() {
+                return play;
+            }
+
+            public void setPlay(String play) {
+                this.play = play;
+            }
+
+            public Integer getReply() {
                 return reply;
             }
 
-            public void setReply(int reply) {
+            public void setReply(Integer reply) {
                 this.reply = reply;
             }
 
-            public int getShare() {
+            public Integer getShare() {
                 return share;
             }
 
-            public void setShare(int share) {
+            public void setShare(Integer share) {
                 this.share = share;
             }
 
-            public int getViews() {
+            public Integer getViews() {
                 return views;
             }
 
-            public void setViews(int views) {
+            public void setViews(Integer views) {
                 this.views = views;
             }
         }
 
-        public static class UpInfoBean {
+        public static class TestSwitch {
+            @SerializedName("is_merge_preview_section")
+            private Boolean isMergePreviewSection;
+            @SerializedName("is_ogv_fav_exp")
+            private Boolean isOgvFavExp;
+            @SerializedName("movie_mark_action")
+            private Integer movieMarkAction;
+            @SerializedName("was_pugv_style_optimize")
+            private Boolean wasPugvStyleOptimize;
+
+            public Boolean getIsMergePreviewSection() {
+                return isMergePreviewSection;
+            }
+
+            public void setIsMergePreviewSection(Boolean isMergePreviewSection) {
+                this.isMergePreviewSection = isMergePreviewSection;
+            }
+
+            public Boolean getIsOgvFavExp() {
+                return isOgvFavExp;
+            }
+
+            public void setIsOgvFavExp(Boolean isOgvFavExp) {
+                this.isOgvFavExp = isOgvFavExp;
+            }
+
+            public Integer getMovieMarkAction() {
+                return movieMarkAction;
+            }
+
+            public void setMovieMarkAction(Integer movieMarkAction) {
+                this.movieMarkAction = movieMarkAction;
+            }
+
+            public Boolean getWasPugvStyleOptimize() {
+                return wasPugvStyleOptimize;
+            }
+
+            public void setWasPugvStyleOptimize(Boolean wasPugvStyleOptimize) {
+                this.wasPugvStyleOptimize = wasPugvStyleOptimize;
+            }
+        }
+
+        public static class UpInfo {
             @SerializedName("avatar")
             private String avatar;
             @SerializedName("follower")
-            private int follower;
+            private Integer follower;
             @SerializedName("is_follow")
-            private int isFollow;
+            private Integer isFollow;
             @SerializedName("mid")
-            private int mid;
+            private Integer mid;
             @SerializedName("pendant")
-            private PendantBean pendant;
+            private Pendant pendant;
+            @SerializedName("theme_type")
+            private Integer themeType;
             @SerializedName("uname")
             private String uname;
             @SerializedName("verify_type")
-            private int verifyType;
+            private Integer verifyType;
+            @SerializedName("vip_label")
+            private VipLabel vipLabel;
             @SerializedName("vip_status")
-            private int vipStatus;
+            private Integer vipStatus;
             @SerializedName("vip_type")
-            private int vipType;
+            private Integer vipType;
 
             public String getAvatar() {
                 return avatar;
@@ -936,36 +2038,44 @@ public class BangumiDetailPageBean {
                 this.avatar = avatar;
             }
 
-            public int getFollower() {
+            public Integer getFollower() {
                 return follower;
             }
 
-            public void setFollower(int follower) {
+            public void setFollower(Integer follower) {
                 this.follower = follower;
             }
 
-            public int getIsFollow() {
+            public Integer getIsFollow() {
                 return isFollow;
             }
 
-            public void setIsFollow(int isFollow) {
+            public void setIsFollow(Integer isFollow) {
                 this.isFollow = isFollow;
             }
 
-            public int getMid() {
+            public Integer getMid() {
                 return mid;
             }
 
-            public void setMid(int mid) {
+            public void setMid(Integer mid) {
                 this.mid = mid;
             }
 
-            public PendantBean getPendant() {
+            public Pendant getPendant() {
                 return pendant;
             }
 
-            public void setPendant(PendantBean pendant) {
+            public void setPendant(Pendant pendant) {
                 this.pendant = pendant;
+            }
+
+            public Integer getThemeType() {
+                return themeType;
+            }
+
+            public void setThemeType(Integer themeType) {
+                this.themeType = themeType;
             }
 
             public String getUname() {
@@ -976,37 +2086,45 @@ public class BangumiDetailPageBean {
                 this.uname = uname;
             }
 
-            public int getVerifyType() {
+            public Integer getVerifyType() {
                 return verifyType;
             }
 
-            public void setVerifyType(int verifyType) {
+            public void setVerifyType(Integer verifyType) {
                 this.verifyType = verifyType;
             }
 
-            public int getVipStatus() {
+            public VipLabel getVipLabel() {
+                return vipLabel;
+            }
+
+            public void setVipLabel(VipLabel vipLabel) {
+                this.vipLabel = vipLabel;
+            }
+
+            public Integer getVipStatus() {
                 return vipStatus;
             }
 
-            public void setVipStatus(int vipStatus) {
+            public void setVipStatus(Integer vipStatus) {
                 this.vipStatus = vipStatus;
             }
 
-            public int getVipType() {
+            public Integer getVipType() {
                 return vipType;
             }
 
-            public void setVipType(int vipType) {
+            public void setVipType(Integer vipType) {
                 this.vipType = vipType;
             }
 
-            public static class PendantBean {
+            public static class Pendant {
                 @SerializedName("image")
                 private String image;
                 @SerializedName("name")
                 private String name;
                 @SerializedName("pid")
-                private int pid;
+                private Integer pid;
 
                 public String getImage() {
                     return image;
@@ -1024,336 +2142,299 @@ public class BangumiDetailPageBean {
                     this.name = name;
                 }
 
-                public int getPid() {
+                public Integer getPid() {
                     return pid;
                 }
 
-                public void setPid(int pid) {
+                public void setPid(Integer pid) {
                     this.pid = pid;
                 }
             }
+
+            public static class VipLabel {
+                @SerializedName("label_theme")
+                private String labelTheme;
+                @SerializedName("path")
+                private String path;
+                @SerializedName("text")
+                private String text;
+
+                public String getLabelTheme() {
+                    return labelTheme;
+                }
+
+                public void setLabelTheme(String labelTheme) {
+                    this.labelTheme = labelTheme;
+                }
+
+                public String getPath() {
+                    return path;
+                }
+
+                public void setPath(String path) {
+                    this.path = path;
+                }
+
+                public String getText() {
+                    return text;
+                }
+
+                public void setText(String text) {
+                    this.text = text;
+                }
+            }
         }
 
-        public static class UserStatusBean {
+        public static class UserStatus {
             @SerializedName("follow")
-            private int follow;
+            private Integer follow;
+            @SerializedName("follow_bubble")
+            private Integer followBubble;
+            @SerializedName("follow_status")
+            private Integer followStatus;
             @SerializedName("pay")
-            private int pay;
+            private Integer pay;
+            @SerializedName("pay_for")
+            private Integer payFor;
+            @SerializedName("review")
+            private Review review;
             @SerializedName("sponsor")
-            private int sponsor;
+            private Integer sponsor;
             @SerializedName("vip")
-            private int vip;
+            private Integer vip;
             @SerializedName("vip_frozen")
-            private int vipFrozen;
+            private Integer vipFrozen;
 
-            public int getFollow() {
+            public Integer getFollow() {
                 return follow;
             }
 
-            public void setFollow(int follow) {
+            public void setFollow(Integer follow) {
                 this.follow = follow;
             }
 
-            public int getPay() {
+            public Integer getFollowBubble() {
+                return followBubble;
+            }
+
+            public void setFollowBubble(Integer followBubble) {
+                this.followBubble = followBubble;
+            }
+
+            public Integer getFollowStatus() {
+                return followStatus;
+            }
+
+            public void setFollowStatus(Integer followStatus) {
+                this.followStatus = followStatus;
+            }
+
+            public Integer getPay() {
                 return pay;
             }
 
-            public void setPay(int pay) {
+            public void setPay(Integer pay) {
                 this.pay = pay;
             }
 
-            public int getSponsor() {
+            public Integer getPayFor() {
+                return payFor;
+            }
+
+            public void setPayFor(Integer payFor) {
+                this.payFor = payFor;
+            }
+
+            public Review getReview() {
+                return review;
+            }
+
+            public void setReview(Review review) {
+                this.review = review;
+            }
+
+            public Integer getSponsor() {
                 return sponsor;
             }
 
-            public void setSponsor(int sponsor) {
+            public void setSponsor(Integer sponsor) {
                 this.sponsor = sponsor;
             }
 
-            public int getVip() {
+            public Integer getVip() {
                 return vip;
             }
 
-            public void setVip(int vip) {
+            public void setVip(Integer vip) {
                 this.vip = vip;
             }
 
-            public int getVipFrozen() {
+            public Integer getVipFrozen() {
                 return vipFrozen;
             }
 
-            public void setVipFrozen(int vipFrozen) {
+            public void setVipFrozen(Integer vipFrozen) {
                 this.vipFrozen = vipFrozen;
             }
+
+            public static class Review {
+                @SerializedName("article_url")
+                private String articleUrl;
+                @SerializedName("is_open")
+                private Integer isOpen;
+                @SerializedName("score")
+                private Integer score;
+
+                public String getArticleUrl() {
+                    return articleUrl;
+                }
+
+                public void setArticleUrl(String articleUrl) {
+                    this.articleUrl = articleUrl;
+                }
+
+                public Integer getIsOpen() {
+                    return isOpen;
+                }
+
+                public void setIsOpen(Integer isOpen) {
+                    this.isOpen = isOpen;
+                }
+
+                public Integer getScore() {
+                    return score;
+                }
+
+                public void setScore(Integer score) {
+                    this.score = score;
+                }
+            }
         }
 
-        public static class EpisodesBean {
-            @SerializedName("aid")
-            private long aid;
-            @SerializedName("badge")
-            private String badge;
-            @SerializedName("badge_type")
-            private int badgeType;
-            @SerializedName("cid")
-            private long cid;
-            @SerializedName("cover")
-            private String cover;
-            @SerializedName("dimension")
-            private DimensionBean dimension;
-            @SerializedName("from")
-            private String from;
+        public static class Areas {
             @SerializedName("id")
-            private int id;
-            @SerializedName("long_title")
-            private String longTitle;
-            @SerializedName("release_date")
-            private String releaseDate;
-            @SerializedName("share_copy")
-            private String shareCopy;
-            @SerializedName("share_url")
-            private String shareUrl;
-            @SerializedName("short_link")
-            private String shortLink;
-            @SerializedName("status")
-            private int status;
-            @SerializedName("subtitle")
-            private String subtitle;
-            @SerializedName("title")
-            private String title;
-            @SerializedName("vid")
-            private String vid;
+            private Integer id;
+            @SerializedName("name")
+            private String name;
 
-            public long getAid() {
-                return aid;
-            }
-
-            public void setAid(long aid) {
-                this.aid = aid;
-            }
-
-            public String getBadge() {
-                return badge;
-            }
-
-            public void setBadge(String badge) {
-                this.badge = badge;
-            }
-
-            public int getBadgeType() {
-                return badgeType;
-            }
-
-            public void setBadgeType(int badgeType) {
-                this.badgeType = badgeType;
-            }
-
-            public long getCid() {
-                return cid;
-            }
-
-            public void setCid(long cid) {
-                this.cid = cid;
-            }
-
-            public String getCover() {
-                return cover;
-            }
-
-            public void setCover(String cover) {
-                this.cover = cover;
-            }
-
-            public DimensionBean getDimension() {
-                return dimension;
-            }
-
-            public void setDimension(DimensionBean dimension) {
-                this.dimension = dimension;
-            }
-
-            public String getFrom() {
-                return from;
-            }
-
-            public void setFrom(String from) {
-                this.from = from;
-            }
-
-            public int getId() {
+            public Integer getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(Integer id) {
                 this.id = id;
             }
 
-            public String getLongTitle() {
-                return longTitle;
+            public String getName() {
+                return name;
             }
 
-            public void setLongTitle(String longTitle) {
-                this.longTitle = longTitle;
-            }
-
-            public String getReleaseDate() {
-                return releaseDate;
-            }
-
-            public void setReleaseDate(String releaseDate) {
-                this.releaseDate = releaseDate;
-            }
-
-            public String getShareCopy() {
-                return shareCopy;
-            }
-
-            public void setShareCopy(String shareCopy) {
-                this.shareCopy = shareCopy;
-            }
-
-            public String getShareUrl() {
-                return shareUrl;
-            }
-
-            public void setShareUrl(String shareUrl) {
-                this.shareUrl = shareUrl;
-            }
-
-            public String getShortLink() {
-                return shortLink;
-            }
-
-            public void setShortLink(String shortLink) {
-                this.shortLink = shortLink;
-            }
-
-            public int getStatus() {
-                return status;
-            }
-
-            public void setStatus(int status) {
-                this.status = status;
-            }
-
-            public String getSubtitle() {
-                return subtitle;
-            }
-
-            public void setSubtitle(String subtitle) {
-                this.subtitle = subtitle;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
-
-            public String getVid() {
-                return vid;
-            }
-
-            public void setVid(String vid) {
-                this.vid = vid;
-            }
-
-            public static class DimensionBean {
-                @SerializedName("height")
-                private int height;
-                @SerializedName("rotate")
-                private int rotate;
-                @SerializedName("width")
-                private int width;
-
-                public int getHeight() {
-                    return height;
-                }
-
-                public void setHeight(int height) {
-                    this.height = height;
-                }
-
-                public int getRotate() {
-                    return rotate;
-                }
-
-                public void setRotate(int rotate) {
-                    this.rotate = rotate;
-                }
-
-                public int getWidth() {
-                    return width;
-                }
-
-                public void setWidth(int width) {
-                    this.width = width;
-                }
+            public void setName(String name) {
+                this.name = name;
             }
         }
 
-        public static class SeasonsBean {
-            @SerializedName("is_new")
-            private int isNew;
-            @SerializedName("season_id")
-            private int seasonId;
-            @SerializedName("season_title")
-            private String seasonTitle;
-
-            public int getIsNew() {
-                return isNew;
-            }
-
-            public void setIsNew(int isNew) {
-                this.isNew = isNew;
-            }
-
-            public int getSeasonId() {
-                return seasonId;
-            }
-
-            public void setSeasonId(int seasonId) {
-                this.seasonId = seasonId;
-            }
-
-            public String getSeasonTitle() {
-                return seasonTitle;
-            }
-
-            public void setSeasonTitle(String seasonTitle) {
-                this.seasonTitle = seasonTitle;
-            }
-        }
-
-        public static class SectionBean {
-            @SerializedName("episode_id")
-            private int episodeId;
+        public static class Celebrity {
+            @SerializedName("avatar")
+            private String avatar;
+            @SerializedName("character_avatar")
+            private String characterAvatar;
+            @SerializedName("desc")
+            private String desc;
             @SerializedName("id")
-            private int id;
+            private Integer id;
+            @SerializedName("name")
+            private String name;
+            @SerializedName("short_desc")
+            private String shortDesc;
+
+            public String getAvatar() {
+                return avatar;
+            }
+
+            public void setAvatar(String avatar) {
+                this.avatar = avatar;
+            }
+
+            public String getCharacterAvatar() {
+                return characterAvatar;
+            }
+
+            public void setCharacterAvatar(String characterAvatar) {
+                this.characterAvatar = characterAvatar;
+            }
+
+            public String getDesc() {
+                return desc;
+            }
+
+            public void setDesc(String desc) {
+                this.desc = desc;
+            }
+
+            public Integer getId() {
+                return id;
+            }
+
+            public void setId(Integer id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getShortDesc() {
+                return shortDesc;
+            }
+
+            public void setShortDesc(String shortDesc) {
+                this.shortDesc = shortDesc;
+            }
+        }
+
+        public static class Modules {
+            @SerializedName("data")
+            private Data data;
+            @SerializedName("id")
+            private Integer id;
+            @SerializedName("module_style")
+            private ModuleStyle moduleStyle;
             @SerializedName("more")
             private String more;
+            @SerializedName("report")
+            private Report report;
+            @SerializedName("style")
+            private String style;
             @SerializedName("title")
             private String title;
-            @SerializedName("type")
-            private int type;
-            @SerializedName("episodes")
-            private List<EpisodesBeanX> episodes;
 
-            public int getEpisodeId() {
-                return episodeId;
+            public Data getData() {
+                return data;
             }
 
-            public void setEpisodeId(int episodeId) {
-                this.episodeId = episodeId;
+            public void setData(Data data) {
+                this.data = data;
             }
 
-            public int getId() {
+            public Integer getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(Integer id) {
                 this.id = id;
+            }
+
+            public ModuleStyle getModuleStyle() {
+                return moduleStyle;
+            }
+
+            public void setModuleStyle(ModuleStyle moduleStyle) {
+                this.moduleStyle = moduleStyle;
             }
 
             public String getMore() {
@@ -1364,6 +2445,22 @@ public class BangumiDetailPageBean {
                 this.more = more;
             }
 
+            public Report getReport() {
+                return report;
+            }
+
+            public void setReport(Report report) {
+                this.report = report;
+            }
+
+            public String getStyle() {
+                return style;
+            }
+
+            public void setStyle(String style) {
+                this.style = style;
+            }
+
             public String getTitle() {
                 return title;
             }
@@ -1372,282 +2469,698 @@ public class BangumiDetailPageBean {
                 this.title = title;
             }
 
-            public int getType() {
-                return type;
+            public static class Data {
+                @SerializedName("episodes")
+                private List<Episodes> episodes;
+
+                public List<Episodes> getEpisodes() {
+                    return episodes;
+                }
+
+                public void setEpisodes(List<Episodes> episodes) {
+                    this.episodes = episodes;
+                }
+
+                public static class Episodes {
+                    @SerializedName("aid")
+                    private Integer aid;
+                    @SerializedName("badge")
+                    private String badge;
+                    @SerializedName("badge_info")
+                    private BadgeInfo badgeInfo;
+                    @SerializedName("badge_type")
+                    private Integer badgeType;
+                    @SerializedName("bvid")
+                    private String bvid;
+                    @SerializedName("cid")
+                    private Integer cid;
+                    @SerializedName("cover")
+                    private String cover;
+                    @SerializedName("dimension")
+                    private Dimension dimension;
+                    @SerializedName("duration")
+                    private Integer duration;
+                    @SerializedName("ep_index")
+                    private Integer epIndex;
+                    @SerializedName("from")
+                    private String from;
+                    @SerializedName("id")
+                    private Integer id;
+                    @SerializedName("link")
+                    private String link;
+                    @SerializedName("long_title")
+                    private String longTitle;
+                    @SerializedName("pub_time")
+                    private Integer pubTime;
+                    @SerializedName("pv")
+                    private Integer pv;
+                    @SerializedName("release_date")
+                    private String releaseDate;
+                    @SerializedName("report")
+                    private Report report;
+                    @SerializedName("rights")
+                    private Rights rights;
+                    @SerializedName("section_index")
+                    private Integer sectionIndex;
+                    @SerializedName("share_copy")
+                    private String shareCopy;
+                    @SerializedName("share_url")
+                    private String shareUrl;
+                    @SerializedName("short_link")
+                    private String shortLink;
+                    @SerializedName("stat")
+                    private Stat stat;
+                    @SerializedName("status")
+                    private Integer status;
+                    @SerializedName("subtitle")
+                    private String subtitle;
+                    @SerializedName("title")
+                    private String title;
+                    @SerializedName("vid")
+                    private String vid;
+                    @SerializedName("up_infos")
+                    private List<UpInfos> upInfos;
+
+                    public Integer getAid() {
+                        return aid;
+                    }
+
+                    public void setAid(Integer aid) {
+                        this.aid = aid;
+                    }
+
+                    public String getBadge() {
+                        return badge;
+                    }
+
+                    public void setBadge(String badge) {
+                        this.badge = badge;
+                    }
+
+                    public BadgeInfo getBadgeInfo() {
+                        return badgeInfo;
+                    }
+
+                    public void setBadgeInfo(BadgeInfo badgeInfo) {
+                        this.badgeInfo = badgeInfo;
+                    }
+
+                    public Integer getBadgeType() {
+                        return badgeType;
+                    }
+
+                    public void setBadgeType(Integer badgeType) {
+                        this.badgeType = badgeType;
+                    }
+
+                    public String getBvid() {
+                        return bvid;
+                    }
+
+                    public void setBvid(String bvid) {
+                        this.bvid = bvid;
+                    }
+
+                    public Integer getCid() {
+                        return cid;
+                    }
+
+                    public void setCid(Integer cid) {
+                        this.cid = cid;
+                    }
+
+                    public String getCover() {
+                        return cover;
+                    }
+
+                    public void setCover(String cover) {
+                        this.cover = cover;
+                    }
+
+                    public Dimension getDimension() {
+                        return dimension;
+                    }
+
+                    public void setDimension(Dimension dimension) {
+                        this.dimension = dimension;
+                    }
+
+                    public Integer getDuration() {
+                        return duration;
+                    }
+
+                    public void setDuration(Integer duration) {
+                        this.duration = duration;
+                    }
+
+                    public Integer getEpIndex() {
+                        return epIndex;
+                    }
+
+                    public void setEpIndex(Integer epIndex) {
+                        this.epIndex = epIndex;
+                    }
+
+                    public String getFrom() {
+                        return from;
+                    }
+
+                    public void setFrom(String from) {
+                        this.from = from;
+                    }
+
+                    public Integer getId() {
+                        return id;
+                    }
+
+                    public void setId(Integer id) {
+                        this.id = id;
+                    }
+
+                    public String getLink() {
+                        return link;
+                    }
+
+                    public void setLink(String link) {
+                        this.link = link;
+                    }
+
+                    public String getLongTitle() {
+                        return longTitle;
+                    }
+
+                    public void setLongTitle(String longTitle) {
+                        this.longTitle = longTitle;
+                    }
+
+                    public Integer getPubTime() {
+                        return pubTime;
+                    }
+
+                    public void setPubTime(Integer pubTime) {
+                        this.pubTime = pubTime;
+                    }
+
+                    public Integer getPv() {
+                        return pv;
+                    }
+
+                    public void setPv(Integer pv) {
+                        this.pv = pv;
+                    }
+
+                    public String getReleaseDate() {
+                        return releaseDate;
+                    }
+
+                    public void setReleaseDate(String releaseDate) {
+                        this.releaseDate = releaseDate;
+                    }
+
+                    public Report getReport() {
+                        return report;
+                    }
+
+                    public void setReport(Report report) {
+                        this.report = report;
+                    }
+
+                    public Rights getRights() {
+                        return rights;
+                    }
+
+                    public void setRights(Rights rights) {
+                        this.rights = rights;
+                    }
+
+                    public Integer getSectionIndex() {
+                        return sectionIndex;
+                    }
+
+                    public void setSectionIndex(Integer sectionIndex) {
+                        this.sectionIndex = sectionIndex;
+                    }
+
+                    public String getShareCopy() {
+                        return shareCopy;
+                    }
+
+                    public void setShareCopy(String shareCopy) {
+                        this.shareCopy = shareCopy;
+                    }
+
+                    public String getShareUrl() {
+                        return shareUrl;
+                    }
+
+                    public void setShareUrl(String shareUrl) {
+                        this.shareUrl = shareUrl;
+                    }
+
+                    public String getShortLink() {
+                        return shortLink;
+                    }
+
+                    public void setShortLink(String shortLink) {
+                        this.shortLink = shortLink;
+                    }
+
+                    public Stat getStat() {
+                        return stat;
+                    }
+
+                    public void setStat(Stat stat) {
+                        this.stat = stat;
+                    }
+
+                    public Integer getStatus() {
+                        return status;
+                    }
+
+                    public void setStatus(Integer status) {
+                        this.status = status;
+                    }
+
+                    public String getSubtitle() {
+                        return subtitle;
+                    }
+
+                    public void setSubtitle(String subtitle) {
+                        this.subtitle = subtitle;
+                    }
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public void setTitle(String title) {
+                        this.title = title;
+                    }
+
+                    public String getVid() {
+                        return vid;
+                    }
+
+                    public void setVid(String vid) {
+                        this.vid = vid;
+                    }
+
+                    public List<UpInfos> getUpInfos() {
+                        return upInfos;
+                    }
+
+                    public void setUpInfos(List<UpInfos> upInfos) {
+                        this.upInfos = upInfos;
+                    }
+
+                    public static class BadgeInfo {
+                        @SerializedName("bg_color")
+                        private String bgColor;
+                        @SerializedName("bg_color_night")
+                        private String bgColorNight;
+                        @SerializedName("text")
+                        private String text;
+
+                        public String getBgColor() {
+                            return bgColor;
+                        }
+
+                        public void setBgColor(String bgColor) {
+                            this.bgColor = bgColor;
+                        }
+
+                        public String getBgColorNight() {
+                            return bgColorNight;
+                        }
+
+                        public void setBgColorNight(String bgColorNight) {
+                            this.bgColorNight = bgColorNight;
+                        }
+
+                        public String getText() {
+                            return text;
+                        }
+
+                        public void setText(String text) {
+                            this.text = text;
+                        }
+                    }
+
+                    public static class Dimension {
+                        @SerializedName("height")
+                        private Integer height;
+                        @SerializedName("rotate")
+                        private Integer rotate;
+                        @SerializedName("width")
+                        private Integer width;
+
+                        public Integer getHeight() {
+                            return height;
+                        }
+
+                        public void setHeight(Integer height) {
+                            this.height = height;
+                        }
+
+                        public Integer getRotate() {
+                            return rotate;
+                        }
+
+                        public void setRotate(Integer rotate) {
+                            this.rotate = rotate;
+                        }
+
+                        public Integer getWidth() {
+                            return width;
+                        }
+
+                        public void setWidth(Integer width) {
+                            this.width = width;
+                        }
+                    }
+
+                    public static class Report {
+                        @SerializedName("aid")
+                        private String aid;
+                        @SerializedName("ep_title")
+                        private String epTitle;
+                        @SerializedName("epid")
+                        private String epid;
+                        @SerializedName("season_id")
+                        private String seasonId;
+                        @SerializedName("season_type")
+                        private String seasonType;
+                        @SerializedName("section_id")
+                        private String sectionId;
+                        @SerializedName("section_type")
+                        private String sectionType;
+
+                        public String getAid() {
+                            return aid;
+                        }
+
+                        public void setAid(String aid) {
+                            this.aid = aid;
+                        }
+
+                        public String getEpTitle() {
+                            return epTitle;
+                        }
+
+                        public void setEpTitle(String epTitle) {
+                            this.epTitle = epTitle;
+                        }
+
+                        public String getEpid() {
+                            return epid;
+                        }
+
+                        public void setEpid(String epid) {
+                            this.epid = epid;
+                        }
+
+                        public String getSeasonId() {
+                            return seasonId;
+                        }
+
+                        public void setSeasonId(String seasonId) {
+                            this.seasonId = seasonId;
+                        }
+
+                        public String getSeasonType() {
+                            return seasonType;
+                        }
+
+                        public void setSeasonType(String seasonType) {
+                            this.seasonType = seasonType;
+                        }
+
+                        public String getSectionId() {
+                            return sectionId;
+                        }
+
+                        public void setSectionId(String sectionId) {
+                            this.sectionId = sectionId;
+                        }
+
+                        public String getSectionType() {
+                            return sectionType;
+                        }
+
+                        public void setSectionType(String sectionType) {
+                            this.sectionType = sectionType;
+                        }
+                    }
+
+                    public static class Rights {
+                        @SerializedName("allow_demand")
+                        private Integer allowDemand;
+                        @SerializedName("allow_dm")
+                        private Integer allowDm;
+                        @SerializedName("allow_download")
+                        private Integer allowDownload;
+                        @SerializedName("area_limit")
+                        private Integer areaLimit;
+
+                        public Integer getAllowDemand() {
+                            return allowDemand;
+                        }
+
+                        public void setAllowDemand(Integer allowDemand) {
+                            this.allowDemand = allowDemand;
+                        }
+
+                        public Integer getAllowDm() {
+                            return allowDm;
+                        }
+
+                        public void setAllowDm(Integer allowDm) {
+                            this.allowDm = allowDm;
+                        }
+
+                        public Integer getAllowDownload() {
+                            return allowDownload;
+                        }
+
+                        public void setAllowDownload(Integer allowDownload) {
+                            this.allowDownload = allowDownload;
+                        }
+
+                        public Integer getAreaLimit() {
+                            return areaLimit;
+                        }
+
+                        public void setAreaLimit(Integer areaLimit) {
+                            this.areaLimit = areaLimit;
+                        }
+                    }
+
+                    public static class Stat {
+                        @SerializedName("coin")
+                        private Integer coin;
+                        @SerializedName("danmakus")
+                        private Integer danmakus;
+                        @SerializedName("likes")
+                        private Integer likes;
+                        @SerializedName("play")
+                        private Integer play;
+                        @SerializedName("reply")
+                        private Integer reply;
+
+                        public Integer getCoin() {
+                            return coin;
+                        }
+
+                        public void setCoin(Integer coin) {
+                            this.coin = coin;
+                        }
+
+                        public Integer getDanmakus() {
+                            return danmakus;
+                        }
+
+                        public void setDanmakus(Integer danmakus) {
+                            this.danmakus = danmakus;
+                        }
+
+                        public Integer getLikes() {
+                            return likes;
+                        }
+
+                        public void setLikes(Integer likes) {
+                            this.likes = likes;
+                        }
+
+                        public Integer getPlay() {
+                            return play;
+                        }
+
+                        public void setPlay(Integer play) {
+                            this.play = play;
+                        }
+
+                        public Integer getReply() {
+                            return reply;
+                        }
+
+                        public void setReply(Integer reply) {
+                            this.reply = reply;
+                        }
+                    }
+
+                    public static class UpInfos {
+                        @SerializedName("follower")
+                        private Integer follower;
+                        @SerializedName("is_follow")
+                        private Integer isFollow;
+                        @SerializedName("mid")
+                        private Integer mid;
+                        @SerializedName("title")
+                        private String title;
+
+                        public Integer getFollower() {
+                            return follower;
+                        }
+
+                        public void setFollower(Integer follower) {
+                            this.follower = follower;
+                        }
+
+                        public Integer getIsFollow() {
+                            return isFollow;
+                        }
+
+                        public void setIsFollow(Integer isFollow) {
+                            this.isFollow = isFollow;
+                        }
+
+                        public Integer getMid() {
+                            return mid;
+                        }
+
+                        public void setMid(Integer mid) {
+                            this.mid = mid;
+                        }
+
+                        public String getTitle() {
+                            return title;
+                        }
+
+                        public void setTitle(String title) {
+                            this.title = title;
+                        }
+                    }
+                }
             }
 
-            public void setType(int type) {
-                this.type = type;
+            public static class ModuleStyle {
+                @SerializedName("hidden")
+                private Integer hidden;
+                @SerializedName("line")
+                private Integer line;
+
+                public Integer getHidden() {
+                    return hidden;
+                }
+
+                public void setHidden(Integer hidden) {
+                    this.hidden = hidden;
+                }
+
+                public Integer getLine() {
+                    return line;
+                }
+
+                public void setLine(Integer line) {
+                    this.line = line;
+                }
             }
 
-            public List<EpisodesBeanX> getEpisodes() {
-                return episodes;
-            }
+            public static class Report {
+                @SerializedName("season_id")
+                private String seasonId;
+                @SerializedName("season_type")
+                private String seasonType;
+                @SerializedName("sec_title")
+                private String secTitle;
+                @SerializedName("section_id")
+                private String sectionId;
+                @SerializedName("section_type")
+                private String sectionType;
 
-            public void setEpisodes(List<EpisodesBeanX> episodes) {
-                this.episodes = episodes;
-            }
-
-            public static class EpisodesBeanX {
-                @SerializedName("aid")
-                private int aid;
-                @SerializedName("badge")
-                private String badge;
-                @SerializedName("badge_type")
-                private int badgeType;
-                @SerializedName("cid")
-                private int cid;
-                @SerializedName("cover")
-                private String cover;
-                @SerializedName("dimension")
-                private DimensionBeanX dimension;
-                @SerializedName("from")
-                private String from;
-                @SerializedName("id")
-                private int id;
-                @SerializedName("long_title")
-                private String longTitle;
-                @SerializedName("release_date")
-                private String releaseDate;
-                @SerializedName("share_copy")
-                private String shareCopy;
-                @SerializedName("share_url")
-                private String shareUrl;
-                @SerializedName("short_link")
-                private String shortLink;
-                @SerializedName("stat")
-                private StatBeanX stat;
-                @SerializedName("status")
-                private int status;
-                @SerializedName("subtitle")
-                private String subtitle;
-                @SerializedName("title")
-                private String title;
-                @SerializedName("vid")
-                private String vid;
-
-                public int getAid() {
-                    return aid;
+                public String getSeasonId() {
+                    return seasonId;
                 }
 
-                public void setAid(int aid) {
-                    this.aid = aid;
+                public void setSeasonId(String seasonId) {
+                    this.seasonId = seasonId;
                 }
 
-                public String getBadge() {
-                    return badge;
+                public String getSeasonType() {
+                    return seasonType;
                 }
 
-                public void setBadge(String badge) {
-                    this.badge = badge;
+                public void setSeasonType(String seasonType) {
+                    this.seasonType = seasonType;
                 }
 
-                public int getBadgeType() {
-                    return badgeType;
+                public String getSecTitle() {
+                    return secTitle;
                 }
 
-                public void setBadgeType(int badgeType) {
-                    this.badgeType = badgeType;
+                public void setSecTitle(String secTitle) {
+                    this.secTitle = secTitle;
                 }
 
-                public int getCid() {
-                    return cid;
+                public String getSectionId() {
+                    return sectionId;
                 }
 
-                public void setCid(int cid) {
-                    this.cid = cid;
+                public void setSectionId(String sectionId) {
+                    this.sectionId = sectionId;
                 }
 
-                public String getCover() {
-                    return cover;
+                public String getSectionType() {
+                    return sectionType;
                 }
 
-                public void setCover(String cover) {
-                    this.cover = cover;
-                }
-
-                public DimensionBeanX getDimension() {
-                    return dimension;
-                }
-
-                public void setDimension(DimensionBeanX dimension) {
-                    this.dimension = dimension;
-                }
-
-                public String getFrom() {
-                    return from;
-                }
-
-                public void setFrom(String from) {
-                    this.from = from;
-                }
-
-                public int getId() {
-                    return id;
-                }
-
-                public void setId(int id) {
-                    this.id = id;
-                }
-
-                public String getLongTitle() {
-                    return longTitle;
-                }
-
-                public void setLongTitle(String longTitle) {
-                    this.longTitle = longTitle;
-                }
-
-                public String getReleaseDate() {
-                    return releaseDate;
-                }
-
-                public void setReleaseDate(String releaseDate) {
-                    this.releaseDate = releaseDate;
-                }
-
-                public String getShareCopy() {
-                    return shareCopy;
-                }
-
-                public void setShareCopy(String shareCopy) {
-                    this.shareCopy = shareCopy;
-                }
-
-                public String getShareUrl() {
-                    return shareUrl;
-                }
-
-                public void setShareUrl(String shareUrl) {
-                    this.shareUrl = shareUrl;
-                }
-
-                public String getShortLink() {
-                    return shortLink;
-                }
-
-                public void setShortLink(String shortLink) {
-                    this.shortLink = shortLink;
-                }
-
-                public StatBeanX getStat() {
-                    return stat;
-                }
-
-                public void setStat(StatBeanX stat) {
-                    this.stat = stat;
-                }
-
-                public int getStatus() {
-                    return status;
-                }
-
-                public void setStatus(int status) {
-                    this.status = status;
-                }
-
-                public String getSubtitle() {
-                    return subtitle;
-                }
-
-                public void setSubtitle(String subtitle) {
-                    this.subtitle = subtitle;
-                }
-
-                public String getTitle() {
-                    return title;
-                }
-
-                public void setTitle(String title) {
-                    this.title = title;
-                }
-
-                public String getVid() {
-                    return vid;
-                }
-
-                public void setVid(String vid) {
-                    this.vid = vid;
-                }
-
-                public static class DimensionBeanX {
-                    @SerializedName("height")
-                    private int height;
-                    @SerializedName("rotate")
-                    private int rotate;
-                    @SerializedName("width")
-                    private int width;
-
-                    public int getHeight() {
-                        return height;
-                    }
-
-                    public void setHeight(int height) {
-                        this.height = height;
-                    }
-
-                    public int getRotate() {
-                        return rotate;
-                    }
-
-                    public void setRotate(int rotate) {
-                        this.rotate = rotate;
-                    }
-
-                    public int getWidth() {
-                        return width;
-                    }
-
-                    public void setWidth(int width) {
-                        this.width = width;
-                    }
-                }
-
-                public static class StatBeanX {
-                    @SerializedName("coin")
-                    private int coin;
-                    @SerializedName("danmakus")
-                    private int danmakus;
-                    @SerializedName("play")
-                    private int play;
-                    @SerializedName("reply")
-                    private int reply;
-
-                    public int getCoin() {
-                        return coin;
-                    }
-
-                    public void setCoin(int coin) {
-                        this.coin = coin;
-                    }
-
-                    public int getDanmakus() {
-                        return danmakus;
-                    }
-
-                    public void setDanmakus(int danmakus) {
-                        this.danmakus = danmakus;
-                    }
-
-                    public int getPlay() {
-                        return play;
-                    }
-
-                    public void setPlay(int play) {
-                        this.play = play;
-                    }
-
-                    public int getReply() {
-                        return reply;
-                    }
-
-                    public void setReply(int reply) {
-                        this.reply = reply;
-                    }
+                public void setSectionType(String sectionType) {
+                    this.sectionType = sectionType;
                 }
             }
         }
+
+        public static class Styles {
+            @SerializedName("id")
+            private Integer id;
+            @SerializedName("name")
+            private String name;
+            @SerializedName("url")
+            private String url;
+
+            public Integer getId() {
+                return id;
+            }
+
+            public void setId(Integer id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getUrl() {
+                return url;
+            }
+
+            public void setUrl(String url) {
+                this.url = url;
+            }
+        }
     }
-
 }
-

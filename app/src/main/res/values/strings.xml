@@ -7,4 +7,16 @@
     <string name="search_desc">搜索框</string>
     <string name="search_hint">我总想搜点什么</string>
     <string name="cancel">取消</string>
+    <string name="mine">我的</string>
+    <string name="history">历史记录</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="username_hint">你的手机号/邮箱</string>
+    <string name="password_hint">请输入密码</string>
+    <string name="video_url_parse_error">视频信息解析错误</string>
+    <string name="video_load_error">视频加载错误</string>
+    <string name="download">下载</string>
+    <string name="accounts">账号</string>
+    <string name="setting">设置</string>
+    <string name="multiWindow_not_allow">分屏模式下无法进行此操作</string>
 </resources>

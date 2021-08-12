@@ -32,9 +32,12 @@ public interface BIPPlayer {
         boolean onError(BIPPlayer bp, int what, int extra);
     }
 
-    interface OnCompletionListener
-    {
+    interface OnCompletionListener {
         void onCompletion(BIPPlayer bp);
+    }
+
+    interface OnSeekCompleteListener {
+        void onSeekComplete(BIPPlayer bp);
     }
 
     void updatePlayer();
@@ -51,7 +54,7 @@ public interface BIPPlayer {
 
     int getVideoHeight();
 
-     void setDisplay(SurfaceHolder sh);
+    void setDisplay(SurfaceHolder sh);
 
     void setScreenOnWhilePlaying(boolean screenOn);
 
@@ -59,4 +62,7 @@ public interface BIPPlayer {
 
     void setOnCompletionListener(OnCompletionListener listener);
 
+    void prepareQualityAsync(String path);
+
+    void setOnSeekCompleteListener(OnSeekCompleteListener listener);
 }

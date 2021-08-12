@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/mine_collection"
+        android:layout_width="72dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:drawablePadding="6dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/collection"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:drawableTopCompat="@drawable/ic_collection"
+        app:layout_constraintEnd_toStartOf="@id/mine_history"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/mine_history"
+        android:layout_width="72dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:drawablePadding="6dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/history"
+        app:drawableTopCompat="@drawable/ic_history"
+        app:layout_constraintEnd_toStartOf="@id/mine_download"
+        app:layout_constraintStart_toEndOf="@id/mine_collection"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/mine_download"
+        android:layout_width="72dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="6dp"
+        android:text="@string/download"
+        app:drawableTopCompat="@drawable/ic_download"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/mine_history"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/mine_accounts"
+        android:layout_width="72dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="6dp"
+        android:text="@string/accounts"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintEnd_toStartOf="@id/mine_settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mine_download"
+        app:drawableTopCompat="@drawable/ic_accounts" />
+    <TextView
+        android:id="@+id/mine_settings"
+        android:layout_width="72dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="6dp"
+        android:text="@string/setting"
+        app:layout_constraintEnd_toStartOf="@id/mine_none"
+        app:layout_constraintStart_toEndOf="@id/mine_accounts"
+        app:layout_constraintTop_toBottomOf="@id/mine_download"
+        app:drawableTopCompat="@drawable/ic_setting"/>
+    <TextView
+        android:id="@+id/mine_none"
+        android:layout_width="72dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/mine_settings"
+        app:layout_constraintTop_toBottomOf="@id/mine_download" />
+</androidx.constraintlayout.widget.ConstraintLayout>
