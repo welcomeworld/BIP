@@ -20,6 +20,7 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     List<VideoListBean> data;
     ItemClickListener itemClickListener;
     ActionClickListener actionClickListener;
+    private boolean isFav = false;
     private int selectSourceIndex = -1;
 
     private static final int HEADER_TYPE = 233;
@@ -53,8 +54,10 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             if (!StringUtil.isEmpty(data.get(position).getVideoListDes())) {
                 itemHolder.videoPlayDes.setText(data.get(position).getVideoListDes());
             }
+            itemHolder.favView.setSelected(isFav);
             itemHolder.favView.setOnClickListener(v -> {
-                itemHolder.favView.setSelected(true);
+                isFav = !isFav;
+                itemHolder.favView.setSelected(isFav);
                 if(actionClickListener!=null){
                     actionClickListener.onFavClick();
                 }
@@ -159,5 +162,9 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void setSelectSourceIndex(int selectSourceIndex) {
         this.selectSourceIndex = selectSourceIndex;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
     }
 }

@@ -8,7 +8,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.persistence.AppBa
 
 import java.util.List;
 
-@Entity(tableName = "history",primaryKeys = {"uid","vid","isFav"})
+@Entity(tableName = "history",primaryKeys = {"uid","vid"})
 @TypeConverters({AppBaseConverter.class})
 public class HistoryBean {
     private int uid;
@@ -101,6 +101,10 @@ public class HistoryBean {
             vid = videoData.get(0).getSourceName()+":"+videoData.get(0).getVideoBeanList().get(0).getVideoKey();
         }
         return vid;
+    }
+
+    public static String getVid(List<VideoListBean> videoData){
+        return videoData.get(0).getSourceName()+":"+videoData.get(0).getVideoBeanList().get(0).getVideoKey();
     }
 
     public void setVid(String vId) {

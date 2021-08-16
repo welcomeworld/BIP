@@ -24,7 +24,7 @@ import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 public class MainCollectionFragment extends BaseFragment<FragmentMainCollectionBinding> {
 
     FavOrHistoryRecyclerViewAdapter adapter;
-    List<HistoryBean> data=new ArrayList<>();
+    List<HistoryBean> data = new ArrayList<>();
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -38,23 +38,24 @@ public class MainCollectionFragment extends BaseFragment<FragmentMainCollectionB
         getViewBinding().mainHomeRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if(newState ==SCROLL_STATE_IDLE ){
+                if (newState == SCROLL_STATE_IDLE) {
                     scrollHideBottom();
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
     }
-    private void scrollHideBottom(){
-        Log.e("SwipeRefresh","scrollHide");
-        if(getContext() == null){
+
+    private void scrollHideBottom() {
+        Log.e("SwipeRefresh", "scrollHide");
+        if (getContext() == null) {
             return;
         }
-        int footerHeight = ScreenUtil.dp2px(getContext(),96);
+        int footerHeight = ScreenUtil.dp2px(getContext(), 96);
         final int offset = getViewBinding().mainHomeRv.computeVerticalScrollOffset();
         final int range = getViewBinding().mainHomeRv.computeVerticalScrollRange() - getViewBinding().mainHomeRv.computeVerticalScrollExtent();
-        if(offset>range- footerHeight){
-            getViewBinding().mainHomeRv.smoothScrollBy(0,range-offset-footerHeight);
+        if (offset > range - footerHeight) {
+            getViewBinding().mainHomeRv.smoothScrollBy(0, range - offset - footerHeight);
         }
 
     }
@@ -66,14 +67,14 @@ public class MainCollectionFragment extends BaseFragment<FragmentMainCollectionB
         refresh(false);
     }
 
-    private void refresh(boolean force){
-        if((!force&&data!=null&&data.size()>0)){
+    private void refresh(boolean force) {
+        if ((!force && data != null && data.size() > 0)) {
             return;
         }
-        if(getViewBinding().mainHomeSwipeRefresh.isRefreshing()&&!force){
+        if (getViewBinding().mainHomeSwipeRefresh.isRefreshing() && !force) {
             return;
         }
-        if(force){
+        if (force) {
             moreTime = 0;
         }
         getViewBinding().mainHomeSwipeRefresh.setRefreshing(true);
@@ -81,15 +82,16 @@ public class MainCollectionFragment extends BaseFragment<FragmentMainCollectionB
             data = result;
             adapter.replaceAll(data);
             getViewBinding().mainHomeSwipeRefresh.setRefreshing(false);
-            if(result!=null&&result.size()>0){
+            if (result != null && result.size() > 0) {
                 loadMore();
             }
         });
     }
 
     int moreTime = 4;
-    private void loadMore(){
-        if(moreTime>=4){
+
+    private void loadMore() {
+        if (moreTime >= 4) {
             return;
         }
         moreTime++;

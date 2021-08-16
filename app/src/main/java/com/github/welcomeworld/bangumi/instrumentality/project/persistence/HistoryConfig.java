@@ -20,4 +20,8 @@ public class HistoryConfig {
     public static List<HistoryBean> getFav(){
         return AppDatabaseManager.getDatabase().getHistoryDao().getAllFav();
     }
+
+    public static HistoryBean findHistory(int uid,String vid){
+        return AppDatabaseManager.getDatabase().getHistoryDao().findHistory(uid,vid);
+    }
 }

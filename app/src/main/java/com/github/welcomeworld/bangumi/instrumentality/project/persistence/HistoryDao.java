@@ -26,6 +26,9 @@ public interface HistoryDao {
     @Query("select * from history where isFav = 1 order by favTime desc")
     public List<HistoryBean> getAllFav();
 
-    @Query("select * from history where isFav = 0 order by viewTime desc")
+    @Query("select * from history order by viewTime desc")
     public List<HistoryBean> getAllHistory();
+
+    @Query("select * from history where uid = :uid and vid = :vid")
+    public HistoryBean findHistory(int uid,String vid);
 }

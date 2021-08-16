@@ -50,11 +50,12 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     VideoListBean currentVideoListBean;
     VideoBean currentVideoBean;
     BIPPlayer bipPlayer = new IjkBIPPlayerImpl();
+    HistoryBean historyBean;
 
     @Override
     protected void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveHistoryOrFav();
+        saveHistory();
     }
 
     @Override
@@ -70,7 +71,22 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         }
         ThreadUtil.defer().when(() -> {
             videoListBeans = ParserManager.getInstance().updateVideoList(videoListBeans, selectSourceIndex);
+            initHistory();
         }).done((result) -> initCreate()).fail(throwable -> initCreate());
+    }
+
+    private void initHistory(){
+        historyBean = HistoryConfig.findHistory(0,HistoryBean.getVid(videoListBeans));
+        if(historyBean == null){
+            historyBean = new HistoryBean();
+            historyBean.setActive(true);
+            historyBean.setCover(currentVideoListBean.getCover());
+            historyBean.setSelectSourceIndex(selectSourceIndex);
+            historyBean.setTitle(currentVideoListBean.getTitle());
+            historyBean.setCoverPortrait(currentVideoListBean.isCoverPortrait());
+            historyBean.setVideoData(videoListBeans);
+            historyBean.setViewTime(System.currentTimeMillis());
+        }
     }
 
     private void registerSomething(){
@@ -84,41 +100,44 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         unregisterReceiver(playReceiver);
     }
 
-    private void saveHistoryOrFav(){
-        saveHistoryOrFav(false);
-    }
-
-    private void saveHistoryOrFav(boolean fav) {
-        HistoryBean historyBean = new HistoryBean();
-        historyBean.setActive(true);
-        historyBean.setCover(currentVideoListBean.getCover());
+    private void saveHistory(){
         historyBean.setSelectSourceIndex(selectSourceIndex);
-        historyBean.setTitle(currentVideoListBean.getTitle());
-        historyBean.setCoverPortrait(currentVideoListBean.isCoverPortrait());
         historyBean.setVideoData(videoListBeans);
         historyBean.setViewTime(System.currentTimeMillis());
+        HistoryConfig.updateOrSaveHistory(historyBean);
+    }
+
+    private void changeFavStatus(boolean fav) {
         historyBean.setFav(fav);
+        if(fav){
+            historyBean.setFavTime(System.currentTimeMillis());
+        }
         HistoryConfig.updateOrSaveHistory(historyBean);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        saveHistoryOrFav();
+        saveHistory();
     }
 
     private void initCreate() {
         getViewBinding().videoPlayView.setBipPlayer(bipPlayer);
         getViewBinding().videoPlayView.setPlayViewListener(playViewListener);
         currentVideoListBean = videoListBeans.get(selectSourceIndex);
-        saveHistoryOrFav();
+        saveHistory();
         currentVideoBean = currentVideoListBean.getCurrentVideoBean();
         sourceAdapter.setSelectSourceIndex(selectSourceIndex);
         sourceAdapter.setData(videoListBeans);
+        sourceAdapter.setFav(historyBean.isFav());
         sourceAdapter.setActionClickListener(new VideoSourceItemAdapter.ActionClickListener() {
             @Override
             public void onFavClick() {
-                saveHistoryOrFav(true);
+                if(historyBean.isFav()){
+                    changeFavStatus(false);
+                }else {
+                    changeFavStatus(true);
+                }
             }
 
             @Override
@@ -174,7 +193,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                 }
                 bipPlayer.setVideoQualityBean(currentVideoBean.getCurrentQualityBean());
                 bipPlayer.prepareAsync();
-                saveHistoryOrFav();
+                saveHistory();
             });
         } else {
             LogUtil.e("BIPPlayer", "prepared directly");
