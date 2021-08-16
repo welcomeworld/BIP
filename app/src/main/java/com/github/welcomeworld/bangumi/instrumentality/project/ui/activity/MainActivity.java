@@ -22,7 +22,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getViewBinding().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(this);
-        viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(),BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         getViewBinding().mainViewPager.setAdapter(viewPagerAdapter);
         getViewBinding().mainViewPager.setOffscreenPageLimit(2);
         getViewBinding().mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         });
     }
 
-    public void onClick(View view){
+    public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.main_bottom_home) {
             getViewBinding().mainViewPager.setCurrentItem(0);

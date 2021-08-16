@@ -49,3 +49,8 @@
       publicstaticfinalint*;
 }
 #友盟结束
+
+#bugly 开始
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+#bugly 结束

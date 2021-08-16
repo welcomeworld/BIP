@@ -1,4 +1,10 @@
 apply plugin: 'com.android.application'
+apply plugin: 'bugly'
+
+bugly {
+    appId = '2d6af2e6f5' // 注册时分配的App ID
+    appKey = '97b88401-8537-4364-8767-e679b1e0765c' // 注册时分配的App Key
+}
 
 android {
     compileSdkVersion 29
@@ -14,7 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters "armeabi-v7a","x86_64"
+            abiFilters "armeabi-v7a"
         }
 
         javaCompileOptions {
@@ -104,5 +110,9 @@ dependencies {
 
     implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
     implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+
+    //bugly
+    implementation 'com.tencent.bugly:crashreport:3.4.4'
+    implementation 'com.tencent.bugly:nativecrashreport:3.9.2'
 
 }
