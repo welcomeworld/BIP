@@ -32,6 +32,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retro
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoDetailPageBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
+import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -43,7 +44,6 @@ import java.util.TreeMap;
 
 import retrofit2.Call;
 import retrofit2.Response;
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class BiliParser extends BaseParser {
     private static BiliParser instance;
@@ -69,7 +69,7 @@ public class BiliParser extends BaseParser {
         playerOptions.put("enable-accurate-seek", "1");
         playerOptions.put("start-on-prepared", "1");
         playerOptions.put("framedrop", "5");
-        result.put(IjkMediaPlayer.OPT_CATEGORY_PLAYER, playerOptions);
+        result.put(DefaultBIPPlayer.OPT_CATEGORY_PLAYER, playerOptions);
 
         Map<String, String> formatOptions = new HashMap<>();
 //        formatOptions.put("reconnect","1");
@@ -77,7 +77,7 @@ public class BiliParser extends BaseParser {
 //        formatOptions.put("dns_cache_clear","1");
 //        formatOptions.put("protocol_whitelist","rtmp,concat,ffconcat,file,subfile,http,https,tls,rtp,tcp,udp,crypto");
         formatOptions.put("user_agent", "Bilibili Freedoooooom/MarkII");
-        result.put(IjkMediaPlayer.OPT_CATEGORY_FORMAT, formatOptions);
+        result.put(DefaultBIPPlayer.OPT_CATEGORY_FORMAT, formatOptions);
         return result;
     }
 

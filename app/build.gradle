@@ -8,7 +8,7 @@ bugly {
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.github.welcomeworld.bangumi.instrumentality.project"
@@ -51,7 +51,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
+        viewBinding true
     }
 }
 
@@ -80,16 +80,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
-    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
-    implementation 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
-
     implementation 'org.jsoup:jsoup:1.13.1'
 
     implementation 'org.jdeferred:jdeferred-android-aar:1.2.4'
 
-    implementation 'com.jonathanfinerty.once:once:1.2.2'
-
-    implementation 'com.dylanc:viewbinding-base-ktx:1.1.1'
+    implementation 'com.github.DylanCaiCoding.ViewBindingKTX:viewbinding-base:2.0.2'
     implementation "androidx.room:room-runtime:2.2.6"
     annotationProcessor 'androidx.room:room-compiler:2.2.6'
 //    implementation "androidx.room:room-rxjava3:2.2.6"
@@ -108,8 +103,7 @@ dependencies {
 
     implementation 'com.eclipsesource.j2v8:j2v8:5.0.103@aar'
 
-    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
-    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+    implementation 'com.github.welcomeworld:DanmakuFlameMaster-Jitpack:v0.9.25'
 
     //bugly
     implementation 'com.tencent.bugly:crashreport:3.4.4'
