@@ -67,6 +67,16 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     actionClickListener.onDownloadClick();
                 }
             });
+            itemHolder.browserView.setOnClickListener(v->{
+                if(actionClickListener!=null){
+                    actionClickListener.onBrowserClick();
+                }
+            });
+            itemHolder.refreshView.setOnClickListener(v->{
+                if(actionClickListener!=null){
+                    actionClickListener.onRefreshClick();
+                }
+            });
         }
         ItemHolder itemHolder = (ItemHolder) holder;
         if (data.size() <= 1 && data.get(0).getVideoBeanList().size() <= 1) {
@@ -110,6 +120,8 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         TextView videoPlayDes;
         TextView favView;
         TextView downloadView;
+        TextView browserView;
+        TextView refreshView;
 
         public HeaderItemHolder(@NonNull View itemView) {
             super(itemView);
@@ -117,6 +129,9 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             videoPlayDes = itemView.findViewById(R.id.video_play_des);
             favView = itemView.findViewById(R.id.video_play_collection);
             downloadView = itemView.findViewById(R.id.video_play_download);
+            browserView = itemView.findViewById(R.id.video_play_browser);
+            refreshView = itemView.findViewById(R.id.video_play_refresh);
+
         }
     }
 
@@ -150,6 +165,11 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void onFavClick();
 
         void onDownloadClick();
+
+        void onBrowserClick();
+
+        void onRefreshClick();
+
     }
 
     public void setActionClickListener(ActionClickListener actionClickListener) {

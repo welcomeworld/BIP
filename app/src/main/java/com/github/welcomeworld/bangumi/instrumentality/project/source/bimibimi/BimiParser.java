@@ -52,4 +52,9 @@ public class BimiParser extends BaseParser {
     public boolean isMatchParser(String key) {
         return Constants.Source.BIMI.equals(key);
     }
+
+    @Override
+    public void initParser() {
+        BimiNetApi.initBaseUrl();
+    }
 }

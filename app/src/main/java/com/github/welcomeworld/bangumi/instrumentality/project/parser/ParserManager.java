@@ -1,10 +1,12 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.parser;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
+import com.nisigada.common.devbase.utils.ThreadUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ParserManager {
 
@@ -35,6 +37,11 @@ public class ParserManager {
         return result;
     }
 
+    /**
+     *
+     * @param searchKey searchWord
+     * @param pn start with 1
+     */
     public List<VideoListBean> search(String searchKey, String pn) {
         List<VideoListBean> result = new ArrayList<>();
         for (BaseParser parser : mParsers.values()) {
@@ -61,5 +68,33 @@ public class ParserManager {
             }
         }
         return videoListBeans;
+    }
+
+    public Map<Integer, Map<String,String>> getPlayerOptions(VideoListBean videoListBean){
+        if (videoListBean != null) {
+            for (BaseParser parser : mParsers.values()) {
+                if (parser.isMatchParser(videoListBean.getSourceName())) {
+                    return parser.getPlayerOptions();
+                }
+            }
+        }
+        return null;
+    }
+
+    public void clearCache(VideoListBean videoListBean){
+        if (videoListBean != null) {
+            for (BaseParser parser : mParsers.values()) {
+                if (parser.isMatchParser(videoListBean.getSourceName())) {
+                    parser.clearCache(videoListBean);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void initParsers(){
+        for (BaseParser parser : mParsers.values()) {
+            ThreadUtil.defer().when(parser::initParser);
+        }
     }
 }

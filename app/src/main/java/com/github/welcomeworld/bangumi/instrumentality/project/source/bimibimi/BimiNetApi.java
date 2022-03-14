@@ -23,12 +23,41 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BimiNetApi {
-    public static final String baseUrl = "http://www.bimiacg.net";
-    public static final String baseVideoDir = baseUrl+"/static/danmu/";
+    public static String baseUrl = "http://www.bimiacg4.net";
+    private static boolean initBaseUrl = false;
+    private static String getBaseUrl(){
+        if(!initBaseUrl){
+            for(int i=0;i<5;i++){
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    //ignore
+                }
+                if(initBaseUrl){
+                    break;
+                }
+            }
+        }
+        return baseUrl;
+    }
+
+    protected static void initBaseUrl(){
+        Connection baseUrlConn = Jsoup.connect("http://www.bimiacg.one/");
+        Document baseUrlDocument;
+        try {
+            baseUrlDocument = baseUrlConn.get();
+            Element urlElement = baseUrlDocument.selectFirst("div.container h3 span");
+            baseUrl = urlElement.text();
+            LogUtil.d("BimiSearch","bimi init get baseUrl"+baseUrl);
+            initBaseUrl = true;
+        } catch (Exception e) {
+            //ignore
+        }
+    }
 
     public static List<VideoListBean> search(String key, String pn) {
         List<VideoListBean> result = new ArrayList<>();
-        Connection searchConn = Jsoup.connect(baseUrl + "/vod/search/wd/" + key + "/page/" + pn);
+        Connection searchConn = Jsoup.connect(getBaseUrl() + "/vod/search/wd/" + key + "/page/" + pn);
         Document searchDocument;
         try {
             searchDocument = searchConn.get();
@@ -65,7 +94,7 @@ public class BimiNetApi {
                     String videoKey = path.substring(path.indexOf("bi/") + 3, path.lastIndexOf('/'));
                     LogUtil.e("BimiSearch getVideoKey:", videoKey);
                     videoBean.setVideoKey(videoKey);
-                    videoBean.setUrl(baseUrl + path);
+                    videoBean.setUrl(getBaseUrl() + path);
                     videoBeans.add(videoBean);
                     videoListBean.setVideoBeanList(videoBeans);
                     result.add(videoListBean);
@@ -91,11 +120,11 @@ public class BimiNetApi {
         Document pageDocument;
         String videoListId = videoListExtraData.get("videoListId");
         LogUtil.e("BimiParseVideo","getVideoListId:"+videoListId);
-        String urlKey;
+        String urlKey = "";
         String fromKey = "play";
         try {
             if(TextUtils.isEmpty(videoListId)){
-                Connection pageConn = Jsoup.connect(baseUrl + "/bangumi/bi/" + currentVideoBean.getVideoKey());
+                Connection pageConn = Jsoup.connect(getBaseUrl() + "/bangumi/bi/" + currentVideoBean.getVideoKey());
                 pageDocument = pageConn.get();
                 Elements sourceElements = pageDocument.select("ul.player_list");
                 Elements sourceTitleElements = pageDocument.select("div.play_source_tab a");
@@ -125,7 +154,7 @@ public class BimiNetApi {
                         videoBean.setTitle(item.text());
                         videoBean.setCover(videoListBean.getCover());
                         videoBean.setVideoKey(currentVideoBean.getVideoKey());
-                        videoBean.setUrl(baseUrl + item.attr("href"));
+                        videoBean.setUrl(getBaseUrl() + item.attr("href"));
                         videoListBean.getVideoBeanList().add(videoBean);
                     }
                     videoListBeans.add(videoListBean);
@@ -137,11 +166,18 @@ public class BimiNetApi {
                     }
                 }
             }
-            String playUrl = baseUrl + "/bangumi/" + currentVideoBean.getVideoKey() + "/play/"+videoListId+"/" + selectVideoIndex;
+            String playUrl = getBaseUrl() + "/bangumi/" + currentVideoBean.getVideoKey() + "/play/"+videoListId+"/" + selectVideoIndex;
             LogUtil.e("BimiParseVideo","playUrl:"+playUrl);
             Connection playConn = Jsoup.connect(playUrl);
             Document playDocument = playConn.get();
-            urlKey = playDocument.selectFirst("div.play-player script").html();
+            Elements playerJss = playDocument.select("div.play-player script");
+            for(Element playerJs:playerJss){
+                String js = playerJs.html();
+                if(js.contains("var player_aaaa")){
+                    urlKey = js;
+                    break;
+                }
+            }
             LogUtil.e("BimiParseVideo:", "get orignal urlKey:" + urlKey);
             BimiPlayerJsConfig playerJsConfig = new Gson().fromJson(urlKey.substring(urlKey.indexOf("{")),BimiPlayerJsConfig.class);
             if (playerJsConfig.getFrom().contains("ksyun")) {
@@ -155,7 +191,7 @@ public class BimiNetApi {
             LogUtil.e("BimiParseVideo:", "connectEror" + e.getMessage());
             return videoListBeans;
         }
-        String urlConnUri = baseVideoDir + fromKey + ".php?url=" + urlKey + "&myurl=" + baseUrl + "/bangumi/" + currentVideoBean.getVideoKey() + "/play/"+videoListId+"/"+selectVideoIndex;
+        String urlConnUri = getBaseUrl()+"/static/danmu/" + fromKey + ".php?url=" + urlKey + "&myurl=" + getBaseUrl() + "/bangumi/" + currentVideoBean.getVideoKey() + "/play/"+videoListId+"/"+selectVideoIndex;
         LogUtil.e("BimiParseVideo:", "log url:" + urlConnUri);
         Connection urlConn = Jsoup.connect(urlConnUri);
 
@@ -174,7 +210,7 @@ public class BimiNetApi {
             LogUtil.e("BimiParseVideo", "get url Html:" + urlDocument.selectFirst("video#video").html());
             String realPlayUrl = urlDocument.selectFirst("video#video source").attr("src");
             if(!realPlayUrl.startsWith("http")&&realPlayUrl.contains(".m3u8")){
-                realPlayUrl = baseVideoDir+"m3u8/play.php?url="+realPlayUrl;
+                realPlayUrl = getBaseUrl()+"/static/danmu/m3u8/play.php?url="+realPlayUrl;
             }
             qualityBean.setRealVideoUrl(realPlayUrl);
             LogUtil.e("BimiParseVideo:", "final get url:" + qualityBean.getRealVideoUrl());

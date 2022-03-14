@@ -7,4 +7,9 @@
         android:id="@+id/bangumi_webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <FrameLayout
+        android:id="@+id/bangumi_web_fullContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 </FrameLayout>

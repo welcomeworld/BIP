@@ -22,6 +22,7 @@ public class BIPApp extends Application {
         ParserManager.getInstance().addParser(new AgeFansParser());
         ParserManager.getInstance().addParser(new BimiParser());
         ParserManager.getInstance().addParser(BiliParser.getInstance());
+        ParserManager.getInstance().initParsers();
 //        UMConfigure.init(this,"608126355844f15425e47e5b","Umeng",UMConfigure.DEVICE_TYPE_PHONE,"");
 //        MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
 //        UMConfigure.setLogEnabled(BuildConfig.DEBUG);

@@ -18,5 +18,8 @@
     <string name="download">下载</string>
     <string name="accounts">账号</string>
     <string name="setting">设置</string>
+    <string name="source_browser">源网页</string>
+    <string name="source_refresh">刷新视频源</string>
     <string name="multiWindow_not_allow">分屏模式下无法进行此操作</string>
+    <string name="uri_null_tip">Uri是空的</string>
 </resources>

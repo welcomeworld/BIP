@@ -1,5 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment;
 
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,8 +20,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
 
@@ -73,9 +73,9 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
         if(getViewBinding().mainHomeSwipeRefresh.isRefreshing()&&!force){
             return;
         }
-        if(force){
-            moreTime = 0;
-        }
+//        if(force){
+//            moreTime = 0;
+//        }
         getViewBinding().mainHomeSwipeRefresh.setRefreshing(true);
         ThreadUtil.defer().when(()-> ParserManager.getInstance().refreshRecommend()).done(result -> {
             data = result;
@@ -87,12 +87,12 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
         });
     }
 
-    int moreTime = 0;
+//    int moreTime = 0;
     private void loadMore(){
-        if(moreTime>=4){
-            return;
-        }
-        moreTime++;
+//        if(moreTime>=4){
+//            return;
+//        }
+//        moreTime++;
         ThreadUtil.defer().when(()-> ParserManager.getInstance().getMoreRecommend()).done(result -> {
             data.addAll(result);
             adapter.addAll(result);

@@ -30,7 +30,7 @@ import java.util.List;
 import retrofit2.Response;
 
 public class AgeFansNetApi {
-    public static final String baseUrl = "https://www.agefans.vip";
+    public static final String baseUrl = "https://www.agemys.com";
 
     public static List<VideoListBean> search(String key, String pn) {
         List<VideoListBean> result = new ArrayList<>();
@@ -50,7 +50,7 @@ public class AgeFansNetApi {
             for (int i = 0; i < searchItemElements.size(); i++) {
                 try {
                     Element searchItem = searchItemElements.get(i);
-                    LogUtil.e("BimiSearch:", searchItem.html());
+                    LogUtil.e("AgeFansSearch:", searchItem.html());
                     VideoListBean videoListBean = new VideoListBean();
                     videoListBean.setSourceName(Constants.Source.AGEFANS);
                     String title = searchItem.selectFirst("img").attr("alt");
@@ -65,7 +65,7 @@ public class AgeFansNetApi {
                     videoBean.setCover(videoListBean.getCover());
                     String path = searchItem.attr("href");
                     String videoKey = path.replace("/detail/", "");
-                    LogUtil.e("BimiSearch getVideoKey:", videoKey);
+                    LogUtil.e("AgeFansSearch getVideoKey:", videoKey);
                     videoBean.setVideoKey(videoKey);
                     videoBean.setUrl(baseUrl + path);
                     videoBeans.add(videoBean);
@@ -102,6 +102,10 @@ public class AgeFansNetApi {
                 if (sourceElements.size() == 0) {
                     return videoListBeans;
                 }
+                List<Long> positionList = new ArrayList<>();
+                for (VideoBean cacheBean : orignal.getVideoBeanList()) {
+                    positionList.add(cacheBean.getPlayPosition());
+                }
                 videoListBeans.clear();
                 for (int i = 0; i < sourceElements.size(); i++) {
                     Elements itemElements = sourceElements.get(i).select("li a");
@@ -119,17 +123,21 @@ public class AgeFansNetApi {
                     videoListBean.setCoverPortrait(true);
                     videoListBean.setTag(orignal.getTag());
                     videoListBean.setCover(orignal.getCover());
+                    videoListBean.setSelectIndex(orignal.getSelectIndex());
+                    int positionIndex = 0;
                     for (Element item : itemElements) {
                         VideoBean videoBean = new VideoBean();
                         videoBean.setTitle(item.text());
                         videoBean.setCover(videoListBean.getCover());
                         videoBean.setVideoKey(currentVideoBean.getVideoKey());
+                        if (positionIndex < positionList.size()) {
+                            videoBean.setPlayPosition(positionList.get(positionIndex++));
+                        }
                         videoBean.setUrl(baseUrl + item.attr("href"));
                         videoListBean.getVideoBeanList().add(videoBean);
                     }
                     videoListBeans.add(videoListBean);
                     if (i == selectSourceIndex) {
-                        videoListBean.setSelectIndex(orignal.getSelectIndex());
                         currentVideoBean = videoListBean.getCurrentVideoBean();
                         videoListId = videoListExtraData.get("videoListId");
                         LogUtil.e("AgeParseVideo", "setVideoListId:" + videoListId);
@@ -245,7 +253,7 @@ public class AgeFansNetApi {
                 headers.put("Token", vKey);
                 headers.put("Access-Token", vKey + "-" + key + "-" + sign + "-" + token);
                 headers.put("Version", runtime.getString("Version"));
-                Response<AgeVideoUrlBean> videoUrlResponse = BiliRetrofitManager.getNormalRetrofit(apiBaseUrl).create(VideoNetAPI.class).getRealUrl(headers, vUrl, "1", "0", host, key, sign, token, "", "", ""+time).execute();
+                Response<AgeVideoUrlBean> videoUrlResponse = BiliRetrofitManager.getNormalRetrofit(apiBaseUrl).create(VideoNetAPI.class).getRealUrl(headers, vUrl, "1", "0", host, key, sign, token, "", "", "" + time).execute();
                 if (videoUrlResponse.code() == 200) {
                     finalResult = videoUrlResponse.body().getUrl();
                     LogUtil.e("AgeParseVideo", "get response url" + finalResult);

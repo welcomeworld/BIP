@@ -30,13 +30,13 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BiliDanmukuParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SettingConfig;
-import com.github.welcomeworld.bangumi.instrumentality.project.player.BIPPlayer;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.BaseActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ToastUtil;
+import com.github.welcomeworld.bipplayer.BIPPlayer;
 import com.github.welcomeworld.devbase.utils.StringUtils;
 
 import java.io.ByteArrayInputStream;
@@ -83,6 +83,7 @@ public class BipPlayView extends ConstraintLayout {
     private TextView batteryView;
     private TextView timeView;
     private TextView fastForwardView;
+    private ProgressBar videoBufferingView;
     BIPPlayer bipPlayer;
     boolean isFullScreen;
     VideoBean currentVideoBean;
@@ -168,6 +169,7 @@ public class BipPlayView extends ConstraintLayout {
         videoPositionView = itemView.findViewById(R.id.bip_play_view_current_position);
         videoDurationView = itemView.findViewById(R.id.bip_play_view_duration);
         videoBottomProgressView = itemView.findViewById(R.id.bip_play_view_bottom_progress);
+        videoBufferingView = itemView.findViewById(R.id.bip_play_view_buffering);
         controllerParent = itemView.findViewById(R.id.bip_play_view_controller_parent);
         videoQualityView = itemView.findViewById(R.id.bip_play_view_quality);
         videoQualityView.setOnClickListener(playItemClickListener);
@@ -214,10 +216,10 @@ public class BipPlayView extends ConstraintLayout {
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-//            videoSurfaceHolder = holder;
-//            if (bipPlayer != null) {
-//                bipPlayer.setSurface(holder.getSurface());
-//            }
+            videoSurfaceHolder = holder;
+            if (bipPlayer != null) {
+                bipPlayer.setDisplay(videoSurfaceHolder);
+            }
             LogUtil.e("SurfaceTest", "Change");
         }
 
@@ -482,11 +484,14 @@ public class BipPlayView extends ConstraintLayout {
 
     public void setBipPlayer(BIPPlayer bipPlayer) {
         this.bipPlayer = bipPlayer;
+        if (bipPlayer == null) {
+            return;
+        }
         bipPlayer.setOnPreparedListener(mediaPlayer -> {
             duration = mediaPlayer.getDuration();
             resizeWithVideoSize(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
             videoDurationView.setText(StringUtil.formatTime(duration));
-            if (currentVideoBean.getPlayPosition() > 1000 && currentVideoBean.getPlayPosition() < bipPlayer.getDuration() - 5000) {
+            if (currentVideoBean != null && currentVideoBean.getPlayPosition() > 1000 && currentVideoBean.getPlayPosition() < bipPlayer.getDuration() - 5000) {
                 bipPlayer.seekTo(currentVideoBean.getPlayPosition());
             }
             if (isControllerShowing() && !isFullScreen) {
@@ -513,6 +518,17 @@ public class BipPlayView extends ConstraintLayout {
                 }
                 videoBottomProgressView.setProgress(1000);
                 playPauseView.setSelected(false);
+            }
+        });
+        bipPlayer.setOnBufferingUpdateListener((bp, percent) -> videoSeekView.setSecondaryProgress(percent*10));
+        bipPlayer.setOnInfoListener((bp, what, extra) -> {
+            switch (what){
+                case 0:
+                    videoBufferingView.setVisibility(View.VISIBLE);
+                    break;
+                case 1:
+                    videoBufferingView.setVisibility(View.GONE);
+                    break;
             }
         });
         bipPlayer.setOnSeekCompleteListener(bp -> {
@@ -573,7 +589,7 @@ public class BipPlayView extends ConstraintLayout {
         resizeWithVideoSize(videoWidth, videoHeight);
     }
 
-    private Runnable progressChangeRunnable = new Runnable() {
+    private final Runnable progressChangeRunnable = new Runnable() {
         @Override
         public void run() {
             if (bipPlayer != null && bipPlayer.getDuration() > 0) {
@@ -583,7 +599,9 @@ public class BipPlayView extends ConstraintLayout {
                 }
                 videoBottomProgressView.setProgress((int) (bipPlayer.getCurrentPosition() * 1000 / bipPlayer.getDuration()));
                 playPauseView.setSelected(bipPlayer.isPlaying());
-                currentVideoBean.setPlayPosition(bipPlayer.getCurrentPosition());
+                if(bipPlayer.isPlaying()){
+                    currentVideoBean.setPlayPosition(bipPlayer.getCurrentPosition());
+                }
             }
             postDelayed(this, 400);
         }
@@ -595,10 +613,16 @@ public class BipPlayView extends ConstraintLayout {
 
     public void setCurrentVideoBean(VideoBean currentVideoBean) {
         this.currentVideoBean = currentVideoBean;
-        if (currentVideoBean != null && currentVideoBean.getCurrentQualityBean() != null) {
-            videoQualityView.setText(currentVideoBean.getCurrentQualityBean().getQuality());
-            titleView.setText(currentVideoBean.getTitle());
-            initDanmaku();
+        if (currentVideoBean != null) {
+            if (currentVideoBean.getCurrentQualityBean() != null) {
+                videoQualityView.setText(currentVideoBean.getCurrentQualityBean().getQuality());
+            }
+            if (!StringUtil.isEmpty(currentVideoBean.getTitle())) {
+                titleView.setText(currentVideoBean.getTitle());
+            }
+            if (!StringUtil.isEmpty(currentVideoBean.getDanmakuUrl())) {
+                initDanmaku();
+            }
         }
     }
 

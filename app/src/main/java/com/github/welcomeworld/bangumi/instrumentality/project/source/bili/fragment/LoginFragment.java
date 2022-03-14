@@ -21,7 +21,7 @@ public class LoginFragment extends BaseFragment<BiliFragmentLoginBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        WebUtil.initNormalWebView(getViewBinding().validatorWeb);
+        WebUtil.initNormalWebView(getViewBinding().validatorWeb,null);
         getViewBinding().loginLogin.setOnClickListener(v -> login());
         getViewBinding().loginPasswordInput.addTextChangedListener(new TextWatcher() {
             @Override

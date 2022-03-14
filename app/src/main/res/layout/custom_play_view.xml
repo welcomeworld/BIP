@@ -213,5 +213,14 @@
             android:paddingStart="8dp"
             app:layout_constraintBaseline_toBaselineOf="@id/bip_play_view_duration"
             app:layout_constraintEnd_toEndOf="parent"/>
+        <ProgressBar
+            android:id="@+id/bip_play_view_buffering"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

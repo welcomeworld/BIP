@@ -40,6 +40,7 @@
             android:id="@+id/video_play_collection"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
             android:drawablePadding="6dp"
             android:gravity="center"
             android:text="@string/collection"
@@ -54,10 +55,41 @@
             android:id="@+id/video_play_download"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
             android:drawablePadding="6dp"
             android:gravity="center"
             android:text="@string/download"
             app:drawableTopCompat="@drawable/ic_download" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/video_play_browser"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:drawablePadding="6dp"
+            android:gravity="center"
+            android:text="@string/source_browser"
+            app:drawableTopCompat="@drawable/ic_browser" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/video_play_refresh"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:drawablePadding="6dp"
+            android:gravity="center"
+            android:text="@string/source_refresh"
+            app:drawableTopCompat="@drawable/ic_refresh" />
 
         <Space
             android:layout_width="0dp"

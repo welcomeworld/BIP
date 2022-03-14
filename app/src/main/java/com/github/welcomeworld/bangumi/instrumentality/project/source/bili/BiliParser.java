@@ -43,6 +43,7 @@ import java.util.TreeMap;
 
 import retrofit2.Call;
 import retrofit2.Response;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class BiliParser extends BaseParser {
     private static BiliParser instance;
@@ -57,6 +58,27 @@ public class BiliParser extends BaseParser {
     @Override
     public String getTag() {
         return "BiliParser";
+    }
+
+    @Override
+    public Map<Integer, Map<String, String>> getPlayerOptions() {
+        Map<Integer, Map<String, String>> result = new HashMap<>();
+        Map<String, String> playerOptions = new HashMap<>();
+        playerOptions.put("max-buffer-size", (500 * 1024) + "");
+        playerOptions.put("min-frames", "100");
+        playerOptions.put("enable-accurate-seek", "1");
+        playerOptions.put("start-on-prepared", "1");
+        playerOptions.put("framedrop", "5");
+        result.put(IjkMediaPlayer.OPT_CATEGORY_PLAYER, playerOptions);
+
+        Map<String, String> formatOptions = new HashMap<>();
+//        formatOptions.put("reconnect","1");
+//        formatOptions.put("safe","0");
+//        formatOptions.put("dns_cache_clear","1");
+//        formatOptions.put("protocol_whitelist","rtmp,concat,ffconcat,file,subfile,http,https,tls,rtp,tcp,udp,crypto");
+        formatOptions.put("user_agent", "Bilibili Freedoooooom/MarkII");
+        result.put(IjkMediaPlayer.OPT_CATEGORY_FORMAT, formatOptions);
+        return result;
     }
 
     @Override
@@ -177,11 +199,11 @@ public class BiliParser extends BaseParser {
                 return;
             }
             String description;
-            if(currentVideoBean.getQualityBeans().size()<=1){
+            if (currentVideoBean.getQualityBeans().size() <= 1) {
                 currentVideoBean.getQualityBeans().clear();
                 List<Integer> qualityList = urlResponse.body().getAcceptQuality();
                 TreeMap<Integer, String> qualityMap = new TreeMap<>();
-                for(Integer quality:qualityList){
+                for (Integer quality : qualityList) {
                     switch (quality) {
                         case 16:
                             qualityMap.put(16, "360P");
@@ -206,7 +228,7 @@ public class BiliParser extends BaseParser {
                     VideoQualityBean videoQualityBean = new VideoQualityBean();
                     videoQualityBean.setQuality(quality);
                     currentVideoBean.getQualityBeans().add(videoQualityBean);
-                    if(quality.equals(SettingConfig.getCurrentQuality())){
+                    if (quality.equals(SettingConfig.getCurrentQuality())) {
                         currentVideoBean.setCurrentQualityIndex(selectIndex);
                     }
                     selectIndex++;
@@ -299,11 +321,11 @@ public class BiliParser extends BaseParser {
                 return;
             }
             String description;
-            if(currentVideoBean.getQualityBeans().size()<=1){
+            if (currentVideoBean.getQualityBeans().size() <= 1) {
                 currentVideoBean.getQualityBeans().clear();
                 List<Integer> qualityList = urlResponse.body().getData().getAccept_quality();
                 TreeMap<Integer, String> qualityMap = new TreeMap<>();
-                for(Integer quality:qualityList){
+                for (Integer quality : qualityList) {
                     switch (quality) {
                         case 16:
                             qualityMap.put(16, "360P");
@@ -328,7 +350,7 @@ public class BiliParser extends BaseParser {
                     VideoQualityBean videoQualityBean = new VideoQualityBean();
                     videoQualityBean.setQuality(quality);
                     currentVideoBean.getQualityBeans().add(videoQualityBean);
-                    if(quality.equals(SettingConfig.getCurrentQuality())){
+                    if (quality.equals(SettingConfig.getCurrentQuality())) {
                         currentVideoBean.setCurrentQualityIndex(selectIndex);
                     }
                     selectIndex++;
@@ -607,6 +629,14 @@ public class BiliParser extends BaseParser {
             queryBangumiItemDetail(currentVideoBean, currentAid, currentCid);
             return videoListBeans;
         }
+        Map<String, VideoBean> cacheVideoBeans = new HashMap<>();
+        List<Integer> selectIndexs = new ArrayList<>();
+        for (VideoListBean indexBean : videoListBeans) {
+            selectIndexs.add(indexBean.getSelectIndex());
+            for (VideoBean cacheBean : indexBean.getVideoBeanList()) {
+                cacheVideoBeans.put(cacheBean.getVideoKey(), cacheBean);
+            }
+        }
         Uri currentUri = Uri.parse(currentVideoBean.getUrl());
         LogUtil.e("BiliParser", "uri:" + currentUri);
         Map<String, String> parameters = new HashMap<>();
@@ -638,6 +668,9 @@ public class BiliParser extends BaseParser {
                 videoListBean.setTitle(detailResult.getTitle());
                 videoListBean.setSeasonTitle(module.getTitle());
                 videoListBean.setVideoListDes(detailResult.getEvaluate());
+                if (selectIndexs.size() > loopIndex) {
+                    videoListBean.setSelectIndex(selectIndexs.get(loopIndex));
+                }
                 List<BangumiDetailPageBean.Result.Modules.Data.Episodes> episodes = module.getData().getEpisodes();
                 for (int i = 0; i < episodes.size(); i++) {
                     String title = episodes.get(i).getTitle();
@@ -677,6 +710,11 @@ public class BiliParser extends BaseParser {
                         videoBean.setDanmakuUrl("http://comment.bilibili.com/" + cid + ".xml");
                         videoBean.setTitle(title);
                         if (!haveData) {
+                            VideoBean cacheBean = cacheVideoBeans.get(videoBean.getVideoKey());
+                            if (cacheBean != null) {
+                                videoBean.setPlayPosition(cacheBean.getPlayPosition());
+                                videoBean.setCurrentQualityIndex(cacheBean.getCurrentQualityIndex());
+                            }
                             videoListBean.getVideoBeanList().add(videoBean);
                         }
                         continue;
@@ -693,7 +731,6 @@ public class BiliParser extends BaseParser {
                     queryBangumiItemDetail(currentVideoBean, extraData.get("aid"), extraData.get("cid"));
                 }
                 if (!matchCid && videoListBean.getVideoBeanList().size() > 0 && loopIndex == selectSourceIndex) {
-                    videoListBean.setSelectIndex(0);
                     currentVideoBean = videoListBean.getCurrentVideoBean();
                     extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
                     currentAid = extraData.get("aid");
@@ -712,13 +749,17 @@ public class BiliParser extends BaseParser {
 
     private List<VideoListBean> updateAvVideoList(List<VideoListBean> videoListBeans, int selectSourceIndex) {
         VideoListBean orignal = videoListBeans.get(selectSourceIndex);
-        VideoBean currentVideoBean = videoListBeans.get(selectSourceIndex).getCurrentVideoBean();
+        VideoBean currentVideoBean = orignal.getCurrentVideoBean();
         HashMap<String, String> extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
         String currentAid = extraData.get("aid");
         String currentCid = extraData.get("cid");
         if (currentAid != null && currentCid != null) {
             queryAVItemDetail(currentVideoBean, currentAid, currentCid);
             return videoListBeans;
+        }
+        Map<String, VideoBean> cacheVideoBeans = new HashMap<>();
+        for (VideoBean cacheBean : orignal.getVideoBeanList()) {
+            cacheVideoBeans.put(cacheBean.getVideoKey(), cacheBean);
         }
         Uri currentUri = Uri.parse(currentVideoBean.getUrl());
         LogUtil.e("BiliParser", "uri:" + currentUri);
@@ -749,8 +790,9 @@ public class BiliParser extends BaseParser {
             videoListBean.setTitle(response.body().getData().getTitle());
             videoListBean.setSeasonTitle("选集");
             videoListBean.setVideoListDes(response.body().getData().getDesc());
+            videoListBean.setSelectIndex(orignal.getSelectIndex());
             videoListBean.getVideoBeanList().clear();
-            boolean useListTitle = response.body().getData().getPages().size()<=1;
+            boolean useListTitle = response.body().getData().getPages().size() <= 1;
             for (int i = 0; i < response.body().getData().getPages().size(); i++) {
                 LogUtil.e("BiliParser", "parse Data:" + response.body().getData().getPages().get(i));
                 int cid = response.body().getData().getPages().get(i).getCid();
@@ -770,12 +812,17 @@ public class BiliParser extends BaseParser {
                     extraData.put("cid", String.valueOf(cid));
                     videoBean.setSourceExternalData(new Gson().toJson(extraData));
                     videoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
-                    if(useListTitle){
+                    if (useListTitle) {
                         videoBean.setTitle(videoListBean.getTitle());
-                    }else {
+                    } else {
                         videoBean.setTitle(response.body().getData().getPages().get(i).getPart());
                     }
                     if (!haveData) {
+                        VideoBean cacheBean = cacheVideoBeans.get(videoBean.getVideoKey());
+                        if (cacheBean != null) {
+                            videoBean.setPlayPosition(cacheBean.getPlayPosition());
+                            videoBean.setCurrentQualityIndex(cacheBean.getCurrentQualityIndex());
+                        }
                         videoListBean.getVideoBeanList().add(videoBean);
                     }
                     continue;
@@ -786,16 +833,15 @@ public class BiliParser extends BaseParser {
                 extraData.put("cid", String.valueOf(cid));
                 currentVideoBean.setSourceExternalData(new Gson().toJson(extraData));
                 currentVideoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
-                if(useListTitle){
+                if (useListTitle) {
                     currentVideoBean.setTitle(videoListBean.getTitle());
-                }else {
+                } else {
                     currentVideoBean.setTitle(response.body().getData().getPages().get(i).getPart());
                 }
                 videoListBean.getVideoBeanList().add(currentVideoBean);
                 queryAVItemDetail(currentVideoBean, extraData.get("aid"), extraData.get("cid"));
             }
             if (!matchCid && videoListBean.getVideoBeanList().size() > 0) {
-                videoListBean.setSelectIndex(0);
                 currentVideoBean = videoListBean.getCurrentVideoBean();
                 currentCid = currentVideoBean.getVideoKey();
                 LogUtil.e("BiliParser", "not here error");

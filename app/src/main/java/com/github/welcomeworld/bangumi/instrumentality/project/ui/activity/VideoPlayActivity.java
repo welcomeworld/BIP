@@ -24,17 +24,19 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.HistoryConfig;
-import com.github.welcomeworld.bangumi.instrumentality.project.player.BIPPlayer;
-import com.github.welcomeworld.bangumi.instrumentality.project.player.IjkBIPPlayerImpl;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ToastUtil;
+import com.github.welcomeworld.bipplayer.BIPPlayer;
+import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
 
@@ -49,7 +51,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     private int selectSourceIndex = 0;
     VideoListBean currentVideoListBean;
     VideoBean currentVideoBean;
-    BIPPlayer bipPlayer = new IjkBIPPlayerImpl();
+    BIPPlayer bipPlayer = new DefaultBIPPlayer();
     HistoryBean historyBean;
 
     @Override
@@ -69,15 +71,27 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             finish();
             return;
         }
+        initPlayer();
         ThreadUtil.defer().when(() -> {
-            videoListBeans = ParserManager.getInstance().updateVideoList(videoListBeans, selectSourceIndex);
             initHistory();
+            videoListBeans = ParserManager.getInstance().updateVideoList(videoListBeans, selectSourceIndex);
         }).done((result) -> initCreate()).fail(throwable -> initCreate());
     }
 
-    private void initHistory(){
-        historyBean = HistoryConfig.findHistory(0,HistoryBean.getVid(videoListBeans));
-        if(historyBean == null){
+    private void initPlayer() {
+        Map<Integer, Map<String, String>> options = ParserManager.getInstance().getPlayerOptions(videoListBeans.get(selectSourceIndex));
+        if (options != null && options.size() > 0) {
+            for (Integer category : options.keySet()) {
+                for (String key : options.get(category).keySet()) {
+                    bipPlayer.setOption(category, key, options.get(category).get(key));
+                }
+            }
+        }
+    }
+
+    private void initHistory() {
+        historyBean = HistoryConfig.findHistory(0, HistoryBean.getVid(videoListBeans));
+        if (historyBean == null) {
             historyBean = new HistoryBean();
             historyBean.setActive(true);
             historyBean.setCover(currentVideoListBean.getCover());
@@ -86,21 +100,25 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             historyBean.setCoverPortrait(currentVideoListBean.isCoverPortrait());
             historyBean.setVideoData(videoListBeans);
             historyBean.setViewTime(System.currentTimeMillis());
+        } else {
+            selectSourceIndex = historyBean.getSelectSourceIndex();
+            videoListBeans = historyBean.getVideoData();
         }
+        ParserManager.getInstance().clearCache(videoListBeans.get(selectSourceIndex));
     }
 
-    private void registerSomething(){
+    private void registerSomething() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
         intentFilter.addAction(Intent.ACTION_TIME_TICK);
-        registerReceiver(playReceiver,intentFilter);
+        registerReceiver(playReceiver, intentFilter);
     }
 
-    private void unregisterSomething(){
+    private void unregisterSomething() {
         unregisterReceiver(playReceiver);
     }
 
-    private void saveHistory(){
+    private void saveHistory() {
         historyBean.setSelectSourceIndex(selectSourceIndex);
         historyBean.setVideoData(videoListBeans);
         historyBean.setViewTime(System.currentTimeMillis());
@@ -109,7 +127,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
 
     private void changeFavStatus(boolean fav) {
         historyBean.setFav(fav);
-        if(fav){
+        if (fav) {
             historyBean.setFavTime(System.currentTimeMillis());
         }
         HistoryConfig.updateOrSaveHistory(historyBean);
@@ -122,6 +140,9 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     }
 
     private void initCreate() {
+        if(isFinishing()){
+            return;
+        }
         getViewBinding().videoPlayView.setBipPlayer(bipPlayer);
         getViewBinding().videoPlayView.setPlayViewListener(playViewListener);
         currentVideoListBean = videoListBeans.get(selectSourceIndex);
@@ -133,16 +154,23 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         sourceAdapter.setActionClickListener(new VideoSourceItemAdapter.ActionClickListener() {
             @Override
             public void onFavClick() {
-                if(historyBean.isFav()){
-                    changeFavStatus(false);
-                }else {
-                    changeFavStatus(true);
-                }
+                changeFavStatus(!historyBean.isFav());
             }
 
             @Override
             public void onDownloadClick() {
                 ToastUtil.showToast("开发中");
+            }
+
+            @Override
+            public void onBrowserClick() {
+                IntentUtil.intentToBrowser(VideoPlayActivity.this, currentVideoBean.getUrl());
+            }
+
+            @Override
+            public void onRefreshClick() {
+                ParserManager.getInstance().clearCache(videoListBeans.get(selectSourceIndex));
+                parseVideoBeanDetail();
             }
         });
         sourceAdapter.setItemClickListener((rv, sourcePosition, position) -> {
@@ -172,7 +200,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     }
 
     private void parseVideoBeanDetail() {
-        bipPlayer.updatePlayer();
+        bipPlayer.stop();
         if (currentVideoBean.getCurrentQualityBean() == null || currentVideoBean.getCurrentQualityBean().getRealVideoUrl() == null) {
             LogUtil.e("BIPPlayer", "start parse");
             ThreadUtil.defer().when(() -> {
@@ -184,6 +212,9 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                 ToastUtil.showToast(R.string.video_url_parse_error);
                 LogUtil.e("BIPPlayer", "parse faile" + throwable.getMessage());
             }).done((result) -> {
+                if(isFinishing()){
+                    return;
+                }
                 LogUtil.e("BIPPlayer", "finish parse");
                 sourceAdapter.notifyDataSetChanged();
                 getViewBinding().videoPlayView.setCurrentVideoBean(currentVideoBean);
@@ -191,14 +222,14 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                     ToastUtil.showToast(R.string.video_url_parse_error);
                     return;
                 }
-                bipPlayer.setVideoQualityBean(currentVideoBean.getCurrentQualityBean());
+                bipPlayer.setDataSource(currentVideoBean.getCurrentQualityBean().getRealVideoUrl());
                 bipPlayer.prepareAsync();
                 saveHistory();
             });
         } else {
             LogUtil.e("BIPPlayer", "prepared directly");
             getViewBinding().videoPlayView.setCurrentVideoBean(currentVideoBean);
-            bipPlayer.setVideoQualityBean(currentVideoBean.getCurrentQualityBean());
+            bipPlayer.setDataSource(currentVideoBean.getCurrentQualityBean().getRealVideoUrl());
             bipPlayer.prepareAsync();
             //todo
         }
@@ -249,12 +280,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         }
     }
 
-
-    public void parseQualityAsync() {
-
-    }
-
-    private BipPlayView.PlayViewListener playViewListener = new BipPlayView.PlayViewListener() {
+    private final BipPlayView.PlayViewListener playViewListener = new BipPlayView.PlayViewListener() {
         @Override
         public void onQualityChangeClick() {
             if (currentVideoBean.getCurrentQualityBean() == null || currentVideoBean.getCurrentQualityBean().getRealVideoUrl() == null) {
@@ -290,14 +316,14 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         }
     }
 
-    private final BroadcastReceiver playReceiver =new BroadcastReceiver() {
+    private final BroadcastReceiver playReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()){
+            switch (intent.getAction()) {
                 case Intent.ACTION_BATTERY_CHANGED:
-                    int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
-                    int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE,100);
-                    getViewBinding().videoPlayView.setBattery(level*100/scale);
+                    int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                    int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+                    getViewBinding().videoPlayView.setBattery(level * 100 / scale);
                     break;
                 case Intent.ACTION_TIME_TICK:
                     getViewBinding().videoPlayView.setTime();

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Space
+        android:id="@+id/top_space"
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+    <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BaseWebView
+        android:id="@+id/browser_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_space"/>
+    <FrameLayout
+        android:id="@+id/browser_web_full"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+</RelativeLayout>
