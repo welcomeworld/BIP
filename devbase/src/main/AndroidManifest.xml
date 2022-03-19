@@ -3,7 +3,7 @@
     package="com.github.welcomeworld.devbase">
     <application>
         <provider
-            android:authorities="{applicationId}.github.welcomeworld.dev.base.provider"
+            android:authorities="${applicationId}.github.welcomeworld.dev.base.provider"
             android:name=".provider.DevBaseInitContentProvider"
             android:exported="false" />
     </application>
