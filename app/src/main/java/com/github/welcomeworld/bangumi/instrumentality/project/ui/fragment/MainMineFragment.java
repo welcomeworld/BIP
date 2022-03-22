@@ -10,6 +10,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentMainMineBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.LoginContainerActivity;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SimpleContainerActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 
 public class MainMineFragment extends BaseFragment<FragmentMainMineBinding> implements View.OnClickListener {
@@ -20,6 +21,7 @@ public class MainMineFragment extends BaseFragment<FragmentMainMineBinding> impl
         getViewBinding().mineCollection.setOnClickListener(this);
         getViewBinding().mineHistory.setOnClickListener(this);
         getViewBinding().mineAccounts.setOnClickListener(this);
+        getViewBinding().mineSettings.setOnClickListener(this);
     }
 
     public void onClick(View view) {
@@ -30,6 +32,8 @@ public class MainMineFragment extends BaseFragment<FragmentMainMineBinding> impl
             IntentUtil.intentToHistory(getActivity(), null);
         } else if (id == R.id.mine_accounts) {
             IntentUtil.intentToLoginContainer(getActivity(), LoginContainerActivity.getStartBundle(BiliParser.getInstance().getTag()));
+        } else if (id == R.id.mine_settings) {
+            IntentUtil.intentToSimpleContainer(getActivity(), SimpleContainerActivity.getStartBundle(SettingsFragment.TAG));
         }
     }
 }

@@ -9,6 +9,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.FavOr
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.LoginContainerActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.MainActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SearchActivity;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SimpleContainerActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.VideoPlayActivity;
 
 public class IntentUtil {
@@ -64,6 +65,15 @@ public class IntentUtil {
     public static void intentToBrowser(Context context, String url) {
         Intent intent = new Intent(context, BrowserActivity.class);
         intent.putExtra(BrowserActivity.EXTRA_URL, url);
+        context.startActivity(intent);
+    }
+
+    public static void intentToSimpleContainer(Context context, Bundle bundle) {
+        Intent intent = new Intent(context, SimpleContainerActivity.class);
+        intent.putExtra(FavOrHistoryActivity.EXTRA_PAGE_INDEX, 1);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
         context.startActivity(intent);
     }
 

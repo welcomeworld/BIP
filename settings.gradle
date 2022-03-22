@@ -1,3 +1,4 @@
 include ':app'
 rootProject.name = "BangumiInstrumentalityProject"
 include ':devbase'
+include ':app_update'

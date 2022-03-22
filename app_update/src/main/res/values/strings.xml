@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_update_version_update">版本更新</string>
+    <string name="app_update_update">更新</string>
+    <string name="app_update_update_fail">更新请求失败</string>
+    <string name="app_update_lastest_version">已经是最新版本</string>
+    <string name="app_update_update_start">开始下载更新</string>
+    <string name="app_update_download_update_fail">下载更新失败</string>
+</resources>
