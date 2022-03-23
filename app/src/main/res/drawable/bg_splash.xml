@@ -5,6 +5,6 @@
         </shape>
     </item>
     <item
-        android:drawable="@drawable/ic_launcher_background"
+        android:drawable="@mipmap/ic_launcher"
         android:gravity="center" />
 </layer-list>
