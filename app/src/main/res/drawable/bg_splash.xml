@@ -5,6 +5,6 @@
         </shape>
     </item>
     <item
-        android:drawable="@mipmap/ic_launcher"
+        android:drawable="@drawable/ic_splash1"
         android:gravity="center" />
 </layer-list>

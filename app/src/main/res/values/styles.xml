@@ -15,8 +15,7 @@
 
     <style name="splashTheme" parent="AppTheme">
         <item name="android:background">@drawable/bg_splash</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@color/transparent</item>
-
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="normalDialogTheme">
