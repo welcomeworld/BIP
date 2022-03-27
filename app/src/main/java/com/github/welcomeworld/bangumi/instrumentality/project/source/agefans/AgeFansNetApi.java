@@ -12,8 +12,8 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.re
 import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.retrofit.databean.AgeVideoUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BiliRetrofitManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
-import com.github.welcomeworld.devbase.utils.FileUtil;
 import com.google.gson.Gson;
+import com.nisigada.common.devbase.utils.FileUtil;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

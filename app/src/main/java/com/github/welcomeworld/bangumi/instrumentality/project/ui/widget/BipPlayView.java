@@ -37,7 +37,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ToastUtil;
 import com.github.welcomeworld.bipplayer.BIPPlayer;
-import com.github.welcomeworld.devbase.utils.StringUtils;
+import com.nisigada.common.devbase.utils.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
