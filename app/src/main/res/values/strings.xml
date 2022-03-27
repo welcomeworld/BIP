@@ -24,4 +24,5 @@
     <string name="uri_null_tip">Uri是空的</string>
     <string name="check_update">检查更新</string>
     <string name="thanks_opensource">开源鸣谢</string>
+    <string name="update_backup">使用备用地址检查更新</string>
 </resources>
