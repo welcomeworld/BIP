@@ -25,4 +25,8 @@
     <string name="check_update">检查更新</string>
     <string name="thanks_opensource">开源鸣谢</string>
     <string name="update_backup">使用备用地址检查更新</string>
+    <string name="refresh_qr">刷新二维码</string>
+    <string name="scan_confirm">已扫描确认</string>
+    <string name="login_success">登录成功</string>
+    <string name="get_qrcode_fail">获取二维码链接失败</string>
 </resources>

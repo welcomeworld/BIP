@@ -3,6 +3,7 @@ package com.github.welcomeworld.bangumi.instrumentality.project.source.bili;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.BiliFixedHeaderInterceptor;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.BiliFixedParameterInterceptor;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.BiliSortAndSignInterceptor;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.CookieInterceptor;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.UserAgentInterceptor;
 
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,7 @@ public class BiliOkHttpClientManager {
             normalClient =new OkHttpClient.Builder()
                     .callTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(new UserAgentInterceptor())
+                    .addInterceptor(new CookieInterceptor())
                     .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                     .build();
         }

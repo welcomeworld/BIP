@@ -14,15 +14,16 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualit
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SettingConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.api.BiliLocalStatus;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.fragment.LoginFragment;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.fragment.WebLoginFragment;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BaseUrl;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BiliRetrofitManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.IndexNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.SearchNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.UserNetAPI;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.UserWebAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.VideoDetailNetAPI;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.VideoWebAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BangumiDetailPageBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BangumiUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BvToAvBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendDataBean;
@@ -31,6 +32,8 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retro
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.SearchResultBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoDetailPageBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoUrlBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginInfoBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 import com.google.gson.Gson;
@@ -76,7 +79,8 @@ public class BiliParser extends BaseParser {
 //        formatOptions.put("safe","0");
 //        formatOptions.put("dns_cache_clear","1");
 //        formatOptions.put("protocol_whitelist","rtmp,concat,ffconcat,file,subfile,http,https,tls,rtp,tcp,udp,crypto");
-        formatOptions.put("user_agent", "Bilibili Freedoooooom/MarkII");
+        formatOptions.put("user_agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36");
+        formatOptions.put("headers", "referer:https://www.bilibili.com\r\n");
         result.put(DefaultBIPPlayer.OPT_CATEGORY_FORMAT, formatOptions);
         return result;
     }
@@ -186,135 +190,16 @@ public class BiliParser extends BaseParser {
         return result;
     }
 
-    private void queryBangumiItemDetail(VideoBean currentVideoBean, String aid, String cid) {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("aid", aid);
-        parameters.put("cid", cid);
-        parameters.put("qn", getUserQuality());
-        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APIURL).create(VideoDetailNetAPI.class);
-        try {
-            Response<BangumiUrlBean> urlResponse = videoDetailNetAPI.getBangumiUrl(parameters).execute();
-
-            if (urlResponse.body() == null || urlResponse.body().getCode() != 0) {
-                return;
-            }
-            String description;
-            if (currentVideoBean.getQualityBeans().size() <= 1) {
-                currentVideoBean.getQualityBeans().clear();
-                List<Integer> qualityList = urlResponse.body().getAcceptQuality();
-                TreeMap<Integer, String> qualityMap = new TreeMap<>();
-                for (Integer quality : qualityList) {
-                    switch (quality) {
-                        case 16:
-                            qualityMap.put(16, "360P");
-                            break;
-                        case 32:
-                            qualityMap.put(32, "480P");
-                            break;
-                        case 64:
-                            qualityMap.put(64, "720P");
-                            break;
-                        case 80:
-                            qualityMap.put(80, "1080P");
-                            break;
-                        case 112:
-                        default:
-                            qualityMap.put(112, "1080P+");
-                            break;
-                    }
-                }
-                int selectIndex = 0;
-                for (String quality : qualityMap.values()) {
-                    VideoQualityBean videoQualityBean = new VideoQualityBean();
-                    videoQualityBean.setQuality(quality);
-                    currentVideoBean.getQualityBeans().add(videoQualityBean);
-                    if (quality.equals(SettingConfig.getCurrentQuality())) {
-                        currentVideoBean.setCurrentQualityIndex(selectIndex);
-                    }
-                    selectIndex++;
-                }
-            }
-            if (urlResponse.body().getDash() != null) {
-                currentVideoBean.setDash(true);
-                for (int j = 0; j < urlResponse.body().getDash().getVideo().size(); j++) {
-                    VideoQualityBean qualityBean = new VideoQualityBean();
-                    qualityBean.setRealVideoUrl(urlResponse.body().getDash().getVideo().get(j).getBaseUrl());
-                    int quality = urlResponse.body().getDash().getVideo().get(j).getId();
-                    switch (quality) {
-                        case 16:
-                            description = "360P";
-                            break;
-                        case 32:
-                            description = "480P";
-                            break;
-                        case 64:
-                            description = "720P";
-                            break;
-                        case 80:
-                            description = "1080P";
-                            break;
-                        case 112:
-                        default:
-                            description = "1080P+";
-                            break;
-                    }
-                    qualityBean.setQuality(description);
-                    qualityBean.setRealAudioUrl(urlResponse.body().getDash().getAudio().get(0).getBaseUrl());
-                    currentVideoBean.getQualityBeans().add(qualityBean);
-                    if (quality == urlResponse.body().getQuality()) {
-                        currentVideoBean.setCurrentQualityIndex(currentVideoBean.getQualityBeans().size() - 1);
-                    }
-                }
-            } else {
-                currentVideoBean.setDash(false);
-                VideoQualityBean qualityBean = new VideoQualityBean();
-                switch (urlResponse.body().getQuality()) {
-                    case 16:
-                        description = "360P";
-                        break;
-                    case 32:
-                        description = "480P";
-                        break;
-                    case 64:
-                        description = "720P";
-                        break;
-                    case 80:
-                        description = "1080P";
-                        break;
-                    case 112:
-                    default:
-                        description = "1080P+";
-                        break;
-                }
-                boolean qualityMatch = false;
-                for (int innerIndex = 0; innerIndex < currentVideoBean.getQualityBeans().size(); innerIndex++) {
-                    VideoQualityBean innerBean = currentVideoBean.getQualityBeans().get(innerIndex);
-                    if (description.equals(innerBean.getQuality())) {
-                        qualityBean = innerBean;
-                        qualityMatch = true;
-                        currentVideoBean.setCurrentQualityIndex(innerIndex);
-                        break;
-                    }
-                }
-                qualityBean.setRealVideoUrl(urlResponse.body().getDurl().get(0).getUrl());
-                qualityBean.setQuality(description);
-                LogUtil.e("DataLog", qualityBean.getRealVideoUrl());
-                if (!qualityMatch) {
-                    currentVideoBean.getQualityBeans().add(qualityBean);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("BiliNextError", "error:" + e.getMessage());
-        }
-    }
-
     private void queryAVItemDetail(VideoBean currentVideoBean, String aid, String cid) {
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("aid", aid);
+        parameters.put("avid", aid);
         parameters.put("cid", cid + "");
-        parameters.put("qn", getUserQuality());
-        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(VideoDetailNetAPI.class);
+        String qn = getUserQuality();
+        if ("120".equals(qn)) {
+            parameters.put("fourk", "1");
+        }
+        parameters.put("qn", qn);
+        VideoWebAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoWebAPI.class);
         try {
             Response<VideoUrlBean> urlResponse = videoDetailNetAPI.getVideoUrl(parameters).execute();
             if (urlResponse.body() == null || urlResponse.body().getCode() != 0) {
@@ -326,24 +211,7 @@ public class BiliParser extends BaseParser {
                 List<Integer> qualityList = urlResponse.body().getData().getAccept_quality();
                 TreeMap<Integer, String> qualityMap = new TreeMap<>();
                 for (Integer quality : qualityList) {
-                    switch (quality) {
-                        case 16:
-                            qualityMap.put(16, "360P");
-                            break;
-                        case 32:
-                            qualityMap.put(32, "480P");
-                            break;
-                        case 64:
-                            qualityMap.put(64, "720P");
-                            break;
-                        case 80:
-                            qualityMap.put(80, "1080P");
-                            break;
-                        case 112:
-                        default:
-                            qualityMap.put(112, "1080P+");
-                            break;
-                    }
+                    qualityMap.put(quality, getVideoQuality(quality));
                 }
                 int selectIndex = 0;
                 for (String quality : qualityMap.values()) {
@@ -360,24 +228,7 @@ public class BiliParser extends BaseParser {
                 currentVideoBean.setDash(true);
                 for (int j = 0; j < urlResponse.body().getData().getDash().getVideo().size(); j++) {
                     VideoQualityBean qualityBean = new VideoQualityBean();
-                    switch (urlResponse.body().getData().getDash().getVideo().get(j).getId()) {
-                        case 16:
-                            description = "360P";
-                            break;
-                        case 32:
-                            description = "480P";
-                            break;
-                        case 64:
-                            description = "720P";
-                            break;
-                        case 80:
-                            description = "1080P";
-                            break;
-                        case 112:
-                        default:
-                            description = "1080P+";
-                            break;
-                    }
+                    description = getVideoQuality(urlResponse.body().getData().getDash().getVideo().get(j).getId());
                     boolean qualityMatch = false;
                     for (int innerIndex = 0; innerIndex < currentVideoBean.getQualityBeans().size(); innerIndex++) {
                         VideoQualityBean innerBean = currentVideoBean.getQualityBeans().get(innerIndex);
@@ -399,24 +250,7 @@ public class BiliParser extends BaseParser {
             } else {
                 currentVideoBean.setDash(false);
                 VideoQualityBean qualityBean = new VideoQualityBean();
-                switch (urlResponse.body().getData().getQuality()) {
-                    case 16:
-                        description = "360P";
-                        break;
-                    case 32:
-                        description = "480P";
-                        break;
-                    case 64:
-                        description = "720P";
-                        break;
-                    case 80:
-                        description = "1080P";
-                        break;
-                    case 112:
-                    default:
-                        description = "1080P+";
-                        break;
-                }
+                description = getVideoQuality(urlResponse.body().getData().getQuality());
                 boolean qualityMatch = false;
                 for (int innerIndex = 0; innerIndex < currentVideoBean.getQualityBeans().size(); innerIndex++) {
                     VideoQualityBean innerBean = currentVideoBean.getQualityBeans().get(innerIndex);
@@ -605,7 +439,7 @@ public class BiliParser extends BaseParser {
 
     @Override
     public Fragment getLoginFragment() {
-        return new LoginFragment();
+        return new WebLoginFragment();
     }
 
     @Override
@@ -626,7 +460,7 @@ public class BiliParser extends BaseParser {
         String currentAid = extraData.get("aid");
         String currentCid = extraData.get("cid");
         if (currentAid != null && currentCid != null) {
-            queryBangumiItemDetail(currentVideoBean, currentAid, currentCid);
+            queryAVItemDetail(currentVideoBean, currentAid, currentCid);
             return videoListBeans;
         }
         Map<String, VideoBean> cacheVideoBeans = new HashMap<>();
@@ -728,14 +562,14 @@ public class BiliParser extends BaseParser {
                     currentVideoBean.setDanmakuUrl("http://comment.bilibili.com/" + cid + ".xml");
                     currentVideoBean.setTitle(title);
                     videoListBean.getVideoBeanList().add(currentVideoBean);
-                    queryBangumiItemDetail(currentVideoBean, extraData.get("aid"), extraData.get("cid"));
+                    queryAVItemDetail(currentVideoBean, extraData.get("aid"), extraData.get("cid"));
                 }
                 if (!matchCid && videoListBean.getVideoBeanList().size() > 0 && loopIndex == selectSourceIndex) {
                     currentVideoBean = videoListBean.getCurrentVideoBean();
                     extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
                     currentAid = extraData.get("aid");
                     currentCid = extraData.get("cid");
-                    queryBangumiItemDetail(currentVideoBean, currentAid, currentCid);
+                    queryAVItemDetail(currentVideoBean, currentAid, currentCid);
                 }
                 loopIndex++;
                 videoListBeans.add(videoListBean);
@@ -875,17 +709,84 @@ public class BiliParser extends BaseParser {
 
     private String getUserQuality() {
         switch (SettingConfig.getCurrentQuality()) {
+            case "240P":
+                return "6";
             case "360P":
                 return "16";
             case "480P":
                 return "32";
             case "720P":
                 return "64";
+            case "720P60":
+                return "74";
             case "1080P":
                 return "80";
+            case "1080P60":
+                return "116";
+            case "4K":
+                return "120";
             case "1080P+":
             default:
                 return "112";
         }
+    }
+
+    private static String getVideoQuality(int id) {
+        switch (id) {
+            case 6:
+                return "240P";
+            case 16:
+                return "360P";
+            case 32:
+                return "480P";
+            case 74:
+                return "720P60";
+            case 80:
+                return "1080P";
+            case 112:
+                return "1080P+";
+            case 116:
+                return "1080P60";
+            case 120:
+                return "4K";
+            default:
+            case 64:
+                return "720P";
+        }
+    }
+
+    public static WebLoginUrlBean.Data getWebLoginUrl() {
+        UserWebAPI userWebAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.PASSPORTURL).create(UserWebAPI.class);
+        try {
+            Response<WebLoginUrlBean> response = userWebAPI.getLoginUrl().execute();
+            if (response.body() == null || response.body().getData() == null) {
+                Log.e("jsTest", "key response is null");
+                return null;
+            }
+            return response.body().getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static boolean getWebLoginInfo(String oauthKey) {
+        UserWebAPI userWebAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.PASSPORTURL).create(UserWebAPI.class);
+        try {
+            Response<WebLoginInfoBean> response = userWebAPI.getLoginInfo(oauthKey).execute();
+            if (response.body() == null || response.body().getCode() != 0) {
+                return false;
+            }
+            List<String> cookies = response.headers().values("set-cookie");
+            for (String cookie : cookies) {
+                Log.e("loginSuccess", "set-Cookie: " + cookie);
+                CookieManager.getInstance().setCookie("bilibili.com", cookie);
+            }
+            BiliLocalStatus.setIsWebLogin(true);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

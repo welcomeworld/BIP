@@ -10,6 +10,7 @@ public class BiliLocalStatus {
     private static int mid = -1;
     private static String avatar = "";
     private static String name = "";
+    private static boolean isWebLogin = false;
 
     static {
         LoginResultBean.TokenInfoBean token = getToken();
@@ -66,5 +67,14 @@ public class BiliLocalStatus {
 
     public static LoginResultBean.TokenInfoBean getToken() {
         return new Gson().fromJson(KVUtil.getString("bili_local_token"), LoginResultBean.TokenInfoBean.class);
+    }
+
+    public static boolean isIsWebLogin() {
+        return isWebLogin;
+    }
+
+    public static void setIsWebLogin(boolean isWebLogin) {
+        BiliLocalStatus.isWebLogin = isWebLogin;
+        KVUtil.putBoolean("bili_local_status_web_login", isWebLogin);
     }
 }
