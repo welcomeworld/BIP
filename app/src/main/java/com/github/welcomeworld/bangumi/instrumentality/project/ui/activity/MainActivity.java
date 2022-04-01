@@ -1,5 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
+import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
+
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,12 +13,12 @@ import com.github.welcomeworld.bangumi.instrumentality.project.adapter.MainViewP
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityMainBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
-
-import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
+import com.nisigada.common.devbase.utils.ToastUtil;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     MainViewPagerAdapter viewPagerAdapter;
+    private long clickBackTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,5 +58,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() - clickBackTime < 2000) {
+            super.onBackPressed();
+        } else {
+            clickBackTime = System.currentTimeMillis();
+            ToastUtil.showToast(R.string.click_again_back);
+        }
+    }
 }

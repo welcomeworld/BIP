@@ -29,4 +29,5 @@
     <string name="scan_confirm">已扫描确认</string>
     <string name="login_success">登录成功</string>
     <string name="get_qrcode_fail">获取二维码链接失败</string>
+    <string name="click_again_back">再次返回退出应用</string>
 </resources>
