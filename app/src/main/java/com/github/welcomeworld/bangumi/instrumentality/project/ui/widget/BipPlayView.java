@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,9 +34,9 @@ import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ToastUtil;
 import com.github.welcomeworld.bipplayer.BIPPlayer;
 import com.nisigada.common.devbase.utils.StringUtils;
+import com.nisigada.common.devbase.utils.ToastUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -97,6 +96,13 @@ public class BipPlayView extends ConstraintLayout {
     private boolean skipAction = false;
     private long fastforward_record = 0;
     private boolean userSeeking = false;
+
+    private BIPPlayer.OnPreparedListener mOnPreparedListener;
+    private BIPPlayer.OnCompletionListener mOnCompletionListener;
+    private BIPPlayer.OnBufferingUpdateListener mOnBufferingUpdateListener;
+    private BIPPlayer.OnSeekCompleteListener mOnSeekCompleteListener;
+    private BIPPlayer.OnErrorListener mOnErrorListener;
+    private BIPPlayer.OnInfoListener mOnInfoListener;
 
     private static String TAG = "BipPlayView";
 
@@ -502,11 +508,17 @@ public class BipPlayView extends ConstraintLayout {
             }
             LogUtil.e("BIPPlayer", "prepared");
             post(progressChangeRunnable);
+            if (mOnPreparedListener != null) {
+                mOnPreparedListener.onPrepared(mediaPlayer);
+            }
         });
         bipPlayer.setOnErrorListener((mp, what, extra) -> {
             ToastUtil.showToast(R.string.video_load_error);
             LogUtil.e("BIPPlayer", "error:" + what + "extra:" + extra);
             removeCallbacks(progressChangeRunnable);
+            if (mOnErrorListener != null) {
+                mOnErrorListener.onError(mp, what, extra);
+            }
             return false;
         });
         bipPlayer.setOnCompletionListener(bp -> {
@@ -519,16 +531,27 @@ public class BipPlayView extends ConstraintLayout {
                 videoBottomProgressView.setProgress(1000);
                 playPauseView.setSelected(false);
             }
+            if (mOnCompletionListener != null) {
+                mOnCompletionListener.onCompletion(bp);
+            }
         });
-        bipPlayer.setOnBufferingUpdateListener((bp, percent) -> videoSeekView.setSecondaryProgress(percent*10));
+        bipPlayer.setOnBufferingUpdateListener((bp, percent) -> {
+            videoSeekView.setSecondaryProgress(percent * 10);
+            if (mOnBufferingUpdateListener != null) {
+                mOnBufferingUpdateListener.onBufferingUpdate(bp, percent);
+            }
+        });
         bipPlayer.setOnInfoListener((bp, what, extra) -> {
-            switch (what){
+            switch (what) {
                 case 0:
                     videoBufferingView.setVisibility(View.VISIBLE);
                     break;
                 case 1:
                     videoBufferingView.setVisibility(View.GONE);
                     break;
+            }
+            if (mOnInfoListener != null) {
+                mOnInfoListener.onInfo(bp, what, extra);
             }
         });
         bipPlayer.setOnSeekCompleteListener(bp -> {
@@ -538,6 +561,9 @@ public class BipPlayView extends ConstraintLayout {
                 danmakuView.start(bipPlayer.getCurrentPosition());
             }
             LogUtil.e(TAG, "seek completed" + bipPlayer.getCurrentPosition());
+            if (mOnSeekCompleteListener != null) {
+                mOnSeekCompleteListener.onSeekComplete(bp);
+            }
         });
         if (videoSurfaceHolder != null) {
             bipPlayer.setDisplay(videoSurfaceHolder);
@@ -599,7 +625,7 @@ public class BipPlayView extends ConstraintLayout {
                 }
                 videoBottomProgressView.setProgress((int) (bipPlayer.getCurrentPosition() * 1000 / bipPlayer.getDuration()));
                 playPauseView.setSelected(bipPlayer.isPlaying());
-                if(bipPlayer.isPlaying()){
+                if (bipPlayer.isPlaying()) {
                     currentVideoBean.setPlayPosition(bipPlayer.getCurrentPosition());
                 }
             }
@@ -762,8 +788,8 @@ public class BipPlayView extends ConstraintLayout {
         okHttpClient.newCall(new Request.Builder().url(uri).build()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, e.getMessage() == null ? "消息体为空！instance:" + e.toString() : e.getMessage());
-                Toast.makeText(getContext(), "弹幕加载失败", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, e.getMessage() == null ? "消息体为空！instance:" + e : e.getMessage());
+                ToastUtil.showToast("弹幕加载失败");
             }
 
             @Override
@@ -804,5 +830,29 @@ public class BipPlayView extends ConstraintLayout {
     public void setTime() {
         String time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE);
         timeView.setText(time);
+    }
+
+    public void setOnPreparedListener(BIPPlayer.OnPreparedListener mOnPreparedListener) {
+        this.mOnPreparedListener = mOnPreparedListener;
+    }
+
+    public void setOnCompletionListener(BIPPlayer.OnCompletionListener mOnCompletionListener) {
+        this.mOnCompletionListener = mOnCompletionListener;
+    }
+
+    public void setOnBufferingUpdateListener(BIPPlayer.OnBufferingUpdateListener mOnBufferingUpdateListener) {
+        this.mOnBufferingUpdateListener = mOnBufferingUpdateListener;
+    }
+
+    public void setOnSeekCompleteListener(BIPPlayer.OnSeekCompleteListener mOnSeekCompleteListener) {
+        this.mOnSeekCompleteListener = mOnSeekCompleteListener;
+    }
+
+    public void setOnErrorListener(BIPPlayer.OnErrorListener mOnErrorListener) {
+        this.mOnErrorListener = mOnErrorListener;
+    }
+
+    public void setOnInfoListener(BIPPlayer.OnInfoListener mOnInfoListener) {
+        this.mOnInfoListener = mOnInfoListener;
     }
 }
