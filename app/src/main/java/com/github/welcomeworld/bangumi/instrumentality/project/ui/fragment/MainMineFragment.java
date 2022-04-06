@@ -33,7 +33,7 @@ public class MainMineFragment extends BaseFragment<FragmentMainMineBinding> impl
         } else if (id == R.id.mine_accounts) {
             IntentUtil.intentToLoginContainer(getActivity(), LoginContainerActivity.getStartBundle(BiliParser.getInstance().getTag()));
         } else if (id == R.id.mine_settings) {
-            IntentUtil.intentToSimpleContainer(getActivity(), SimpleContainerActivity.getStartBundle(SettingsFragment.TAG));
+            IntentUtil.intentToSimpleContainer(getActivity(), SimpleContainerActivity.getStartBundle(SettingsFragment.class.getName(), null));
         }
     }
 }

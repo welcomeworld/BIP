@@ -10,6 +10,7 @@ import com.github.welcomeworld.app_update.UpdateManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.BuildConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentSettingsBinding;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SimpleContainerActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
 import com.nisigada.common.devbase.utils.KVUtil;
 
@@ -37,7 +38,7 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
                 UpdateManager.checkUpdate(view.getContext(), "https://gitee.com/nisigada/software-update/raw/master/bip/version.json", BuildConfig.VERSION_NAME);
             }
         } else if (id == R.id.setting_opensource) {
-
+            SimpleContainerActivity.addFragment(getActivity(), GratitudeFragment.class, null);
         }
     }
 }
