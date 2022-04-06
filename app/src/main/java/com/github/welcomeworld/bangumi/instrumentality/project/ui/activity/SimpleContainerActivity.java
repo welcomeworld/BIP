@@ -12,8 +12,8 @@ import com.github.welcomeworld.bangumi.instrumentality.project.databinding.Activ
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 
 public class SimpleContainerActivity extends BaseActivity<ActivitySimpleContainerBinding> {
-    private static String EXTRA_TAG = "extra_fragment_tag";
-    private static String EXTRA_DATA = "extra_fragment_data";
+    private static final String EXTRA_TAG = "extra_fragment_tag";
+    private static final String EXTRA_DATA = "extra_fragment_data";
 
 
     public static Bundle getStartBundle(String tag, Bundle fragmentBundle) {
@@ -25,11 +25,12 @@ public class SimpleContainerActivity extends BaseActivity<ActivitySimpleContaine
         return bundle;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String tag = getIntent().getStringExtra(EXTRA_TAG);
-        Class<Fragment> fragmentClass = null;
+        Class<Fragment> fragmentClass;
         try {
             fragmentClass = (Class<Fragment>) Class.forName(tag);
         } catch (ClassNotFoundException e) {
@@ -46,7 +47,7 @@ public class SimpleContainerActivity extends BaseActivity<ActivitySimpleContaine
     public static void addFragment(Activity container, Class<? extends Fragment> fragmentClass, Bundle fragmentBundle, boolean isContainer) {
         if (container != null) {
             if (isContainer && container instanceof FragmentActivity) {
-                Fragment fragment = null;
+                Fragment fragment;
                 String simpleName = fragmentClass.getSimpleName();
                 try {
                     fragment = fragmentClass.newInstance();
