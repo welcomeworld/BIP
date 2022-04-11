@@ -20,7 +20,7 @@ import java.lang.ref.WeakReference;
 
 public class WebUtil {
     @SuppressLint("SetJavaScriptEnabled")
-    public static void initNormalWebView(WebView webView,ViewGroup fullParentView) {
+    public static void initNormalWebView(WebView webView, ViewGroup fullParentView) {
         //解决在5.0以上cookie无法记住问题
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptThirdPartyCookies(webView, true);
@@ -50,10 +50,11 @@ public class WebUtil {
         private WeakReference<ViewGroup> viewGroupWeakReference;
         protected static final FrameLayout.LayoutParams COVER_SCREEN_PARAMS = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        NormalWebChromeClient(ViewGroup parentView){
+        NormalWebChromeClient(ViewGroup parentView) {
             viewGroupWeakReference = new WeakReference<>(parentView);
         }
-        private ViewGroup getViewGroup(){
+
+        private ViewGroup getViewGroup() {
             return viewGroupWeakReference.get();
         }
 
@@ -84,10 +85,11 @@ public class WebUtil {
                 return;
             }
             ViewGroup parentView = getViewGroup();
-            if(parentView == null){
+            if (parentView == null) {
                 return;
             }
             parentView.addView(view, COVER_SCREEN_PARAMS);
+            parentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
             parentView.setVisibility(View.VISIBLE);
             customView = view;
             customCallback = callback;
@@ -99,7 +101,7 @@ public class WebUtil {
                 return;
             }
             ViewGroup parentView = getViewGroup();
-            if(parentView == null){
+            if (parentView == null) {
                 return;
             }
             parentView.removeView(customView);

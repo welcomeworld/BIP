@@ -159,7 +159,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
 
             @Override
             public void onDownloadClick() {
-                ToastUtil.showToast("开发中");
+                ToastUtil.showToast(R.string.developing);
             }
 
             @Override
