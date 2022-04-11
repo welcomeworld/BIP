@@ -12,6 +12,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliP
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.LoginContainerActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SimpleContainerActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
+import com.nisigada.common.devbase.utils.ToastUtil;
 
 public class MainMineFragment extends BaseFragment<FragmentMainMineBinding> implements View.OnClickListener {
 
@@ -22,6 +23,7 @@ public class MainMineFragment extends BaseFragment<FragmentMainMineBinding> impl
         getViewBinding().mineHistory.setOnClickListener(this);
         getViewBinding().mineAccounts.setOnClickListener(this);
         getViewBinding().mineSettings.setOnClickListener(this);
+        getViewBinding().mineDownload.setOnClickListener(this);
     }
 
     public void onClick(View view) {
@@ -34,6 +36,8 @@ public class MainMineFragment extends BaseFragment<FragmentMainMineBinding> impl
             IntentUtil.intentToLoginContainer(getActivity(), LoginContainerActivity.getStartBundle(BiliParser.getInstance().getTag()));
         } else if (id == R.id.mine_settings) {
             IntentUtil.intentToSimpleContainer(getActivity(), SimpleContainerActivity.getStartBundle(SettingsFragment.class.getName(), null));
+        } else if (id == R.id.mine_download) {
+            ToastUtil.showToast(R.string.developing);
         }
     }
 }

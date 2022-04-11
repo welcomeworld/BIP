@@ -30,4 +30,5 @@
     <string name="login_success">登录成功</string>
     <string name="get_qrcode_fail">获取二维码链接失败</string>
     <string name="click_again_back">再次返回退出应用</string>
+    <string name="developing">开发中</string>
 </resources>
