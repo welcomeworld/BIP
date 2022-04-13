@@ -1,5 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.parser;
 
+import android.net.Uri;
+
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.nisigada.common.devbase.utils.ThreadUtil;
 
@@ -38,9 +40,8 @@ public class ParserManager {
     }
 
     /**
-     *
      * @param searchKey searchWord
-     * @param pn start with 1
+     * @param pn        start with 1
      */
     public List<VideoListBean> search(String searchKey, String pn) {
         List<VideoListBean> result = new ArrayList<>();
@@ -70,7 +71,7 @@ public class ParserManager {
         return videoListBeans;
     }
 
-    public Map<Integer, Map<String,String>> getPlayerOptions(VideoListBean videoListBean){
+    public Map<Integer, Map<String, String>> getPlayerOptions(VideoListBean videoListBean) {
         if (videoListBean != null) {
             for (BaseParser parser : mParsers.values()) {
                 if (parser.isMatchParser(videoListBean.getSourceName())) {
@@ -81,7 +82,7 @@ public class ParserManager {
         return null;
     }
 
-    public void clearCache(VideoListBean videoListBean){
+    public void clearCache(VideoListBean videoListBean) {
         if (videoListBean != null) {
             for (BaseParser parser : mParsers.values()) {
                 if (parser.isMatchParser(videoListBean.getSourceName())) {
@@ -92,9 +93,18 @@ public class ParserManager {
         }
     }
 
-    public void initParsers(){
+    public void initParsers() {
         for (BaseParser parser : mParsers.values()) {
             ThreadUtil.defer().when(parser::initParser);
         }
+    }
+
+    public BaseParser matchSource(Uri uri) {
+        for (BaseParser parser : mParsers.values()) {
+            if (parser.matchSource(uri)) {
+                return parser;
+            }
+        }
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package com.github.welcomeworld.bangumi.instrumentality.project.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.BrowserActivity;
@@ -26,6 +27,12 @@ public class IntentUtil {
         if (bundle != null) {
             intent.putExtras(bundle);
         }
+        context.startActivity(intent);
+    }
+
+    public static void intentToVideoPlay(Context context, Uri uri) {
+        Intent intent = new Intent(context, VideoPlayActivity.class);
+        intent.setData(uri);
         context.startActivity(intent);
     }
 

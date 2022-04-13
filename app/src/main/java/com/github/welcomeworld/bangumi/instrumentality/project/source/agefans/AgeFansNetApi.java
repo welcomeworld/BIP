@@ -12,6 +12,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.re
 import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.retrofit.databean.AgeVideoUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BiliRetrofitManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 import com.google.gson.Gson;
 import com.nisigada.common.devbase.utils.FileUtil;
 
@@ -107,22 +108,34 @@ public class AgeFansNetApi {
                     positionList.add(cacheBean.getPlayPosition());
                 }
                 videoListBeans.clear();
+                String title = orignal.getTitle();
+                if (StringUtil.isEmpty(title)) {
+                    title = pageDocument.selectFirst("div.baseblock div.blockcontent h4.detail_imform_name").text();
+                }
+                String cover = orignal.getCover();
+                if (StringUtil.isEmpty(cover)) {
+                    cover = pageDocument.selectFirst("div.baseblock div.blockcontent img.poster").attr("src");
+                    if (cover != null && cover.startsWith("//")) {
+                        cover = "https:" + cover;
+                    }
+                }
+                String listDesc = pageDocument.selectFirst("div.baseblock div.blockcontent div.detail_imform_desc_pre p").text();
                 for (int i = 0; i < sourceElements.size(); i++) {
                     Elements itemElements = sourceElements.get(i).select("li a");
                     if (itemElements.size() <= 0) {
                         continue;
                     }
                     VideoListBean videoListBean = new VideoListBean();
-                    videoListBean.setVideoListDes(pageDocument.selectFirst("div.baseblock div.blockcontent div.detail_imform_desc_pre p").text());
+                    videoListBean.setVideoListDes(listDesc);
                     videoListBean.setSeasonTitle(sourceTitleElements.get(i).text());
                     videoListExtraData.put("videoListId", String.valueOf(i + 1));
                     LogUtil.e("AgeParseVideo:", "parse source" + videoListBean.getSeasonTitle() + "  " + videoListExtraData.get("videoListId"));
                     videoListBean.setSourceExternalData(new Gson().toJson(videoListExtraData));
                     videoListBean.setSourceName(Constants.Source.AGEFANS);
-                    videoListBean.setTitle(orignal.getTitle());
+                    videoListBean.setTitle(title);
                     videoListBean.setCoverPortrait(true);
                     videoListBean.setTag(orignal.getTag());
-                    videoListBean.setCover(orignal.getCover());
+                    videoListBean.setCover(cover);
                     videoListBean.setSelectIndex(orignal.getSelectIndex());
                     int positionIndex = 0;
                     for (Element item : itemElements) {

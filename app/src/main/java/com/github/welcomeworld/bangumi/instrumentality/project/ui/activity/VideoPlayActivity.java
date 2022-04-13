@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.databinding.Activ
 import com.github.welcomeworld.bangumi.instrumentality.project.model.HistoryBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.HistoryConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
@@ -53,6 +55,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     VideoBean currentVideoBean;
     BIPPlayer bipPlayer = new DefaultBIPPlayer();
     HistoryBean historyBean;
+    Uri videoUri = null;
 
     @Override
     protected void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
@@ -67,6 +70,13 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         getViewBinding().videoPlayTopSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(this);
         videoListBeans = getIntent().getParcelableArrayListExtra(EXTRA_VIDEO_LIST_BEAN);
         selectSourceIndex = getIntent().getIntExtra(EXTRA_VIDEO_SELECT_INDEX, 0);
+        videoUri = getIntent().getData();
+        if (videoUri != null && (videoListBeans == null || videoListBeans.size() == 0)) {
+            BaseParser parser = ParserManager.getInstance().matchSource(videoUri);
+            if (parser != null) {
+                videoListBeans = parser.createVideoListBeans(videoUri);
+            }
+        }
         if (videoListBeans == null || videoListBeans.size() == 0) {
             finish();
             return;
@@ -75,6 +85,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         ThreadUtil.defer().when(() -> {
             initHistory();
             videoListBeans = ParserManager.getInstance().updateVideoList(videoListBeans, selectSourceIndex);
+            LogUtil.e("VideoPlayActivity",videoListBeans.toString());
         }).done((result) -> initCreate()).fail(throwable -> initCreate());
     }
 
@@ -140,7 +151,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     }
 
     private void initCreate() {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         getViewBinding().videoPlayView.setBipPlayer(bipPlayer);
@@ -212,7 +223,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                 ToastUtil.showToast(R.string.video_url_parse_error);
                 LogUtil.e("BIPPlayer", "parse faile" + throwable.getMessage());
             }).done((result) -> {
-                if(isFinishing()){
+                if (isFinishing()) {
                     return;
                 }
                 LogUtil.e("BIPPlayer", "finish parse");
