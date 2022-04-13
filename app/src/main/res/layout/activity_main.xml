@@ -5,90 +5,101 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.MainActivity">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_top"
-        android:background="@color/color_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/color_white"
         app:layout_constraintTop_toTopOf="parent">
+
         <Space
             android:id="@+id/top_space"
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/main_search"
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:layout_marginStart="18dp"
             android:layout_marginEnd="18dp"
-            android:gravity="center_vertical"
-            android:text="@string/search_hint"
-            android:paddingStart="12dp"
-            android:textSize="14sp"
-            android:paddingEnd="8dp"
-            android:onClick="onClick"
-            android:background="@drawable/ic_home_search"
             android:layout_marginBottom="8dp"
-            app:layout_constraintTop_toBottomOf="@id/top_space"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:background="@drawable/ic_home_search"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:paddingStart="12dp"
+            android:paddingEnd="8dp"
+            android:text="@string/search_hint"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_space" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/main_view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/color_E4EAF8"
-        app:layout_constraintTop_toBottomOf="@id/main_top"
-        app:layout_constraintBottom_toTopOf="@id/main_bottom"/>
+        app:layout_constraintBottom_toTopOf="@id/main_bottom"
+        app:layout_constraintTop_toBottomOf="@id/main_top" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent">
+
         <View
             android:id="@+id/main_bottom_bg"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:background="@color/color_white"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <TextView
             android:id="@+id/main_bottom_home"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/home"
-            android:onClick="onClick"
+            android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
-            app:layout_constraintTop_toTopOf="@id/main_bottom_bg"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="@string/home"
+            android:textColor="@color/black_29b6f6"
             app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
+            app:layout_constraintEnd_toStartOf="@id/main_bottom_bangumi"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/main_bottom_bangumi"/>
+            app:layout_constraintTop_toTopOf="@id/main_bottom_bg" />
+
         <TextView
             android:id="@+id/main_bottom_bangumi"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:background="?selectableItemBackgroundBorderless"
             android:gravity="center"
+            android:onClick="onClick"
             android:text="@string/bangumi"
             android:textAlignment="center"
-            android:onClick="onClick"
-            android:background="?selectableItemBackgroundBorderless"
-            app:layout_constraintTop_toTopOf="@id/main_bottom_bg"
+            android:textColor="@color/black_29b6f6"
             app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
+            app:layout_constraintEnd_toStartOf="@id/main_bottom_mine"
             app:layout_constraintStart_toEndOf="@id/main_bottom_home"
-            app:layout_constraintEnd_toStartOf="@id/main_bottom_mine"/>
+            app:layout_constraintTop_toTopOf="@id/main_bottom_bg" />
+
         <TextView
             android:id="@+id/main_bottom_mine"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/mine"
-            android:onClick="onClick"
+            android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
-            app:layout_constraintTop_toTopOf="@id/main_bottom_bg"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="@string/mine"
+            android:textColor="@color/black_29b6f6"
             app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/main_bottom_bangumi"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="@id/main_bottom_bg" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

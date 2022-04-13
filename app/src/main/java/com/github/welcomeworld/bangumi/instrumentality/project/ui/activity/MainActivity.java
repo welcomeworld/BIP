@@ -35,7 +35,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
             @Override
             public void onPageSelected(int position) {
-
+                getViewBinding().mainBottomHome.setSelected(position == 0);
+                getViewBinding().mainBottomBangumi.setSelected(position == 1);
+                getViewBinding().mainBottomMine.setSelected(position == 2);
             }
 
             @Override
@@ -43,6 +45,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
             }
         });
+        getViewBinding().mainBottomHome.setSelected(true);
     }
 
     public void onClick(View view) {
