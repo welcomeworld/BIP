@@ -28,7 +28,7 @@ public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
         getViewBinding().searchInput.setOnEditorActionListener((v, actionId, event) -> {
             searchText = getViewBinding().searchInput.getText().toString();
             refresh();
-            return false;
+            return true;
         });
         adapter = new SearchResultRecyclerViewAdapter(this);
         getViewBinding().searchResultRecyclerview.setAdapter(adapter);
@@ -62,9 +62,6 @@ public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
             getViewBinding().searchResultSwipecontainer.setRefreshing(false);
             adapter.replaceAll(searchData);
             getViewBinding().searchResultRecyclerview.scrollToPosition(0);
-            if (searchData != null && searchData.size() > 0) {
-//             loadMore();
-            }
         });
     }
 }
