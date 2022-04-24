@@ -138,7 +138,7 @@ dependencies {
     implementation 'com.tencent.bugly:nativecrashreport:3.9.2'
 
     implementation 'com.github.welcomeworld:BIPPlayer:1.0.10'
-    implementation 'com.nisigada:devbase:1.0.3'
+    implementation 'com.nisigada:devbase:1.0.4'
     implementation project(path:':app_update')
     implementation project(path:':zxing')
 
