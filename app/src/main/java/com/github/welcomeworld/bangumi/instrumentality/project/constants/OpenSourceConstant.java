@@ -10,7 +10,8 @@ public class OpenSourceConstant {
             "DanmakuFlameMaster 0.9.25",
             "zxing",
             "okhttp",
-            "ffmpeg 4.2.4"
+            "ffmpeg 4.2.4",
+            "leakcanary 2.9.1"
     };
     public static final String[] openSourceDesc = {
             "https://github.com/bumptech/glide",
@@ -21,6 +22,7 @@ public class OpenSourceConstant {
             "https://github.com/bilibili/DanmakuFlameMaster",
             "https://github.com/zxing/zxing",
             "https://github.com/square/okhttp",
-            "https://git.ffmpeg.org/ffmpeg.git"
+            "https://git.ffmpeg.org/ffmpeg.git",
+            "https://github.com/square/leakcanary"
     };
 }
