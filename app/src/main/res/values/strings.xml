@@ -39,5 +39,6 @@
     <string name="download_task">%d下载任务</string>
     <string name="delete_download_confirm">确认删除下载?</string>
     <string name="delete">删除</string>
+    <string name="password_login">账号密码登录</string>
 
 </resources>

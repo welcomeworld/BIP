@@ -31,4 +31,13 @@
         android:text="@string/scan_confirm"
         android:textColor="@color/color_white" />
 
+    <Button
+        android:id="@+id/login_login_pw"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/button_solid_accent"
+        android:text="@string/password_login"
+        android:textColor="@color/color_white" />
+
 </LinearLayout>

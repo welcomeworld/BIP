@@ -7,12 +7,15 @@ import androidx.annotation.Nullable;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityLoginCntainerBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliParser;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.ToastUtil;
 
-public class LoginContainerActivity extends BaseActivity<ActivityLoginCntainerBinding>{
-    private static String EXTRA_TAG  = "extra_parser_tag";
-    public static Bundle getStartBundle(String tag){
+public class LoginContainerActivity extends BaseActivity<ActivityLoginCntainerBinding> {
+    private static String EXTRA_TAG = "extra_parser_tag";
+
+    public static Bundle getStartBundle(String tag) {
         Bundle bundle = new Bundle();
-        bundle.putString(EXTRA_TAG,tag);
+        bundle.putString(EXTRA_TAG, tag);
         return bundle;
     }
 
@@ -21,5 +24,14 @@ public class LoginContainerActivity extends BaseActivity<ActivityLoginCntainerBi
         super.onCreate(savedInstanceState);
         String tag = getIntent().getStringExtra(EXTRA_TAG);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ParserManager.getInstance().getParser(tag).getLoginFragment()).commit();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (BiliParser.checkLogin()) {
+            ToastUtil.showToast(R.string.login_success);
+            finish();
+        }
     }
 }

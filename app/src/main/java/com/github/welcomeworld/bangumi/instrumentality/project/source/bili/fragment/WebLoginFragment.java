@@ -12,6 +12,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.databinding.BiliF
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.BaseFragment;
+import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 import com.github.welcomeworld.zxing.QRCodeAPI;
 import com.nisigada.common.devbase.utils.ThreadUtil;
@@ -25,6 +26,7 @@ public class WebLoginFragment extends BaseFragment<BiliFragmentWebLoginBinding> 
         super.onViewCreated(view, savedInstanceState);
         getViewBinding().loginRefreshQr.setOnClickListener(v -> refreshQRCode());
         getViewBinding().loginLoginQr.setOnClickListener(v -> checkLogin());
+        getViewBinding().loginLoginPw.setOnClickListener(v -> IntentUtil.intentToBrowser(requireActivity(), "https://passport.bilibili.com/login"));
         refreshQRCode();
     }
 
