@@ -42,6 +42,7 @@ public class NormalCustomDialog extends Dialog {
     private String mContent;
     private String mPositiveText;
     private String mNegativeText;
+    private int uiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
     public NormalCustomDialog setCancelAble(boolean cancelAble) {
         this.cancelAble = cancelAble;
@@ -65,6 +66,11 @@ public class NormalCustomDialog extends Dialog {
 
     public NormalCustomDialog setDismissNegative(boolean dismissNegative) {
         this.dismissNegative = dismissNegative;
+        return this;
+    }
+
+    public NormalCustomDialog setUiVisibility(int uiVisibility) {
+        this.uiVisibility = uiVisibility;
         return this;
     }
 
@@ -240,7 +246,7 @@ public class NormalCustomDialog extends Dialog {
             }
             super.show();
             if (dialogWindow != null) {
-                dialogWindow.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                dialogWindow.getDecorView().setSystemUiVisibility(uiVisibility);
                 dialogWindow.setGravity(gravity);
                 dialogWindow.setLayout(matchWidth ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT, matchHeight ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT);
                 dialogWindow.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);

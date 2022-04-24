@@ -129,6 +129,7 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         TextView tagView;
         ImageView coverView;
         TextView durationView;
+        ImageView moreView;
 
         public MyInnerViewHolder(View itemView) {
             super(itemView);
@@ -136,6 +137,7 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             tagView = itemView.findViewById(R.id.card_video_label);
             coverView = itemView.findViewById(R.id.card_video_cover);
             durationView = itemView.findViewById(R.id.card_video_duration);
+            moreView = itemView.findViewById(R.id.card_video_more);
         }
     }
 

@@ -18,7 +18,7 @@ public class AgeFansParser extends BaseParser {
 
     @Override
     public String getTag() {
-        return "AgeFansParser";
+        return Constants.Source.AGEFANS;
     }
 
     @Override

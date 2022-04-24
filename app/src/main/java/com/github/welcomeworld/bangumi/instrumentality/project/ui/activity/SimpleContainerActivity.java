@@ -1,6 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -38,6 +39,24 @@ public class SimpleContainerActivity extends BaseActivity<ActivitySimpleContaine
             return;
         }
         addFragment(this, fragmentClass, getIntent().getBundleExtra(EXTRA_DATA));
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        String tag = intent.getStringExtra(EXTRA_TAG);
+        Class<Fragment> fragmentClass;
+        try {
+            fragmentClass = (Class<Fragment>) Class.forName(tag);
+        } catch (ClassNotFoundException e) {
+            finish();
+            return;
+        }
+        Fragment firstFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (firstFragment != null && firstFragment.getClass() == fragmentClass) {
+            return;
+        }
+        addFragment(this, fragmentClass, intent.getBundleExtra(EXTRA_DATA));
     }
 
     public static void addFragment(Activity container, Class<? extends Fragment> fragmentClass, Bundle fragmentBundle) {

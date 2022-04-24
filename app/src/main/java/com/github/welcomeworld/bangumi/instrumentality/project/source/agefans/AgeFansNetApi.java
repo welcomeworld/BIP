@@ -59,7 +59,11 @@ public class AgeFansNetApi {
                     videoListBean.setCoverPortrait(true);
                     String tagName = "age番剧";
                     videoListBean.setTag(tagName);
-                    videoListBean.setCover(searchItem.selectFirst("img").attr("src"));
+                    String cover = searchItem.selectFirst("img").attr("src");
+                    if (cover != null && cover.startsWith("//")) {
+                        cover = "https:" + cover;
+                    }
+                    videoListBean.setCover(cover);
                     ArrayList<VideoBean> videoBeans = new ArrayList<>();
                     VideoBean videoBean = new VideoBean();
                     videoBean.setTitle(title);
@@ -67,7 +71,7 @@ public class AgeFansNetApi {
                     String path = searchItem.attr("href");
                     String videoKey = path.replace("/detail/", "");
                     LogUtil.e("AgeFansSearch getVideoKey:", videoKey);
-                    videoBean.setVideoKey(videoKey);
+                    videoBean.setVideoKey(videoKey + "_1_1");
                     videoBean.setUrl(baseUrl + path);
                     videoBeans.add(videoBean);
                     videoListBean.setVideoBeanList(videoBeans);
@@ -85,6 +89,13 @@ public class AgeFansNetApi {
     public static List<VideoListBean> updateVideoList(List<VideoListBean> videoListBeans, int selectSourceIndex) {
         VideoListBean orignal = videoListBeans.get(selectSourceIndex);
         VideoBean currentVideoBean = orignal.getCurrentVideoBean();
+        String wrapVideoKey = currentVideoBean.getVideoKey();
+        String originalVideoKey;
+        if (wrapVideoKey.contains("_")) {
+            originalVideoKey = wrapVideoKey.substring(0, wrapVideoKey.indexOf("_"));
+        } else {
+            originalVideoKey = wrapVideoKey;
+        }
         String videoListExtra = orignal.getSourceExternalData();
         HashMap<String, String> videoListExtraData = new Gson().fromJson(videoListExtra, HashMap.class);
         if (videoListExtraData == null) {
@@ -96,7 +107,7 @@ public class AgeFansNetApi {
         LogUtil.e("AgeParseVideo", "getVideoListId:" + videoListId);
         try {
             if (TextUtils.isEmpty(videoListId)) {
-                Connection pageConn = Jsoup.connect(baseUrl + "/detail/" + currentVideoBean.getVideoKey());
+                Connection pageConn = Jsoup.connect(baseUrl + "/detail/" + originalVideoKey);
                 pageDocument = pageConn.get();
                 Elements sourceElements = pageDocument.select("div#main0 div.movurl ul");
                 Elements sourceTitleElements = pageDocument.select("ul#menu0 li");
@@ -138,11 +149,12 @@ public class AgeFansNetApi {
                     videoListBean.setCover(cover);
                     videoListBean.setSelectIndex(orignal.getSelectIndex());
                     int positionIndex = 0;
+                    int keyPosition = 1;
                     for (Element item : itemElements) {
                         VideoBean videoBean = new VideoBean();
                         videoBean.setTitle(item.text());
                         videoBean.setCover(videoListBean.getCover());
-                        videoBean.setVideoKey(currentVideoBean.getVideoKey());
+                        videoBean.setVideoKey(originalVideoKey+"_"+(i+1)+"_"+keyPosition++);
                         if (positionIndex < positionList.size()) {
                             videoBean.setPlayPosition(positionList.get(positionIndex++));
                         }
@@ -157,7 +169,7 @@ public class AgeFansNetApi {
                     }
                 }
             }
-            String referrerUrl = baseUrl + "/play/" + currentVideoBean.getVideoKey() + "?playid=" + videoListId + "_" + selectVideoIndex;
+            String referrerUrl = baseUrl + "/play/" + originalVideoKey + "?playid=" + videoListId + "_" + selectVideoIndex;
             Connection cookieConn = Jsoup.connect(referrerUrl);
             Connection.Response cookieResponse = cookieConn.execute();
             List<String> cookies = cookieResponse.headers("set-cookie");
@@ -165,7 +177,7 @@ public class AgeFansNetApi {
             for (String cookie : cookies) {
                 requestCookie.put(cookie.substring(0, cookie.indexOf("=")), cookie.substring(cookie.indexOf("=") + 1, cookie.indexOf(";")));
             }
-            String playUrl = baseUrl + "/_getplay?aid=" + currentVideoBean.getVideoKey() + "&playindex=" + videoListId + "&epindex=" + selectVideoIndex + "&r=" + Math.random();
+            String playUrl = baseUrl + "/_getplay?aid=" + originalVideoKey + "&playindex=" + videoListId + "&epindex=" + selectVideoIndex + "&r=" + Math.random();
             LogUtil.e("AgeParseVideo", " playUrl:" + playUrl);
             Connection playConn = Jsoup.connect(playUrl);
             playConn.cookie("username", "admin");

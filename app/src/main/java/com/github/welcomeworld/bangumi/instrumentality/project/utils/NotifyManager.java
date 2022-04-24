@@ -1,51 +1,84 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.utils;
 
-import android.app.Notification;
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SimpleContainerActivity;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.DownloadFragment;
 
 
 public class NotifyManager {
-    public static final int CODE_NOTIFICATION_BAR = 233;
-    private static final String CHANNEL_BAR_DESCRIPTION = "App Fast Switch";
-    private static final String CHANNEL_BAR_ID = "2Space App Fast Switch";
-    private static final String CHANNEL_BAR_NAME = "2Space App Fast Switch Channel";
+    private static final String CHANNEL_DOWNLOAD_DESCRIPTION = "BIP Download";
+    private static final String CHANNEL_DOWNLOAD_ID = "BIP download media";
+    private static final String CHANNEL_DOWNLOAD_NAME = "BIP download media Channel";
 
-    public static void showNotify(Context context) {
+    @SuppressLint("UnspecifiedImmutableFlag")
+    public static void showDownloadNotify(Context context, int notifyId, int progress, String contentTitle) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder;
-        builder = new NotificationCompat.Builder(context, NotifyManager.CHANNEL_BAR_ID);
-        builder.setSmallIcon(R.mipmap.ic_launcher)
-                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_DOWNLOAD_ID);
+        String title = contentTitle + "-" + context.getString(R.string.downloading);
+        Intent intent = new Intent(context, SimpleContainerActivity.class);
+        intent.putExtras(SimpleContainerActivity.getStartBundle(DownloadFragment.class.getName(), null));
+        PendingIntent contentIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+        builder.setContentTitle(title)
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                 .setAutoCancel(false)
-                .setContentIntent(PendingIntent.getActivities(context,233,new Intent[]{new Intent("fsjdlk")},PendingIntent.FLAG_UPDATE_CURRENT))
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_notification_small);
-        RemoteViews largeView = new RemoteViews(context.getPackageName(), R.layout.layout_notification_large);
-        remoteViews.setTextViewText(R.id.notification_title,"TestTitle");
-        remoteViews.setTextViewText(R.id.notification_body,"TestBody");
-
-        largeView.setTextViewText(R.id.notification_title,"TestLargeTitle");
-        largeView.setTextViewText(R.id.notification_body,"TestLargefdsfdsfdsfdsBody\nfdsjfljdslj\nfjdslfj");
-
-        builder.setCustomContentView(remoteViews);
-        builder.setCustomBigContentView(largeView);
+                .setOnlyAlertOnce(true)
+                .setContentIntent(contentIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setSmallIcon(R.drawable.ic_download)
+                .setProgress(100, progress, false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel mNotificationChannel = new NotificationChannel(NotifyManager.CHANNEL_BAR_ID, NotifyManager.CHANNEL_BAR_NAME, NotificationManager.IMPORTANCE_HIGH);
-            mNotificationChannel.setDescription(NotifyManager.CHANNEL_BAR_DESCRIPTION);
+            NotificationChannel mNotificationChannel = new NotificationChannel(CHANNEL_DOWNLOAD_ID, CHANNEL_DOWNLOAD_NAME, NotificationManager.IMPORTANCE_HIGH);
+            mNotificationChannel.setDescription(NotifyManager.CHANNEL_DOWNLOAD_DESCRIPTION);
             manager.createNotificationChannel(mNotificationChannel);
         }
-        Notification notification = builder.build();
-        manager.notify(NotifyManager.CODE_NOTIFICATION_BAR, notification);
-        LogUtil.e("NotifyManager","showNotification");
+        manager.notify(notifyId, builder.build());
+    }
+
+    @SuppressLint("UnspecifiedImmutableFlag")
+    public static void showDownloadCompletedNotify(Context context, int notifyId, String content) {
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_DOWNLOAD_ID);
+        Intent intent = new Intent(context, SimpleContainerActivity.class);
+        intent.putExtras(SimpleContainerActivity.getStartBundle(DownloadFragment.class.getName(), null));
+        PendingIntent contentIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+        builder.setContentTitle(context.getString(R.string.downloaded))
+                .setContentText(content)
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
+                .setContentIntent(contentIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setSmallIcon(R.drawable.ic_download);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel mNotificationChannel = new NotificationChannel(CHANNEL_DOWNLOAD_ID, CHANNEL_DOWNLOAD_NAME, NotificationManager.IMPORTANCE_HIGH);
+            mNotificationChannel.setDescription(NotifyManager.CHANNEL_DOWNLOAD_DESCRIPTION);
+            manager.createNotificationChannel(mNotificationChannel);
+        }
+        manager.notify(notifyId, builder.build());
+    }
+
+    public static void cancelNotify(Context context, int notifyId) {
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancel(notifyId);
     }
 }

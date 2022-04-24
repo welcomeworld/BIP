@@ -31,4 +31,13 @@
     <string name="get_qrcode_fail">获取二维码链接失败</string>
     <string name="click_again_back">再次返回退出应用</string>
     <string name="developing">开发中</string>
+    <string name="downloading">正在下载</string>
+    <string name="downloaded">下载完成</string>
+    <string name="prepare">正在准备</string>
+    <string name="paused">暂停</string>
+    <string name="error">错误</string>
+    <string name="download_task">%d下载任务</string>
+    <string name="delete_download_confirm">确认删除下载?</string>
+    <string name="delete">删除</string>
+
 </resources>

@@ -1,5 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment;
 
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,8 +20,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
     FavOrHistoryRecyclerViewAdapter adapter;
@@ -84,7 +84,7 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
             if (result != null && result.size() > 0) {
                 loadMore();
             }
-        });
+        }).fail(Throwable::printStackTrace);
     }
 
     int moreTime = 4;

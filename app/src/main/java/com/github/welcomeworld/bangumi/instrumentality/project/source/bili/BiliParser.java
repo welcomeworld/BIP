@@ -60,7 +60,7 @@ public class BiliParser extends BaseParser {
 
     @Override
     public String getTag() {
-        return "BiliParser";
+        return Constants.Source.BILI;
     }
 
     @Override
@@ -83,6 +83,13 @@ public class BiliParser extends BaseParser {
         formatOptions.put("headers", "referer:https://www.bilibili.com\r\n");
         result.put(DefaultBIPPlayer.OPT_CATEGORY_FORMAT, formatOptions);
         return result;
+    }
+
+    @Override
+    public Map<String, String> getDownloadHeaders(VideoListBean videoListBean) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("referer", "https://www.bilibili.com");
+        return headers;
     }
 
     @Override
@@ -124,7 +131,7 @@ public class BiliParser extends BaseParser {
                     videoBean.setSourceExternalData(new Gson().toJson(extraMap));
                     videoBean.setTitle(moreData.get(i).getTitle());
                     videoBean.setCover(videoListBean.getCover());
-                    videoBean.setDuration(moreData.get(i).getDuration());
+                    videoBean.setDuration(moreData.get(i).getDuration() * 1000L);
                     videoBean.setVideoKey(String.valueOf(moreData.get(i).getCid()));
                     videoBean.setUrl(moreData.get(i).getUri());
                     videoBeans.add(videoBean);
@@ -176,7 +183,7 @@ public class BiliParser extends BaseParser {
                     videoBean.setSourceExternalData(new Gson().toJson(extraMap));
                     videoBean.setVideoKey(String.valueOf(moreData.get(i).getCid()));
                     videoBean.setTitle(moreData.get(i).getTitle());
-                    videoBean.setDuration(moreData.get(i).getDuration());
+                    videoBean.setDuration(moreData.get(i).getDuration() * 1000L);
                     videoBean.setCover(videoListBean.getCover());
                     videoBean.setUrl(moreData.get(i).getUri());
                     videoBeans.add(videoBean);
@@ -326,7 +333,7 @@ public class BiliParser extends BaseParser {
                         videoBean.setVideoKey(currentAid);
                     }
                     videoBean.setUrl(moreData.get(i).getUri());
-                    videoBean.setDuration(parseDuration(moreData.get(i).getDuration()));
+                    videoBean.setDuration(parseDuration(moreData.get(i).getDuration()) * 1000L);
                     videoBeans.add(videoBean);
                     videoListBean.setVideoBeanList(videoBeans);
                     result.add(videoListBean);

@@ -6,8 +6,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.inter
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.CookieInterceptor;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.UserAgentInterceptor;
 
-import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -37,7 +35,6 @@ public class BiliOkHttpClientManager {
     public OkHttpClient getNormalOkHttpClient(){
         if(normalClient == null){
             normalClient =new OkHttpClient.Builder()
-                    .callTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(new UserAgentInterceptor())
                     .addInterceptor(new CookieInterceptor())
                     .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))

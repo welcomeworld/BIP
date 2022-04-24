@@ -10,16 +10,16 @@ public class VideoListBean implements Parcelable {
     private String cover;
     private int selectIndex;
     private String sourceName;
-    private ArrayList<VideoBean> videoBeanList = new ArrayList<>();;
+    private ArrayList<VideoBean> videoBeanList = new ArrayList<>();
     private String sourceExternalData;
     private boolean coverPortrait;
     private String tag;
     private String VideoListDes;
     private String seasonTitle;
 
-    public VideoListBean(){
+    public VideoListBean() {
 
-    };
+    }
 
 
     protected VideoListBean(Parcel in) {
@@ -43,7 +43,7 @@ public class VideoListBean implements Parcelable {
         dest.writeString(sourceName);
         dest.writeTypedList(videoBeanList);
         dest.writeString(sourceExternalData);
-        dest.writeByte(coverPortrait?(byte) 1:0);
+        dest.writeByte(coverPortrait ? (byte) 1 : 0);
         dest.writeString(tag);
         dest.writeString(VideoListDes);
         dest.writeString(seasonTitle);
@@ -99,7 +99,7 @@ public class VideoListBean implements Parcelable {
     }
 
     public ArrayList<VideoBean> getVideoBeanList() {
-        if(videoBeanList == null){
+        if (videoBeanList == null) {
             videoBeanList = new ArrayList<>();
         }
         return videoBeanList;
@@ -109,8 +109,8 @@ public class VideoListBean implements Parcelable {
         this.videoBeanList = videoBeanList;
     }
 
-    public VideoBean getCurrentVideoBean(){
-        if(videoBeanList == null||videoBeanList.size()==0){
+    public VideoBean getCurrentVideoBean() {
+        if (videoBeanList == null || videoBeanList.size() == 0) {
             return null;
         }
         return videoBeanList.get(selectIndex);

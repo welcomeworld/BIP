@@ -10,11 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BimiParser extends BaseParser {
-    private static HashMap<String,Integer> searchMaxPageCache = new HashMap<>();
+    private static HashMap<String, Integer> searchMaxPageCache = new HashMap<>();
 
     @Override
     public String getTag() {
-        return "BimiParser";
+        return Constants.Source.BIMI;
     }
 
     @Override
@@ -29,20 +29,20 @@ public class BimiParser extends BaseParser {
 
     @Override
     public List<VideoListBean> updateVideoList(List<VideoListBean> videoListBeans, int selectSourceIndex) {
-        return BimiNetApi.updateVideoList(videoListBeans,selectSourceIndex);
+        return BimiNetApi.updateVideoList(videoListBeans, selectSourceIndex);
     }
 
     @Override
     public List<VideoListBean> search(String key, String pn) {
         Integer currentPn = Integer.parseInt(pn);
         Integer cachePn = searchMaxPageCache.get(key);
-        if(cachePn !=null &&currentPn>=cachePn){
-            LogUtil.e("BimiSearch:", "skip search because out of max page max:"+cachePn+" current:"+currentPn);
+        if (cachePn != null && currentPn >= cachePn) {
+            LogUtil.e("BimiSearch:", "skip search because out of max page max:" + cachePn + " current:" + currentPn);
             return Collections.emptyList();
         }
-        List<VideoListBean> result = BimiNetApi.search(key,pn);
-        if(result == null){
-            searchMaxPageCache.put(key,currentPn);
+        List<VideoListBean> result = BimiNetApi.search(key, pn);
+        if (result == null) {
+            searchMaxPageCache.put(key, currentPn);
             return Collections.emptyList();
         }
         return result;

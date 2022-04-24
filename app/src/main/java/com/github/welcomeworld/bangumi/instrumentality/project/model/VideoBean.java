@@ -18,7 +18,7 @@ public class VideoBean implements Parcelable {
     private long duration;
     private long playPosition;
 
-    public VideoBean(){
+    public VideoBean() {
 
     }
 
@@ -141,16 +141,16 @@ public class VideoBean implements Parcelable {
         this.currentQualityIndex = currentQualityIndex;
     }
 
-    public VideoQualityBean getCurrentQualityBean(){
-        if(qualityBeans == null){
+    public VideoQualityBean getCurrentQualityBean() {
+        if (qualityBeans == null) {
             return null;
         }
-        if(qualityBeans.size()>0){
-            if(qualityBeans.size()<=currentQualityIndex){
+        if (qualityBeans.size() > 0) {
+            if (qualityBeans.size() <= currentQualityIndex) {
                 currentQualityIndex = 0;
             }
             return qualityBeans.get(currentQualityIndex);
-        }else {
+        } else {
             return null;
         }
     }

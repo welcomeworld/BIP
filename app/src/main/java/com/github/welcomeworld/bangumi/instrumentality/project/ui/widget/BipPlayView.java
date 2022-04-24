@@ -184,26 +184,23 @@ public class BipPlayView extends ConstraintLayout {
         surfaceView = itemView.findViewById(R.id.bip_play_view_surface);
         surfaceView.getHolder().addCallback(surfaceHolderCallback);
         gestureDetectorCompat = new GestureDetectorCompat(context, gestureListener);
-        setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                LogUtil.e("GestureTest", "Touch");
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (fastfowarding) {
-                        fastForwardView.setVisibility(GONE);
-                        bipPlayer.seekTo(fastforward_record);
-                        playPauseView.postDelayed(hideControllerRunnable, 3500);
-                        userSeeking = false;
-                    }
-                    lastXpercentage = 0;
-                    lastYpercentage = 0;
-                    skipAction = false;
-                    fastfowarding = false;
-                    fastforward_record = 0;
+        setOnTouchListener((v, event) -> {
+            LogUtil.e("GestureTest", "Touch");
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (fastfowarding && bipPlayer != null) {
+                    fastForwardView.setVisibility(GONE);
+                    bipPlayer.seekTo(fastforward_record);
+                    playPauseView.postDelayed(hideControllerRunnable, 3500);
+                    userSeeking = false;
                 }
-                gestureDetectorCompat.onTouchEvent(event);
-                return true;
+                lastXpercentage = 0;
+                lastYpercentage = 0;
+                skipAction = false;
+                fastfowarding = false;
+                fastforward_record = 0;
             }
+            gestureDetectorCompat.onTouchEvent(event);
+            return true;
         });
         playPauseView.setOnClickListener(playItemClickListener);
         danmakuView = itemView.findViewById(R.id.bip_play_danmaku_view);
@@ -302,7 +299,7 @@ public class BipPlayView extends ConstraintLayout {
             double change;
             double xpercentage = -distanceX / screen_width * 2 + lastXpercentage;
             double ypercentage = distanceY / screen_height * 2 + lastYpercentage;
-            if (e2.getX() < getWidth() / 4D || e2.getX() > getWidth() * 3 / 4d || e2.getY() < getHeight() / 4D || e2.getY() > getHeight() * 3 / 4d) {
+            if (e2.getX() < getWidth() / 4D || e2.getX() > getWidth() * 3 / 4d || e2.getY() < getHeight() / 4D || e2.getY() > getHeight() * 3 / 4d || bipPlayer == null) {
                 LogUtil.e("GestureTest", "scroll skip");
                 return false;
             }
@@ -497,6 +494,9 @@ public class BipPlayView extends ConstraintLayout {
             duration = mediaPlayer.getDuration();
             resizeWithVideoSize(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
             videoDurationView.setText(StringUtil.formatTime(duration));
+            if (duration > 0 && currentVideoBean != null) {
+                currentVideoBean.setDuration(duration);
+            }
             if (currentVideoBean != null && currentVideoBean.getPlayPosition() > 1000 && currentVideoBean.getPlayPosition() < bipPlayer.getDuration() - 5000) {
                 bipPlayer.seekTo(currentVideoBean.getPlayPosition());
             }
@@ -854,5 +854,11 @@ public class BipPlayView extends ConstraintLayout {
 
     public void setOnInfoListener(BIPPlayer.OnInfoListener mOnInfoListener) {
         this.mOnInfoListener = mOnInfoListener;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        danmakuView.release();
     }
 }

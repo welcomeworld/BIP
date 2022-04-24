@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +27,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(isNotch()){
+        if (isNotch()) {
             setXiaoMiInNotouch();
         }
         setContentView(0);
@@ -36,7 +35,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 
     @Override
     public void setContentView(int layoutResID) {
-        viewBinding = ViewBindingUtil.inflateWithGeneric(this,getLayoutInflater());
+        viewBinding = ViewBindingUtil.inflateWithGeneric(this, getLayoutInflater());
         setContentView(viewBinding.getRoot());
     }
 
@@ -49,14 +48,11 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 
     public void refreshSystemUIVisibility() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//android6.0以后可以对状态栏文字颜色和图标进行修改
-            getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//android6.0以后可以对状态栏文字颜色和图标进行修改
-            getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        } else {//android6.0以后可以对状态栏文字颜色和图标进行修改
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
-        } else {//4.4到5.0
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
         }
     }
 
@@ -75,7 +71,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         return isResume;
     }
 
-    private void setXiaoMiInNotouch(){
+    private void setXiaoMiInNotouch() {
         int flag = 0x00000100 | 0x00000200 | 0x00000400;
         try {
             Method method = Window.class.getMethod("addExtraFlags",

@@ -77,6 +77,7 @@
         </activity>
         <activity
             android:name=".ui.activity.SimpleContainerActivity"
+            android:launchMode="singleTop"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:screenOrientation="portrait" />
 

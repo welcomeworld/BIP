@@ -109,7 +109,7 @@ public class FavOrHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             holder.durationView.setVisibility(View.INVISIBLE);
         }else {
             holder.durationView.setVisibility(View.VISIBLE);
-            holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(),StringUtil.SECOND));
+            holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(),StringUtil.MILLISECOND));
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

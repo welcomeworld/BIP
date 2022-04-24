@@ -62,5 +62,9 @@ public abstract class BaseParser {
         return null;
     }
 
+    public Map<String, String> getDownloadHeaders(VideoListBean videoListBean) {
+        return null;
+    }
+
 
 }
