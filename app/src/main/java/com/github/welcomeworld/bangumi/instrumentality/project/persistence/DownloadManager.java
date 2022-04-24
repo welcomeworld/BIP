@@ -140,7 +140,7 @@ public class DownloadManager {
                 downloadTrafficTime = current;
                 lastDownloadLength = length;
             } else if (current - downloadTrafficTime > 950) {
-                LogUtil.e(TAG, "download speed:" + (length - lastDownloadLength) / (current - downloadTrafficTime) + "kb/s");
+//                LogUtil.e(TAG, "download speed:" + (length - lastDownloadLength) / (current - downloadTrafficTime) + "kb/s");
                 lastDownloadLength = length;
                 downloadTrafficTime = current;
             }
