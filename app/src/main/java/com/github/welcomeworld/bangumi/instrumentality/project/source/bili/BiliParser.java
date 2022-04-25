@@ -799,6 +799,6 @@ public class BiliParser extends BaseParser {
 
     public static boolean checkLogin() {
         String cookie = CookieManager.getInstance().getCookie("bilibili.com");
-        return cookie.contains("DedeUserID");
+        return cookie != null && cookie.contains("DedeUserID");
     }
 }
