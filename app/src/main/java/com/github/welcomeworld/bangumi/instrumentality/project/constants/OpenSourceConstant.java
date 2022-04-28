@@ -11,7 +11,8 @@ public class OpenSourceConstant {
             "zxing",
             "okhttp",
             "ffmpeg 4.2.4",
-            "leakcanary 2.9.1"
+            "leakcanary 2.9.1",
+            "soundTouch 2.3.1"
     };
     public static final String[] openSourceDesc = {
             "https://github.com/bumptech/glide",
@@ -23,6 +24,7 @@ public class OpenSourceConstant {
             "https://github.com/zxing/zxing",
             "https://github.com/square/okhttp",
             "https://git.ffmpeg.org/ffmpeg.git",
-            "https://github.com/square/leakcanary"
+            "https://github.com/square/leakcanary",
+            "https://codeberg.org/soundtouch/soundtouch"
     };
 }
