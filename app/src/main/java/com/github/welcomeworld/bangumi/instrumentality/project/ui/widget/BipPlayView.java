@@ -96,6 +96,8 @@ public class BipPlayView extends ConstraintLayout {
     private boolean skipAction = false;
     private long fastforward_record = 0;
     private boolean userSeeking = false;
+    private float playSpeed = 1.0f;
+    private boolean longPressSpeedChange = false;
 
     private BIPPlayer.OnPreparedListener mOnPreparedListener;
     private BIPPlayer.OnCompletionListener mOnCompletionListener;
@@ -187,17 +189,24 @@ public class BipPlayView extends ConstraintLayout {
         setOnTouchListener((v, event) -> {
             LogUtil.e("GestureTest", "Touch");
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (fastfowarding && bipPlayer != null) {
-                    fastForwardView.setVisibility(GONE);
-                    bipPlayer.seekTo(fastforward_record);
-                    playPauseView.postDelayed(hideControllerRunnable, 3500);
-                    userSeeking = false;
+                if (bipPlayer != null) {
+                    if (fastfowarding) {
+                        fastForwardView.setVisibility(GONE);
+                        bipPlayer.seekTo(fastforward_record);
+                        playPauseView.postDelayed(hideControllerRunnable, 3500);
+                        userSeeking = false;
+                    }
+                    if (longPressSpeedChange) {
+                        playSpeed = 1.0f;
+                        bipPlayer.setSpeed(playSpeed);
+                    }
                 }
                 lastXpercentage = 0;
                 lastYpercentage = 0;
                 skipAction = false;
                 fastfowarding = false;
                 fastforward_record = 0;
+                longPressSpeedChange = false;
             }
             gestureDetectorCompat.onTouchEvent(event);
             return true;
@@ -243,6 +252,8 @@ public class BipPlayView extends ConstraintLayout {
 
         @Override
         public boolean onDown(MotionEvent e) {
+            screen_height = getResources().getDisplayMetrics().heightPixels;
+            screen_width = getResources().getDisplayMetrics().widthPixels;
             LogUtil.e("GestureTest", "Down x:" + e.getX() + " y:" + e.getY() + " width:" + getWidth() + " height:" + getHeight());
             if (e.getX() < getWidth() / 4D || e.getX() > getWidth() * 3 / 4d || e.getY() < getHeight() / 4D || e.getY() > getHeight() * 3 / 4d) {
                 LogUtil.e("GestureTest", "down skip");
@@ -294,8 +305,6 @@ public class BipPlayView extends ConstraintLayout {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             String fastfowardText;
-            screen_height = getResources().getDisplayMetrics().heightPixels;
-            screen_width = getResources().getDisplayMetrics().widthPixels;
             double change;
             double xpercentage = -distanceX / screen_width * 2 + lastXpercentage;
             double ypercentage = distanceY / screen_height * 2 + lastYpercentage;
@@ -337,7 +346,31 @@ public class BipPlayView extends ConstraintLayout {
 
         @Override
         public void onLongPress(MotionEvent e) {
-
+            if (e.getX() > (float) screen_width * 2 / 3) {
+                longPressSpeedChange = true;
+                if (bipPlayer != null) {
+                    if (e.getY() < (float) screen_height / 3) {
+                        playSpeed = 4f;
+                    } else if (e.getY() < (float) screen_height * 2 / 3) {
+                        playSpeed = 3f;
+                    } else {
+                        playSpeed = 2f;
+                    }
+                    bipPlayer.setSpeed(playSpeed);
+                }
+            } else if (e.getX() < (float) screen_width / 3) {
+                longPressSpeedChange = true;
+                if (bipPlayer != null) {
+                    if (e.getY() < (float) screen_height / 2) {
+                        playSpeed = 0.75f;
+                    } else if (e.getY() < (float) screen_height * 2 / 3) {
+                        playSpeed = 0.5f;
+                    } else {
+                        playSpeed = 0.25f;
+                    }
+                    bipPlayer.setSpeed(playSpeed);
+                }
+            }
         }
 
         @Override
