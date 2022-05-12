@@ -28,6 +28,6 @@ jobs:
     - uses: actions/upload-artifact@v3.0.0
       with:
         name: upload-apk
-        path: ./app/build/outputs/apk/release/app-release.apk
+        path: ./app/build/outputs/apk/release/app-release-unsigned.apk
     - name: print work dir
-      run: ls
+      run: ls ./app
