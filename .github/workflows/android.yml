@@ -29,4 +29,5 @@ jobs:
       with:
         name: upload-apk
         path: ./app/build/outputs/apk/release/app-release.apk
-        if-no-files-found: ls
+    - name: print work dir
+      run: ls
