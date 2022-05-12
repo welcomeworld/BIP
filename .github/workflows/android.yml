@@ -28,4 +28,5 @@ jobs:
     - uses: actions/upload-artifact@v3.0.0
       with:
         name: upload-apk
-        path: app/build/outputs/apk/release/app-release.apk
+        path: ./app/build/outputs/apk/release/app-release.apk
+        if-no-files-found: ls
