@@ -13,7 +13,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.adapter.MainViewP
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityMainBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
-import com.nisigada.common.devbase.utils.ToastUtil;
+import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 

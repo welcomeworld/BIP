@@ -3,7 +3,7 @@ package com.github.welcomeworld.bangumi.instrumentality.project.parser;
 import android.net.Uri;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
-import com.nisigada.common.devbase.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

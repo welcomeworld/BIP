@@ -15,8 +15,8 @@ import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.BaseF
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
 import com.github.welcomeworld.zxing.QRCodeAPI;
-import com.nisigada.common.devbase.utils.ThreadUtil;
-import com.nisigada.common.devbase.utils.ToastUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 public class WebLoginFragment extends BaseFragment<BiliFragmentWebLoginBinding> {
     private String oauthKey = null;

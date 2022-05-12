@@ -2,7 +2,7 @@ package com.github.welcomeworld.bangumi.instrumentality.project.source.bili.api;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.LoginResultBean;
 import com.google.gson.Gson;
-import com.nisigada.common.devbase.utils.KVUtil;
+import com.github.welcomeworld.devbase.utils.KVUtil;
 
 public class BiliLocalStatus {
     private static String accessKey = "";

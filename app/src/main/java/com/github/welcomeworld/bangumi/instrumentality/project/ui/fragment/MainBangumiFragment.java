@@ -17,7 +17,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.databinding.Fragm
 import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.AgeFansNetApi;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.WebUtil;
-import com.nisigada.common.devbase.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 public class MainBangumiFragment extends BaseFragment<FragmentMainBangumiBinding> {
     boolean goDetail = false;

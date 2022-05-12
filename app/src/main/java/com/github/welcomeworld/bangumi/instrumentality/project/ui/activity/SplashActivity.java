@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivitySplashBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
-import com.nisigada.common.devbase.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
     @Override

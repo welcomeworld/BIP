@@ -29,7 +29,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.bipplayer.BIPPlayer;
 import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
-import com.nisigada.common.devbase.utils.ToastUtil;
+import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 public class LocalPlayActivity extends BaseActivity<ActivityLocalPlayBinding> {
     BIPPlayer bipPlayer = new DefaultBIPPlayer();

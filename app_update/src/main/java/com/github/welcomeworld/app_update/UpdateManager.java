@@ -7,8 +7,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.nisigada.common.devbase.utils.FileUtil;
-import com.nisigada.common.devbase.utils.ToastUtil;
+import com.github.welcomeworld.devbase.utils.FileUtil;
+import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;

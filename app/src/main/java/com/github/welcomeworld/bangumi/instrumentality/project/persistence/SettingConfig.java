@@ -1,7 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.persistence;
 
 
-import com.nisigada.common.devbase.utils.KVUtil;
+import com.github.welcomeworld.devbase.utils.KVUtil;
 
 public class SettingConfig {
     private static final String DEFAULT_QUALITY_KEY = "setting.default.quality.key";

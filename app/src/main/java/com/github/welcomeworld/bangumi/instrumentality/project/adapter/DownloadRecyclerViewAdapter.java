@@ -22,7 +22,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.Video
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
-import com.nisigada.common.devbase.utils.StringUtils;
+import com.github.welcomeworld.devbase.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
