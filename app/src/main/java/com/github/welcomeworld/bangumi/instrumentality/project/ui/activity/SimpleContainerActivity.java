@@ -31,6 +31,10 @@ public class SimpleContainerActivity extends BaseActivity<ActivitySimpleContaine
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String tag = getIntent().getStringExtra(EXTRA_TAG);
+        if (tag == null) {
+            finish();
+            return;
+        }
         Class<Fragment> fragmentClass;
         try {
             fragmentClass = (Class<Fragment>) Class.forName(tag);
