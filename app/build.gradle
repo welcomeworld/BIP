@@ -6,6 +6,9 @@ bugly {
     appKey = '97b88401-8537-4364-8767-e679b1e0765c' // 注册时分配的App Key
 }
 
+Properties keyStoreProperties = new Properties()
+keyStoreProperties.load(rootProject.file("keystore/keystore.properties").newDataInputStream())
+
 def getVersionCode = { ->
     try {
         def stdout = new ByteArrayOutputStream()
@@ -60,9 +63,19 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file(keyStoreProperties['storeFile'])
+            storePassword keyStoreProperties['storePassword']
+            keyAlias keyStoreProperties['keyAlias']
+            keyPassword keyStoreProperties['keyPassword']
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -139,8 +152,8 @@ dependencies {
 
     implementation 'com.github.welcomeworld:BIPPlayer:1.0.12'
     implementation 'com.github.welcomeworld:DevTool:1.0.01'
-    implementation project(path:':app_update')
-    implementation project(path:':zxing')
+    implementation project(path: ':app_update')
+    implementation project(path: ':zxing')
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
