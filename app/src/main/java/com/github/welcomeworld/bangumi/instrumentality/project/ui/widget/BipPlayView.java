@@ -799,7 +799,7 @@ public class BipPlayView extends ConstraintLayout {
 
             @Override
             public void danmakuShown(BaseDanmaku danmaku) {
-                Log.e("danmaku", "shown");
+
             }
 
             @Override
