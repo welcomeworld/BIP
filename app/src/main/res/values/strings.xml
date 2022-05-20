@@ -40,5 +40,6 @@
     <string name="delete_download_confirm">确认删除下载?</string>
     <string name="delete">删除</string>
     <string name="password_login">账号密码登录</string>
+    <string name="use_mediaCodec">使用MediaCodec硬解</string>
 
 </resources>

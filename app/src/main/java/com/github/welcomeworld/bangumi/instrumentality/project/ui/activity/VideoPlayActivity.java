@@ -28,6 +28,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserMana
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadInfoConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.HistoryConfig;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.SettingsFragment;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
@@ -105,6 +106,9 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                 for (String key : options.get(category).keySet()) {
                     bipPlayer.setOption(category, key, options.get(category).get(key));
                 }
+            }
+            if (SettingsFragment.useMediaCodec()) {
+                bipPlayer.setOption(DefaultBIPPlayer.OPT_CATEGORY_PLAYER, "mediacodec", "1");
             }
         }
     }

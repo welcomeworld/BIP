@@ -17,6 +17,8 @@ import com.github.welcomeworld.devbase.utils.KVUtil;
 public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> implements View.OnClickListener {
     public static String TAG = "setting_fragment";
     private static final String SETTING_BACKUP_UPDATE = "setting_backup_update";
+    private static final String SETTING_MEDIACODEC = "setting_mediacodec";
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -27,6 +29,8 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
         getViewBinding().settingOpensource.setOnClickListener(this);
         getViewBinding().settingBackupCheck.setChecked(KVUtil.getBoolean(SETTING_BACKUP_UPDATE));
         getViewBinding().settingBackupCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_BACKUP_UPDATE, isChecked));
+        getViewBinding().settingMediaCodecCheck.setChecked(KVUtil.getBoolean(SETTING_MEDIACODEC));
+        getViewBinding().settingMediaCodecCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_MEDIACODEC, isChecked));
     }
 
     public void onClick(View view) {
@@ -40,5 +44,9 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
         } else if (id == R.id.setting_opensource) {
             SimpleContainerActivity.addFragment(getActivity(), GratitudeFragment.class, null);
         }
+    }
+
+    public static boolean useMediaCodec() {
+        return KVUtil.getBoolean(SETTING_MEDIACODEC);
     }
 }
