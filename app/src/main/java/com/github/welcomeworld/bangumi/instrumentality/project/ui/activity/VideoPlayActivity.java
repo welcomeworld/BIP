@@ -31,9 +31,9 @@ import com.github.welcomeworld.bangumi.instrumentality.project.persistence.Histo
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ToastUtil;
+import com.github.welcomeworld.devbase.utils.ScreenUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ToastUtil;
 import com.github.welcomeworld.bipplayer.BIPPlayer;
 import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 

@@ -20,9 +20,8 @@ import com.github.welcomeworld.bangumi.instrumentality.project.persistence.Downl
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.VideoPlayActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
-import com.github.welcomeworld.devbase.utils.StringUtils;
+import com.github.welcomeworld.devbase.utils.ScreenUtil;
+import com.github.welcomeworld.devbase.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +84,7 @@ public class DownloadRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         } else if (downloadInfo.getDownloadState() == DownloadInfoBean.PREPARED) {
             holder.tagView.setText(R.string.prepare);
         } else if (downloadInfo.getDownloadState() == DownloadInfoBean.COMPLETE) {
-            holder.tagView.setText(StringUtils.formatFlow(downloadInfo.getContentLength()));
+            holder.tagView.setText(StringUtil.formatFlow(downloadInfo.getContentLength()));
         } else if (downloadInfo.getDownloadState() == DownloadInfoBean.ERROR) {
             holder.tagView.setText(R.string.error);
         } else if (downloadInfo.getDownloadState() == DownloadInfoBean.PAUSE) {

@@ -5,7 +5,7 @@ import android.os.Looper;
 import androidx.annotation.WorkerThread;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.model.DownloadInfoBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 import java.io.File;
 import java.util.List;

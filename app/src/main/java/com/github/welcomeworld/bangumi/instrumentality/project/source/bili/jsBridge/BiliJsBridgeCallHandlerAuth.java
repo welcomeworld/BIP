@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import com.alibaba.fastjson.JSONObject;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 public final class BiliJsBridgeCallHandlerAuth extends AbstractJsBridge{
 

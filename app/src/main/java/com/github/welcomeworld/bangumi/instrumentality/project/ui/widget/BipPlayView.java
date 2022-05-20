@@ -31,11 +31,10 @@ import com.github.welcomeworld.bangumi.instrumentality.project.parser.BiliDanmuk
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SettingConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.BaseActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ScreenUtil;
+import com.github.welcomeworld.devbase.utils.StringUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 import com.github.welcomeworld.bipplayer.BIPPlayer;
-import com.github.welcomeworld.devbase.utils.StringUtils;
 import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 import java.io.ByteArrayInputStream;
@@ -141,7 +140,7 @@ public class BipPlayView extends ConstraintLayout {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     long targetTime = progress * bipPlayer.getDuration() / SEEKBAR_MAX;
-                    String seekText = StringUtils.formatTime(targetTime) + "/" + StringUtils.formatTime(duration);
+                    String seekText = StringUtil.formatTime(targetTime) + "/" + StringUtil.formatTime(duration);
                     fastForwardView.setText(seekText);
                 }
             }
@@ -317,7 +316,7 @@ public class BipPlayView extends ConstraintLayout {
                     LogUtil.e("GestureTest", "set fastfoward");
                     fastfowarding = true;
                     fastforward_record = bipPlayer.getCurrentPosition();
-                    fastfowardText = StringUtils.formatTime(fastforward_record) + "/" + StringUtils.formatTime(duration);
+                    fastfowardText = StringUtil.formatTime(fastforward_record) + "/" + StringUtil.formatTime(duration);
                     fastForwardView.setText(fastfowardText);
                     fastForwardView.setVisibility(VISIBLE);
                     showController();
@@ -336,7 +335,7 @@ public class BipPlayView extends ConstraintLayout {
                 LogUtil.e("GestureTest", "scroll fastfoward");
                 change = xpercentage * FASTFORWARD_MAX + fastforward_record > duration ? duration : xpercentage * FASTFORWARD_MAX + fastforward_record;
                 fastforward_record = (long) change;
-                fastfowardText = StringUtils.formatTime(fastforward_record) + "/" + StringUtils.formatTime(duration);
+                fastfowardText = StringUtil.formatTime(fastforward_record) + "/" + StringUtil.formatTime(duration);
                 fastForwardView.setText(fastfowardText);
                 videoSeekView.setProgress((int) (change * SEEKBAR_MAX / duration));
                 lastXpercentage = 0;

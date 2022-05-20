@@ -3,7 +3,7 @@ package com.github.welcomeworld.bangumi.instrumentality.project.persistence;
 import android.os.Looper;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.model.HistoryBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 import java.util.List;
 

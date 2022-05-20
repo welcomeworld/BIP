@@ -15,8 +15,8 @@ import com.github.welcomeworld.bangumi.instrumentality.project.adapter.MainHomeR
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentMainHomeBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ScreenUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 import java.util.ArrayList;
 import java.util.List;

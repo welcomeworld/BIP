@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityBrowserBinding;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
+import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.WebUtil;
 
 public class BrowserActivity extends BaseActivity<ActivityBrowserBinding> {

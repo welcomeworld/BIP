@@ -2,7 +2,7 @@ package com.github.welcomeworld.bangumi.instrumentality.project.source.bili.inte
 
 import android.webkit.CookieManager;
 
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
+import com.github.welcomeworld.devbase.utils.StringUtil;
 
 import org.jetbrains.annotations.NotNull;
 

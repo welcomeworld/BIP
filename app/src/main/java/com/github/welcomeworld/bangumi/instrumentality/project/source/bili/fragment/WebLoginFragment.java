@@ -13,7 +13,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliP
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.BaseFragment;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
+import com.github.welcomeworld.devbase.utils.StringUtil;
 import com.github.welcomeworld.zxing.QRCodeAPI;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 import com.github.welcomeworld.devbase.utils.ToastUtil;

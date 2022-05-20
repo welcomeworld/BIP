@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.BiliFragmentLoginBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.BaseFragment;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.WebUtil;
 
 public class LoginFragment extends BaseFragment<BiliFragmentLoginBinding> {

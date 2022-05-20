@@ -11,9 +11,9 @@ import com.github.welcomeworld.bangumi.instrumentality.project.adapter.SearchRes
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivitySearchBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.SwiperefreshContainer;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ScreenUtil;
+import com.github.welcomeworld.devbase.utils.StringUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
 

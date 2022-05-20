@@ -11,7 +11,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.BuildConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentSettingsBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SimpleContainerActivity;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
+import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.devbase.utils.KVUtil;
 
 public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> implements View.OnClickListener {

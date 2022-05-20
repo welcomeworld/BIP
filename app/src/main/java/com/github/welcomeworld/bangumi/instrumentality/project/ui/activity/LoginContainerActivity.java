@@ -9,7 +9,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.databinding.Activ
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliParser;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ToastUtil;
+import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 public class LoginContainerActivity extends BaseActivity<ActivityLoginCntainerBinding> {
     private static String EXTRA_TAG = "extra_parser_tag";

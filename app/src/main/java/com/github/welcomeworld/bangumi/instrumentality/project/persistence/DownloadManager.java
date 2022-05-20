@@ -11,7 +11,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserMana
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.DownloadUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.NotifyManager;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 import java.io.File;
 import java.util.List;

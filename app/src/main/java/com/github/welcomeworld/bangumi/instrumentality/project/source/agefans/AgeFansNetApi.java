@@ -12,7 +12,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.re
 import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.retrofit.databean.AgeVideoUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BiliRetrofitManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
+import com.github.welcomeworld.devbase.utils.StringUtil;
 import com.google.gson.Gson;
 import com.github.welcomeworld.devbase.utils.FileUtil;
 

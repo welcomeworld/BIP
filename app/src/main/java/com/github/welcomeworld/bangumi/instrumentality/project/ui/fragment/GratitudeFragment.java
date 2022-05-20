@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.GratitudeRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentGratitudeBinding;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
+import com.github.welcomeworld.devbase.utils.ScreenUtil;
 
 public class GratitudeFragment extends BaseFragment<FragmentGratitudeBinding> {
     GratitudeRecyclerViewAdapter recyclerViewAdapter;

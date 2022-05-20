@@ -9,7 +9,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBe
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bimibimi.databean.BimiPlayerJsConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
+import com.github.welcomeworld.devbase.utils.StringUtil;
 import com.google.gson.Gson;
 
 import org.jsoup.Connection;

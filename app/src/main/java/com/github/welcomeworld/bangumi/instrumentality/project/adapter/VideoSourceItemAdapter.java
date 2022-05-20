@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
+import com.github.welcomeworld.devbase.utils.StringUtil;
 
 import java.util.List;
 

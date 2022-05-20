@@ -20,8 +20,8 @@ import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.VideoPlayActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.StringUtil;
+import com.github.welcomeworld.devbase.utils.ScreenUtil;
+import com.github.welcomeworld.devbase.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,8 +15,8 @@ import com.github.welcomeworld.bangumi.instrumentality.project.adapter.FavOrHist
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentHistoryBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.HistoryBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.HistoryConfig;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ScreenUtil;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.ThreadUtil;
+import com.github.welcomeworld.devbase.utils.ScreenUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 import java.util.ArrayList;
 import java.util.List;
