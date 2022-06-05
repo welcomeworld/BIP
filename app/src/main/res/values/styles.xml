@@ -8,6 +8,7 @@
         <item name="android:fontFamily">@font/bilifont</item>
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges
         </item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
     <style name="videoSeekTheme">
@@ -15,8 +16,7 @@
     </style>
 
     <style name="splashTheme" parent="AppTheme">
-        <item name="android:background">@drawable/bg_splash</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/bg_splash</item>
     </style>
 
     <style name="normalDialogTheme" parent="@android:style/Theme.Dialog">
