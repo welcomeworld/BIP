@@ -1,226 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
-     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
     <SurfaceView
         android:id="@+id/bip_play_view_surface"
-        android:layout_height="0dp"
         android:layout_width="0dp"
-        app:layout_constrainedWidth="true"
+        android:layout_height="0dp"
         app:layout_constrainedHeight="true"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <master.flame.danmaku.ui.widget.DanmakuView
         android:id="@+id/bip_play_danmaku_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bip_play_view_controller_parent"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/bip_play_view_top_shadow"
             android:layout_width="match_parent"
             android:layout_height="81dp"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:background="@drawable/bg_black60_top2bottom"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
         <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.FocusTextView
             android:id="@+id/bip_play_view_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:maxWidth="268dp"
-            android:gravity="center"
-            tools:visibility="visible"
-            android:layout_marginEnd="8dp"
-            android:singleLine="true"
-            tools:text="水花消失术"
-            android:textSize="18sp"
-            android:textColor="@color/colorPrimary"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="marquee"
             android:focusable="true"
+            android:gravity="center"
+            android:maxWidth="268dp"
+            android:singleLine="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="水花消失术"
+            tools:visibility="visible" />
+
         <TextView
             android:id="@+id/bip_play_view_battery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="45%"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="12dp"
-            android:gravity="center"
             android:drawablePadding="4dp"
+            android:gravity="center"
             android:textColor="@color/color_white"
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            app:drawableEndCompat="@drawable/ic_player_battery"
             app:layout_constraintEnd_toEndOf="parent"
-            app:drawableEndCompat="@drawable/ic_player_battery" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="45%"
+            tools:visibility="visible" />
+
         <TextView
             android:id="@+id/bip_play_view_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="14:22"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:gravity="center"
-            android:textSize="14sp"
             android:textColor="@color/color_white"
-            app:layout_constraintTop_toTopOf="@id/bip_play_view_title"
+            android:textSize="14sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/bip_play_view_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/bip_play_view_title"
+            tools:text="14:22"
+            tools:visibility="visible" />
+
         <TextView
             android:id="@+id/bip_play_view_bottom_shadow"
             android:layout_width="match_parent"
             android:layout_height="81dp"
-            android:visibility="gone"
             android:background="@drawable/bg_black60_bottom2top"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:id="@+id/bip_play_view_play_pause"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:src="@drawable/ic_player_play_pause"
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
         <TextView
             android:id="@+id/bip_play_view_fast_forward"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/bg_black50_radius5"
             android:gravity="center"
-            android:textColor="@color/color_white"
             android:paddingStart="12dp"
-            android:paddingEnd="12dp"
             android:paddingTop="8dp"
+            android:paddingEnd="12dp"
             android:paddingBottom="8dp"
-            tools:visibility="visible"
+            android:textColor="@color/color_white"
             android:visibility="gone"
-            tools:text="00:16/12:24"
-            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            tools:text="00:16/12:24"
+            tools:visibility="visible" />
+
         <ProgressBar
             android:id="@+id/bip_play_view_bottom_progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="2dp"
             android:max="1000"
             android:progress="0"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:progressDrawable="@drawable/progress_video_seek_transparent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
+
         <TextView
             android:id="@+id/bip_play_view_current_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="00:23"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:visibility="gone"
-            android:textColor="@color/color_29B6F6"
             android:layout_marginStart="16dp"
-            app:layout_goneMarginStart="16dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center"
+            android:textColor="@color/color_29B6F6"
+            android:textSize="14sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/bip_play_view_seek_bar"
-            app:layout_constraintTop_toTopOf="@id/bip_play_view_seek_bar"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/bip_play_view_seek_bar"
+            app:layout_goneMarginStart="16dp"
+            tools:text="00:23" />
+
+        <ImageView
+            android:id="@+id/bip_play_view_danmaku_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_player_danmaku"
+            app:layout_constraintBottom_toBottomOf="@id/bip_play_view_seek_bar"
+            app:layout_constraintStart_toEndOf="@id/bip_play_view_current_position"
+            app:layout_constraintTop_toTopOf="@id/bip_play_view_seek_bar" />
+
         <SeekBar
             android:id="@+id/bip_play_view_seek_bar"
             android:layout_width="0dp"
             android:layout_height="36dp"
-            android:maxHeight="2dp"
             android:max="1000"
+            android:maxHeight="2dp"
             android:progress="0"
-            android:visibility="gone"
             android:progressDrawable="@drawable/progress_video_seek"
-            app:layout_constraintStart_toEndOf="@id/bip_play_view_current_position"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/bip_play_view_duration"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toEndOf="@id/bip_play_view_danmaku_switch" />
+
         <TextView
             android:id="@+id/bip_play_view_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="23:23"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:visibility="gone"
             android:layout_marginEnd="8dp"
+            android:gravity="center"
             android:textColor="@color/color_white"
-            app:layout_constraintEnd_toStartOf="@id/full_quality_barrier"
+            android:textSize="14sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/bip_play_view_seek_bar"
-            app:layout_constraintTop_toTopOf="@id/bip_play_view_seek_bar"/>
+            app:layout_constraintEnd_toStartOf="@id/full_quality_barrier"
+            app:layout_constraintTop_toTopOf="@id/bip_play_view_seek_bar"
+            tools:text="23:23" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/full_quality_barrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="start"
-            app:constraint_referenced_ids="bip_play_view_fullscreen,bip_play_view_quality"
-            />
+            app:constraint_referenced_ids="bip_play_view_fullscreen,bip_play_view_quality" />
+
         <ImageView
             android:id="@+id/bip_play_view_fullscreen"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:visibility="gone"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="6dp"
             android:src="@drawable/ic_player_fullscreen"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/bip_play_view_quality"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:maxWidth="92dp"
-            android:gravity="center"
-            tools:visibility="visible"
             android:layout_marginEnd="8dp"
-            tools:text="高清"
-            android:textSize="14sp"
-            android:textColor="@color/colorPrimary"
-            android:paddingBottom="8dp"
-            android:paddingEnd="8dp"
+            android:gravity="center"
+            android:maxWidth="92dp"
             android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            android:visibility="gone"
             app:layout_constraintBaseline_toBaselineOf="@id/bip_play_view_duration"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="高清"
+            tools:visibility="visible" />
+
         <ProgressBar
             android:id="@+id/bip_play_view_buffering"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

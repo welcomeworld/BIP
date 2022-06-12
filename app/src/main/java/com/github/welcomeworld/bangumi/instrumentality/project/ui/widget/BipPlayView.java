@@ -82,6 +82,7 @@ public class BipPlayView extends ConstraintLayout {
     private TextView timeView;
     private TextView fastForwardView;
     private ProgressBar videoBufferingView;
+    private ImageView danmakuSwitchView;
     BIPPlayer bipPlayer;
     boolean isFullScreen;
     VideoBean currentVideoBean;
@@ -213,6 +214,9 @@ public class BipPlayView extends ConstraintLayout {
         playPauseView.setOnClickListener(playItemClickListener);
         danmakuView = itemView.findViewById(R.id.bip_play_danmaku_view);
         setTime();
+        danmakuSwitchView = itemView.findViewById(R.id.bip_play_view_danmaku_switch);
+        danmakuSwitchView.setOnClickListener(playItemClickListener);
+        danmakuSwitchView.setSelected(SettingConfig.isDanmakuOpen());
     }
 
     SurfaceHolder.Callback surfaceHolderCallback = new SurfaceHolder.Callback() {
@@ -393,6 +397,7 @@ public class BipPlayView extends ConstraintLayout {
         }
         videoFullScreenView.setVisibility(GONE);
         videoQualityView.setVisibility(GONE);
+        danmakuSwitchView.setVisibility(GONE);
     }
 
     private void showController() {
@@ -416,6 +421,7 @@ public class BipPlayView extends ConstraintLayout {
         }
         playPauseView.removeCallbacks(hideControllerRunnable);
         playPauseView.postDelayed(hideControllerRunnable, 3500);
+        danmakuSwitchView.setVisibility(VISIBLE);
     }
 
     private boolean isControllerShowing() {
@@ -446,6 +452,14 @@ public class BipPlayView extends ConstraintLayout {
                     showQualityWindow();
                 } else {
                     LogUtil.e("BipPlayView", "Data not valid");
+                }
+            } else if (vId == R.id.bip_play_view_danmaku_switch) {
+                v.setSelected(!v.isSelected());
+                SettingConfig.setDanmakuOpen(v.isSelected());
+                if (v.isSelected()) {
+                    danmakuView.show();
+                } else {
+                    danmakuView.hide();
                 }
             }
         }
