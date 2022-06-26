@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -78,7 +79,7 @@ public class BipPlayView extends ConstraintLayout {
     private TextView topShadowView;
     private TextView titleView;
     private IDanmakuView danmakuView;
-    private TextView batteryView;
+    private BatteryView batteryView;
     private TextView timeView;
     private TextView fastForwardView;
     private ProgressBar videoBufferingView;
@@ -421,7 +422,9 @@ public class BipPlayView extends ConstraintLayout {
         }
         playPauseView.removeCallbacks(hideControllerRunnable);
         playPauseView.postDelayed(hideControllerRunnable, 3500);
-        danmakuSwitchView.setVisibility(VISIBLE);
+        if (bipPlayer != null && bipPlayer.getVideoWidth() > 0) {
+            danmakuSwitchView.setVisibility(VISIBLE);
+        }
     }
 
     private boolean isControllerShowing() {
@@ -869,8 +872,12 @@ public class BipPlayView extends ConstraintLayout {
     }
 
     public void setBattery(int battery) {
-        String batteryStr = battery + "%";
-        batteryView.setText(batteryStr);
+        if (battery < 50) {
+            batteryView.setBatteryColor(Color.RED);
+        } else {
+            batteryView.setBatteryColor(Color.GREEN);
+        }
+        batteryView.setBattery(battery);
     }
 
     public void setTime() {

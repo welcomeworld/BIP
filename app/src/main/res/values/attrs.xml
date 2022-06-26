@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BatteryView">
+        <attr name="battery" format="integer" />
+        <attr name="batteryVertical" format="boolean" />
+        <attr name="batteryWrapper" format="reference" />
+        <attr name="batteryWrapperPaddingStart" format="dimension" />
+        <attr name="batteryWrapperPaddingEnd" format="dimension" />
+        <attr name="batteryWrapperPaddingTop" format="dimension" />
+        <attr name="batteryWrapperPaddingBottom" format="dimension" />
+        <attr name="batteryTextSize" format="dimension" />
+        <attr name="batteryTextColor" format="color" />
+    </declare-styleable>
+</resources>

@@ -47,9 +47,8 @@
         <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.FocusTextView
             android:id="@+id/bip_play_view_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
             android:ellipsize="marquee"
             android:focusable="true"
@@ -66,20 +65,26 @@
             tools:text="水花消失术"
             tools:visibility="visible" />
 
-        <TextView
+        <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BatteryView
             android:id="@+id/bip_play_view_battery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
-            android:drawablePadding="4dp"
+            android:layout_marginEnd="8dp"
             android:gravity="center"
-            android:textColor="@color/color_white"
             android:visibility="gone"
-            app:drawableEndCompat="@drawable/ic_player_battery"
+            app:battery="50"
+            app:batteryTextColor="@color/color_white"
+            app:batteryTextSize="12sp"
+            app:batteryWrapper="@drawable/ic_player_battery"
+            app:batteryWrapperPaddingBottom="8dp"
+            app:batteryWrapperPaddingEnd="6dp"
+            app:batteryWrapperPaddingStart="3dp"
+            app:batteryWrapperPaddingTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/bip_play_view_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="45%"
+            app:layout_constraintTop_toTopOf="@id/bip_play_view_title"
+
+            tools:targetApi="m"
             tools:visibility="visible" />
 
         <TextView
@@ -168,8 +173,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:visibility="gone"
             android:src="@drawable/ic_player_danmaku"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/bip_play_view_seek_bar"
             app:layout_constraintStart_toEndOf="@id/bip_play_view_current_position"
             app:layout_constraintTop_toTopOf="@id/bip_play_view_seek_bar" />
