@@ -1,7 +1,7 @@
 <div align=center>
 <img src ="./img/ic_launcher.png"/>
+<p>BIP</p>
 </div>
-<center>BIP</center>
 
 
 ## UI
