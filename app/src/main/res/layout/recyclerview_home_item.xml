@@ -79,16 +79,9 @@
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/card_video_more"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/card_video_cover"
             tools:text="影视剪辑 还珠格格" />
 
-        <ImageView
-            android:id="@+id/card_video_more"
-            android:layout_width="27dp"
-            android:layout_height="36dp"
-            android:src="@drawable/ic_more_black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

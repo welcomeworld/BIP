@@ -110,7 +110,6 @@ public class DownloadRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 DownloadManager.download(downloadInfo);
             }
         });
-        holder.moreView.setVisibility(View.GONE);
     }
 
     @Override
