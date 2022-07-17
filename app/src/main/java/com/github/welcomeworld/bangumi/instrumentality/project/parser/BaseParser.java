@@ -4,9 +4,12 @@ import android.net.Uri;
 
 import androidx.fragment.app.Fragment;
 
+import com.github.welcomeworld.bangumi.instrumentality.project.model.CommentBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +67,18 @@ public abstract class BaseParser {
 
     public Map<String, String> getDownloadHeaders(VideoListBean videoListBean) {
         return null;
+    }
+
+    public boolean hasComment() {
+        return false;
+    }
+
+    public CommentBean getComment(VideoBean videoBean, int page) {
+        return new CommentBean();
+    }
+
+    public List<CommentBean.CommentDataBean> getSubComment(CommentBean.CommentDataBean parent) {
+        return new ArrayList<>();
     }
 
 

@@ -41,5 +41,11 @@
     <string name="delete">删除</string>
     <string name="password_login">账号密码登录</string>
     <string name="use_mediaCodec">使用MediaCodec硬解</string>
-
+    <string name="hour_ago">小时前</string>
+    <string name="minute_ago">分钟前</string>
+    <string name="reply">共计%d条回复</string>
+    <string name="sub_reply_content"><![CDATA[<font color="#29B6F6">%s</font>%s]]></string>
+    <string name="no_more">我真的一滴都没有了</string>
+    <string name="sub_reply_page">第%d页</string>
+    <string name="collapse">收起</string>
 </resources>

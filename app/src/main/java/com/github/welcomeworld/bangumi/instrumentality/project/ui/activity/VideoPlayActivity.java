@@ -1,5 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,12 +14,15 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.adapter.CommentRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.VideoSourceItemAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityVideoPlayBinding;
+import com.github.welcomeworld.bangumi.instrumentality.project.model.CommentBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.DownloadInfoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.HistoryBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
@@ -32,11 +37,12 @@ import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.Setti
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
+import com.github.welcomeworld.bipplayer.BIPPlayer;
+import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 import com.github.welcomeworld.devbase.utils.ToastUtil;
-import com.github.welcomeworld.bipplayer.BIPPlayer;
-import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -61,6 +67,14 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     HistoryBean historyBean;
     Uri videoUri = null;
     int downloadTarget = -1;
+    BaseParser videoParser = null;
+
+    CommentRecyclerViewAdapter.LoadSubCommentCallback loadSubCommentCallback = new CommentRecyclerViewAdapter.LoadSubCommentCallback() {
+        @Override
+        public void loadSubComment(CommentBean.CommentDataBean parentComment) {
+            ThreadUtil.defer().when(() -> videoParser.getSubComment(parentComment)).done(result -> commentAdapter.onLoadSubCommentSuccess(parentComment, result));
+        }
+    };
 
     @Override
     protected void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
@@ -87,6 +101,16 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             finish();
             return;
         }
+        commentAdapter.setLoadSubCommentCallback(loadSubCommentCallback);
+        getViewBinding().bottomCommentRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (newState == SCROLL_STATE_IDLE) {
+                    scrollHideBottom();
+                }
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
         initPlayer();
         ThreadUtil.defer().when(() -> {
             initHistory();
@@ -97,6 +121,21 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             throwable.printStackTrace();
             initCreate();
         });
+    }
+
+    boolean loadingComment;
+
+    private void scrollHideBottom() {
+        int footerHeight = ScreenUtil.dp2px(this, 76);
+        final int offset = getViewBinding().bottomCommentRv.computeVerticalScrollOffset();
+        final int range = getViewBinding().bottomCommentRv.computeVerticalScrollRange() - getViewBinding().bottomCommentRv.computeVerticalScrollExtent();
+        if (offset > range - footerHeight) {
+            getViewBinding().bottomCommentRv.smoothScrollBy(0, range - offset - footerHeight);
+            if (!loadingComment) {
+                loadComment();
+            }
+        }
+
     }
 
     private void initPlayer() {
@@ -169,11 +208,23 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         if (isFinishing()) {
             return;
         }
+        getViewBinding().videoCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBottomComment();
+            }
+        });
         getViewBinding().videoPlayView.setBipPlayer(bipPlayer);
         getViewBinding().videoPlayView.setPlayViewListener(playViewListener);
         currentVideoListBean = videoListBeans.get(selectSourceIndex);
         if (downloadTarget != -1) {
             currentVideoListBean.setSelectIndex(downloadTarget);
+        }
+        videoParser = ParserManager.getInstance().getParser(currentVideoListBean.getSourceName());
+        if (videoParser != null && videoParser.hasComment()) {
+            getViewBinding().videoCommentButton.setVisibility(View.VISIBLE);
+        } else {
+            getViewBinding().videoCommentButton.setVisibility(View.GONE);
         }
         saveHistory();
         currentVideoBean = currentVideoListBean.getCurrentVideoBean();
@@ -344,4 +395,43 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             }
         }
     };
+
+    CommentRecyclerViewAdapter commentAdapter = new CommentRecyclerViewAdapter();
+    BottomSheetBehavior<ConstraintLayout> behavior = null;
+
+    private void showBottomComment() {
+        if (behavior == null) {
+            behavior = BottomSheetBehavior.from(getViewBinding().videoBottomCommentBehaviorView);
+            getViewBinding().bottomCommentRv.setAdapter(commentAdapter);
+            getViewBinding().bottomCommentRv.setLayoutManager(new LinearLayoutManager(this));
+        }
+        getViewBinding().videoBottomComment.setVisibility(View.VISIBLE);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        if (!loadingComment && currentPage == 1) {
+            loadComment();
+        }
+    }
+
+    int currentPage = 1;
+
+    private void loadComment() {
+        loadingComment = true;
+        ThreadUtil.defer().when(() -> videoParser.getComment(currentVideoBean, currentPage))
+                .fail(ex -> {
+                    loadingComment = false;
+                })
+                .done(result -> {
+                    if (result == null || result.comments.size() == 0) {
+                        commentAdapter.noMoreData = true;
+                        return;
+                    }
+                    if (currentPage == 1) {
+                        commentAdapter.setData(result);
+                    } else {
+                        commentAdapter.addData(result);
+                    }
+                    currentPage++;
+                    loadingComment = false;
+                });
+    }
 }

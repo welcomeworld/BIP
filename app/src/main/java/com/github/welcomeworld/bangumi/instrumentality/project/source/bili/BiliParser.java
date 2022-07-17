@@ -8,6 +8,7 @@ import android.webkit.CookieManager;
 import androidx.fragment.app.Fragment;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constants;
+import com.github.welcomeworld.bangumi.instrumentality.project.model.CommentBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
@@ -24,6 +25,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retro
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.VideoDetailNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.VideoWebAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BangumiDetailPageBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BiliCommentBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BvToAvBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendDataBean;
@@ -800,5 +802,97 @@ public class BiliParser extends BaseParser {
     public static boolean checkLogin() {
         String cookie = CookieManager.getInstance().getCookie("bilibili.com");
         return cookie != null && cookie.contains("DedeUserID");
+    }
+
+    @Override
+    public boolean hasComment() {
+        return true;
+    }
+
+    @Override
+    public CommentBean getComment(VideoBean currentVideoBean, int page) {
+        HashMap<String, String> extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
+        String currentAid = extraData.get("aid");
+        if (currentAid == null) {
+            return super.getComment(currentVideoBean, page);
+        }
+        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoDetailNetAPI.class);
+        try {
+            Response<BiliCommentBean> response = videoDetailNetAPI.getComment(Long.parseLong(currentAid), page).execute();
+            if (response.body() == null || response.body().getCode() != 0) {
+                return super.getComment(currentVideoBean, page);
+            }
+            CommentBean result = new CommentBean();
+            result.commentId = getTag() + "_" + currentAid;
+            for (BiliCommentBean.DataBean.RepliesBean reply : response.body().getData().getReplies()) {
+                CommentBean.CommentDataBean comment = new CommentBean.CommentDataBean();
+                comment.comment = reply.getContent().getMessage();
+                comment.upperName = reply.getMember().getUname();
+                comment.avatar = reply.getMember().getAvatar();
+                comment.upTime = reply.getCtime() * 1000;
+                comment.commentDataLongId = reply.getRpid();
+                comment.commentDataId = getTag() + "_" + currentAid + "_" + comment.commentDataLongId;
+                List<BiliCommentBean.DataBean.RepliesBean> subReplys = reply.getReplies();
+                if (subReplys != null && subReplys.size() > 0) {
+                    comment.subCommentCount = reply.getRcount();
+                    comment.subComment = new ArrayList<>();
+                    for (BiliCommentBean.DataBean.RepliesBean subReply : subReplys) {
+                        CommentBean.CommentDataBean subComment = new CommentBean.CommentDataBean();
+                        String subContent = subReply.getContent().getMessage();
+                        if (subContent.startsWith("回复")) {
+                            subComment.comment = " " + subContent;
+                        } else {
+                            subComment.comment = ": " + subContent;
+                        }
+                        subComment.upperName = subReply.getMember().getUname();
+                        subComment.avatar = subReply.getMember().getAvatar();
+                        subComment.upTime = subReply.getCtime() * 1000;
+                        subComment.commentDataLongId = subReply.getRpid();
+                        subComment.commentDataId = getTag() + "_" + currentAid + "_" + subComment.commentDataLongId;
+                        comment.subComment.add(subComment);
+                    }
+                }
+                result.comments.add(comment);
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.getComment(currentVideoBean, page);
+    }
+
+    @Override
+    public List<CommentBean.CommentDataBean> getSubComment(CommentBean.CommentDataBean parent) {
+
+        int page = Math.round(parent.subComment.size() * 1.0f / 20 + 0.5f);
+        String currentAid = parent.commentDataId.replace(getTag() + "_", "").replace("_" + parent.commentDataLongId, "");
+        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoDetailNetAPI.class);
+        try {
+            Response<BiliCommentBean> response = videoDetailNetAPI.getSubComment(parent.commentDataLongId, Long.parseLong(currentAid), page).execute();
+            if (response.body() == null || response.body().getCode() != 0) {
+                return super.getSubComment(parent);
+            }
+            List<CommentBean.CommentDataBean> result = new ArrayList<>();
+            for (BiliCommentBean.DataBean.RepliesBean reply : response.body().getData().getReplies()) {
+                CommentBean.CommentDataBean comment = new CommentBean.CommentDataBean();
+                String subCommentContent = reply.getContent().getMessage();
+                if (subCommentContent.startsWith("回复")) {
+                    comment.comment = " " + subCommentContent;
+                } else {
+                    comment.comment = ": " + subCommentContent;
+                }
+                comment.upperName = reply.getMember().getUname();
+                comment.avatar = reply.getMember().getAvatar();
+                comment.upTime = reply.getCtime() * 1000;
+                comment.commentDataLongId = reply.getRpid();
+                comment.commentDataLongId = reply.getRpid();
+                comment.commentDataId = getTag() + "_" + currentAid + "_" + comment.commentDataLongId;
+                result.add(comment);
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.getSubComment(parent);
     }
 }
