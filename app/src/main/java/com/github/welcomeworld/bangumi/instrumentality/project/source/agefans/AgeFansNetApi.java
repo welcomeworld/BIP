@@ -31,7 +31,7 @@ import java.util.List;
 import retrofit2.Response;
 
 public class AgeFansNetApi {
-    public static final String baseUrl = "https://www.agemys.com";
+    public static final String baseUrl = "https://www.agemys.cc";
 
     public static List<VideoListBean> search(String key, String pn) {
         List<VideoListBean> result = new ArrayList<>();
