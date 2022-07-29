@@ -13,8 +13,11 @@
 
 ## 视频源
 [哔哩哔哩](https://www.bilibili.com/)
+API来源：[bilibili-API-collect](https://github.com/SocialSisterYi/bilibili-API-collect)
 [AGE动漫](https://www.agemys.com)
+API来源：自抓包
 [哔咪动漫](https://bimiacg4.net/)
+API来源：自抓包
 
 ## ToDo
 ~~- 评论~~
@@ -26,3 +29,4 @@
 - 支持TV
 - 历史记录增加观看集数和时间
 - 首页推荐视频流关联登录账号
+- 设置页增加注销B站登录状态
