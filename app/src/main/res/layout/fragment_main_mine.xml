@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,11 +13,13 @@
         android:drawablePadding="6dp"
         android:gravity="center"
         android:text="@string/collection"
+        android:textColor="@color/color_black_70"
         app:drawableTopCompat="@drawable/ic_collection"
         app:layout_constraintEnd_toStartOf="@id/mine_history"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/mine_history"
@@ -26,10 +29,12 @@
         android:drawablePadding="6dp"
         android:gravity="center"
         android:text="@string/history"
+        android:textColor="@color/color_black_70"
         app:drawableTopCompat="@drawable/ic_history"
         app:layout_constraintEnd_toStartOf="@id/mine_download"
         app:layout_constraintStart_toEndOf="@id/mine_collection"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/mine_download"
@@ -39,10 +44,12 @@
         android:drawablePadding="6dp"
         android:gravity="center"
         android:text="@string/download"
+        android:textColor="@color/color_black_70"
         app:drawableTopCompat="@drawable/ic_download"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/mine_history"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/mine_accounts"
@@ -52,11 +59,13 @@
         android:drawablePadding="6dp"
         android:gravity="center"
         android:text="@string/accounts"
+        android:textColor="@color/color_black_70"
         app:drawableTopCompat="@drawable/ic_accounts"
         app:layout_constraintEnd_toStartOf="@id/mine_settings"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mine_download" />
+        app:layout_constraintTop_toBottomOf="@id/mine_download"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/mine_settings"
@@ -66,10 +75,12 @@
         android:drawablePadding="6dp"
         android:gravity="center"
         android:text="@string/setting"
+        android:textColor="@color/color_black_70"
         app:drawableTopCompat="@drawable/ic_setting"
         app:layout_constraintEnd_toStartOf="@id/mine_none"
         app:layout_constraintStart_toEndOf="@id/mine_accounts"
-        app:layout_constraintTop_toBottomOf="@id/mine_download" />
+        app:layout_constraintTop_toBottomOf="@id/mine_download"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/mine_none"

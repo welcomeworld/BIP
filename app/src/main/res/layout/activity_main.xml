@@ -23,18 +23,17 @@
             android:id="@+id/main_search"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/ic_home_search"
             android:gravity="center_vertical"
-            android:onClick="onClick"
             android:paddingStart="12dp"
             android:paddingEnd="8dp"
             android:text="@string/search_hint"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/top_space" />
+            app:layout_constraintTop_toBottomOf="@id/top_space"
+            tools:ignore="TextContrastCheck"
+            tools:layout_editor_absoluteX="18dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.viewpager.widget.ViewPager
@@ -43,7 +42,8 @@
         android:layout_height="0dp"
         android:background="@color/color_E4EAF8"
         app:layout_constraintBottom_toTopOf="@id/main_bottom"
-        app:layout_constraintTop_toBottomOf="@id/main_top" />
+        app:layout_constraintTop_toBottomOf="@id/main_top"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_bottom"
@@ -64,7 +64,6 @@
             android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
             android:gravity="center"
-            android:onClick="onClick"
             android:text="@string/home"
             android:textColor="@color/black_29b6f6"
             app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"
@@ -78,7 +77,6 @@
             android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
             android:gravity="center"
-            android:onClick="onClick"
             android:text="@string/bangumi"
             android:textAlignment="center"
             android:textColor="@color/black_29b6f6"
@@ -93,7 +91,6 @@
             android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
             android:gravity="center"
-            android:onClick="onClick"
             android:text="@string/mine"
             android:textColor="@color/black_29b6f6"
             app:layout_constraintBottom_toBottomOf="@id/main_bottom_bg"

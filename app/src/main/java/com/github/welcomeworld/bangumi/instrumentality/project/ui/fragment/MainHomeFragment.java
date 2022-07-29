@@ -3,7 +3,6 @@ package com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment;
 import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -24,7 +23,7 @@ import java.util.List;
 public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
 
     MainHomeRecyclerViewAdapter adapter;
-    List<VideoListBean> data=new ArrayList<>();
+    List<VideoListBean> data = new ArrayList<>();
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -38,27 +37,25 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
         getViewBinding().mainHomeRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if(newState ==SCROLL_STATE_IDLE ){
+                if (newState == SCROLL_STATE_IDLE) {
                     scrollHideBottom();
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
     }
-    private void scrollHideBottom(){
-        Log.e("SwipeRefresh","scrollHide");
-        if(getContext() == null){
+
+    private void scrollHideBottom() {
+        if (getContext() == null) {
             return;
         }
-        int footerHeight = ScreenUtil.dp2px(getContext(),96);
+        int footerHeight = ScreenUtil.dp2px(getContext(), 96);
         final int offset = getViewBinding().mainHomeRv.computeVerticalScrollOffset();
         final int range = getViewBinding().mainHomeRv.computeVerticalScrollRange() - getViewBinding().mainHomeRv.computeVerticalScrollExtent();
-        if(offset>range- footerHeight){
-            getViewBinding().mainHomeRv.smoothScrollBy(0,range-offset-footerHeight);
+        if (offset > range - footerHeight) {
+            getViewBinding().mainHomeRv.smoothScrollBy(0, range - offset - footerHeight);
         }
-
     }
-
 
     @Override
     public void onResume() {
@@ -66,38 +63,29 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
         refresh(false);
     }
 
-    private void refresh(boolean force){
-        if((!force&&data!=null&&data.size()>0)){
+    private void refresh(boolean force) {
+        if ((!force && data != null && data.size() > 0)) {
             return;
         }
-        if(getViewBinding().mainHomeSwipeRefresh.isRefreshing()&&!force){
+        if (getViewBinding().mainHomeSwipeRefresh.isRefreshing() && !force) {
             return;
         }
-//        if(force){
-//            moreTime = 0;
-//        }
         getViewBinding().mainHomeSwipeRefresh.setRefreshing(true);
-        ThreadUtil.defer().when(()-> ParserManager.getInstance().refreshRecommend()).done(result -> {
+        ThreadUtil.defer().when(() -> ParserManager.getInstance().refreshRecommend()).done(result -> {
             data = result;
             adapter.replaceAll(data);
             getViewBinding().mainHomeSwipeRefresh.setRefreshing(false);
-            if(result!=null&&result.size()>0){
+            if (result != null && result.size() > 0) {
                 loadMore();
             }
         });
     }
 
-//    int moreTime = 0;
-    private void loadMore(){
-//        if(moreTime>=4){
-//            return;
-//        }
-//        moreTime++;
-        ThreadUtil.defer().when(()-> ParserManager.getInstance().getMoreRecommend()).done(result -> {
+    private void loadMore() {
+        ThreadUtil.defer().when(() -> ParserManager.getInstance().getMoreRecommend()).done(result -> {
             data.addAll(result);
             adapter.addAll(result);
             getViewBinding().mainHomeSwipeRefresh.setLoading(false);
         });
     }
-
 }

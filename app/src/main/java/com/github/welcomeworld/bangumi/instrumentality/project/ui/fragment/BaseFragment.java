@@ -19,10 +19,9 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        viewBinding = ViewBindingUtil.inflateWithGeneric(this,getLayoutInflater());
+        viewBinding = ViewBindingUtil.inflateWithGeneric(this, getLayoutInflater());
         return viewBinding.getRoot();
     }
-
 
     public VB getViewBinding() {
         return viewBinding;

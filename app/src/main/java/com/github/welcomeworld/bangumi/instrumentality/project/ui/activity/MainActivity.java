@@ -17,14 +17,29 @@ import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
-    MainViewPagerAdapter viewPagerAdapter;
-    private long clickBackTime = 0;
+    MainViewPagerAdapter viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+    private long lastClickBackTime = 0;
+    private final View.OnClickListener clickListener = view -> {
+        int id = view.getId();
+        if (id == R.id.main_bottom_home) {
+            getViewBinding().mainViewPager.setCurrentItem(0);
+        } else if (id == R.id.main_bottom_bangumi) {
+            getViewBinding().mainViewPager.setCurrentItem(1);
+        } else if (id == R.id.main_bottom_mine) {
+            getViewBinding().mainViewPager.setCurrentItem(2);
+        } else if (id == R.id.main_search) {
+            IntentUtil.intentToSearch(MainActivity.this, null);
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getViewBinding().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(this);
-        viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        getViewBinding().mainSearch.setOnClickListener(clickListener);
+        getViewBinding().mainBottomHome.setOnClickListener(clickListener);
+        getViewBinding().mainBottomBangumi.setOnClickListener(clickListener);
+        getViewBinding().mainBottomMine.setOnClickListener(clickListener);
         getViewBinding().mainViewPager.setAdapter(viewPagerAdapter);
         getViewBinding().mainViewPager.setOffscreenPageLimit(2);
         getViewBinding().mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -48,25 +63,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         getViewBinding().mainBottomHome.setSelected(true);
     }
 
-    public void onClick(View view) {
-        int id = view.getId();
-        if (id == R.id.main_bottom_home) {
-            getViewBinding().mainViewPager.setCurrentItem(0);
-        } else if (id == R.id.main_bottom_bangumi) {
-            getViewBinding().mainViewPager.setCurrentItem(1);
-        } else if (id == R.id.main_bottom_mine) {
-            getViewBinding().mainViewPager.setCurrentItem(2);
-        } else if (id == R.id.main_search) {
-            IntentUtil.intentToSearch(this, null);
-        }
-    }
-
     @Override
     public void onBackPressed() {
-        if (System.currentTimeMillis() - clickBackTime < 2000) {
+        if (System.currentTimeMillis() - lastClickBackTime < 2000) {
             super.onBackPressed();
         } else {
-            clickBackTime = System.currentTimeMillis();
+            lastClickBackTime = System.currentTimeMillis();
             ToastUtil.showToast(R.string.click_again_back);
         }
     }
