@@ -1,10 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'bugly'
-
-bugly {
-    appId = '2d6af2e6f5' // 注册时分配的App ID
-    appKey = '97b88401-8537-4364-8767-e679b1e0765c' // 注册时分配的App Key
-}
 
 Properties keyStoreProperties = new Properties()
 keyStoreProperties.load(rootProject.file("keystore/keystore.properties").newDataInputStream())
