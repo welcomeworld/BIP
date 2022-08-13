@@ -33,6 +33,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserMana
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadInfoConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.HistoryConfig;
+import com.github.welcomeworld.bangumi.instrumentality.project.player.BipExoPlayer;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.SettingsFragment;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
@@ -63,7 +64,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     private int selectSourceIndex = 0;
     VideoListBean currentVideoListBean;
     VideoBean currentVideoBean;
-    BIPPlayer bipPlayer = new DefaultBIPPlayer();
+    BIPPlayer bipPlayer = SettingsFragment.useExoPlayer() ? new BipExoPlayer() : new DefaultBIPPlayer();
     HistoryBean historyBean;
     Uri videoUri = null;
     int downloadTarget = -1;

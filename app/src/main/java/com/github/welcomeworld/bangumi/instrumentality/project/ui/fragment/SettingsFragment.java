@@ -18,6 +18,7 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
     public static String TAG = "setting_fragment";
     private static final String SETTING_BACKUP_UPDATE = "setting_backup_update";
     private static final String SETTING_MEDIACODEC = "setting_mediacodec";
+    private static final String SETTING_EXOPLAYER = "setting_exoplayer";
 
 
     @Override
@@ -31,6 +32,8 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
         getViewBinding().settingBackupCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_BACKUP_UPDATE, isChecked));
         getViewBinding().settingMediaCodecCheck.setChecked(KVUtil.getBoolean(SETTING_MEDIACODEC));
         getViewBinding().settingMediaCodecCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_MEDIACODEC, isChecked));
+        getViewBinding().settingExoPlayerCheck.setChecked(KVUtil.getBoolean(SETTING_EXOPLAYER));
+        getViewBinding().settingExoPlayerCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_EXOPLAYER, isChecked));
     }
 
     public void onClick(View view) {
@@ -48,5 +51,9 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
 
     public static boolean useMediaCodec() {
         return KVUtil.getBoolean(SETTING_MEDIACODEC);
+    }
+
+    public static boolean useExoPlayer() {
+        return KVUtil.getBoolean(SETTING_EXOPLAYER);
     }
 }

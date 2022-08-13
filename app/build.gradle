@@ -151,5 +151,10 @@ dependencies {
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
+    def exoVersion = "2.18.1"
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoVersion"
+    implementation "com.google.android.exoplayer:exoplayer-dash:$exoVersion"
+    implementation "com.google.android.exoplayer:exoplayer-hls:$exoVersion"
+    implementation "com.google.android.exoplayer:exoplayer-rtsp:$exoVersion"
 
 }

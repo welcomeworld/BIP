@@ -804,9 +804,11 @@ public class BipPlayView extends ConstraintLayout {
             @Override
             public void prepared() {
                 Log.e("danmaku", "prepared");
-                if (bipPlayer != null && bipPlayer.isPlaying()) {
-                    danmakuView.start(bipPlayer.getCurrentPosition());
-                }
+                post(() -> {
+                    if (bipPlayer != null && bipPlayer.isPlaying()) {
+                        danmakuView.start(bipPlayer.getCurrentPosition());
+                    }
+                });
             }
 
             @Override

@@ -48,4 +48,5 @@
     <string name="no_more">我真的一滴都没有了</string>
     <string name="sub_reply_page">第%d页</string>
     <string name="collapse">收起</string>
+    <string name="use_exoPlayer">使用ExoPlayer</string>
 </resources>
