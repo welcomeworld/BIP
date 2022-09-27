@@ -1,21 +1,19 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment;
 
-import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
-
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.MainHomeRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentMainHomeBinding;
+import com.github.welcomeworld.bangumi.instrumentality.project.livedata.HomeLiveWrapper;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
-import com.github.welcomeworld.devbase.utils.ScreenUtil;
-import com.github.welcomeworld.devbase.utils.ThreadUtil;
+import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.MainHomeViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +22,13 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
 
     MainHomeRecyclerViewAdapter adapter;
     List<VideoListBean> data = new ArrayList<>();
+    MainHomeViewModel viewModel = null;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(MainHomeViewModel.class);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -33,28 +38,22 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
         getViewBinding().mainHomeRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         getViewBinding().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));
         getViewBinding().mainHomeSwipeRefresh.setOnLoadListener(this::loadMore);
-        refresh(false);
-        getViewBinding().mainHomeRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == SCROLL_STATE_IDLE) {
-                    scrollHideBottom();
+        viewModel.getHomeDataLive().observe(getViewLifecycleOwner(), homeLiveWrapper -> {
+            if (homeLiveWrapper.getAction() == HomeLiveWrapper.REFRESH) {
+                data = homeLiveWrapper.getData();
+                adapter.replaceAll(data);
+                getViewBinding().mainHomeSwipeRefresh.setRefreshing(false);
+                if (data != null && data.size() > 0) {
+                    loadMore();
                 }
-                super.onScrollStateChanged(recyclerView, newState);
+            }else if(homeLiveWrapper.getAction() == HomeLiveWrapper.MORE){
+                List<VideoListBean> result = homeLiveWrapper.getData();
+                data.addAll(result);
+                adapter.addAll(result);
+                getViewBinding().mainHomeSwipeRefresh.setLoading(false);
             }
         });
-    }
-
-    private void scrollHideBottom() {
-        if (getContext() == null) {
-            return;
-        }
-        int footerHeight = ScreenUtil.dp2px(getContext(), 96);
-        final int offset = getViewBinding().mainHomeRv.computeVerticalScrollOffset();
-        final int range = getViewBinding().mainHomeRv.computeVerticalScrollRange() - getViewBinding().mainHomeRv.computeVerticalScrollExtent();
-        if (offset > range - footerHeight) {
-            getViewBinding().mainHomeRv.smoothScrollBy(0, range - offset - footerHeight);
-        }
+        refresh(false);
     }
 
     @Override
@@ -71,21 +70,10 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
             return;
         }
         getViewBinding().mainHomeSwipeRefresh.setRefreshing(true);
-        ThreadUtil.defer().when(() -> ParserManager.getInstance().refreshRecommend()).done(result -> {
-            data = result;
-            adapter.replaceAll(data);
-            getViewBinding().mainHomeSwipeRefresh.setRefreshing(false);
-            if (result != null && result.size() > 0) {
-                loadMore();
-            }
-        });
+        viewModel.refresh();
     }
 
     private void loadMore() {
-        ThreadUtil.defer().when(() -> ParserManager.getInstance().getMoreRecommend()).done(result -> {
-            data.addAll(result);
-            adapter.addAll(result);
-            getViewBinding().mainHomeSwipeRefresh.setLoading(false);
-        });
+        viewModel.loadMore();
     }
 }

@@ -1,5 +1,6 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -26,50 +26,51 @@ import com.github.welcomeworld.devbase.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<VideoListBean> data = new ArrayList<>();
     Context context;
 
-    private static int ITEM_TYPE = 0;
-    private static int FOOTER_TYPE = 1;
+    private static final int ITEM_TYPE = 0;
+    private static final int FOOTER_TYPE = 1;
     Activity activity;
 
-    public MainHomeRecyclerViewAdapter(Activity activity){
+    public MainHomeRecyclerViewAdapter(Activity activity) {
         this.activity = activity;
     }
 
-    public void replaceAll(List<VideoListBean> data){
+    @SuppressLint("NotifyDataSetChanged")
+    public void replaceAll(List<VideoListBean> data) {
         this.data.clear();
-        if(data!=null){
+        if (data != null) {
             this.data.addAll(data);
         }
         notifyDataSetChanged();
     }
 
-    public void addAll(List<VideoListBean> data){
-        if(data!=null){
+    public void addAll(List<VideoListBean> data) {
+        if (data != null) {
             int start = this.data.size();
             this.data.addAll(data);
-            notifyItemRangeInserted(start,data.size());
+            notifyItemRangeInserted(start, data.size());
         }
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == FOOTER_TYPE){
-            View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_footer,parent,false);
+        if (viewType == FOOTER_TYPE) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_footer, parent, false);
             return new FooterViewHolder(view);
         }
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_item,parent,false);
-        context=parent.getContext();
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_item, parent, false);
+        context = parent.getContext();
         return new MyInnerViewHolder(view);
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position == getItemCount()-1){
+        if (position == getItemCount() - 1) {
             return FOOTER_TYPE;
         }
         return ITEM_TYPE;
@@ -77,55 +78,51 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        if(position == data.size()){
+        if (position == data.size()) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) viewHolder;
-            if(data.size()==0){
+            if (data.size() == 0) {
                 footerViewHolder.itemView.setVisibility(View.GONE);
-            }else {
+            } else {
                 footerViewHolder.itemView.setVisibility(View.VISIBLE);
             }
             return;
         }
         MyInnerViewHolder holder = (MyInnerViewHolder) viewHolder;
-        VideoListBean currentData=data.get(position);
+        VideoListBean currentData = data.get(position);
         holder.titleView.setText(currentData.getTitle());
-        if(StringUtil.isEmpty(currentData.getTag())){
+        if (StringUtil.isEmpty(currentData.getTag())) {
             holder.tagView.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             holder.tagView.setVisibility(View.VISIBLE);
             holder.tagView.setText(currentData.getTag());
         }
-        Glide.with(context).load(currentData.getCover()).transform(new RoundedCorners(ScreenUtil.dp2px(context,4))).into(holder.coverView);
-        if(currentData.getCurrentVideoBean()==null||currentData.getCurrentVideoBean().getDuration()==0){
+        Glide.with(context).load(currentData.getCover()).transform(new RoundedCorners(ScreenUtil.dp2px(context, 4))).into(holder.coverView);
+        if (currentData.getCurrentVideoBean() == null || currentData.getCurrentVideoBean().getDuration() == 0) {
             holder.durationView.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             holder.durationView.setVisibility(View.VISIBLE);
-            holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(),StringUtil.MILLISECOND));
+            holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(), StringUtil.MILLISECOND));
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                ArrayList<VideoListBean> videoListBeans = new ArrayList<>();
-                videoListBeans.add(currentData);
-                bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN,videoListBeans);
-                IntentUtil.intentToVideoPlay(activity,bundle);
-//                Intent playIntent=new Intent("com.github.welcomeworld.simplebili.action.VIDEODETAIL");
-//                context.startActivity(playIntent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            ArrayList<VideoListBean> videoListBeans = new ArrayList<>();
+            videoListBeans.add(currentData);
+            bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN, videoListBeans);
+            IntentUtil.intentToVideoPlay(activity, bundle);
         });
     }
 
     @Override
     public int getItemCount() {
-        return data.size()+1;
+        return data.size() + 1;
     }
 
-    public static class MyInnerViewHolder extends RecyclerView.ViewHolder{
+    public static class MyInnerViewHolder extends RecyclerView.ViewHolder {
         TextView titleView;
         TextView tagView;
         ImageView coverView;
         TextView durationView;
+
         public MyInnerViewHolder(View itemView) {
             super(itemView);
             titleView = itemView.findViewById(R.id.card_video_title);
@@ -135,24 +132,12 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
-    public static class FooterViewHolder extends RecyclerView.ViewHolder{
+    public static class FooterViewHolder extends RecyclerView.ViewHolder {
         ProgressBar progressBar;
 
         public FooterViewHolder(View itemView) {
             super(itemView);
             progressBar = itemView.findViewById(R.id.footer_progress);
         }
-    }
-
-
-    private GridLayoutManager.SpanSizeLookup spanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
-        @Override
-        public int getSpanSize(int position) {
-            return position == data.size()?2:1;
-        }
-    };
-
-    public GridLayoutManager.SpanSizeLookup getSizeLookup(){
-        return spanSizeLookup;
     }
 }

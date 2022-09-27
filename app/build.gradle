@@ -94,7 +94,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.navigation:navigation-fragment:2.5.1'
@@ -105,6 +105,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.android.material:material:1.6.1'
 
+    //glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 
@@ -144,17 +145,25 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport:3.4.4'
     implementation 'com.tencent.bugly:nativecrashreport:3.9.2'
 
-    implementation 'com.github.welcomeworld:BIPPlayer:1.0.19'
+    //custom library
+    implementation 'com.github.welcomeworld:BIPPlayer:1.0.20'
     implementation 'com.github.welcomeworld:DevTool:1.0.03'
     implementation project(path: ':app_update')
     implementation project(path: ':zxing')
 
+    //leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
-
+    //exoplayer
     def exoVersion = "2.18.1"
     implementation "com.google.android.exoplayer:exoplayer-core:$exoVersion"
     implementation "com.google.android.exoplayer:exoplayer-dash:$exoVersion"
     implementation "com.google.android.exoplayer:exoplayer-hls:$exoVersion"
     implementation "com.google.android.exoplayer:exoplayer-rtsp:$exoVersion"
+
+    def lifecycle_version = "2.5.1"
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
 
 }

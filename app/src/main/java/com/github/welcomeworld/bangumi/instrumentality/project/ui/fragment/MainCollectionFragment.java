@@ -1,25 +1,20 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.FavOrHistoryRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentMainCollectionBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.HistoryBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.HistoryConfig;
-import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 public class MainCollectionFragment extends BaseFragment<FragmentMainCollectionBinding> {
 
@@ -35,31 +30,7 @@ public class MainCollectionFragment extends BaseFragment<FragmentMainCollectionB
         getViewBinding().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));
         getViewBinding().mainHomeSwipeRefresh.setOnLoadListener(this::loadMore);
         refresh(false);
-        getViewBinding().mainHomeRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == SCROLL_STATE_IDLE) {
-                    scrollHideBottom();
-                }
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
     }
-
-    private void scrollHideBottom() {
-        Log.e("SwipeRefresh", "scrollHide");
-        if (getContext() == null) {
-            return;
-        }
-        int footerHeight = ScreenUtil.dp2px(getContext(), 96);
-        final int offset = getViewBinding().mainHomeRv.computeVerticalScrollOffset();
-        final int range = getViewBinding().mainHomeRv.computeVerticalScrollRange() - getViewBinding().mainHomeRv.computeVerticalScrollExtent();
-        if (offset > range - footerHeight) {
-            getViewBinding().mainHomeRv.smoothScrollBy(0, range - offset - footerHeight);
-        }
-
-    }
-
 
     @Override
     public void onResume() {

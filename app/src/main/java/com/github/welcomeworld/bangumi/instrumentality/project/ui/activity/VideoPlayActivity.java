@@ -1,7 +1,5 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
-import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -103,15 +101,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             return;
         }
         commentAdapter.setLoadSubCommentCallback(loadSubCommentCallback);
-        getViewBinding().bottomCommentRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == SCROLL_STATE_IDLE) {
-                    scrollHideBottom();
-                }
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
+        getViewBinding().bottomCommentRv.setEndSize(76);
         initPlayer();
         ThreadUtil.defer().when(() -> {
             initHistory();
@@ -125,19 +115,6 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     }
 
     boolean loadingComment;
-
-    private void scrollHideBottom() {
-        int footerHeight = ScreenUtil.dp2px(this, 76);
-        final int offset = getViewBinding().bottomCommentRv.computeVerticalScrollOffset();
-        final int range = getViewBinding().bottomCommentRv.computeVerticalScrollRange() - getViewBinding().bottomCommentRv.computeVerticalScrollExtent();
-        if (offset > range - footerHeight) {
-            getViewBinding().bottomCommentRv.smoothScrollBy(0, range - offset - footerHeight);
-            if (!loadingComment) {
-                loadComment();
-            }
-        }
-
-    }
 
     private void initPlayer() {
         Map<Integer, Map<String, String>> options = ParserManager.getInstance().getPlayerOptions(videoListBeans.get(selectSourceIndex));

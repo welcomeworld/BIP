@@ -62,13 +62,14 @@
                 android:layout_height="4dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
-                android:background="?selectableItemBackgroundBorderless"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:contentDescription="@string/comment_header"
                 android:src="@drawable/ic_bottom_comment_header"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.HideEndRecyclerView
                 android:id="@+id/bottom_comment_rv"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
