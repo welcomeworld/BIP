@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search_top"
         android:layout_width="match_parent"
@@ -19,51 +20,50 @@
         <EditText
             android:id="@+id/search_input"
             android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="18dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:inputType="text"
-            android:imeOptions="actionSearch"
+            android:autofillHints="none"
             android:background="@drawable/ic_home_search"
             android:gravity="center_vertical"
-            android:autofillHints="none"
-            android:paddingStart="12dp"
-            android:textSize="14sp"
-            android:paddingEnd="8dp"
             android:hint="@string/search_hint"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/cancel_button"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingStart="12dp"
+            android:paddingEnd="8dp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cancel_button"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/top_space" />
+
         <TextView
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
             android:gravity="center"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="@string/cancel"
-            android:onClick="onClick"
-            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/search_input"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/search_input"
-            app:layout_constraintBottom_toBottomOf="@id/search_input"/>
+            app:layout_constraintTop_toTopOf="@id/search_input" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.SwiperefreshContainer
         android:id="@+id/search_result_swipecontainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/color_E4EAF8"
-        app:layout_constraintTop_toBottomOf="@id/search_top"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
-        <androidx.recyclerview.widget.RecyclerView
+        app:layout_constraintTop_toBottomOf="@id/search_top">
+
+        <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.HideEndRecyclerView
             android:id="@+id/search_result_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-        </androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="match_parent"></com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.HideEndRecyclerView>
     </com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.SwiperefreshContainer>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,67 +1,50 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.SearchResultRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivitySearchBinding;
-import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
-import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.SwiperefreshContainer;
+import com.github.welcomeworld.bangumi.instrumentality.project.livedata.HomeLiveWrapper;
+import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.SearchViewModel;
 import com.github.welcomeworld.devbase.utils.ScreenUtil;
-import com.github.welcomeworld.devbase.utils.StringUtil;
-import com.github.welcomeworld.devbase.utils.ThreadUtil;
+
+import java.util.List;
 
 public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
 
-    private String searchText = "";
     SearchResultRecyclerViewAdapter adapter;
-
+    SearchViewModel viewModel = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+        viewModel.getSearchDataLive().observe(this, homeLiveWrapper -> {
+            List<VideoListBean> result = homeLiveWrapper.getData();
+            if (homeLiveWrapper.getAction() == HomeLiveWrapper.REFRESH) {
+                adapter.replaceAll(result);
+                getViewBinding().searchResultSwipecontainer.setRefreshing(false);
+            } else if (homeLiveWrapper.getAction() == HomeLiveWrapper.MORE) {
+                adapter.addAll(result);
+                getViewBinding().searchResultSwipecontainer.setLoading(false);
+            }
+        });
         getViewBinding().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(this);
         getViewBinding().searchInput.setOnEditorActionListener((v, actionId, event) -> {
-            searchText = getViewBinding().searchInput.getText().toString();
-            refresh();
+            getViewBinding().searchResultSwipecontainer.setRefreshing(true);
+            viewModel.setSearchText(getViewBinding().searchInput.getText().toString(), true);
             return true;
         });
         adapter = new SearchResultRecyclerViewAdapter(this);
         getViewBinding().searchResultRecyclerview.setAdapter(adapter);
         getViewBinding().searchResultRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        getViewBinding().searchResultSwipecontainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (!StringUtil.isEmpty(searchText)) {
-                    refresh();
-                }
-            }
-        });
-        getViewBinding().searchResultSwipecontainer.setOnLoadListener(new SwiperefreshContainer.OnLoadListener() {
-            @Override
-            public void onLoad() {
-//                load();
-            }
-        });
-    }
-
-    public void onClick(View view) {
-        finish();
-    }
-
-    public void refresh() {
-        if (searchText == null || searchText.isEmpty()) {
-            return;
-        }
-        getViewBinding().searchResultSwipecontainer.setRefreshing(true);
-        ThreadUtil.defer().when(() -> ParserManager.getInstance().search(searchText, "" + 1)).done((searchData) -> {
-            getViewBinding().searchResultSwipecontainer.setRefreshing(false);
-            adapter.replaceAll(searchData);
-            getViewBinding().searchResultRecyclerview.scrollToPosition(0);
-        });
+        getViewBinding().searchResultSwipecontainer.setOnRefreshListener(() -> viewModel.refresh());
+        getViewBinding().searchResultSwipecontainer.setOnLoadListener(() -> viewModel.loadMore());
+        getViewBinding().cancelButton.setOnClickListener(v -> finish());
     }
 }

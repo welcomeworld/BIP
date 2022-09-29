@@ -1,5 +1,6 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.databinding.Activ
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

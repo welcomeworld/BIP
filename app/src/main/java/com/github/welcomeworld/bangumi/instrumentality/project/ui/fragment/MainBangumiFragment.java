@@ -8,7 +8,6 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +25,7 @@ public class MainBangumiFragment extends BaseFragment<FragmentMainBangumiBinding
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         WebUtil.initNormalWebView(getViewBinding().bangumiWebview, getViewBinding().bangumiWebFullContainer);
-        getViewBinding().bangumiWebview.setWebViewClient(new WebViewClient() {
+        getViewBinding().bangumiWebview.setWebViewClient(new WebUtil.NormalWebViewClient() {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -49,7 +48,6 @@ public class MainBangumiFragment extends BaseFragment<FragmentMainBangumiBinding
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
                 ThreadUtil.post(() -> getViewBinding().bangumiWebviewRefresh.setVisibility(View.GONE));
             }
 

@@ -2,15 +2,10 @@ package com.github.welcomeworld.bangumi.instrumentality.project.utils;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
-import android.webkit.JsPromptResult;
-import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -47,7 +42,7 @@ public class WebUtil {
     private static class NormalWebChromeClient extends WebChromeClient {
         private View customView;
         CustomViewCallback customCallback;
-        private WeakReference<ViewGroup> viewGroupWeakReference;
+        private final WeakReference<ViewGroup> viewGroupWeakReference;
         protected static final FrameLayout.LayoutParams COVER_SCREEN_PARAMS = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         NormalWebChromeClient(ViewGroup parentView) {
@@ -56,26 +51,6 @@ public class WebUtil {
 
         private ViewGroup getViewGroup() {
             return viewGroupWeakReference.get();
-        }
-
-        @Override
-        public void onReceivedTitle(WebView view, String title) {
-//            toolbar.setTitle(title);
-        }
-
-        @Override
-        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-            return super.onJsAlert(view, url, message, result);
-        }
-
-        @Override
-        public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-            return super.onJsConfirm(view, url, message, result);
-        }
-
-        @Override
-        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-            return super.onJsPrompt(view, url, message, defaultValue, result);
         }
 
         @Override
@@ -111,29 +86,23 @@ public class WebUtil {
         }
     }
 
-    private static class NormalWebViewClient extends WebViewClient {
-
-        @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-            return super.shouldInterceptRequest(view, request);
-        }
+    public static class NormalWebViewClient extends WebViewClient {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Log.e("jsTest", "override" + url);
             Uri uri = Uri.parse(url);
             if (uri.getHost().equalsIgnoreCase("feedback") || uri.getHost().equalsIgnoreCase("assistant")) {
                 view.loadUrl("https://github.com/welcomeworld/SimpleBili/issues");
                 return true;
+            }else if(!uri.getHost().equalsIgnoreCase("http") && uri.getHost().equalsIgnoreCase("https")){
+                handleAppLink();
+                return true;
             }
-            view.loadUrl(url);
-            return true;
+            return false;
         }
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
+        
+        private void handleAppLink(){
+            //ignore
         }
-
     }
 }

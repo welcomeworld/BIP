@@ -35,9 +35,9 @@ public class SimpleContainerActivity extends BaseActivity<ActivitySimpleContaine
             finish();
             return;
         }
-        Class<Fragment> fragmentClass;
+        Class<? extends Fragment> fragmentClass;
         try {
-            fragmentClass = (Class<Fragment>) Class.forName(tag);
+            fragmentClass = Class.forName(tag).asSubclass(Fragment.class);
         } catch (ClassNotFoundException e) {
             finish();
             return;
@@ -49,9 +49,9 @@ public class SimpleContainerActivity extends BaseActivity<ActivitySimpleContaine
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         String tag = intent.getStringExtra(EXTRA_TAG);
-        Class<Fragment> fragmentClass;
+        Class<? extends Fragment> fragmentClass;
         try {
-            fragmentClass = (Class<Fragment>) Class.forName(tag);
+            fragmentClass = Class.forName(tag).asSubclass(Fragment.class);
         } catch (ClassNotFoundException e) {
             finish();
             return;
