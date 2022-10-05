@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.MainHomeRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentMainHomeBinding;
-import com.github.welcomeworld.bangumi.instrumentality.project.livedata.HomeLiveWrapper;
+import com.github.welcomeworld.bangumi.instrumentality.project.livedata.ListLiveWrapper;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.MainHomeViewModel;
 
@@ -39,14 +39,14 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
         getViewBinding().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));
         getViewBinding().mainHomeSwipeRefresh.setOnLoadListener(this::loadMore);
         viewModel.getHomeDataLive().observe(getViewLifecycleOwner(), homeLiveWrapper -> {
-            if (homeLiveWrapper.getAction() == HomeLiveWrapper.REFRESH) {
+            if (homeLiveWrapper.getAction() == ListLiveWrapper.REFRESH) {
                 data = homeLiveWrapper.getData();
                 adapter.replaceAll(data);
                 getViewBinding().mainHomeSwipeRefresh.setRefreshing(false);
                 if (data != null && data.size() > 0) {
                     loadMore();
                 }
-            }else if(homeLiveWrapper.getAction() == HomeLiveWrapper.MORE){
+            }else if(homeLiveWrapper.getAction() == ListLiveWrapper.MORE){
                 List<VideoListBean> result = homeLiveWrapper.getData();
                 data.addAll(result);
                 adapter.addAll(result);

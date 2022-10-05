@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.SearchResultRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivitySearchBinding;
-import com.github.welcomeworld.bangumi.instrumentality.project.livedata.HomeLiveWrapper;
+import com.github.welcomeworld.bangumi.instrumentality.project.livedata.ListLiveWrapper;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.SearchViewModel;
 import com.github.welcomeworld.devbase.utils.ScreenUtil;
@@ -26,10 +26,10 @@ public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
         viewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         viewModel.getSearchDataLive().observe(this, homeLiveWrapper -> {
             List<VideoListBean> result = homeLiveWrapper.getData();
-            if (homeLiveWrapper.getAction() == HomeLiveWrapper.REFRESH) {
+            if (homeLiveWrapper.getAction() == ListLiveWrapper.REFRESH) {
                 adapter.replaceAll(result);
                 getViewBinding().searchResultSwipecontainer.setRefreshing(false);
-            } else if (homeLiveWrapper.getAction() == HomeLiveWrapper.MORE) {
+            } else if (homeLiveWrapper.getAction() == ListLiveWrapper.MORE) {
                 adapter.addAll(result);
                 getViewBinding().searchResultSwipecontainer.setLoading(false);
             }
