@@ -17,7 +17,7 @@ import java.util.List;
 
 public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
 
-    SearchResultRecyclerViewAdapter adapter;
+    SearchResultRecyclerViewAdapter adapter = new SearchResultRecyclerViewAdapter(this);
     SearchViewModel viewModel = null;
 
     @Override
@@ -40,7 +40,6 @@ public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
             viewModel.setSearchText(getViewBinding().searchInput.getText().toString(), true);
             return true;
         });
-        adapter = new SearchResultRecyclerViewAdapter(this);
         getViewBinding().searchResultRecyclerview.setAdapter(adapter);
         getViewBinding().searchResultRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         getViewBinding().searchResultSwipecontainer.setOnRefreshListener(() -> viewModel.refresh());

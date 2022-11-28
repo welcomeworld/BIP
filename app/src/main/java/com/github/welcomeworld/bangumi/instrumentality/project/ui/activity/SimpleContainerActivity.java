@@ -26,7 +26,6 @@ public class SimpleContainerActivity extends BaseActivity<ActivitySimpleContaine
         return bundle;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

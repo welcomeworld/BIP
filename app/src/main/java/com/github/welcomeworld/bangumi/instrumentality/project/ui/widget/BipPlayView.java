@@ -107,7 +107,7 @@ public class BipPlayView extends ConstraintLayout {
     private BIPPlayer.OnErrorListener mOnErrorListener;
     private BIPPlayer.OnInfoListener mOnInfoListener;
 
-    private static String TAG = "BipPlayView";
+    private static final String TAG = "BipPlayView";
 
     public BipPlayView(@NonNull Context context) {
         super(context);
@@ -282,12 +282,7 @@ public class BipPlayView extends ConstraintLayout {
             if (currentTime - lastTapUpTime < 400) {
                 onDoubleTapUp(e);
             } else {
-                ThreadUtil.postDelayed(100, new Runnable() {
-                    @Override
-                    public void run() {
-                        onRealSingleTapUp();
-                    }
-                });
+                ThreadUtil.postDelayed(100, () -> onRealSingleTapUp());
             }
             lastTapUpTime = currentTime;
             return false;
@@ -431,12 +426,7 @@ public class BipPlayView extends ConstraintLayout {
         return playPauseView.getVisibility() == VISIBLE;
     }
 
-    private final Runnable hideControllerRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hideController();
-        }
-    };
+    private final Runnable hideControllerRunnable = this::hideController;
 
 
     private final OnClickListener playItemClickListener = new OnClickListener() {
@@ -745,20 +735,16 @@ public class BipPlayView extends ConstraintLayout {
             VideoQualityBean videoQualityBean = currentVideoBean.getQualityBeans().get(i);
             TextView itemView = (TextView) LayoutInflater.from(detachActivity).inflate(qualityItemLayout, qualityView, false);
             itemView.setText(videoQualityBean.getQuality());
-            LogUtil.e("BipPlayView", "showQuality" + videoQualityBean.getQuality());
             if (i == currentVideoBean.getCurrentQualityIndex()) {
                 itemView.setSelected(true);
             }
             int finalI = i;
-            itemView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    hideQualityWindow();
-                    currentVideoBean.setCurrentQualityIndex(finalI);
-                    SettingConfig.setCurrentQuality(videoQualityBean.getQuality());
-                    if (playViewListener != null) {
-                        playViewListener.onQualityChangeClick();
-                    }
+            itemView.setOnClickListener(v -> {
+                hideQualityWindow();
+                currentVideoBean.setCurrentQualityIndex(finalI);
+                SettingConfig.setCurrentQuality(videoQualityBean.getQuality());
+                if (playViewListener != null) {
+                    playViewListener.onQualityChangeClick();
                 }
             });
             qualityView.addView(itemView);
@@ -838,13 +824,13 @@ public class BipPlayView extends ConstraintLayout {
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder().build();
         okHttpClient.newCall(new Request.Builder().url(uri).build()).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(TAG, e.getMessage() == null ? "消息体为空！instance:" + e : e.getMessage());
                 ToastUtil.showToast("弹幕加载失败");
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 try {
                     InflaterInputStream deflaterInputStream = new InflaterInputStream(response.body().byteStream(), new Inflater(true));

@@ -12,7 +12,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliP
 import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 public class LoginContainerActivity extends BaseActivity<ActivityLoginCntainerBinding> {
-    private static String EXTRA_TAG = "extra_parser_tag";
+    private static final String EXTRA_TAG = "extra_parser_tag";
 
     public static Bundle getStartBundle(String tag) {
         Bundle bundle = new Bundle();
