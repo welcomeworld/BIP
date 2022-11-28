@@ -987,7 +987,7 @@ public class VideoDetailPageBean {
                  */
 
                 private int mid;
-                private int pay_mid;
+                private long pay_mid;
                 private int rank;
                 private String uname;
                 private String avatar;
@@ -1004,11 +1004,11 @@ public class VideoDetailPageBean {
                     this.mid = mid;
                 }
 
-                public int getPay_mid() {
+                public long getPay_mid() {
                     return pay_mid;
                 }
 
-                public void setPay_mid(int pay_mid) {
+                public void setPay_mid(long pay_mid) {
                     this.pay_mid = pay_mid;
                 }
 

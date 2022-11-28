@@ -12,9 +12,9 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.re
 import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.retrofit.databean.AgeVideoUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BiliRetrofitManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
+import com.github.welcomeworld.devbase.utils.FileUtil;
 import com.github.welcomeworld.devbase.utils.StringUtil;
 import com.google.gson.Gson;
-import com.github.welcomeworld.devbase.utils.FileUtil;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -31,27 +31,30 @@ import java.util.List;
 import retrofit2.Response;
 
 public class AgeFansNetApi {
-    public static final String baseUrl = "https://www.agemys.cc";
+    public static final String baseUrl = "https://www.agemys.net";
 
     public static List<VideoListBean> search(String key, String pn) {
         List<VideoListBean> result = new ArrayList<>();
-        Connection searchConn = Jsoup.connect(baseUrl + "/search?query=" + key + "&page=" + pn);
+        String searchUrl = baseUrl + "/search?query=" + key + "&page=" + pn;
+        LogUtil.i("AgeParserSearch:", "get:"+searchUrl);
+        Connection searchConn = Jsoup.connect(searchUrl);
         Document searchDocument;
         try {
             searchDocument = searchConn.get();
         } catch (Exception e) {
-            LogUtil.e("AgeFansSearch:", "connectEror" + e.getMessage());
+            LogUtil.e("AgeParserSearch:", "connectEror" + e.getMessage());
             return result;
         }
         try {
             Elements searchItemElements = searchDocument.select("div.blockcontent1 div.cell a.cell_poster");
             if (searchItemElements.size() == 0) {
+                LogUtil.i("AgeParserSearch:", "search item empty");
                 return null;
             }
             for (int i = 0; i < searchItemElements.size(); i++) {
                 try {
                     Element searchItem = searchItemElements.get(i);
-                    LogUtil.e("AgeFansSearch:", searchItem.html());
+                    LogUtil.i("AgeParserSearch:", searchItem.html());
                     VideoListBean videoListBean = new VideoListBean();
                     videoListBean.setSourceName(Constants.Source.AGEFANS);
                     String title = searchItem.selectFirst("img").attr("alt");
@@ -70,7 +73,7 @@ public class AgeFansNetApi {
                     videoBean.setCover(videoListBean.getCover());
                     String path = searchItem.attr("href");
                     String videoKey = path.replace("/detail/", "");
-                    LogUtil.e("AgeFansSearch getVideoKey:", videoKey);
+                    LogUtil.e("AgeParserSearch getVideoKey:", videoKey);
                     videoBean.setVideoKey(videoKey + "_1_1");
                     videoBean.setUrl(baseUrl + path);
                     videoBeans.add(videoBean);
@@ -154,7 +157,7 @@ public class AgeFansNetApi {
                         VideoBean videoBean = new VideoBean();
                         videoBean.setTitle(item.text());
                         videoBean.setCover(videoListBean.getCover());
-                        videoBean.setVideoKey(originalVideoKey+"_"+(i+1)+"_"+keyPosition++);
+                        videoBean.setVideoKey(originalVideoKey + "_" + (i + 1) + "_" + keyPosition++);
                         if (positionIndex < positionList.size()) {
                             videoBean.setPlayPosition(positionList.get(positionIndex++));
                         }
