@@ -49,4 +49,5 @@
     <string name="sub_reply_page">第%d页</string>
     <string name="collapse">收起</string>
     <string name="use_exoPlayer">使用ExoPlayer</string>
+    <string name="logout">退出登录</string>
 </resources>

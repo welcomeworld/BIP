@@ -10,6 +10,7 @@ import com.github.welcomeworld.app_update.UpdateManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.BuildConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentSettingsBinding;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SimpleContainerActivity;
 import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.devbase.utils.KVUtil;
@@ -34,6 +35,8 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
         getViewBinding().settingMediaCodecCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_MEDIACODEC, isChecked));
         getViewBinding().settingExoPlayerCheck.setChecked(KVUtil.getBoolean(SETTING_EXOPLAYER));
         getViewBinding().settingExoPlayerCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_EXOPLAYER, isChecked));
+        getViewBinding().settingLogout.setVisibility(BiliParser.checkLogin() ? View.VISIBLE : View.GONE);
+        getViewBinding().settingLogout.setOnClickListener(this);
     }
 
     public void onClick(View view) {
@@ -46,6 +49,9 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
             }
         } else if (id == R.id.setting_opensource) {
             SimpleContainerActivity.addFragment(getActivity(), GratitudeFragment.class, null);
+        } else if (id == R.id.setting_logout) {
+            BiliParser.clearLoginStatus();
+            getViewBinding().settingLogout.setVisibility(View.GONE);
         }
     }
 

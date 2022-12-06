@@ -791,7 +791,6 @@ public class BiliParser extends BaseParser {
                 Log.e("loginSuccess", "set-Cookie: " + cookie);
                 CookieManager.getInstance().setCookie("bilibili.com", cookie);
             }
-            BiliLocalStatus.setIsWebLogin(true);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -802,6 +801,11 @@ public class BiliParser extends BaseParser {
     public static boolean checkLogin() {
         String cookie = CookieManager.getInstance().getCookie("bilibili.com");
         return cookie != null && cookie.contains("DedeUserID");
+    }
+
+    public static void clearLoginStatus() {
+        //todo 只清除bilibili的cookie
+        CookieManager.getInstance().removeAllCookies(null);
     }
 
     @Override
