@@ -1,5 +1,6 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,11 @@ public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.View
     VideoListBean data;
     ItemClickListener itemClickListener;
     private int selectItemIndex = -1;
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_video_play_item,parent,false));
+        return new ItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_video_play_item, parent, false));
     }
 
     @Override
@@ -28,14 +30,15 @@ public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.View
         itemHolder.videoItemNameView.setSelected(position == selectItemIndex);
         itemHolder.videoItemNameView.setOnClickListener(v -> {
             v.setSelected(true);
-            selectItemIndex = position;
-            if(itemClickListener!=null){
-                itemClickListener.onItemClick(position);
+            int itemPosition = holder.getBindingAdapterPosition();
+            selectItemIndex = itemPosition;
+            if (itemClickListener != null) {
+                itemClickListener.onItemClick(itemPosition);
             }
         });
     }
 
-    static class ItemHolder extends RecyclerView.ViewHolder{
+    static class ItemHolder extends RecyclerView.ViewHolder {
         TextView videoItemNameView;
 
         public ItemHolder(@NonNull View itemView) {
@@ -46,31 +49,25 @@ public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return data == null||data.getVideoBeanList() == null?0:data.getVideoBeanList().size();
+        return data == null || data.getVideoBeanList() == null ? 0 : data.getVideoBeanList().size();
     }
 
     public VideoListBean getData() {
         return data;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(VideoListBean data) {
         this.data = data;
-    }
-
-    public ItemClickListener getItemClickListener() {
-        return itemClickListener;
+        notifyDataSetChanged();
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
-    public interface ItemClickListener{
-        public void onItemClick(int position);
-    }
-
-    public int getSelectItemIndex() {
-        return selectItemIndex;
+    public interface ItemClickListener {
+        void onItemClick(int position);
     }
 
     public void setSelectItemIndex(int selectItemIndex) {

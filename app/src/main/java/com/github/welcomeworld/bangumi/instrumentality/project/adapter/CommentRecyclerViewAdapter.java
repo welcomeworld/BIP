@@ -24,7 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 
 public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -125,16 +124,16 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                 loadSubCommentCallback.loadSubComment(commentData);
                             }
                         } else {
-                            notifyItemChanged(holder.getAdapterPosition());
+                            notifyItemChanged(holder.getBindingAdapterPosition());
                         }
                     });
                     holder.subCommentCollapseView.setOnClickListener(v -> {
                         commentData.subCommentExpand = false;
-                        notifyItemChanged(holder.getAdapterPosition());
+                        notifyItemChanged(holder.getBindingAdapterPosition());
                     });
                     holder.subCommentPreviousView.setOnClickListener(v -> {
                         commentData.currentSubPage--;
-                        notifyItemChanged(holder.getAdapterPosition());
+                        notifyItemChanged(holder.getBindingAdapterPosition());
                     });
                     holder.subCommentNextView.setOnClickListener(v -> {
                         commentData.currentSubPage++;
@@ -144,7 +143,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                 loadSubCommentCallback.loadSubComment(commentData);
                             }
                         }
-                        notifyItemChanged(holder.getAdapterPosition());
+                        notifyItemChanged(holder.getBindingAdapterPosition());
                     });
                 } else {
                     holder.subCommentAdapter.setSubComments(commentData.subComment);
@@ -230,15 +229,8 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         return 0;
     }
 
-    public void onLoadSubCommentSuccess(CommentBean.CommentDataBean parentComment, List<CommentBean.CommentDataBean> subComments) {
-        if (parentComment.subComment.size() < parentComment.subCommentPageSize) {
-            parentComment.subComment.clear();
-            parentComment.subComment.addAll(subComments);
-        } else {
-            parentComment.subComment.addAll(subComments);
-        }
+    public void onLoadSubCommentSuccess(CommentBean.CommentDataBean parentComment) {
         int index = data.comments.indexOf(parentComment);
-        parentComment.subLoading = false;
         if (index >= 0) {
             notifyItemChanged(index);
         }

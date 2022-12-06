@@ -116,8 +116,8 @@ public class FavOrHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN, (ArrayList<? extends Parcelable>) historyData.getVideoData());
-                bundle.putInt(VideoPlayActivity.EXTRA_VIDEO_SELECT_INDEX,historyData.getSelectSourceIndex());
-                IntentUtil.intentToVideoPlay(activity,bundle);
+                bundle.putInt(VideoPlayActivity.EXTRA_SOURCE_SELECT_INDEX, historyData.getSelectSourceIndex());
+                IntentUtil.intentToVideoPlay(activity, bundle);
             }
         });
     }

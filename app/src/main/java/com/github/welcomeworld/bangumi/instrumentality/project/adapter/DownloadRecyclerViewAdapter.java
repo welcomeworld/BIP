@@ -101,8 +101,8 @@ public class DownloadRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             if (downloadInfo.getDownloadState() == DownloadInfoBean.COMPLETE) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN, (ArrayList<? extends Parcelable>) downloadInfo.getVideoData());
-                bundle.putInt(VideoPlayActivity.EXTRA_VIDEO_SELECT_INDEX, downloadInfo.getSelectSourceIndex());
-                bundle.putInt(VideoPlayActivity.EXTRA_DOWNLOAD_TARGET_INDEX, downloadInfo.getDownloadTargetPosition());
+                bundle.putInt(VideoPlayActivity.EXTRA_SOURCE_SELECT_INDEX, downloadInfo.getSelectSourceIndex());
+                bundle.putInt(VideoPlayActivity.EXTRA_VIDEO_TARGET_INDEX, downloadInfo.getDownloadTargetPosition());
                 IntentUtil.intentToVideoPlay(activity, bundle);
             } else if (downloadInfo.getDownloadState() == DownloadInfoBean.DOWNLOADING) {
                 DownloadManager.pauseDownload(downloadInfo);

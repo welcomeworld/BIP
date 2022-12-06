@@ -1,5 +1,6 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,22 +59,22 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             itemHolder.favView.setOnClickListener(v -> {
                 isFav = !isFav;
                 itemHolder.favView.setSelected(isFav);
-                if(actionClickListener!=null){
+                if (actionClickListener != null) {
                     actionClickListener.onFavClick();
                 }
             });
             itemHolder.downloadView.setOnClickListener(v -> {
-                if(actionClickListener!=null){
+                if (actionClickListener != null) {
                     actionClickListener.onDownloadClick();
                 }
             });
-            itemHolder.browserView.setOnClickListener(v->{
-                if(actionClickListener!=null){
+            itemHolder.browserView.setOnClickListener(v -> {
+                if (actionClickListener != null) {
                     actionClickListener.onBrowserClick();
                 }
             });
-            itemHolder.refreshView.setOnClickListener(v->{
-                if(actionClickListener!=null){
+            itemHolder.refreshView.setOnClickListener(v -> {
+                if (actionClickListener != null) {
                     actionClickListener.onRefreshClick();
                 }
             });
@@ -98,7 +99,6 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 itemClickListener.onItemClick(itemHolder.videoItemRecyclerView, position, itemPosition);
             }
         });
-        itemHolder.itemAdapter.notifyDataSetChanged();
     }
 
     static class ItemHolder extends RecyclerView.ViewHolder {
@@ -144,13 +144,10 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return data;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<VideoListBean> data) {
         this.data = data;
         notifyDataSetChanged();
-    }
-
-    public ItemClickListener getItemClickListener() {
-        return itemClickListener;
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
@@ -158,10 +155,10 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public interface ItemClickListener {
-        public void onItemClick(RecyclerView rv, int sourcePosition, int position);
+        void onItemClick(RecyclerView rv, int sourcePosition, int position);
     }
 
-    public interface ActionClickListener{
+    public interface ActionClickListener {
         void onFavClick();
 
         void onDownloadClick();
@@ -181,7 +178,9 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public void setSelectSourceIndex(int selectSourceIndex) {
+        int oldIndex = this.selectSourceIndex;
         this.selectSourceIndex = selectSourceIndex;
+        notifyItemChanged(oldIndex);
     }
 
     public void setFav(boolean fav) {
