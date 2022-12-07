@@ -6,10 +6,6 @@ public class WebLoginUrlBean {
 
     @SerializedName("code")
     private Integer code;
-    @SerializedName("status")
-    private Boolean status;
-    @SerializedName("ts")
-    private long ts;
     @SerializedName("data")
     private Data data;
 
@@ -19,22 +15,6 @@ public class WebLoginUrlBean {
 
     public void setCode(Integer code) {
         this.code = code;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public long getTs() {
-        return ts;
-    }
-
-    public void setTs(long ts) {
-        this.ts = ts;
     }
 
     public Data getData() {
@@ -48,7 +28,7 @@ public class WebLoginUrlBean {
     public static class Data {
         @SerializedName("url")
         private String url;
-        @SerializedName("oauthKey")
+        @SerializedName("qrcode_key")
         private String oauthKey;
 
         public String getUrl() {

@@ -788,8 +788,11 @@ public class BiliParser extends BaseParser {
             }
             List<String> cookies = response.headers().values("set-cookie");
             for (String cookie : cookies) {
-                Log.e("loginSuccess", "set-Cookie: " + cookie);
-                CookieManager.getInstance().setCookie("bilibili.com", cookie);
+                if (cookie.contains("Secure")) {
+                    CookieManager.getInstance().setCookie("https://bilibili.com", cookie);
+                } else {
+                    CookieManager.getInstance().setCookie("bilibili.com", cookie);
+                }
             }
             return true;
         } catch (Exception e) {
