@@ -57,10 +57,10 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == FOOTER_TYPE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_comment_footer, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_comment_footer, parent, false);
             return new FooterViewHolder(view);
         }
-        return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_comment_item, parent, false));
+        return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_comment_item, parent, false));
     }
 
     @Override

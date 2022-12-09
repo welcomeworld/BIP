@@ -30,7 +30,7 @@ public class SubCommentRecyclerViewAdapter extends RecyclerView.Adapter<SubComme
     @NonNull
     @Override
     public SubCommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SubCommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_sub_comment_item, parent, false));
+        return new SubCommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_sub_comment_item, parent, false));
     }
 
     @Override

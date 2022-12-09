@@ -31,10 +31,10 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == HEADER_TYPE) {
-            return new HeaderItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_video_play_source_header, parent, false));
+            return new HeaderItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_video_play_source_header, parent, false));
 
         }
-        return new ItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_video_play_source, parent, false));
+        return new ItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_video_play_source, parent, false));
     }
 
     @Override

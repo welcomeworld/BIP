@@ -16,7 +16,7 @@ public class GratitudeRecyclerViewAdapter extends RecyclerView.Adapter<Gratitude
     @NonNull
     @Override
     public MyInnerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyInnerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_gratitude, parent, false));
+        return new MyInnerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_gratitude, parent, false));
     }
 
     @Override

@@ -60,10 +60,10 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == FOOTER_TYPE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_footer, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_home_footer, parent, false);
             return new FooterViewHolder(view);
         }
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_home_item, parent, false);
         context = parent.getContext();
         return new MyInnerViewHolder(view);
     }

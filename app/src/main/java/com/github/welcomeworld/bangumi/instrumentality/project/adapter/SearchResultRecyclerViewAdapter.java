@@ -61,12 +61,12 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         if (viewType == FOOTER_TYPE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_footer, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_home_footer, parent, false);
             return new FooterViewHolder(view);
         } else if (viewType == ITEM_PORTRAIT_TYPE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_search_portrait_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_search_portrait_item, parent, false);
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_search_landscape_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_search_landscape_item, parent, false);
         }
         context = parent.getContext();
         return new MyInnerViewHolder(view);

@@ -25,5 +25,5 @@
         android:layout_marginTop="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/recyclerview_comment_item" />
+        tools:listitem="@layout/rv_comment_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>

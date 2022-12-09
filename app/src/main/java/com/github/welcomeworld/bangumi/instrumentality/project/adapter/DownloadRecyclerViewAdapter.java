@@ -60,9 +60,9 @@ public class DownloadRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         if (viewType == ITEM_PORTRAIT_TYPE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_search_portrait_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_search_portrait_item, parent, false);
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_search_landscape_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_search_landscape_item, parent, false);
         }
         context = parent.getContext();
         return new SearchResultRecyclerViewAdapter.MyInnerViewHolder(view);

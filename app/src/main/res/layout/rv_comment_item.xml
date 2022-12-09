@@ -82,7 +82,7 @@
             android:id="@+id/comment_sub_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/recyclerview_sub_comment_item" />
+            tools:listitem="@layout/rv_sub_comment_item" />
 
 
         <LinearLayout
