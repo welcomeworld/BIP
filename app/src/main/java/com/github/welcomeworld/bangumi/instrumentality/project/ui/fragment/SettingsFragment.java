@@ -25,18 +25,18 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getViewBinding().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(view.getContext());
-        getViewBinding().settingVersionName.setText(BuildConfig.VERSION_NAME);
-        getViewBinding().settingVersion.setOnClickListener(this);
-        getViewBinding().settingOpensource.setOnClickListener(this);
-        getViewBinding().settingBackupCheck.setChecked(KVUtil.getBoolean(SETTING_BACKUP_UPDATE));
-        getViewBinding().settingBackupCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_BACKUP_UPDATE, isChecked));
-        getViewBinding().settingMediaCodecCheck.setChecked(KVUtil.getBoolean(SETTING_MEDIACODEC));
-        getViewBinding().settingMediaCodecCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_MEDIACODEC, isChecked));
-        getViewBinding().settingExoPlayerCheck.setChecked(KVUtil.getBoolean(SETTING_EXOPLAYER));
-        getViewBinding().settingExoPlayerCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_EXOPLAYER, isChecked));
-        getViewBinding().settingLogout.setVisibility(BiliParser.checkLogin() ? View.VISIBLE : View.GONE);
-        getViewBinding().settingLogout.setOnClickListener(this);
+        getVB().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(view.getContext());
+        getVB().settingVersionName.setText(BuildConfig.VERSION_NAME);
+        getVB().settingVersion.setOnClickListener(this);
+        getVB().settingOpensource.setOnClickListener(this);
+        getVB().settingBackupCheck.setChecked(KVUtil.getBoolean(SETTING_BACKUP_UPDATE));
+        getVB().settingBackupCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_BACKUP_UPDATE, isChecked));
+        getVB().settingMediaCodecCheck.setChecked(KVUtil.getBoolean(SETTING_MEDIACODEC));
+        getVB().settingMediaCodecCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_MEDIACODEC, isChecked));
+        getVB().settingExoPlayerCheck.setChecked(KVUtil.getBoolean(SETTING_EXOPLAYER));
+        getVB().settingExoPlayerCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_EXOPLAYER, isChecked));
+        getVB().settingLogout.setVisibility(BiliParser.checkLogin() ? View.VISIBLE : View.GONE);
+        getVB().settingLogout.setOnClickListener(this);
     }
 
     public void onClick(View view) {
@@ -51,7 +51,7 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
             SimpleContainerActivity.addFragment(getActivity(), GratitudeFragment.class, null);
         } else if (id == R.id.setting_logout) {
             BiliParser.clearLoginStatus();
-            getViewBinding().settingLogout.setVisibility(View.GONE);
+            getVB().settingLogout.setVisibility(View.GONE);
         }
     }
 

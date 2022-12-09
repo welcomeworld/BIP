@@ -18,11 +18,11 @@ public class MainMineFragment extends BaseFragment<FragmentMainMineBinding> impl
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getViewBinding().mineCollection.setOnClickListener(this);
-        getViewBinding().mineHistory.setOnClickListener(this);
-        getViewBinding().mineAccounts.setOnClickListener(this);
-        getViewBinding().mineSettings.setOnClickListener(this);
-        getViewBinding().mineDownload.setOnClickListener(this);
+        getVB().mineCollection.setOnClickListener(this);
+        getVB().mineHistory.setOnClickListener(this);
+        getVB().mineAccounts.setOnClickListener(this);
+        getVB().mineSettings.setOnClickListener(this);
+        getVB().mineDownload.setOnClickListener(this);
     }
 
     public void onClick(View view) {

@@ -32,11 +32,11 @@ public class DownloadFragment extends BaseFragment<FragmentDownloadBinding> {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        getViewBinding().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(view.getContext());
-        getViewBinding().downloadRv.setAdapter(adapter);
-        getViewBinding().downloadRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        getVB().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(view.getContext());
+        getVB().downloadRv.setAdapter(adapter);
+        getVB().downloadRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(downloadItemTouchHelpCallback);
-        itemTouchHelper.attachToRecyclerView(getViewBinding().downloadRv);
+        itemTouchHelper.attachToRecyclerView(getVB().downloadRv);
     }
 
     private void loadData() {

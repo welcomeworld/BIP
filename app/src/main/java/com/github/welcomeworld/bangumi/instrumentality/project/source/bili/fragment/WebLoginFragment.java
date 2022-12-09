@@ -24,9 +24,9 @@ public class WebLoginFragment extends BaseFragment<BiliFragmentWebLoginBinding> 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getViewBinding().loginRefreshQr.setOnClickListener(v -> refreshQRCode());
-        getViewBinding().loginLoginQr.setOnClickListener(v -> checkLogin());
-        getViewBinding().loginLoginPw.setOnClickListener(v -> IntentUtil.intentToBrowser(requireActivity(), "https://passport.bilibili.com/login"));
+        getVB().loginRefreshQr.setOnClickListener(v -> refreshQRCode());
+        getVB().loginLoginQr.setOnClickListener(v -> checkLogin());
+        getVB().loginLoginPw.setOnClickListener(v -> IntentUtil.intentToBrowser(requireActivity(), "https://passport.bilibili.com/login"));
         refreshQRCode();
     }
 
@@ -47,7 +47,7 @@ public class WebLoginFragment extends BaseFragment<BiliFragmentWebLoginBinding> 
             if (StringUtil.isEmpty(result)) {
                 ToastUtil.showToast(R.string.get_qrcode_fail);
             } else {
-                getViewBinding().loginQr.setImageBitmap(QRCodeAPI.QREncode(result, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher), 500, 500));
+                getVB().loginQr.setImageBitmap(QRCodeAPI.QREncode(result, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher), 500, 500));
             }
         });
     }

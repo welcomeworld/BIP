@@ -24,8 +24,8 @@ public class MainBangumiFragment extends BaseFragment<FragmentMainBangumiBinding
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        WebUtil.initNormalWebView(getViewBinding().bangumiWebview, getViewBinding().bangumiWebFullContainer);
-        getViewBinding().bangumiWebview.setWebViewClient(new WebUtil.NormalWebViewClient() {
+        WebUtil.initNormalWebView(getVB().bangumiWebview, getVB().bangumiWebFullContainer);
+        getVB().bangumiWebview.setWebViewClient(new WebUtil.NormalWebViewClient() {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -48,18 +48,18 @@ public class MainBangumiFragment extends BaseFragment<FragmentMainBangumiBinding
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                ThreadUtil.post(() -> getViewBinding().bangumiWebviewRefresh.setVisibility(View.GONE));
+                ThreadUtil.post(() -> getVB().bangumiWebviewRefresh.setVisibility(View.GONE));
             }
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 if (!goDetail) {
-                    ThreadUtil.post(() -> getViewBinding().bangumiWebviewRefresh.setVisibility(View.VISIBLE));
+                    ThreadUtil.post(() -> getVB().bangumiWebviewRefresh.setVisibility(View.VISIBLE));
                 }
             }
         });
-        getViewBinding().bangumiWebview.loadUrl("https://web.age-spa.com:8443/#/catalog");
-        getViewBinding().bangumiWebviewRefresh.setOnClickListener(v -> getViewBinding().bangumiWebview.reload());
+        getVB().bangumiWebview.loadUrl("https://web.age-spa.com:8443/#/catalog");
+        getVB().bangumiWebviewRefresh.setOnClickListener(v -> getVB().bangumiWebview.reload());
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MainBangumiFragment extends BaseFragment<FragmentMainBangumiBinding
         Uri uri = Uri.parse(url);
         String path = uri.getPath().replace("/v2", "");
         ThreadUtil.post(() -> {
-            getViewBinding().bangumiWebview.goBack();
+            getVB().bangumiWebview.goBack();
             IntentUtil.intentToVideoPlay(getActivity(), Uri.parse(AgeFansNetApi.baseUrl + path));
         });
         goDetail = true;

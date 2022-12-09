@@ -21,9 +21,9 @@ public class LoginFragment extends BaseFragment<BiliFragmentLoginBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        WebUtil.initNormalWebView(getViewBinding().validatorWeb,null);
-        getViewBinding().loginLogin.setOnClickListener(v -> login());
-        getViewBinding().loginPasswordInput.addTextChangedListener(new TextWatcher() {
+        WebUtil.initNormalWebView(getVB().validatorWeb, null);
+        getVB().loginLogin.setOnClickListener(v -> login());
+        getVB().loginPasswordInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -37,7 +37,7 @@ public class LoginFragment extends BaseFragment<BiliFragmentLoginBinding> {
             public void afterTextChanged(Editable s) {
             }
         });
-        getViewBinding().loginUsernameInput.addTextChangedListener(new TextWatcher() {
+        getVB().loginUsernameInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -54,15 +54,15 @@ public class LoginFragment extends BaseFragment<BiliFragmentLoginBinding> {
     }
 
     public void login() {
-        Editable username = getViewBinding().loginUsernameInput.getText();
-        Editable password = getViewBinding().loginPasswordInput.getText();
+        Editable username = getVB().loginUsernameInput.getText();
+        Editable password = getVB().loginPasswordInput.getText();
         if (username == null || password == null) {
             return;
         }
         ThreadUtil.defer().when(() -> BiliParser.login(username.toString(), password.toString())).done((result) -> {
             if (result.startsWith("http")) {
-                getViewBinding().validatorWeb.setVisibility(View.VISIBLE);
-                getViewBinding().validatorWeb.loadUrl(result);
+                getVB().validatorWeb.setVisibility(View.VISIBLE);
+                getVB().validatorWeb.loadUrl(result);
             } else if ("success".equals(result)) {
                 if (getActivity() != null) {
                     getActivity().finish();
@@ -73,11 +73,11 @@ public class LoginFragment extends BaseFragment<BiliFragmentLoginBinding> {
 
     public void usernameTextChange(CharSequence charSequence) {
         userNameNull = charSequence.toString().trim().equals("");
-        getViewBinding().loginLogin.setEnabled(!userNameNull && !passwordNull);
+        getVB().loginLogin.setEnabled(!userNameNull && !passwordNull);
     }
 
     public void passwordTextChange(CharSequence charSequence) {
         passwordNull = charSequence.toString().trim().equals("");
-        getViewBinding().loginLogin.setEnabled(!userNameNull && !passwordNull);
+        getVB().loginLogin.setEnabled(!userNameNull && !passwordNull);
     }
 }

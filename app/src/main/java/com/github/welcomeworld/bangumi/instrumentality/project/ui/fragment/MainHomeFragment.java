@@ -34,15 +34,15 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         adapter = new MainHomeRecyclerViewAdapter(getActivity());
-        getViewBinding().mainHomeRv.setAdapter(adapter);
-        getViewBinding().mainHomeRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        getViewBinding().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));
-        getViewBinding().mainHomeSwipeRefresh.setOnLoadListener(this::loadMore);
+        getVB().mainHomeRv.setAdapter(adapter);
+        getVB().mainHomeRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        getVB().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));
+        getVB().mainHomeSwipeRefresh.setOnLoadListener(this::loadMore);
         viewModel.getHomeDataLive().observe(getViewLifecycleOwner(), homeLiveWrapper -> {
             if (homeLiveWrapper.getAction() == ListActionWrapper.REFRESH) {
                 data = homeLiveWrapper.getData();
                 adapter.replaceAll(data);
-                getViewBinding().mainHomeSwipeRefresh.setRefreshing(false);
+                getVB().mainHomeSwipeRefresh.setRefreshing(false);
                 if (data != null && data.size() > 0) {
                     loadMore();
                 }
@@ -50,7 +50,7 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
                 List<VideoListBean> result = homeLiveWrapper.getData();
                 data.addAll(result);
                 adapter.addAll(result);
-                getViewBinding().mainHomeSwipeRefresh.setLoading(false);
+                getVB().mainHomeSwipeRefresh.setLoading(false);
             }
         });
         refresh(false);
@@ -66,10 +66,10 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
         if ((!force && data != null && data.size() > 0)) {
             return;
         }
-        if (getViewBinding().mainHomeSwipeRefresh.isRefreshing() && !force) {
+        if (getVB().mainHomeSwipeRefresh.isRefreshing() && !force) {
             return;
         }
-        getViewBinding().mainHomeSwipeRefresh.setRefreshing(true);
+        getVB().mainHomeSwipeRefresh.setRefreshing(true);
         viewModel.refresh();
     }
 

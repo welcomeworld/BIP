@@ -17,11 +17,11 @@ public class GratitudeFragment extends BaseFragment<FragmentGratitudeBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getViewBinding().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(view.getContext());
+        getVB().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(view.getContext());
         recyclerViewAdapter = new GratitudeRecyclerViewAdapter();
-        getViewBinding().gratitudeRecyclerView.setAdapter(recyclerViewAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getViewBinding().gratitudeRecyclerView.getContext());
+        getVB().gratitudeRecyclerView.setAdapter(recyclerViewAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getVB().gratitudeRecyclerView.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        getViewBinding().gratitudeRecyclerView.setLayoutManager(linearLayoutManager);
+        getVB().gratitudeRecyclerView.setLayoutManager(linearLayoutManager);
     }
 }

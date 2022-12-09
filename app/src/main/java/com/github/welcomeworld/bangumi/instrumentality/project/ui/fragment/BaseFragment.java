@@ -23,7 +23,7 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment {
         return viewBinding.getRoot();
     }
 
-    public VB getViewBinding() {
+    public VB getVB() {
         return viewBinding;
     }
 }
