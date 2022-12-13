@@ -24,6 +24,7 @@
             android:id="@+id/card_video_cover"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:importantForAccessibility="no"
             android:scaleType="fitXY"
             android:src="@drawable/testcover"
             app:layout_constraintBottom_toBottomOf="parent"

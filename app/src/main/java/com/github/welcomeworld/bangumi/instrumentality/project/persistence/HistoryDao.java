@@ -23,10 +23,10 @@ public interface HistoryDao {
     @Delete
     public void deleteHistory(HistoryBean historyBean);
 
-    @Query("select * from history where isFav = 1 order by favTime desc")
+    @Query("select * from history where isFav = 1 order by favTime desc limit 600")
     public List<HistoryBean> getAllFav();
 
-    @Query("select * from history order by viewTime desc")
+    @Query("select * from history order by viewTime desc limit 600")
     public List<HistoryBean> getAllHistory();
 
     @Query("select * from history where uid = :uid and vid = :vid")

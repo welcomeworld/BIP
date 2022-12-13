@@ -213,6 +213,9 @@ public class VideoPlayViewModel extends ViewModel {
                 return;
             }
             setCurrentVideoBean(currentVideoBean);
+            if (bipPlayer == null) {
+                return;
+            }
             if (fromQuality) {
                 bipPlayer.prepareQualityAsync(currentVideoBean.getCurrentQualityBean().getRealVideoUrl());
             } else {

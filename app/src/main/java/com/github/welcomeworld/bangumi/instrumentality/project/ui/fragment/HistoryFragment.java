@@ -23,7 +23,7 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new FavOrHistoryRecyclerViewAdapter(getActivity());
+        adapter = new FavOrHistoryRecyclerViewAdapter(getActivity(), true);
         getVB().mainHomeRv.setAdapter(adapter);
         getVB().mainHomeRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         getVB().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));

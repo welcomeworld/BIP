@@ -50,4 +50,5 @@
     <string name="collapse">收起</string>
     <string name="use_exoPlayer">使用ExoPlayer</string>
     <string name="logout">退出登录</string>
+    <string name="play_item_index">第%d话</string>
 </resources>
