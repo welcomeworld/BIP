@@ -41,6 +41,7 @@ public abstract class BaseParser {
         Map<Integer, Map<String, String>> result = new HashMap<>();
         Map<String, String> formatOptions = new HashMap<>();
         formatOptions.put("allowed_extensions", "ALL");
+        formatOptions.put("user_agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36");
         result.put(DefaultBIPPlayer.OPT_CATEGORY_FORMAT, formatOptions);
         Map<String, String> playerOptions = new HashMap<>();
         playerOptions.put("start-on-prepared", "1");
