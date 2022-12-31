@@ -77,8 +77,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
 
             @Override
             public void onRefreshClick() {
-                ParserManager.getInstance().clearCache(viewModel.currentVideoListBean);
-                viewModel.parseVideoBeanDetail(false);
+                viewModel.refreshVideo();
             }
         });
         sourceAdapter.setItemClickListener((rv, sourcePosition, position) -> viewModel.changeSelectItem(sourcePosition, position));

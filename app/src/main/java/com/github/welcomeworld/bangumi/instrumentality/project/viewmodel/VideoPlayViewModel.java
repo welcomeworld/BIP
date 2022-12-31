@@ -38,7 +38,7 @@ public class VideoPlayViewModel extends ViewModel {
     private int selectSourceIndex = 0;
     private int selectVideoIndex = 0;
     List<VideoListBean> videoListBeans;
-    public VideoListBean currentVideoListBean;
+    private VideoListBean currentVideoListBean;
     private VideoBean currentVideoBean;
     SafeLiveData<DataActionWrapper<CommentBean>> commentDataLive = new SafeLiveData<>();
     SafeLiveData<ListActionWrapper<VideoListBean>> videoListBeansLive = new SafeLiveData<>();
@@ -288,5 +288,13 @@ public class VideoPlayViewModel extends ViewModel {
 
     public void changeCommentLive(Boolean hasComment) {
         commentLive.updateValueSafe(hasComment);
+    }
+
+    public void refreshVideo() {
+        ParserManager.getInstance().clearCache(currentVideoListBean);
+        if (currentVideoBean.getCurrentQualityBean() != null) {
+            currentVideoBean.getCurrentQualityBean().setRealVideoUrl(null);
+        }
+        parseVideoBeanDetail(false);
     }
 }
