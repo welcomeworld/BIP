@@ -11,6 +11,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bimibimi.d
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.devbase.utils.StringUtil;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -24,36 +25,9 @@ import java.util.List;
 
 public class BimiNetApi {
     public static String baseUrl = "http://www.bimiacg4.net";
-    private static boolean initBaseUrl = false;
 
     private static String getBaseUrl() {
-        if (!initBaseUrl) {
-            for (int i = 0; i < 5; i++) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    //ignore
-                }
-                if (initBaseUrl) {
-                    break;
-                }
-            }
-        }
         return baseUrl;
-    }
-
-    protected static void initBaseUrl() {
-        Connection baseUrlConn = Jsoup.connect("http://www.bimiacg.one/");
-        Document baseUrlDocument;
-        try {
-            baseUrlDocument = baseUrlConn.get();
-            Element urlElement = baseUrlDocument.selectFirst("div.container h3 span");
-            baseUrl = urlElement.text();
-            LogUtil.d("BimiSearch", "bimi init get baseUrl" + baseUrl);
-            initBaseUrl = true;
-        } catch (Exception e) {
-            //ignore
-        }
     }
 
     public static List<VideoListBean> search(String key, String pn) {
@@ -121,7 +95,10 @@ public class BimiNetApi {
             originalVideoKey = wrapVideoKey;
         }
         String videoListExtra = orignal.getSourceExternalData();
-        HashMap<String, String> videoListExtraData = new Gson().fromJson(videoListExtra, HashMap.class);
+        HashMap<String, String> videoListExtraData = new Gson().fromJson(
+                videoListExtra,
+                new TypeToken<HashMap<String, String>>() {
+                }.getType());
         if (videoListExtraData == null) {
             videoListExtraData = new HashMap<>();
         }
@@ -130,7 +107,8 @@ public class BimiNetApi {
         String videoListId = videoListExtraData.get("videoListId");
         LogUtil.e("BimiParseVideo", "getVideoListId:" + videoListId);
         String urlKey = "";
-        String fromKey = "play";
+        String fromKey;
+        String playUrl;
         try {
             if (TextUtils.isEmpty(videoListId)) {
                 String pageUrl = getBaseUrl() + "/bangumi/bi/" + originalVideoKey;
@@ -191,7 +169,7 @@ public class BimiNetApi {
                     }
                 }
             }
-            String playUrl = getBaseUrl() + "/bangumi/" + originalVideoKey + "/play/" + videoListId + "/" + selectVideoIndex;
+            playUrl = getBaseUrl() + "/bangumi/" + originalVideoKey + "/play/" + videoListId + "/" + selectVideoIndex;
             LogUtil.e("BimiParseVideo", "playUrl:" + playUrl);
             Connection playConn = Jsoup.connect(playUrl);
             Document playDocument = playConn.get();
@@ -205,18 +183,13 @@ public class BimiNetApi {
             }
             LogUtil.e("BimiParseVideo:", "get orignal urlKey:" + urlKey);
             BimiPlayerJsConfig playerJsConfig = new Gson().fromJson(urlKey.substring(urlKey.indexOf("{")), BimiPlayerJsConfig.class);
-            if (playerJsConfig.getFrom().contains("ksyun")) {
-                fromKey = "ksyun";
-            } else if (playerJsConfig.getFrom().contains("pic")) {
-                fromKey = "pic";
-            }
+            fromKey = playerJsConfig.getFrom();
             urlKey = playerJsConfig.getUrl();
-            LogUtil.e("BimiParseVideo:", "get urlKey:" + playerJsConfig.getFrom());
         } catch (Exception e) {
             LogUtil.e("BimiParseVideo:", "connectEror" + e.getMessage());
             return videoListBeans;
         }
-        String urlConnUri = getBaseUrl() + "/static/danmu/" + fromKey + ".php?url=" + urlKey + "&myurl=" + getBaseUrl() + "/bangumi/" + originalVideoKey + "/play/" + videoListId + "/" + selectVideoIndex;
+        String urlConnUri = getBaseUrl() + genPath(fromKey, urlKey) + "&myurl=" + playUrl;
         LogUtil.e("BimiParseVideo:", "log url:" + urlConnUri);
         Connection urlConn = Jsoup.connect(urlConnUri);
 
@@ -228,8 +201,6 @@ public class BimiNetApi {
             return videoListBeans;
         }
         try {
-//                currentVideoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
-//                currentVideoBean.setTitle(response.body().getData().getPages().get(i).getPart());
             currentVideoBean.setDash(false);
             VideoQualityBean qualityBean = new VideoQualityBean();
             LogUtil.e("BimiParseVideo", "get url Html:" + urlDocument.selectFirst("video#video").html());
@@ -245,5 +216,69 @@ public class BimiNetApi {
             Log.e("BimiParseVideo", "final error:" + e.getMessage());
         }
         return videoListBeans;
+    }
+
+    private static String genPath(String fromKey, String urlKey) {
+        String fromResult = "play";
+        switch (fromKey) {
+            case "pic":
+            case "danmakk":
+                fromResult = "pic";
+                break;
+            case "alos":
+            case "bimi":
+                if (urlKey.contains(".m3u8")) {
+                    fromResult = "pic";
+                }
+                break;
+            case "special":
+            case "zhilian":
+            case "miui":
+            case "ckplayer":
+                if (urlKey.contains(".m3u8")) {
+                    fromResult = "m3u8";
+                }
+                break;
+            case "aliplay":
+            case "kzyun":
+                fromResult = "kzyun";
+                break;
+            case "renrenmi":
+                fromResult = "rrm";
+                break;
+            case "dplayer":
+            case "zkm3u8":
+            case "qq":
+            case "qiyi":
+                if (urlKey.contains(".mp4")) {
+                    fromResult = "dm";
+                } else if (urlKey.contains(".m3u8")) {
+                    fromResult = "m3u8";
+                } else {
+                    fromResult = "dm";
+                }
+                break;
+            case "cqyunm3u8":
+                if (urlKey.contains(".m3u8")) {
+                    fromResult = "m3u8";
+                } else {
+                    fromResult = "dm";
+                }
+                break;
+            case "youku":
+                fromResult = "qy";
+                break;
+            case "jdym3u8":
+                if (urlKey.contains(".mp4")) {
+                    fromResult = "dm";
+                } else {
+                    fromResult = "m3u8";
+                }
+                break;
+            case "piaoquan":
+                fromResult = "piaoquan";
+                break;
+        }
+        return "/static/danmu/" + fromResult + ".php?url=" + urlKey;
     }
 }
