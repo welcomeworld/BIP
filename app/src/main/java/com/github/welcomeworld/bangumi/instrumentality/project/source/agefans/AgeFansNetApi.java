@@ -1,20 +1,16 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.source.agefans;
 
+import android.net.Uri;
 import android.text.TextUtils;
 
-import com.eclipsesource.v8.V8;
-import com.github.welcomeworld.bangumi.instrumentality.project.BIPApp;
 import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constants;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.retrofit.api.VideoNetAPI;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.retrofit.databean.AgeVideoUrlBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BiliRetrofitManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
-import com.github.welcomeworld.devbase.utils.FileUtil;
 import com.github.welcomeworld.devbase.utils.StringUtil;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -27,8 +23,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import retrofit2.Response;
+import java.util.Objects;
 
 public class AgeFansNetApi {
     public static final String baseUrl = "https://www.agemys.net";
@@ -36,7 +31,7 @@ public class AgeFansNetApi {
     public static List<VideoListBean> search(String key, String pn) {
         List<VideoListBean> result = new ArrayList<>();
         String searchUrl = baseUrl + "/search?query=" + key + "&page=" + pn;
-        LogUtil.i("AgeParserSearch:", "get:"+searchUrl);
+        LogUtil.i("AgeParserSearch:", "get:" + searchUrl);
         Connection searchConn = Jsoup.connect(searchUrl);
         Document searchDocument;
         try {
@@ -100,7 +95,10 @@ public class AgeFansNetApi {
             originalVideoKey = wrapVideoKey;
         }
         String videoListExtra = orignal.getSourceExternalData();
-        HashMap<String, String> videoListExtraData = new Gson().fromJson(videoListExtra, HashMap.class);
+        HashMap<String, String> videoListExtraData = new Gson().fromJson(
+                videoListExtra,
+                new TypeToken<HashMap<String, String>>() {
+                }.getType());
         if (videoListExtraData == null) {
             videoListExtraData = new HashMap<>();
         }
@@ -134,9 +132,11 @@ public class AgeFansNetApi {
                     }
                 }
                 String listDesc = pageDocument.selectFirst("div.baseblock div.blockcontent div.detail_imform_desc_pre p").text();
+                int skipSource = 0;
                 for (int i = 0; i < sourceElements.size(); i++) {
                     Elements itemElements = sourceElements.get(i).select("li a");
                     if (itemElements.size() <= 0) {
+                        skipSource++;
                         continue;
                     }
                     VideoListBean videoListBean = new VideoListBean();
@@ -165,7 +165,7 @@ public class AgeFansNetApi {
                         videoListBean.getVideoBeanList().add(videoBean);
                     }
                     videoListBeans.add(videoListBean);
-                    if (i == selectSourceIndex) {
+                    if (i - skipSource == selectSourceIndex) {
                         currentVideoBean = videoListBean.getCurrentVideoBean();
                         videoListId = videoListExtraData.get("videoListId");
                         LogUtil.e("AgeParseVideo", "setVideoListId:" + videoListId);
@@ -185,19 +185,16 @@ public class AgeFansNetApi {
             Connection playConn = Jsoup.connect(playUrl);
             playConn.cookie("username", "admin");
             playConn.referrer(referrerUrl);
-            long cookieT1 = Long.parseLong(requestCookie.get("t1"));
+            long cookieT1 = Long.parseLong(Objects.requireNonNull(requestCookie.get("t1")));
             String k1 = requestCookie.get("k1");
-            long t1 = Math.round(cookieT1 / 1000) >> 5;
+            long t1 = Math.round(cookieT1 / 1000.0) >> 5;
             long k2 = ((t1 * (t1 % 4096) * 0x3 + 83215) * (t1 % 4096) + t1);
             long t2 = System.currentTimeMillis();
             LogUtil.e("AgeParseVideo", ":cookie:start t2=" + t2);
             long k2End = k2 % 10;
-            LogUtil.e("AgeParseVideo", ":cookie:start k2End=" + k2End);
             long t2End = t2 % 1000;
-            LogUtil.e("AgeParseVideo", ":cookie:start t2End=" + t2End);
             if (!String.valueOf(t2End).contains("" + k2End)) {
                 t2End = t2End % 10;
-                LogUtil.e("AgeParseVideo", ":cookie:end t2End=" + t2End);
                 if (t2End > k2End) {
                     t2 = t2 - (t2End - k2End);
                 } else {
@@ -213,7 +210,6 @@ public class AgeFansNetApi {
             playConn.cookie("k2", "" + k2);
             playConn.cookie("t2", "" + t2);
             long fa_t = System.currentTimeMillis();
-            LogUtil.e("AgeParseVideo", ":cookie:fa_t=" + fa_t);
             playConn.cookie("fa_t", "" + fa_t);
             playConn.cookie("fa_c", "1");
             Connection.Response playResponse = playConn.execute();
@@ -225,12 +221,10 @@ public class AgeFansNetApi {
             LogUtil.e("AgeParseVideo:", "play response:" + responseBody);
             PlayUrlBean playUrlBean = new Gson().fromJson(responseBody, PlayUrlBean.class);
             String realPlayUrl = URLDecoder.decode(playUrlBean.getVurl(), "UTF-8");
-            if (!realPlayUrl.startsWith("http")) {
+            if (!realPlayUrl.startsWith("http") || playUrlBean.getPurlf().contains("shankuwang.com")) {
                 realPlayUrl = playUrlBean.getPurlf() + realPlayUrl;
-                if (realPlayUrl.contains("shankuwang.com/?url")) {
-                    LogUtil.e("AgeParseVideo", "parse 88kan:" + realPlayUrl);
-                    realPlayUrl = parse88kan(realPlayUrl);
-                }
+                LogUtil.e("AgeParseVideo", "云解析:" + realPlayUrl);
+                realPlayUrl = parseshankuwang(realPlayUrl);
             }
             currentVideoBean.setDash(false);
             VideoQualityBean qualityBean = new VideoQualityBean();
@@ -239,59 +233,30 @@ public class AgeFansNetApi {
             qualityBean.setQuality("高清");
             currentVideoBean.getQualityBeans().add(qualityBean);
         } catch (Exception e) {
+            e.printStackTrace();
             LogUtil.e("AgeParseVideo:", "connectEror" + e.getMessage());
             return videoListBeans;
         }
         return videoListBeans;
     }
 
-    private static String parse88kan(String url) {
+    private static String parseshankuwang(String url) {
         String finalResult = "";
         try {
             Document document = Jsoup.parse(new URL(url), 3000);
-//            LogUtil.e("AgeParseVideo", "html:" + document.outerHtml());
-            String jsString = "";
             Elements jsElements = document.select("script");
-            V8 runtime = V8.createV8Runtime();
-            runtime.executeVoidScript(FileUtil.openAssert(BIPApp.getInstance(), "js/jquery.md5.js"));
-            boolean match = false;
             for (Element jsElement : jsElements) {
                 String tempJsString = jsElement.html();
-                if (tempJsString.contains("var Type") && tempJsString.contains("var Ref") && tempJsString.contains("$.md5")) {
-                    jsString = tempJsString.substring(0, tempJsString.indexOf("var Type")).replaceAll("\\$\\.md5", "md5");
-                    LogUtil.e("AgeParseVideo", "jsTring " + jsString);
-                    runtime.executeVoidScript(jsString);
-                } else if (tempJsString.contains("var Host") && tempJsString.contains("var Domain")) {
-                    String doaminString = tempJsString.substring(tempJsString.indexOf("domain;") + 7);
-                    LogUtil.e("AgeParseVideo", "domain string " + doaminString);
-                    runtime.executeVoidScript(doaminString);
-                    runtime.executeVoidScript(";var Host = Domain;");
+                if (tempJsString.contains("var video_url")) {
+                    int start = tempJsString.indexOf("video_url = ");
+                    int end = tempJsString.indexOf("var video_key");
+                    String tempUrl = tempJsString.substring(start + 13, end - 8);
+                    int finalEnd = tempUrl.indexOf("';");
+                    Uri baseUri = Uri.parse(url);
+                    finalResult = baseUri.getScheme() + "://" + baseUri.getAuthority() + tempUrl.substring(0, finalEnd);
+                    break;
                 }
             }
-            try {
-                String apiBaseUrl = runtime.getString("Api");
-                HashMap<String, String> headers = new HashMap<>();
-                String vKey = runtime.getString("Vkey");
-                String key = runtime.getString("Key");
-                String sign = runtime.getString("Sign");
-                String token = runtime.getString("Token");
-                String host = runtime.getString("Host");
-                int time = runtime.getInteger("Time");
-                String vUrl = runtime.getString("Vurl");
-                headers.put("Token", vKey);
-                headers.put("Access-Token", vKey + "-" + key + "-" + sign + "-" + token);
-                headers.put("Version", runtime.getString("Version"));
-                Response<AgeVideoUrlBean> videoUrlResponse = BiliRetrofitManager.getNormalRetrofit(apiBaseUrl).create(VideoNetAPI.class).getRealUrl(headers, vUrl, "1", "0", host, key, sign, token, "", "", "" + time).execute();
-                if (videoUrlResponse.code() == 200) {
-                    finalResult = videoUrlResponse.body().getUrl();
-                    LogUtil.e("AgeParseVideo", "get response url" + finalResult);
-                    finalResult = runtime.executeStringScript("decode_url('" + finalResult + "',md5('" + host + token + "'));");
-                    finalResult = URLDecoder.decode(finalResult, "UTF-8");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            runtime.release(true);
             return finalResult;
         } catch (Exception e) {
             e.printStackTrace();
