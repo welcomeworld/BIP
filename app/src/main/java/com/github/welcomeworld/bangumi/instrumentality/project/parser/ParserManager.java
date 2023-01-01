@@ -21,7 +21,7 @@ public class ParserManager {
         return instance;
     }
 
-    private LinkedHashMap<String, BaseParser> mParsers = new LinkedHashMap<>();
+    private final LinkedHashMap<String, BaseParser> mParsers = new LinkedHashMap<>();
 
     public List<VideoListBean> refreshRecommend() {
         List<VideoListBean> result = new ArrayList<>();
@@ -43,12 +43,10 @@ public class ParserManager {
      * @param searchKey searchWord
      * @param pn        start with 1
      */
-    public List<VideoListBean> search(String searchKey, String pn) {
-        List<VideoListBean> result = new ArrayList<>();
+    public void search(String searchKey, String pn, SearchCallback callback) {
         for (BaseParser parser : mParsers.values()) {
-            result.addAll(parser.search(searchKey, pn));
+            ThreadUtil.defer().when(() -> parser.search(searchKey, pn)).done(callback::onSearchResult);
         }
-        return result;
     }
 
     public void addParser(BaseParser parser) {
@@ -106,5 +104,9 @@ public class ParserManager {
             }
         }
         return null;
+    }
+
+    public interface SearchCallback {
+        void onSearchResult(List<VideoListBean> result);
     }
 }
