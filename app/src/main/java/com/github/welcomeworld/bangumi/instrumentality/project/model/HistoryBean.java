@@ -6,6 +6,7 @@ import androidx.room.TypeConverters;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.AppBaseConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "history", primaryKeys = {"uid", "vid"})
@@ -17,7 +18,7 @@ public class HistoryBean {
     private String title;
     private String cover;
     private boolean coverPortrait;
-    private List<VideoListBean> videoData;
+    private List<VideoListBean> videoData = new ArrayList<>();
     private int selectSourceIndex;
     private long viewTime;
     private boolean isActive = true;
@@ -116,6 +117,7 @@ public class HistoryBean {
     }
 
     public void setVideoData(List<VideoListBean> videoData) {
-        this.videoData = videoData;
+        this.videoData.clear();
+        this.videoData.addAll(videoData);
     }
 }

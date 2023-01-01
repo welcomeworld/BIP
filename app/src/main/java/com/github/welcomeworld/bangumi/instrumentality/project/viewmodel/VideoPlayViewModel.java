@@ -31,6 +31,7 @@ import java.util.Map;
 
 public class VideoPlayViewModel extends ViewModel {
     BIPPlayer bipPlayer = SettingsFragment.useExoPlayer() ? new BipExoPlayer() : new DefaultBIPPlayer();
+    private boolean isFinishing = false;
     BaseParser videoParser = null;
     boolean loadingComment;
     int currentPage = 1;
@@ -73,6 +74,9 @@ public class VideoPlayViewModel extends ViewModel {
             initHistory();
             return ParserManager.getInstance().updateVideoList(videoListBeans, selectSourceIndex);
         }).done((result) -> {
+            if (isFinishing) {
+                return;
+            }
             changeVideoListBeans(result);
             parseVideoBeanDetail(false);
             initPlayer();
@@ -148,6 +152,9 @@ public class VideoPlayViewModel extends ViewModel {
         ThreadUtil.defer().when(() -> videoParser.getComment(currentVideoBean, currentPage))
                 .fail(ex -> loadingComment = false)
                 .done(result -> {
+                    if (isFinishing) {
+                        return;
+                    }
                     commentDataLive.updateValueSafe(new DataActionWrapper<>(DataActionWrapper.REFRESH, result));
                     currentPage++;
                     loadingComment = false;
@@ -157,6 +164,9 @@ public class VideoPlayViewModel extends ViewModel {
     public void loadSubComment(CommentBean.CommentDataBean parentComment) {
         ThreadUtil.defer().when(() -> videoParser.getSubComment(parentComment)).done(result -> {
             {
+                if (isFinishing) {
+                    return;
+                }
                 if (parentComment.subComment.size() < parentComment.subCommentPageSize) {
                     parentComment.subComment.clear();
                     parentComment.subComment.addAll(result);
@@ -171,6 +181,7 @@ public class VideoPlayViewModel extends ViewModel {
 
     public void onViewStop(boolean isFinishing) {
         saveHistory();
+        this.isFinishing = isFinishing;
         if (isFinishing) {
             releasePlayer();
         }
@@ -208,6 +219,9 @@ public class VideoPlayViewModel extends ViewModel {
             throwable.printStackTrace();
             ToastUtil.showToast(R.string.video_url_parse_error);
         }).done((result) -> {
+            if (isFinishing) {
+                return;
+            }
             if (currentVideoBean == null || currentVideoBean.getCurrentQualityBean() == null || currentVideoBean.getCurrentQualityBean().getRealVideoUrl() == null) {
                 ToastUtil.showToast(R.string.video_url_parse_error);
                 return;
@@ -245,7 +259,9 @@ public class VideoPlayViewModel extends ViewModel {
 
     private void saveHistory() {
         historyBean.setSelectSourceIndex(selectSourceIndex);
-        historyBean.setVideoData(videoListBeans);
+        if (videoListBeans != null && videoListBeans.size() > 0) {
+            historyBean.setVideoData(videoListBeans);
+        }
         historyBean.setViewTime(System.currentTimeMillis());
         HistoryConfig.updateOrSaveHistory(historyBean);
     }
