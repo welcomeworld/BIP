@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class LoginResultBean {
 
     @SerializedName("ts")
@@ -171,7 +172,6 @@ public class LoginResultBean {
     }
 
 
-
     @Entity(tableName = "token")
     public static class TokenInfoBean {
         @PrimaryKey(autoGenerate = true)
@@ -184,6 +184,7 @@ public class LoginResultBean {
         public void setId(int id) {
             this.id = id;
         }
+
         @SerializedName("mid")
         private int mid;
         @SerializedName("access_token")

@@ -4,22 +4,23 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class BvToAvBean {
 
     @SerializedName("code")
-    private Integer code;
+    private Long code;
     @SerializedName("message")
     private String message;
     @SerializedName("ttl")
-    private Integer ttl;
+    private Long ttl;
     @SerializedName("data")
     private Data data;
 
-    public Integer getCode() {
+    public Long getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(Long code) {
         this.code = code;
     }
 
@@ -31,11 +32,11 @@ public class BvToAvBean {
         this.message = message;
     }
 
-    public Integer getTtl() {
+    public Long getTtl() {
         return ttl;
     }
 
-    public void setTtl(Integer ttl) {
+    public void setTtl(Long ttl) {
         this.ttl = ttl;
     }
 
@@ -51,33 +52,33 @@ public class BvToAvBean {
         @SerializedName("bvid")
         private String bvid;
         @SerializedName("aid")
-        private Integer aid;
+        private Long aid;
         @SerializedName("videos")
-        private Integer videos;
+        private Long videos;
         @SerializedName("tid")
-        private Integer tid;
+        private Long tid;
         @SerializedName("tname")
         private String tname;
         @SerializedName("copyright")
-        private Integer copyright;
+        private Long copyright;
         @SerializedName("pic")
         private String pic;
         @SerializedName("title")
         private String title;
         @SerializedName("pubdate")
-        private Integer pubdate;
+        private Long pubdate;
         @SerializedName("ctime")
-        private Integer ctime;
+        private Long ctime;
         @SerializedName("desc")
         private String desc;
         @SerializedName("desc_v2")
         private List<DescV2> descV2;
         @SerializedName("state")
-        private Integer state;
+        private Long state;
         @SerializedName("duration")
-        private Integer duration;
+        private Long duration;
         @SerializedName("mission_id")
-        private Integer missionId;
+        private Long missionId;
         @SerializedName("rights")
         private Rights rights;
         @SerializedName("owner")
@@ -87,11 +88,11 @@ public class BvToAvBean {
         @SerializedName("dynamic")
         private String dynamic;
         @SerializedName("cid")
-        private Integer cid;
+        private Long cid;
         @SerializedName("dimension")
         private Dimension dimension;
         @SerializedName("season_id")
-        private Integer seasonId;
+        private Long seasonId;
         @SerializedName("no_cache")
         private Boolean noCache;
         @SerializedName("pages")
@@ -111,27 +112,27 @@ public class BvToAvBean {
             this.bvid = bvid;
         }
 
-        public Integer getAid() {
+        public Long getAid() {
             return aid;
         }
 
-        public void setAid(Integer aid) {
+        public void setAid(Long aid) {
             this.aid = aid;
         }
 
-        public Integer getVideos() {
+        public Long getVideos() {
             return videos;
         }
 
-        public void setVideos(Integer videos) {
+        public void setVideos(Long videos) {
             this.videos = videos;
         }
 
-        public Integer getTid() {
+        public Long getTid() {
             return tid;
         }
 
-        public void setTid(Integer tid) {
+        public void setTid(Long tid) {
             this.tid = tid;
         }
 
@@ -143,11 +144,11 @@ public class BvToAvBean {
             this.tname = tname;
         }
 
-        public Integer getCopyright() {
+        public Long getCopyright() {
             return copyright;
         }
 
-        public void setCopyright(Integer copyright) {
+        public void setCopyright(Long copyright) {
             this.copyright = copyright;
         }
 
@@ -167,19 +168,19 @@ public class BvToAvBean {
             this.title = title;
         }
 
-        public Integer getPubdate() {
+        public Long getPubdate() {
             return pubdate;
         }
 
-        public void setPubdate(Integer pubdate) {
+        public void setPubdate(Long pubdate) {
             this.pubdate = pubdate;
         }
 
-        public Integer getCtime() {
+        public Long getCtime() {
             return ctime;
         }
 
-        public void setCtime(Integer ctime) {
+        public void setCtime(Long ctime) {
             this.ctime = ctime;
         }
 
@@ -199,27 +200,27 @@ public class BvToAvBean {
             this.descV2 = descV2;
         }
 
-        public Integer getState() {
+        public Long getState() {
             return state;
         }
 
-        public void setState(Integer state) {
+        public void setState(Long state) {
             this.state = state;
         }
 
-        public Integer getDuration() {
+        public Long getDuration() {
             return duration;
         }
 
-        public void setDuration(Integer duration) {
+        public void setDuration(Long duration) {
             this.duration = duration;
         }
 
-        public Integer getMissionId() {
+        public Long getMissionId() {
             return missionId;
         }
 
-        public void setMissionId(Integer missionId) {
+        public void setMissionId(Long missionId) {
             this.missionId = missionId;
         }
 
@@ -255,11 +256,11 @@ public class BvToAvBean {
             this.dynamic = dynamic;
         }
 
-        public Integer getCid() {
+        public Long getCid() {
             return cid;
         }
 
-        public void setCid(Integer cid) {
+        public void setCid(Long cid) {
             this.cid = cid;
         }
 
@@ -271,11 +272,11 @@ public class BvToAvBean {
             this.dimension = dimension;
         }
 
-        public Integer getSeasonId() {
+        public Long getSeasonId() {
             return seasonId;
         }
 
-        public void setSeasonId(Integer seasonId) {
+        public void setSeasonId(Long seasonId) {
             this.seasonId = seasonId;
         }
 
@@ -321,160 +322,160 @@ public class BvToAvBean {
 
         public static class Rights {
             @SerializedName("bp")
-            private Integer bp;
+            private Long bp;
             @SerializedName("elec")
-            private Integer elec;
+            private Long elec;
             @SerializedName("download")
-            private Integer download;
+            private Long download;
             @SerializedName("movie")
-            private Integer movie;
+            private Long movie;
             @SerializedName("pay")
-            private Integer pay;
+            private Long pay;
             @SerializedName("hd5")
-            private Integer hd5;
+            private Long hd5;
             @SerializedName("no_reprint")
-            private Integer noReprint;
+            private Long noReprint;
             @SerializedName("autoplay")
-            private Integer autoplay;
+            private Long autoplay;
             @SerializedName("ugc_pay")
-            private Integer ugcPay;
+            private Long ugcPay;
             @SerializedName("is_cooperation")
-            private Integer isCooperation;
+            private Long isCooperation;
             @SerializedName("ugc_pay_preview")
-            private Integer ugcPayPreview;
+            private Long ugcPayPreview;
             @SerializedName("no_background")
-            private Integer noBackground;
+            private Long noBackground;
             @SerializedName("clean_mode")
-            private Integer cleanMode;
+            private Long cleanMode;
             @SerializedName("is_stein_gate")
-            private Integer isSteinGate;
+            private Long isSteinGate;
 
-            public Integer getBp() {
+            public Long getBp() {
                 return bp;
             }
 
-            public void setBp(Integer bp) {
+            public void setBp(Long bp) {
                 this.bp = bp;
             }
 
-            public Integer getElec() {
+            public Long getElec() {
                 return elec;
             }
 
-            public void setElec(Integer elec) {
+            public void setElec(Long elec) {
                 this.elec = elec;
             }
 
-            public Integer getDownload() {
+            public Long getDownload() {
                 return download;
             }
 
-            public void setDownload(Integer download) {
+            public void setDownload(Long download) {
                 this.download = download;
             }
 
-            public Integer getMovie() {
+            public Long getMovie() {
                 return movie;
             }
 
-            public void setMovie(Integer movie) {
+            public void setMovie(Long movie) {
                 this.movie = movie;
             }
 
-            public Integer getPay() {
+            public Long getPay() {
                 return pay;
             }
 
-            public void setPay(Integer pay) {
+            public void setPay(Long pay) {
                 this.pay = pay;
             }
 
-            public Integer getHd5() {
+            public Long getHd5() {
                 return hd5;
             }
 
-            public void setHd5(Integer hd5) {
+            public void setHd5(Long hd5) {
                 this.hd5 = hd5;
             }
 
-            public Integer getNoReprint() {
+            public Long getNoReprint() {
                 return noReprint;
             }
 
-            public void setNoReprint(Integer noReprint) {
+            public void setNoReprint(Long noReprint) {
                 this.noReprint = noReprint;
             }
 
-            public Integer getAutoplay() {
+            public Long getAutoplay() {
                 return autoplay;
             }
 
-            public void setAutoplay(Integer autoplay) {
+            public void setAutoplay(Long autoplay) {
                 this.autoplay = autoplay;
             }
 
-            public Integer getUgcPay() {
+            public Long getUgcPay() {
                 return ugcPay;
             }
 
-            public void setUgcPay(Integer ugcPay) {
+            public void setUgcPay(Long ugcPay) {
                 this.ugcPay = ugcPay;
             }
 
-            public Integer getIsCooperation() {
+            public Long getIsCooperation() {
                 return isCooperation;
             }
 
-            public void setIsCooperation(Integer isCooperation) {
+            public void setIsCooperation(Long isCooperation) {
                 this.isCooperation = isCooperation;
             }
 
-            public Integer getUgcPayPreview() {
+            public Long getUgcPayPreview() {
                 return ugcPayPreview;
             }
 
-            public void setUgcPayPreview(Integer ugcPayPreview) {
+            public void setUgcPayPreview(Long ugcPayPreview) {
                 this.ugcPayPreview = ugcPayPreview;
             }
 
-            public Integer getNoBackground() {
+            public Long getNoBackground() {
                 return noBackground;
             }
 
-            public void setNoBackground(Integer noBackground) {
+            public void setNoBackground(Long noBackground) {
                 this.noBackground = noBackground;
             }
 
-            public Integer getCleanMode() {
+            public Long getCleanMode() {
                 return cleanMode;
             }
 
-            public void setCleanMode(Integer cleanMode) {
+            public void setCleanMode(Long cleanMode) {
                 this.cleanMode = cleanMode;
             }
 
-            public Integer getIsSteinGate() {
+            public Long getIsSteinGate() {
                 return isSteinGate;
             }
 
-            public void setIsSteinGate(Integer isSteinGate) {
+            public void setIsSteinGate(Long isSteinGate) {
                 this.isSteinGate = isSteinGate;
             }
         }
 
         public static class Owner {
             @SerializedName("mid")
-            private Integer mid;
+            private Long mid;
             @SerializedName("name")
             private String name;
             @SerializedName("face")
             private String face;
 
-            public Integer getMid() {
+            public Long getMid() {
                 return mid;
             }
 
-            public void setMid(Integer mid) {
+            public void setMid(Long mid) {
                 this.mid = mid;
             }
 
@@ -497,117 +498,117 @@ public class BvToAvBean {
 
         public static class Stat {
             @SerializedName("aid")
-            private Integer aid;
+            private Long aid;
             @SerializedName("view")
-            private Integer view;
+            private Long view;
             @SerializedName("danmaku")
-            private Integer danmaku;
+            private Long danmaku;
             @SerializedName("reply")
-            private Integer reply;
+            private Long reply;
             @SerializedName("favorite")
-            private Integer favorite;
+            private Long favorite;
             @SerializedName("coin")
-            private Integer coin;
+            private Long coin;
             @SerializedName("share")
-            private Integer share;
+            private Long share;
             @SerializedName("now_rank")
-            private Integer nowRank;
+            private Long nowRank;
             @SerializedName("his_rank")
-            private Integer hisRank;
+            private Long hisRank;
             @SerializedName("like")
-            private Integer like;
+            private Long like;
             @SerializedName("dislike")
-            private Integer dislike;
+            private Long dislike;
             @SerializedName("evaluation")
             private String evaluation;
             @SerializedName("argue_msg")
             private String argueMsg;
 
-            public Integer getAid() {
+            public Long getAid() {
                 return aid;
             }
 
-            public void setAid(Integer aid) {
+            public void setAid(Long aid) {
                 this.aid = aid;
             }
 
-            public Integer getView() {
+            public Long getView() {
                 return view;
             }
 
-            public void setView(Integer view) {
+            public void setView(Long view) {
                 this.view = view;
             }
 
-            public Integer getDanmaku() {
+            public Long getDanmaku() {
                 return danmaku;
             }
 
-            public void setDanmaku(Integer danmaku) {
+            public void setDanmaku(Long danmaku) {
                 this.danmaku = danmaku;
             }
 
-            public Integer getReply() {
+            public Long getReply() {
                 return reply;
             }
 
-            public void setReply(Integer reply) {
+            public void setReply(Long reply) {
                 this.reply = reply;
             }
 
-            public Integer getFavorite() {
+            public Long getFavorite() {
                 return favorite;
             }
 
-            public void setFavorite(Integer favorite) {
+            public void setFavorite(Long favorite) {
                 this.favorite = favorite;
             }
 
-            public Integer getCoin() {
+            public Long getCoin() {
                 return coin;
             }
 
-            public void setCoin(Integer coin) {
+            public void setCoin(Long coin) {
                 this.coin = coin;
             }
 
-            public Integer getShare() {
+            public Long getShare() {
                 return share;
             }
 
-            public void setShare(Integer share) {
+            public void setShare(Long share) {
                 this.share = share;
             }
 
-            public Integer getNowRank() {
+            public Long getNowRank() {
                 return nowRank;
             }
 
-            public void setNowRank(Integer nowRank) {
+            public void setNowRank(Long nowRank) {
                 this.nowRank = nowRank;
             }
 
-            public Integer getHisRank() {
+            public Long getHisRank() {
                 return hisRank;
             }
 
-            public void setHisRank(Integer hisRank) {
+            public void setHisRank(Long hisRank) {
                 this.hisRank = hisRank;
             }
 
-            public Integer getLike() {
+            public Long getLike() {
                 return like;
             }
 
-            public void setLike(Integer like) {
+            public void setLike(Long like) {
                 this.like = like;
             }
 
-            public Integer getDislike() {
+            public Long getDislike() {
                 return dislike;
             }
 
-            public void setDislike(Integer dislike) {
+            public void setDislike(Long dislike) {
                 this.dislike = dislike;
             }
 
@@ -630,33 +631,33 @@ public class BvToAvBean {
 
         public static class Dimension {
             @SerializedName("width")
-            private Integer width;
+            private Long width;
             @SerializedName("height")
-            private Integer height;
+            private Long height;
             @SerializedName("rotate")
-            private Integer rotate;
+            private Long rotate;
 
-            public Integer getWidth() {
+            public Long getWidth() {
                 return width;
             }
 
-            public void setWidth(Integer width) {
+            public void setWidth(Long width) {
                 this.width = width;
             }
 
-            public Integer getHeight() {
+            public Long getHeight() {
                 return height;
             }
 
-            public void setHeight(Integer height) {
+            public void setHeight(Long height) {
                 this.height = height;
             }
 
-            public Integer getRotate() {
+            public Long getRotate() {
                 return rotate;
             }
 
-            public void setRotate(Integer rotate) {
+            public void setRotate(Long rotate) {
                 this.rotate = rotate;
             }
         }
@@ -686,33 +687,33 @@ public class BvToAvBean {
 
         public static class UgcSeason {
             @SerializedName("id")
-            private Integer id;
+            private Long id;
             @SerializedName("title")
             private String title;
             @SerializedName("cover")
             private String cover;
             @SerializedName("mid")
-            private Integer mid;
+            private Long mid;
             @SerializedName("intro")
             private String intro;
             @SerializedName("sign_state")
-            private Integer signState;
+            private Long signState;
             @SerializedName("attribute")
-            private Integer attribute;
+            private Long attribute;
             @SerializedName("sections")
             private List<Sections> sections;
             @SerializedName("stat")
             private Stat stat;
             @SerializedName("ep_count")
-            private Integer epCount;
+            private Long epCount;
             @SerializedName("season_type")
-            private Integer seasonType;
+            private Long seasonType;
 
-            public Integer getId() {
+            public Long getId() {
                 return id;
             }
 
-            public void setId(Integer id) {
+            public void setId(Long id) {
                 this.id = id;
             }
 
@@ -732,11 +733,11 @@ public class BvToAvBean {
                 this.cover = cover;
             }
 
-            public Integer getMid() {
+            public Long getMid() {
                 return mid;
             }
 
-            public void setMid(Integer mid) {
+            public void setMid(Long mid) {
                 this.mid = mid;
             }
 
@@ -748,19 +749,19 @@ public class BvToAvBean {
                 this.intro = intro;
             }
 
-            public Integer getSignState() {
+            public Long getSignState() {
                 return signState;
             }
 
-            public void setSignState(Integer signState) {
+            public void setSignState(Long signState) {
                 this.signState = signState;
             }
 
-            public Integer getAttribute() {
+            public Long getAttribute() {
                 return attribute;
             }
 
-            public void setAttribute(Integer attribute) {
+            public void setAttribute(Long attribute) {
                 this.attribute = attribute;
             }
 
@@ -780,150 +781,150 @@ public class BvToAvBean {
                 this.stat = stat;
             }
 
-            public Integer getEpCount() {
+            public Long getEpCount() {
                 return epCount;
             }
 
-            public void setEpCount(Integer epCount) {
+            public void setEpCount(Long epCount) {
                 this.epCount = epCount;
             }
 
-            public Integer getSeasonType() {
+            public Long getSeasonType() {
                 return seasonType;
             }
 
-            public void setSeasonType(Integer seasonType) {
+            public void setSeasonType(Long seasonType) {
                 this.seasonType = seasonType;
             }
 
             public static class Stat {
                 @SerializedName("season_id")
-                private Integer seasonId;
+                private Long seasonId;
                 @SerializedName("view")
-                private Integer view;
+                private Long view;
                 @SerializedName("danmaku")
-                private Integer danmaku;
+                private Long danmaku;
                 @SerializedName("reply")
-                private Integer reply;
+                private Long reply;
                 @SerializedName("fav")
-                private Integer fav;
+                private Long fav;
                 @SerializedName("coin")
-                private Integer coin;
+                private Long coin;
                 @SerializedName("share")
-                private Integer share;
+                private Long share;
                 @SerializedName("now_rank")
-                private Integer nowRank;
+                private Long nowRank;
                 @SerializedName("his_rank")
-                private Integer hisRank;
+                private Long hisRank;
                 @SerializedName("like")
-                private Integer like;
+                private Long like;
 
-                public Integer getSeasonId() {
+                public Long getSeasonId() {
                     return seasonId;
                 }
 
-                public void setSeasonId(Integer seasonId) {
+                public void setSeasonId(Long seasonId) {
                     this.seasonId = seasonId;
                 }
 
-                public Integer getView() {
+                public Long getView() {
                     return view;
                 }
 
-                public void setView(Integer view) {
+                public void setView(Long view) {
                     this.view = view;
                 }
 
-                public Integer getDanmaku() {
+                public Long getDanmaku() {
                     return danmaku;
                 }
 
-                public void setDanmaku(Integer danmaku) {
+                public void setDanmaku(Long danmaku) {
                     this.danmaku = danmaku;
                 }
 
-                public Integer getReply() {
+                public Long getReply() {
                     return reply;
                 }
 
-                public void setReply(Integer reply) {
+                public void setReply(Long reply) {
                     this.reply = reply;
                 }
 
-                public Integer getFav() {
+                public Long getFav() {
                     return fav;
                 }
 
-                public void setFav(Integer fav) {
+                public void setFav(Long fav) {
                     this.fav = fav;
                 }
 
-                public Integer getCoin() {
+                public Long getCoin() {
                     return coin;
                 }
 
-                public void setCoin(Integer coin) {
+                public void setCoin(Long coin) {
                     this.coin = coin;
                 }
 
-                public Integer getShare() {
+                public Long getShare() {
                     return share;
                 }
 
-                public void setShare(Integer share) {
+                public void setShare(Long share) {
                     this.share = share;
                 }
 
-                public Integer getNowRank() {
+                public Long getNowRank() {
                     return nowRank;
                 }
 
-                public void setNowRank(Integer nowRank) {
+                public void setNowRank(Long nowRank) {
                     this.nowRank = nowRank;
                 }
 
-                public Integer getHisRank() {
+                public Long getHisRank() {
                     return hisRank;
                 }
 
-                public void setHisRank(Integer hisRank) {
+                public void setHisRank(Long hisRank) {
                     this.hisRank = hisRank;
                 }
 
-                public Integer getLike() {
+                public Long getLike() {
                     return like;
                 }
 
-                public void setLike(Integer like) {
+                public void setLike(Long like) {
                     this.like = like;
                 }
             }
 
             public static class Sections {
                 @SerializedName("season_id")
-                private Integer seasonId;
+                private Long seasonId;
                 @SerializedName("id")
-                private Integer id;
+                private Long id;
                 @SerializedName("title")
                 private String title;
                 @SerializedName("type")
-                private Integer type;
+                private Long type;
                 @SerializedName("episodes")
                 private List<Episodes> episodes;
 
-                public Integer getSeasonId() {
+                public Long getSeasonId() {
                     return seasonId;
                 }
 
-                public void setSeasonId(Integer seasonId) {
+                public void setSeasonId(Long seasonId) {
                     this.seasonId = seasonId;
                 }
 
-                public Integer getId() {
+                public Long getId() {
                     return id;
                 }
 
-                public void setId(Integer id) {
+                public void setId(Long id) {
                     this.id = id;
                 }
 
@@ -935,11 +936,11 @@ public class BvToAvBean {
                     this.title = title;
                 }
 
-                public Integer getType() {
+                public Long getType() {
                     return type;
                 }
 
-                public void setType(Integer type) {
+                public void setType(Long type) {
                     this.type = type;
                 }
 
@@ -953,19 +954,19 @@ public class BvToAvBean {
 
                 public static class Episodes {
                     @SerializedName("season_id")
-                    private Integer seasonId;
+                    private Long seasonId;
                     @SerializedName("section_id")
-                    private Integer sectionId;
+                    private Long sectionId;
                     @SerializedName("id")
-                    private Integer id;
+                    private Long id;
                     @SerializedName("aid")
-                    private Integer aid;
+                    private Long aid;
                     @SerializedName("cid")
-                    private Integer cid;
+                    private Long cid;
                     @SerializedName("title")
                     private String title;
                     @SerializedName("attribute")
-                    private Integer attribute;
+                    private Long attribute;
                     @SerializedName("arc")
                     private Arc arc;
                     @SerializedName("page")
@@ -973,43 +974,43 @@ public class BvToAvBean {
                     @SerializedName("bvid")
                     private String bvid;
 
-                    public Integer getSeasonId() {
+                    public Long getSeasonId() {
                         return seasonId;
                     }
 
-                    public void setSeasonId(Integer seasonId) {
+                    public void setSeasonId(Long seasonId) {
                         this.seasonId = seasonId;
                     }
 
-                    public Integer getSectionId() {
+                    public Long getSectionId() {
                         return sectionId;
                     }
 
-                    public void setSectionId(Integer sectionId) {
+                    public void setSectionId(Long sectionId) {
                         this.sectionId = sectionId;
                     }
 
-                    public Integer getId() {
+                    public Long getId() {
                         return id;
                     }
 
-                    public void setId(Integer id) {
+                    public void setId(Long id) {
                         this.id = id;
                     }
 
-                    public Integer getAid() {
+                    public Long getAid() {
                         return aid;
                     }
 
-                    public void setAid(Integer aid) {
+                    public void setAid(Long aid) {
                         this.aid = aid;
                     }
 
-                    public Integer getCid() {
+                    public Long getCid() {
                         return cid;
                     }
 
-                    public void setCid(Integer cid) {
+                    public void setCid(Long cid) {
                         this.cid = cid;
                     }
 
@@ -1021,11 +1022,11 @@ public class BvToAvBean {
                         this.title = title;
                     }
 
-                    public Integer getAttribute() {
+                    public Long getAttribute() {
                         return attribute;
                     }
 
-                    public void setAttribute(Integer attribute) {
+                    public void setAttribute(Long attribute) {
                         this.attribute = attribute;
                     }
 
@@ -1055,29 +1056,29 @@ public class BvToAvBean {
 
                     public static class Arc {
                         @SerializedName("aid")
-                        private Integer aid;
+                        private Long aid;
                         @SerializedName("videos")
-                        private Integer videos;
+                        private Long videos;
                         @SerializedName("type_id")
-                        private Integer typeId;
+                        private Long typeId;
                         @SerializedName("type_name")
                         private String typeName;
                         @SerializedName("copyright")
-                        private Integer copyright;
+                        private Long copyright;
                         @SerializedName("pic")
                         private String pic;
                         @SerializedName("title")
                         private String title;
                         @SerializedName("pubdate")
-                        private Integer pubdate;
+                        private Long pubdate;
                         @SerializedName("ctime")
-                        private Integer ctime;
+                        private Long ctime;
                         @SerializedName("desc")
                         private String desc;
                         @SerializedName("state")
-                        private Integer state;
+                        private Long state;
                         @SerializedName("duration")
-                        private Integer duration;
+                        private Long duration;
                         @SerializedName("rights")
                         private Rights rights;
                         @SerializedName("author")
@@ -1091,27 +1092,27 @@ public class BvToAvBean {
                         @SerializedName("desc_v2")
                         private Object descV2;
 
-                        public Integer getAid() {
+                        public Long getAid() {
                             return aid;
                         }
 
-                        public void setAid(Integer aid) {
+                        public void setAid(Long aid) {
                             this.aid = aid;
                         }
 
-                        public Integer getVideos() {
+                        public Long getVideos() {
                             return videos;
                         }
 
-                        public void setVideos(Integer videos) {
+                        public void setVideos(Long videos) {
                             this.videos = videos;
                         }
 
-                        public Integer getTypeId() {
+                        public Long getTypeId() {
                             return typeId;
                         }
 
-                        public void setTypeId(Integer typeId) {
+                        public void setTypeId(Long typeId) {
                             this.typeId = typeId;
                         }
 
@@ -1123,11 +1124,11 @@ public class BvToAvBean {
                             this.typeName = typeName;
                         }
 
-                        public Integer getCopyright() {
+                        public Long getCopyright() {
                             return copyright;
                         }
 
-                        public void setCopyright(Integer copyright) {
+                        public void setCopyright(Long copyright) {
                             this.copyright = copyright;
                         }
 
@@ -1147,19 +1148,19 @@ public class BvToAvBean {
                             this.title = title;
                         }
 
-                        public Integer getPubdate() {
+                        public Long getPubdate() {
                             return pubdate;
                         }
 
-                        public void setPubdate(Integer pubdate) {
+                        public void setPubdate(Long pubdate) {
                             this.pubdate = pubdate;
                         }
 
-                        public Integer getCtime() {
+                        public Long getCtime() {
                             return ctime;
                         }
 
-                        public void setCtime(Integer ctime) {
+                        public void setCtime(Long ctime) {
                             this.ctime = ctime;
                         }
 
@@ -1171,19 +1172,19 @@ public class BvToAvBean {
                             this.desc = desc;
                         }
 
-                        public Integer getState() {
+                        public Long getState() {
                             return state;
                         }
 
-                        public void setState(Integer state) {
+                        public void setState(Long state) {
                             this.state = state;
                         }
 
-                        public Integer getDuration() {
+                        public Long getDuration() {
                             return duration;
                         }
 
-                        public void setDuration(Integer duration) {
+                        public void setDuration(Long duration) {
                             this.duration = duration;
                         }
 
@@ -1237,130 +1238,130 @@ public class BvToAvBean {
 
                         public static class Rights {
                             @SerializedName("bp")
-                            private Integer bp;
+                            private Long bp;
                             @SerializedName("elec")
-                            private Integer elec;
+                            private Long elec;
                             @SerializedName("download")
-                            private Integer download;
+                            private Long download;
                             @SerializedName("movie")
-                            private Integer movie;
+                            private Long movie;
                             @SerializedName("pay")
-                            private Integer pay;
+                            private Long pay;
                             @SerializedName("hd5")
-                            private Integer hd5;
+                            private Long hd5;
                             @SerializedName("no_reprint")
-                            private Integer noReprint;
+                            private Long noReprint;
                             @SerializedName("autoplay")
-                            private Integer autoplay;
+                            private Long autoplay;
                             @SerializedName("ugc_pay")
-                            private Integer ugcPay;
+                            private Long ugcPay;
                             @SerializedName("is_cooperation")
-                            private Integer isCooperation;
+                            private Long isCooperation;
                             @SerializedName("ugc_pay_preview")
-                            private Integer ugcPayPreview;
+                            private Long ugcPayPreview;
 
-                            public Integer getBp() {
+                            public Long getBp() {
                                 return bp;
                             }
 
-                            public void setBp(Integer bp) {
+                            public void setBp(Long bp) {
                                 this.bp = bp;
                             }
 
-                            public Integer getElec() {
+                            public Long getElec() {
                                 return elec;
                             }
 
-                            public void setElec(Integer elec) {
+                            public void setElec(Long elec) {
                                 this.elec = elec;
                             }
 
-                            public Integer getDownload() {
+                            public Long getDownload() {
                                 return download;
                             }
 
-                            public void setDownload(Integer download) {
+                            public void setDownload(Long download) {
                                 this.download = download;
                             }
 
-                            public Integer getMovie() {
+                            public Long getMovie() {
                                 return movie;
                             }
 
-                            public void setMovie(Integer movie) {
+                            public void setMovie(Long movie) {
                                 this.movie = movie;
                             }
 
-                            public Integer getPay() {
+                            public Long getPay() {
                                 return pay;
                             }
 
-                            public void setPay(Integer pay) {
+                            public void setPay(Long pay) {
                                 this.pay = pay;
                             }
 
-                            public Integer getHd5() {
+                            public Long getHd5() {
                                 return hd5;
                             }
 
-                            public void setHd5(Integer hd5) {
+                            public void setHd5(Long hd5) {
                                 this.hd5 = hd5;
                             }
 
-                            public Integer getNoReprint() {
+                            public Long getNoReprint() {
                                 return noReprint;
                             }
 
-                            public void setNoReprint(Integer noReprint) {
+                            public void setNoReprint(Long noReprint) {
                                 this.noReprint = noReprint;
                             }
 
-                            public Integer getAutoplay() {
+                            public Long getAutoplay() {
                                 return autoplay;
                             }
 
-                            public void setAutoplay(Integer autoplay) {
+                            public void setAutoplay(Long autoplay) {
                                 this.autoplay = autoplay;
                             }
 
-                            public Integer getUgcPay() {
+                            public Long getUgcPay() {
                                 return ugcPay;
                             }
 
-                            public void setUgcPay(Integer ugcPay) {
+                            public void setUgcPay(Long ugcPay) {
                                 this.ugcPay = ugcPay;
                             }
 
-                            public Integer getIsCooperation() {
+                            public Long getIsCooperation() {
                                 return isCooperation;
                             }
 
-                            public void setIsCooperation(Integer isCooperation) {
+                            public void setIsCooperation(Long isCooperation) {
                                 this.isCooperation = isCooperation;
                             }
 
-                            public Integer getUgcPayPreview() {
+                            public Long getUgcPayPreview() {
                                 return ugcPayPreview;
                             }
 
-                            public void setUgcPayPreview(Integer ugcPayPreview) {
+                            public void setUgcPayPreview(Long ugcPayPreview) {
                                 this.ugcPayPreview = ugcPayPreview;
                             }
                         }
 
                         public static class Author {
                             @SerializedName("mid")
-                            private Integer mid;
+                            private Long mid;
                             @SerializedName("name")
                             private String name;
                             @SerializedName("face")
                             private String face;
 
-                            public Integer getMid() {
+                            public Long getMid() {
                                 return mid;
                             }
 
-                            public void setMid(Integer mid) {
+                            public void setMid(Long mid) {
                                 this.mid = mid;
                             }
 
@@ -1383,117 +1384,117 @@ public class BvToAvBean {
 
                         public static class Stat {
                             @SerializedName("aid")
-                            private Integer aid;
+                            private Long aid;
                             @SerializedName("view")
-                            private Integer view;
+                            private Long view;
                             @SerializedName("danmaku")
-                            private Integer danmaku;
+                            private Long danmaku;
                             @SerializedName("reply")
-                            private Integer reply;
+                            private Long reply;
                             @SerializedName("fav")
-                            private Integer fav;
+                            private Long fav;
                             @SerializedName("coin")
-                            private Integer coin;
+                            private Long coin;
                             @SerializedName("share")
-                            private Integer share;
+                            private Long share;
                             @SerializedName("now_rank")
-                            private Integer nowRank;
+                            private Long nowRank;
                             @SerializedName("his_rank")
-                            private Integer hisRank;
+                            private Long hisRank;
                             @SerializedName("like")
-                            private Integer like;
+                            private Long like;
                             @SerializedName("dislike")
-                            private Integer dislike;
+                            private Long dislike;
                             @SerializedName("evaluation")
                             private String evaluation;
                             @SerializedName("argue_msg")
                             private String argueMsg;
 
-                            public Integer getAid() {
+                            public Long getAid() {
                                 return aid;
                             }
 
-                            public void setAid(Integer aid) {
+                            public void setAid(Long aid) {
                                 this.aid = aid;
                             }
 
-                            public Integer getView() {
+                            public Long getView() {
                                 return view;
                             }
 
-                            public void setView(Integer view) {
+                            public void setView(Long view) {
                                 this.view = view;
                             }
 
-                            public Integer getDanmaku() {
+                            public Long getDanmaku() {
                                 return danmaku;
                             }
 
-                            public void setDanmaku(Integer danmaku) {
+                            public void setDanmaku(Long danmaku) {
                                 this.danmaku = danmaku;
                             }
 
-                            public Integer getReply() {
+                            public Long getReply() {
                                 return reply;
                             }
 
-                            public void setReply(Integer reply) {
+                            public void setReply(Long reply) {
                                 this.reply = reply;
                             }
 
-                            public Integer getFav() {
+                            public Long getFav() {
                                 return fav;
                             }
 
-                            public void setFav(Integer fav) {
+                            public void setFav(Long fav) {
                                 this.fav = fav;
                             }
 
-                            public Integer getCoin() {
+                            public Long getCoin() {
                                 return coin;
                             }
 
-                            public void setCoin(Integer coin) {
+                            public void setCoin(Long coin) {
                                 this.coin = coin;
                             }
 
-                            public Integer getShare() {
+                            public Long getShare() {
                                 return share;
                             }
 
-                            public void setShare(Integer share) {
+                            public void setShare(Long share) {
                                 this.share = share;
                             }
 
-                            public Integer getNowRank() {
+                            public Long getNowRank() {
                                 return nowRank;
                             }
 
-                            public void setNowRank(Integer nowRank) {
+                            public void setNowRank(Long nowRank) {
                                 this.nowRank = nowRank;
                             }
 
-                            public Integer getHisRank() {
+                            public Long getHisRank() {
                                 return hisRank;
                             }
 
-                            public void setHisRank(Integer hisRank) {
+                            public void setHisRank(Long hisRank) {
                                 this.hisRank = hisRank;
                             }
 
-                            public Integer getLike() {
+                            public Long getLike() {
                                 return like;
                             }
 
-                            public void setLike(Integer like) {
+                            public void setLike(Long like) {
                                 this.like = like;
                             }
 
-                            public Integer getDislike() {
+                            public Long getDislike() {
                                 return dislike;
                             }
 
-                            public void setDislike(Integer dislike) {
+                            public void setDislike(Long dislike) {
                                 this.dislike = dislike;
                             }
 
@@ -1516,33 +1517,33 @@ public class BvToAvBean {
 
                         public static class Dimension {
                             @SerializedName("width")
-                            private Integer width;
+                            private Long width;
                             @SerializedName("height")
-                            private Integer height;
+                            private Long height;
                             @SerializedName("rotate")
-                            private Integer rotate;
+                            private Long rotate;
 
-                            public Integer getWidth() {
+                            public Long getWidth() {
                                 return width;
                             }
 
-                            public void setWidth(Integer width) {
+                            public void setWidth(Long width) {
                                 this.width = width;
                             }
 
-                            public Integer getHeight() {
+                            public Long getHeight() {
                                 return height;
                             }
 
-                            public void setHeight(Integer height) {
+                            public void setHeight(Long height) {
                                 this.height = height;
                             }
 
-                            public Integer getRotate() {
+                            public Long getRotate() {
                                 return rotate;
                             }
 
-                            public void setRotate(Integer rotate) {
+                            public void setRotate(Long rotate) {
                                 this.rotate = rotate;
                             }
                         }
@@ -1550,15 +1551,15 @@ public class BvToAvBean {
 
                     public static class Page {
                         @SerializedName("cid")
-                        private Integer cid;
+                        private Long cid;
                         @SerializedName("page")
-                        private Integer page;
+                        private Long page;
                         @SerializedName("from")
                         private String from;
                         @SerializedName("part")
                         private String part;
                         @SerializedName("duration")
-                        private Integer duration;
+                        private Long duration;
                         @SerializedName("vid")
                         private String vid;
                         @SerializedName("weblink")
@@ -1566,19 +1567,19 @@ public class BvToAvBean {
                         @SerializedName("dimension")
                         private Dimension dimension;
 
-                        public Integer getCid() {
+                        public Long getCid() {
                             return cid;
                         }
 
-                        public void setCid(Integer cid) {
+                        public void setCid(Long cid) {
                             this.cid = cid;
                         }
 
-                        public Integer getPage() {
+                        public Long getPage() {
                             return page;
                         }
 
-                        public void setPage(Integer page) {
+                        public void setPage(Long page) {
                             this.page = page;
                         }
 
@@ -1598,11 +1599,11 @@ public class BvToAvBean {
                             this.part = part;
                         }
 
-                        public Integer getDuration() {
+                        public Long getDuration() {
                             return duration;
                         }
 
-                        public void setDuration(Integer duration) {
+                        public void setDuration(Long duration) {
                             this.duration = duration;
                         }
 
@@ -1632,33 +1633,33 @@ public class BvToAvBean {
 
                         public static class Dimension {
                             @SerializedName("width")
-                            private Integer width;
+                            private Long width;
                             @SerializedName("height")
-                            private Integer height;
+                            private Long height;
                             @SerializedName("rotate")
-                            private Integer rotate;
+                            private Long rotate;
 
-                            public Integer getWidth() {
+                            public Long getWidth() {
                                 return width;
                             }
 
-                            public void setWidth(Integer width) {
+                            public void setWidth(Long width) {
                                 this.width = width;
                             }
 
-                            public Integer getHeight() {
+                            public Long getHeight() {
                                 return height;
                             }
 
-                            public void setHeight(Integer height) {
+                            public void setHeight(Long height) {
                                 this.height = height;
                             }
 
-                            public Integer getRotate() {
+                            public Long getRotate() {
                                 return rotate;
                             }
 
-                            public void setRotate(Integer rotate) {
+                            public void setRotate(Long rotate) {
                                 this.rotate = rotate;
                             }
                         }
@@ -1684,9 +1685,9 @@ public class BvToAvBean {
             @SerializedName("raw_text")
             private String rawText;
             @SerializedName("type")
-            private Integer type;
+            private Long type;
             @SerializedName("biz_id")
-            private Integer bizId;
+            private Long bizId;
 
             public String getRawText() {
                 return rawText;
@@ -1696,34 +1697,34 @@ public class BvToAvBean {
                 this.rawText = rawText;
             }
 
-            public Integer getType() {
+            public Long getType() {
                 return type;
             }
 
-            public void setType(Integer type) {
+            public void setType(Long type) {
                 this.type = type;
             }
 
-            public Integer getBizId() {
+            public Long getBizId() {
                 return bizId;
             }
 
-            public void setBizId(Integer bizId) {
+            public void setBizId(Long bizId) {
                 this.bizId = bizId;
             }
         }
 
         public static class Pages {
             @SerializedName("cid")
-            private Integer cid;
+            private Long cid;
             @SerializedName("page")
-            private Integer page;
+            private Long page;
             @SerializedName("from")
             private String from;
             @SerializedName("part")
             private String part;
             @SerializedName("duration")
-            private Integer duration;
+            private Long duration;
             @SerializedName("vid")
             private String vid;
             @SerializedName("weblink")
@@ -1731,19 +1732,19 @@ public class BvToAvBean {
             @SerializedName("dimension")
             private Dimension dimension;
 
-            public Integer getCid() {
+            public Long getCid() {
                 return cid;
             }
 
-            public void setCid(Integer cid) {
+            public void setCid(Long cid) {
                 this.cid = cid;
             }
 
-            public Integer getPage() {
+            public Long getPage() {
                 return page;
             }
 
-            public void setPage(Integer page) {
+            public void setPage(Long page) {
                 this.page = page;
             }
 
@@ -1763,11 +1764,11 @@ public class BvToAvBean {
                 this.part = part;
             }
 
-            public Integer getDuration() {
+            public Long getDuration() {
                 return duration;
             }
 
-            public void setDuration(Integer duration) {
+            public void setDuration(Long duration) {
                 this.duration = duration;
             }
 
@@ -1797,33 +1798,33 @@ public class BvToAvBean {
 
             public static class Dimension {
                 @SerializedName("width")
-                private Integer width;
+                private Long width;
                 @SerializedName("height")
-                private Integer height;
+                private Long height;
                 @SerializedName("rotate")
-                private Integer rotate;
+                private Long rotate;
 
-                public Integer getWidth() {
+                public Long getWidth() {
                     return width;
                 }
 
-                public void setWidth(Integer width) {
+                public void setWidth(Long width) {
                     this.width = width;
                 }
 
-                public Integer getHeight() {
+                public Long getHeight() {
                     return height;
                 }
 
-                public void setHeight(Integer height) {
+                public void setHeight(Long height) {
                     this.height = height;
                 }
 
-                public Integer getRotate() {
+                public Long getRotate() {
                     return rotate;
                 }
 
-                public void setRotate(Integer rotate) {
+                public void setRotate(Long rotate) {
                     this.rotate = rotate;
                 }
             }

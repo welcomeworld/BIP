@@ -4,20 +4,21 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class BangumiDetailPageBean{
+@SuppressWarnings("unused")
+public class BangumiDetailPageBean {
 
     @SerializedName("code")
-    private Integer code;
+    private Long code;
     @SerializedName("data")
     private Result result;
     @SerializedName("message")
     private String message;
 
-    public Integer getCode() {
+    public Long getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(Long code) {
         this.code = code;
     }
 
@@ -67,9 +68,9 @@ public class BangumiDetailPageBean{
         @SerializedName("link")
         private String link;
         @SerializedName("media_id")
-        private Integer mediaId;
+        private Long mediaId;
         @SerializedName("mode")
-        private Integer mode;
+        private Long mode;
         @SerializedName("modules")
         private List<Modules> modules;
         @SerializedName("new_ep")
@@ -99,7 +100,7 @@ public class BangumiDetailPageBean{
         @SerializedName("rights")
         private Rights rights;
         @SerializedName("season_id")
-        private Integer seasonId;
+        private Long seasonId;
         @SerializedName("season_title")
         private String seasonTitle;
         @SerializedName("series")
@@ -117,7 +118,7 @@ public class BangumiDetailPageBean{
         @SerializedName("stat")
         private Stat stat;
         @SerializedName("status")
-        private Integer status;
+        private Long status;
         @SerializedName("styles")
         private List<Styles> styles;
         @SerializedName("subtitle")
@@ -129,9 +130,9 @@ public class BangumiDetailPageBean{
         @SerializedName("title")
         private String title;
         @SerializedName("total")
-        private Integer total;
+        private Long total;
         @SerializedName("type")
-        private Integer type;
+        private Long type;
         @SerializedName("type_desc")
         private String typeDesc;
         @SerializedName("type_name")
@@ -253,19 +254,19 @@ public class BangumiDetailPageBean{
             this.link = link;
         }
 
-        public Integer getMediaId() {
+        public Long getMediaId() {
             return mediaId;
         }
 
-        public void setMediaId(Integer mediaId) {
+        public void setMediaId(Long mediaId) {
             this.mediaId = mediaId;
         }
 
-        public Integer getMode() {
+        public Long getMode() {
             return mode;
         }
 
-        public void setMode(Integer mode) {
+        public void setMode(Long mode) {
             this.mode = mode;
         }
 
@@ -381,11 +382,11 @@ public class BangumiDetailPageBean{
             this.rights = rights;
         }
 
-        public Integer getSeasonId() {
+        public Long getSeasonId() {
             return seasonId;
         }
 
-        public void setSeasonId(Integer seasonId) {
+        public void setSeasonId(Long seasonId) {
             this.seasonId = seasonId;
         }
 
@@ -453,11 +454,11 @@ public class BangumiDetailPageBean{
             this.stat = stat;
         }
 
-        public Integer getStatus() {
+        public Long getStatus() {
             return status;
         }
 
-        public void setStatus(Integer status) {
+        public void setStatus(Long status) {
             this.status = status;
         }
 
@@ -501,19 +502,19 @@ public class BangumiDetailPageBean{
             this.title = title;
         }
 
-        public Integer getTotal() {
+        public Long getTotal() {
             return total;
         }
 
-        public void setTotal(Integer total) {
+        public void setTotal(Long total) {
             this.total = total;
         }
 
-        public Integer getType() {
+        public Long getType() {
             return type;
         }
 
-        public void setType(Integer type) {
+        public void setType(Long type) {
             this.type = type;
         }
 
@@ -553,7 +554,7 @@ public class BangumiDetailPageBean{
             @SerializedName("h5_link")
             private String h5Link;
             @SerializedName("id")
-            private Integer id;
+            private Long id;
             @SerializedName("link")
             private String link;
             @SerializedName("picurl")
@@ -565,7 +566,7 @@ public class BangumiDetailPageBean{
             @SerializedName("title")
             private String title;
             @SerializedName("type")
-            private Integer type;
+            private Long type;
 
             public String getH5Link() {
                 return h5Link;
@@ -575,11 +576,11 @@ public class BangumiDetailPageBean{
                 this.h5Link = h5Link;
             }
 
-            public Integer getId() {
+            public Long getId() {
                 return id;
             }
 
-            public void setId(Integer id) {
+            public void setId(Long id) {
                 this.id = id;
             }
 
@@ -623,11 +624,11 @@ public class BangumiDetailPageBean{
                 this.title = title;
             }
 
-            public Integer getType() {
+            public Long getType() {
                 return type;
             }
 
-            public void setType(Integer type) {
+            public void setType(Long type) {
                 this.type = type;
             }
         }
@@ -694,11 +695,11 @@ public class BangumiDetailPageBean{
                 @SerializedName("avatar")
                 private String avatar;
                 @SerializedName("follower")
-                private Integer follower;
+                private Long follower;
                 @SerializedName("is_follow")
-                private Integer isFollow;
+                private Long isFollow;
                 @SerializedName("mid")
-                private Integer mid;
+                private Long mid;
                 @SerializedName("uname")
                 private String uname;
                 @SerializedName("vip_label")
@@ -712,27 +713,27 @@ public class BangumiDetailPageBean{
                     this.avatar = avatar;
                 }
 
-                public Integer getFollower() {
+                public Long getFollower() {
                     return follower;
                 }
 
-                public void setFollower(Integer follower) {
+                public void setFollower(Long follower) {
                     this.follower = follower;
                 }
 
-                public Integer getIsFollow() {
+                public Long getIsFollow() {
                     return isFollow;
                 }
 
-                public void setIsFollow(Integer isFollow) {
+                public void setIsFollow(Long isFollow) {
                     this.isFollow = isFollow;
                 }
 
-                public Integer getMid() {
+                public Long getMid() {
                     return mid;
                 }
 
-                public void setMid(Integer mid) {
+                public void setMid(Long mid) {
                     this.mid = mid;
                 }
 
@@ -790,11 +791,11 @@ public class BangumiDetailPageBean{
                 @SerializedName("avatar")
                 private String avatar;
                 @SerializedName("follower")
-                private Integer follower;
+                private Long follower;
                 @SerializedName("is_follow")
-                private Integer isFollow;
+                private Long isFollow;
                 @SerializedName("mid")
-                private Integer mid;
+                private Long mid;
                 @SerializedName("uname")
                 private String uname;
                 @SerializedName("vip_label")
@@ -808,27 +809,27 @@ public class BangumiDetailPageBean{
                     this.avatar = avatar;
                 }
 
-                public Integer getFollower() {
+                public Long getFollower() {
                     return follower;
                 }
 
-                public void setFollower(Integer follower) {
+                public void setFollower(Long follower) {
                     this.follower = follower;
                 }
 
-                public Integer getIsFollow() {
+                public Long getIsFollow() {
                     return isFollow;
                 }
 
-                public void setIsFollow(Integer isFollow) {
+                public void setIsFollow(Long isFollow) {
                     this.isFollow = isFollow;
                 }
 
-                public Integer getMid() {
+                public Long getMid() {
                     return mid;
                 }
 
-                public void setMid(Integer mid) {
+                public void setMid(Long mid) {
                     this.mid = mid;
                 }
 
@@ -920,9 +921,9 @@ public class BangumiDetailPageBean{
             @SerializedName("desc")
             private String desc;
             @SerializedName("id")
-            private Integer id;
+            private Long id;
             @SerializedName("is_new")
-            private Integer isNew;
+            private Long isNew;
             @SerializedName("more")
             private String more;
             @SerializedName("title")
@@ -936,19 +937,19 @@ public class BangumiDetailPageBean{
                 this.desc = desc;
             }
 
-            public Integer getId() {
+            public Long getId() {
                 return id;
             }
 
-            public void setId(Integer id) {
+            public void setId(Long id) {
                 this.id = id;
             }
 
-            public Integer getIsNew() {
+            public Long getIsNew() {
                 return isNew;
             }
 
-            public void setIsNew(Integer isNew) {
+            public void setIsNew(Long isNew) {
                 this.isNew = isNew;
             }
 
@@ -971,55 +972,55 @@ public class BangumiDetailPageBean{
 
         public static class Paster {
             @SerializedName("aid")
-            private Integer aid;
+            private Long aid;
             @SerializedName("allow_jump")
-            private Integer allowJump;
+            private Long allowJump;
             @SerializedName("cid")
-            private Integer cid;
+            private Long cid;
             @SerializedName("duration")
-            private Integer duration;
+            private Long duration;
             @SerializedName("type")
-            private Integer type;
+            private Long type;
             @SerializedName("url")
             private String url;
 
-            public Integer getAid() {
+            public Long getAid() {
                 return aid;
             }
 
-            public void setAid(Integer aid) {
+            public void setAid(Long aid) {
                 this.aid = aid;
             }
 
-            public Integer getAllowJump() {
+            public Long getAllowJump() {
                 return allowJump;
             }
 
-            public void setAllowJump(Integer allowJump) {
+            public void setAllowJump(Long allowJump) {
                 this.allowJump = allowJump;
             }
 
-            public Integer getCid() {
+            public Long getCid() {
                 return cid;
             }
 
-            public void setCid(Integer cid) {
+            public void setCid(Long cid) {
                 this.cid = cid;
             }
 
-            public Integer getDuration() {
+            public Long getDuration() {
                 return duration;
             }
 
-            public void setDuration(Integer duration) {
+            public void setDuration(Long duration) {
                 this.duration = duration;
             }
 
-            public Integer getType() {
+            public Long getType() {
                 return type;
             }
 
-            public void setType(Integer type) {
+            public void setType(Long type) {
                 this.type = type;
             }
 
@@ -1042,7 +1043,7 @@ public class BangumiDetailPageBean{
             @SerializedName("price")
             private String price;
             @SerializedName("report_type")
-            private Integer reportType;
+            private Long reportType;
             @SerializedName("tv_price")
             private String tvPrice;
             @SerializedName("vip_pay_link")
@@ -1084,11 +1085,11 @@ public class BangumiDetailPageBean{
                 this.price = price;
             }
 
-            public Integer getReportType() {
+            public Long getReportType() {
                 return reportType;
             }
 
-            public void setReportType(Integer reportType) {
+            public void setReportType(Long reportType) {
                 this.reportType = reportType;
             }
 
@@ -1141,7 +1142,7 @@ public class BangumiDetailPageBean{
 
                 public static class Primary {
                     @SerializedName("angle_style")
-                    private Integer angleStyle;
+                    private Long angleStyle;
                     @SerializedName("bg_day_color")
                     private String bgDayColor;
                     @SerializedName("bg_line_color")
@@ -1157,7 +1158,7 @@ public class BangumiDetailPageBean{
                     @SerializedName("showTypeEnum")
                     private String showTypeEnum;
                     @SerializedName("show_type")
-                    private Integer showType;
+                    private Long showType;
                     @SerializedName("text_color")
                     private String textColor;
                     @SerializedName("text_night_color")
@@ -1165,19 +1166,19 @@ public class BangumiDetailPageBean{
                     @SerializedName("title")
                     private String title;
                     @SerializedName("type")
-                    private Integer type;
+                    private Long type;
                     @SerializedName("url")
                     private String url;
                     @SerializedName("url_open_type")
-                    private Integer urlOpenType;
+                    private Long urlOpenType;
                     @SerializedName("view_start_time")
-                    private Integer viewStartTime;
+                    private Long viewStartTime;
 
-                    public Integer getAngleStyle() {
+                    public Long getAngleStyle() {
                         return angleStyle;
                     }
 
-                    public void setAngleStyle(Integer angleStyle) {
+                    public void setAngleStyle(Long angleStyle) {
                         this.angleStyle = angleStyle;
                     }
 
@@ -1237,11 +1238,11 @@ public class BangumiDetailPageBean{
                         this.showTypeEnum = showTypeEnum;
                     }
 
-                    public Integer getShowType() {
+                    public Long getShowType() {
                         return showType;
                     }
 
-                    public void setShowType(Integer showType) {
+                    public void setShowType(Long showType) {
                         this.showType = showType;
                     }
 
@@ -1269,11 +1270,11 @@ public class BangumiDetailPageBean{
                         this.title = title;
                     }
 
-                    public Integer getType() {
+                    public Long getType() {
                         return type;
                     }
 
-                    public void setType(Integer type) {
+                    public void setType(Long type) {
                         this.type = type;
                     }
 
@@ -1285,19 +1286,19 @@ public class BangumiDetailPageBean{
                         this.url = url;
                     }
 
-                    public Integer getUrlOpenType() {
+                    public Long getUrlOpenType() {
                         return urlOpenType;
                     }
 
-                    public void setUrlOpenType(Integer urlOpenType) {
+                    public void setUrlOpenType(Long urlOpenType) {
                         this.urlOpenType = urlOpenType;
                     }
 
-                    public Integer getViewStartTime() {
+                    public Long getViewStartTime() {
                         return viewStartTime;
                     }
 
-                    public void setViewStartTime(Integer viewStartTime) {
+                    public void setViewStartTime(Long viewStartTime) {
                         this.viewStartTime = viewStartTime;
                     }
 
@@ -1361,13 +1362,13 @@ public class BangumiDetailPageBean{
 
             public static class PayType {
                 @SerializedName("allow_ticket")
-                private Integer allowTicket;
+                private Long allowTicket;
 
-                public Integer getAllowTicket() {
+                public Long getAllowTicket() {
                     return allowTicket;
                 }
 
-                public void setAllowTicket(Integer allowTicket) {
+                public void setAllowTicket(Long allowTicket) {
                     this.allowTicket = allowTicket;
                 }
             }
@@ -1450,7 +1451,7 @@ public class BangumiDetailPageBean{
             @SerializedName("auto_play_toast")
             private String autoPlayToast;
             @SerializedName("recommend_show_strategy")
-            private Integer recommendShowStrategy;
+            private Long recommendShowStrategy;
             @SerializedName("strategies")
             private List<String> strategies;
 
@@ -1462,11 +1463,11 @@ public class BangumiDetailPageBean{
                 this.autoPlayToast = autoPlayToast;
             }
 
-            public Integer getRecommendShowStrategy() {
+            public Long getRecommendShowStrategy() {
                 return recommendShowStrategy;
             }
 
-            public void setRecommendShowStrategy(Integer recommendShowStrategy) {
+            public void setRecommendShowStrategy(Long recommendShowStrategy) {
                 this.recommendShowStrategy = recommendShowStrategy;
             }
 
@@ -1481,7 +1482,7 @@ public class BangumiDetailPageBean{
 
         public static class PlayerIcon {
             @SerializedName("ctime")
-            private Integer ctime;
+            private Long ctime;
             @SerializedName("hash1")
             private String hash1;
             @SerializedName("hash2")
@@ -1491,11 +1492,11 @@ public class BangumiDetailPageBean{
             @SerializedName("url2")
             private String url2;
 
-            public Integer getCtime() {
+            public Long getCtime() {
                 return ctime;
             }
 
-            public void setCtime(Integer ctime) {
+            public void setCtime(Long ctime) {
                 this.ctime = ctime;
             }
 
@@ -1534,9 +1535,9 @@ public class BangumiDetailPageBean{
 
         public static class Publish {
             @SerializedName("is_finish")
-            private Integer isFinish;
+            private Long isFinish;
             @SerializedName("is_started")
-            private Integer isStarted;
+            private Long isStarted;
             @SerializedName("pub_time")
             private String pubTime;
             @SerializedName("pub_time_show")
@@ -1546,23 +1547,23 @@ public class BangumiDetailPageBean{
             @SerializedName("time_length_show")
             private String timeLengthShow;
             @SerializedName("unknow_pub_date")
-            private Integer unknowPubDate;
+            private Long unknowPubDate;
             @SerializedName("weekday")
-            private Integer weekday;
+            private Long weekday;
 
-            public Integer getIsFinish() {
+            public Long getIsFinish() {
                 return isFinish;
             }
 
-            public void setIsFinish(Integer isFinish) {
+            public void setIsFinish(Long isFinish) {
                 this.isFinish = isFinish;
             }
 
-            public Integer getIsStarted() {
+            public Long getIsStarted() {
                 return isStarted;
             }
 
-            public void setIsStarted(Integer isStarted) {
+            public void setIsStarted(Long isStarted) {
                 this.isStarted = isStarted;
             }
 
@@ -1598,34 +1599,34 @@ public class BangumiDetailPageBean{
                 this.timeLengthShow = timeLengthShow;
             }
 
-            public Integer getUnknowPubDate() {
+            public Long getUnknowPubDate() {
                 return unknowPubDate;
             }
 
-            public void setUnknowPubDate(Integer unknowPubDate) {
+            public void setUnknowPubDate(Long unknowPubDate) {
                 this.unknowPubDate = unknowPubDate;
             }
 
-            public Integer getWeekday() {
+            public Long getWeekday() {
                 return weekday;
             }
 
-            public void setWeekday(Integer weekday) {
+            public void setWeekday(Long weekday) {
                 this.weekday = weekday;
             }
         }
 
         public static class Rating {
             @SerializedName("count")
-            private Integer count;
+            private Long count;
             @SerializedName("score")
             private Double score;
 
-            public Integer getCount() {
+            public Long getCount() {
                 return count;
             }
 
-            public void setCount(Integer count) {
+            public void setCount(Long count) {
                 this.count = count;
             }
 
@@ -1663,89 +1664,89 @@ public class BangumiDetailPageBean{
 
         public static class Rights {
             @SerializedName("allow_bp")
-            private Integer allowBp;
+            private Long allowBp;
             @SerializedName("allow_bp_rank")
-            private Integer allowBpRank;
+            private Long allowBpRank;
             @SerializedName("allow_download")
-            private Integer allowDownload;
+            private Long allowDownload;
             @SerializedName("allow_review")
-            private Integer allowReview;
+            private Long allowReview;
             @SerializedName("area_limit")
-            private Integer areaLimit;
+            private Long areaLimit;
             @SerializedName("ban_area_show")
-            private Integer banAreaShow;
+            private Long banAreaShow;
             @SerializedName("can_watch")
-            private Integer canWatch;
+            private Long canWatch;
             @SerializedName("copyright")
             private String copyright;
             @SerializedName("copyright_name")
             private String copyrightName;
             @SerializedName("forbid_pre")
-            private Integer forbidPre;
+            private Long forbidPre;
             @SerializedName("is_cover_show")
-            private Integer isCoverShow;
+            private Long isCoverShow;
             @SerializedName("is_preview")
-            private Integer isPreview;
+            private Long isPreview;
             @SerializedName("only_vip_download")
-            private Integer onlyVipDownload;
+            private Long onlyVipDownload;
             @SerializedName("resource")
             private String resource;
             @SerializedName("watch_platform")
-            private Integer watchPlatform;
+            private Long watchPlatform;
 
-            public Integer getAllowBp() {
+            public Long getAllowBp() {
                 return allowBp;
             }
 
-            public void setAllowBp(Integer allowBp) {
+            public void setAllowBp(Long allowBp) {
                 this.allowBp = allowBp;
             }
 
-            public Integer getAllowBpRank() {
+            public Long getAllowBpRank() {
                 return allowBpRank;
             }
 
-            public void setAllowBpRank(Integer allowBpRank) {
+            public void setAllowBpRank(Long allowBpRank) {
                 this.allowBpRank = allowBpRank;
             }
 
-            public Integer getAllowDownload() {
+            public Long getAllowDownload() {
                 return allowDownload;
             }
 
-            public void setAllowDownload(Integer allowDownload) {
+            public void setAllowDownload(Long allowDownload) {
                 this.allowDownload = allowDownload;
             }
 
-            public Integer getAllowReview() {
+            public Long getAllowReview() {
                 return allowReview;
             }
 
-            public void setAllowReview(Integer allowReview) {
+            public void setAllowReview(Long allowReview) {
                 this.allowReview = allowReview;
             }
 
-            public Integer getAreaLimit() {
+            public Long getAreaLimit() {
                 return areaLimit;
             }
 
-            public void setAreaLimit(Integer areaLimit) {
+            public void setAreaLimit(Long areaLimit) {
                 this.areaLimit = areaLimit;
             }
 
-            public Integer getBanAreaShow() {
+            public Long getBanAreaShow() {
                 return banAreaShow;
             }
 
-            public void setBanAreaShow(Integer banAreaShow) {
+            public void setBanAreaShow(Long banAreaShow) {
                 this.banAreaShow = banAreaShow;
             }
 
-            public Integer getCanWatch() {
+            public Long getCanWatch() {
                 return canWatch;
             }
 
-            public void setCanWatch(Integer canWatch) {
+            public void setCanWatch(Long canWatch) {
                 this.canWatch = canWatch;
             }
 
@@ -1765,35 +1766,35 @@ public class BangumiDetailPageBean{
                 this.copyrightName = copyrightName;
             }
 
-            public Integer getForbidPre() {
+            public Long getForbidPre() {
                 return forbidPre;
             }
 
-            public void setForbidPre(Integer forbidPre) {
+            public void setForbidPre(Long forbidPre) {
                 this.forbidPre = forbidPre;
             }
 
-            public Integer getIsCoverShow() {
+            public Long getIsCoverShow() {
                 return isCoverShow;
             }
 
-            public void setIsCoverShow(Integer isCoverShow) {
+            public void setIsCoverShow(Long isCoverShow) {
                 this.isCoverShow = isCoverShow;
             }
 
-            public Integer getIsPreview() {
+            public Long getIsPreview() {
                 return isPreview;
             }
 
-            public void setIsPreview(Integer isPreview) {
+            public void setIsPreview(Long isPreview) {
                 this.isPreview = isPreview;
             }
 
-            public Integer getOnlyVipDownload() {
+            public Long getOnlyVipDownload() {
                 return onlyVipDownload;
             }
 
-            public void setOnlyVipDownload(Integer onlyVipDownload) {
+            public void setOnlyVipDownload(Long onlyVipDownload) {
                 this.onlyVipDownload = onlyVipDownload;
             }
 
@@ -1805,26 +1806,26 @@ public class BangumiDetailPageBean{
                 this.resource = resource;
             }
 
-            public Integer getWatchPlatform() {
+            public Long getWatchPlatform() {
                 return watchPlatform;
             }
 
-            public void setWatchPlatform(Integer watchPlatform) {
+            public void setWatchPlatform(Long watchPlatform) {
                 this.watchPlatform = watchPlatform;
             }
         }
 
         public static class Series {
             @SerializedName("series_id")
-            private Integer seriesId;
+            private Long seriesId;
             @SerializedName("series_title")
             private String seriesTitle;
 
-            public Integer getSeriesId() {
+            public Long getSeriesId() {
                 return seriesId;
             }
 
-            public void setSeriesId(Integer seriesId) {
+            public void setSeriesId(Long seriesId) {
                 this.seriesId = seriesId;
             }
 
@@ -1862,55 +1863,55 @@ public class BangumiDetailPageBean{
 
         public static class Stat {
             @SerializedName("coins")
-            private Integer coins;
+            private Long coins;
             @SerializedName("danmakus")
-            private Integer danmakus;
+            private Long danmakus;
             @SerializedName("favorite")
-            private Integer favorite;
+            private Long favorite;
             @SerializedName("favorites")
-            private Integer favorites;
+            private Long favorites;
             @SerializedName("followers")
             private String followers;
             @SerializedName("likes")
-            private Integer likes;
+            private Long likes;
             @SerializedName("play")
             private String play;
             @SerializedName("reply")
-            private Integer reply;
+            private Long reply;
             @SerializedName("share")
-            private Integer share;
+            private Long share;
             @SerializedName("views")
-            private Integer views;
+            private Long views;
 
-            public Integer getCoins() {
+            public Long getCoins() {
                 return coins;
             }
 
-            public void setCoins(Integer coins) {
+            public void setCoins(Long coins) {
                 this.coins = coins;
             }
 
-            public Integer getDanmakus() {
+            public Long getDanmakus() {
                 return danmakus;
             }
 
-            public void setDanmakus(Integer danmakus) {
+            public void setDanmakus(Long danmakus) {
                 this.danmakus = danmakus;
             }
 
-            public Integer getFavorite() {
+            public Long getFavorite() {
                 return favorite;
             }
 
-            public void setFavorite(Integer favorite) {
+            public void setFavorite(Long favorite) {
                 this.favorite = favorite;
             }
 
-            public Integer getFavorites() {
+            public Long getFavorites() {
                 return favorites;
             }
 
-            public void setFavorites(Integer favorites) {
+            public void setFavorites(Long favorites) {
                 this.favorites = favorites;
             }
 
@@ -1922,11 +1923,11 @@ public class BangumiDetailPageBean{
                 this.followers = followers;
             }
 
-            public Integer getLikes() {
+            public Long getLikes() {
                 return likes;
             }
 
-            public void setLikes(Integer likes) {
+            public void setLikes(Long likes) {
                 this.likes = likes;
             }
 
@@ -1938,27 +1939,27 @@ public class BangumiDetailPageBean{
                 this.play = play;
             }
 
-            public Integer getReply() {
+            public Long getReply() {
                 return reply;
             }
 
-            public void setReply(Integer reply) {
+            public void setReply(Long reply) {
                 this.reply = reply;
             }
 
-            public Integer getShare() {
+            public Long getShare() {
                 return share;
             }
 
-            public void setShare(Integer share) {
+            public void setShare(Long share) {
                 this.share = share;
             }
 
-            public Integer getViews() {
+            public Long getViews() {
                 return views;
             }
 
-            public void setViews(Integer views) {
+            public void setViews(Long views) {
                 this.views = views;
             }
         }
@@ -1969,7 +1970,7 @@ public class BangumiDetailPageBean{
             @SerializedName("is_ogv_fav_exp")
             private Boolean isOgvFavExp;
             @SerializedName("movie_mark_action")
-            private Integer movieMarkAction;
+            private Long movieMarkAction;
             @SerializedName("was_pugv_style_optimize")
             private Boolean wasPugvStyleOptimize;
 
@@ -1989,11 +1990,11 @@ public class BangumiDetailPageBean{
                 this.isOgvFavExp = isOgvFavExp;
             }
 
-            public Integer getMovieMarkAction() {
+            public Long getMovieMarkAction() {
                 return movieMarkAction;
             }
 
-            public void setMovieMarkAction(Integer movieMarkAction) {
+            public void setMovieMarkAction(Long movieMarkAction) {
                 this.movieMarkAction = movieMarkAction;
             }
 
@@ -2010,25 +2011,25 @@ public class BangumiDetailPageBean{
             @SerializedName("avatar")
             private String avatar;
             @SerializedName("follower")
-            private Integer follower;
+            private Long follower;
             @SerializedName("is_follow")
-            private Integer isFollow;
+            private Long isFollow;
             @SerializedName("mid")
-            private Integer mid;
+            private Long mid;
             @SerializedName("pendant")
             private Pendant pendant;
             @SerializedName("theme_type")
-            private Integer themeType;
+            private Long themeType;
             @SerializedName("uname")
             private String uname;
             @SerializedName("verify_type")
-            private Integer verifyType;
+            private Long verifyType;
             @SerializedName("vip_label")
             private VipLabel vipLabel;
             @SerializedName("vip_status")
-            private Integer vipStatus;
+            private Long vipStatus;
             @SerializedName("vip_type")
-            private Integer vipType;
+            private Long vipType;
 
             public String getAvatar() {
                 return avatar;
@@ -2038,27 +2039,27 @@ public class BangumiDetailPageBean{
                 this.avatar = avatar;
             }
 
-            public Integer getFollower() {
+            public Long getFollower() {
                 return follower;
             }
 
-            public void setFollower(Integer follower) {
+            public void setFollower(Long follower) {
                 this.follower = follower;
             }
 
-            public Integer getIsFollow() {
+            public Long getIsFollow() {
                 return isFollow;
             }
 
-            public void setIsFollow(Integer isFollow) {
+            public void setIsFollow(Long isFollow) {
                 this.isFollow = isFollow;
             }
 
-            public Integer getMid() {
+            public Long getMid() {
                 return mid;
             }
 
-            public void setMid(Integer mid) {
+            public void setMid(Long mid) {
                 this.mid = mid;
             }
 
@@ -2070,11 +2071,11 @@ public class BangumiDetailPageBean{
                 this.pendant = pendant;
             }
 
-            public Integer getThemeType() {
+            public Long getThemeType() {
                 return themeType;
             }
 
-            public void setThemeType(Integer themeType) {
+            public void setThemeType(Long themeType) {
                 this.themeType = themeType;
             }
 
@@ -2086,11 +2087,11 @@ public class BangumiDetailPageBean{
                 this.uname = uname;
             }
 
-            public Integer getVerifyType() {
+            public Long getVerifyType() {
                 return verifyType;
             }
 
-            public void setVerifyType(Integer verifyType) {
+            public void setVerifyType(Long verifyType) {
                 this.verifyType = verifyType;
             }
 
@@ -2102,19 +2103,19 @@ public class BangumiDetailPageBean{
                 this.vipLabel = vipLabel;
             }
 
-            public Integer getVipStatus() {
+            public Long getVipStatus() {
                 return vipStatus;
             }
 
-            public void setVipStatus(Integer vipStatus) {
+            public void setVipStatus(Long vipStatus) {
                 this.vipStatus = vipStatus;
             }
 
-            public Integer getVipType() {
+            public Long getVipType() {
                 return vipType;
             }
 
-            public void setVipType(Integer vipType) {
+            public void setVipType(Long vipType) {
                 this.vipType = vipType;
             }
 
@@ -2124,7 +2125,7 @@ public class BangumiDetailPageBean{
                 @SerializedName("name")
                 private String name;
                 @SerializedName("pid")
-                private Integer pid;
+                private Long pid;
 
                 public String getImage() {
                     return image;
@@ -2142,11 +2143,11 @@ public class BangumiDetailPageBean{
                     this.name = name;
                 }
 
-                public Integer getPid() {
+                public Long getPid() {
                     return pid;
                 }
 
-                public void setPid(Integer pid) {
+                public void setPid(Long pid) {
                     this.pid = pid;
                 }
             }
@@ -2187,61 +2188,61 @@ public class BangumiDetailPageBean{
 
         public static class UserStatus {
             @SerializedName("follow")
-            private Integer follow;
+            private Long follow;
             @SerializedName("follow_bubble")
-            private Integer followBubble;
+            private Long followBubble;
             @SerializedName("follow_status")
-            private Integer followStatus;
+            private Long followStatus;
             @SerializedName("pay")
-            private Integer pay;
+            private Long pay;
             @SerializedName("pay_for")
-            private Integer payFor;
+            private Long payFor;
             @SerializedName("review")
             private Review review;
             @SerializedName("sponsor")
-            private Integer sponsor;
+            private Long sponsor;
             @SerializedName("vip")
-            private Integer vip;
+            private Long vip;
             @SerializedName("vip_frozen")
-            private Integer vipFrozen;
+            private Long vipFrozen;
 
-            public Integer getFollow() {
+            public Long getFollow() {
                 return follow;
             }
 
-            public void setFollow(Integer follow) {
+            public void setFollow(Long follow) {
                 this.follow = follow;
             }
 
-            public Integer getFollowBubble() {
+            public Long getFollowBubble() {
                 return followBubble;
             }
 
-            public void setFollowBubble(Integer followBubble) {
+            public void setFollowBubble(Long followBubble) {
                 this.followBubble = followBubble;
             }
 
-            public Integer getFollowStatus() {
+            public Long getFollowStatus() {
                 return followStatus;
             }
 
-            public void setFollowStatus(Integer followStatus) {
+            public void setFollowStatus(Long followStatus) {
                 this.followStatus = followStatus;
             }
 
-            public Integer getPay() {
+            public Long getPay() {
                 return pay;
             }
 
-            public void setPay(Integer pay) {
+            public void setPay(Long pay) {
                 this.pay = pay;
             }
 
-            public Integer getPayFor() {
+            public Long getPayFor() {
                 return payFor;
             }
 
-            public void setPayFor(Integer payFor) {
+            public void setPayFor(Long payFor) {
                 this.payFor = payFor;
             }
 
@@ -2253,27 +2254,27 @@ public class BangumiDetailPageBean{
                 this.review = review;
             }
 
-            public Integer getSponsor() {
+            public Long getSponsor() {
                 return sponsor;
             }
 
-            public void setSponsor(Integer sponsor) {
+            public void setSponsor(Long sponsor) {
                 this.sponsor = sponsor;
             }
 
-            public Integer getVip() {
+            public Long getVip() {
                 return vip;
             }
 
-            public void setVip(Integer vip) {
+            public void setVip(Long vip) {
                 this.vip = vip;
             }
 
-            public Integer getVipFrozen() {
+            public Long getVipFrozen() {
                 return vipFrozen;
             }
 
-            public void setVipFrozen(Integer vipFrozen) {
+            public void setVipFrozen(Long vipFrozen) {
                 this.vipFrozen = vipFrozen;
             }
 
@@ -2281,9 +2282,9 @@ public class BangumiDetailPageBean{
                 @SerializedName("article_url")
                 private String articleUrl;
                 @SerializedName("is_open")
-                private Integer isOpen;
+                private Long isOpen;
                 @SerializedName("score")
-                private Integer score;
+                private Long score;
 
                 public String getArticleUrl() {
                     return articleUrl;
@@ -2293,19 +2294,19 @@ public class BangumiDetailPageBean{
                     this.articleUrl = articleUrl;
                 }
 
-                public Integer getIsOpen() {
+                public Long getIsOpen() {
                     return isOpen;
                 }
 
-                public void setIsOpen(Integer isOpen) {
+                public void setIsOpen(Long isOpen) {
                     this.isOpen = isOpen;
                 }
 
-                public Integer getScore() {
+                public Long getScore() {
                     return score;
                 }
 
-                public void setScore(Integer score) {
+                public void setScore(Long score) {
                     this.score = score;
                 }
             }
@@ -2313,15 +2314,15 @@ public class BangumiDetailPageBean{
 
         public static class Areas {
             @SerializedName("id")
-            private Integer id;
+            private Long id;
             @SerializedName("name")
             private String name;
 
-            public Integer getId() {
+            public Long getId() {
                 return id;
             }
 
-            public void setId(Integer id) {
+            public void setId(Long id) {
                 this.id = id;
             }
 
@@ -2342,7 +2343,7 @@ public class BangumiDetailPageBean{
             @SerializedName("desc")
             private String desc;
             @SerializedName("id")
-            private Integer id;
+            private Long id;
             @SerializedName("name")
             private String name;
             @SerializedName("short_desc")
@@ -2372,11 +2373,11 @@ public class BangumiDetailPageBean{
                 this.desc = desc;
             }
 
-            public Integer getId() {
+            public Long getId() {
                 return id;
             }
 
-            public void setId(Integer id) {
+            public void setId(Long id) {
                 this.id = id;
             }
 
@@ -2401,7 +2402,7 @@ public class BangumiDetailPageBean{
             @SerializedName("data")
             private Data data;
             @SerializedName("id")
-            private Integer id;
+            private Long id;
             @SerializedName("module_style")
             private ModuleStyle moduleStyle;
             @SerializedName("more")
@@ -2421,11 +2422,11 @@ public class BangumiDetailPageBean{
                 this.data = data;
             }
 
-            public Integer getId() {
+            public Long getId() {
                 return id;
             }
 
-            public void setId(Integer id) {
+            public void setId(Long id) {
                 this.id = id;
             }
 
@@ -2483,37 +2484,37 @@ public class BangumiDetailPageBean{
 
                 public static class Episodes {
                     @SerializedName("aid")
-                    private Integer aid;
+                    private Long aid;
                     @SerializedName("badge")
                     private String badge;
                     @SerializedName("badge_info")
                     private BadgeInfo badgeInfo;
                     @SerializedName("badge_type")
-                    private Integer badgeType;
+                    private Long badgeType;
                     @SerializedName("bvid")
                     private String bvid;
                     @SerializedName("cid")
-                    private Integer cid;
+                    private Long cid;
                     @SerializedName("cover")
                     private String cover;
                     @SerializedName("dimension")
                     private Dimension dimension;
                     @SerializedName("duration")
-                    private Integer duration;
+                    private Long duration;
                     @SerializedName("ep_index")
-                    private Integer epIndex;
+                    private Long epIndex;
                     @SerializedName("from")
                     private String from;
                     @SerializedName("id")
-                    private Integer id;
+                    private Long id;
                     @SerializedName("link")
                     private String link;
                     @SerializedName("long_title")
                     private String longTitle;
                     @SerializedName("pub_time")
-                    private Integer pubTime;
+                    private Long pubTime;
                     @SerializedName("pv")
-                    private Integer pv;
+                    private Long pv;
                     @SerializedName("release_date")
                     private String releaseDate;
                     @SerializedName("report")
@@ -2521,7 +2522,7 @@ public class BangumiDetailPageBean{
                     @SerializedName("rights")
                     private Rights rights;
                     @SerializedName("section_index")
-                    private Integer sectionIndex;
+                    private Long sectionIndex;
                     @SerializedName("share_copy")
                     private String shareCopy;
                     @SerializedName("share_url")
@@ -2531,7 +2532,7 @@ public class BangumiDetailPageBean{
                     @SerializedName("stat")
                     private Stat stat;
                     @SerializedName("status")
-                    private Integer status;
+                    private Long status;
                     @SerializedName("subtitle")
                     private String subtitle;
                     @SerializedName("title")
@@ -2541,11 +2542,11 @@ public class BangumiDetailPageBean{
                     @SerializedName("up_infos")
                     private List<UpInfos> upInfos;
 
-                    public Integer getAid() {
+                    public Long getAid() {
                         return aid;
                     }
 
-                    public void setAid(Integer aid) {
+                    public void setAid(Long aid) {
                         this.aid = aid;
                     }
 
@@ -2565,11 +2566,11 @@ public class BangumiDetailPageBean{
                         this.badgeInfo = badgeInfo;
                     }
 
-                    public Integer getBadgeType() {
+                    public Long getBadgeType() {
                         return badgeType;
                     }
 
-                    public void setBadgeType(Integer badgeType) {
+                    public void setBadgeType(Long badgeType) {
                         this.badgeType = badgeType;
                     }
 
@@ -2581,11 +2582,11 @@ public class BangumiDetailPageBean{
                         this.bvid = bvid;
                     }
 
-                    public Integer getCid() {
+                    public Long getCid() {
                         return cid;
                     }
 
-                    public void setCid(Integer cid) {
+                    public void setCid(Long cid) {
                         this.cid = cid;
                     }
 
@@ -2605,19 +2606,19 @@ public class BangumiDetailPageBean{
                         this.dimension = dimension;
                     }
 
-                    public Integer getDuration() {
+                    public Long getDuration() {
                         return duration;
                     }
 
-                    public void setDuration(Integer duration) {
+                    public void setDuration(Long duration) {
                         this.duration = duration;
                     }
 
-                    public Integer getEpIndex() {
+                    public Long getEpIndex() {
                         return epIndex;
                     }
 
-                    public void setEpIndex(Integer epIndex) {
+                    public void setEpIndex(Long epIndex) {
                         this.epIndex = epIndex;
                     }
 
@@ -2629,11 +2630,11 @@ public class BangumiDetailPageBean{
                         this.from = from;
                     }
 
-                    public Integer getId() {
+                    public Long getId() {
                         return id;
                     }
 
-                    public void setId(Integer id) {
+                    public void setId(Long id) {
                         this.id = id;
                     }
 
@@ -2653,19 +2654,19 @@ public class BangumiDetailPageBean{
                         this.longTitle = longTitle;
                     }
 
-                    public Integer getPubTime() {
+                    public Long getPubTime() {
                         return pubTime;
                     }
 
-                    public void setPubTime(Integer pubTime) {
+                    public void setPubTime(Long pubTime) {
                         this.pubTime = pubTime;
                     }
 
-                    public Integer getPv() {
+                    public Long getPv() {
                         return pv;
                     }
 
-                    public void setPv(Integer pv) {
+                    public void setPv(Long pv) {
                         this.pv = pv;
                     }
 
@@ -2693,11 +2694,11 @@ public class BangumiDetailPageBean{
                         this.rights = rights;
                     }
 
-                    public Integer getSectionIndex() {
+                    public Long getSectionIndex() {
                         return sectionIndex;
                     }
 
-                    public void setSectionIndex(Integer sectionIndex) {
+                    public void setSectionIndex(Long sectionIndex) {
                         this.sectionIndex = sectionIndex;
                     }
 
@@ -2733,11 +2734,11 @@ public class BangumiDetailPageBean{
                         this.stat = stat;
                     }
 
-                    public Integer getStatus() {
+                    public Long getStatus() {
                         return status;
                     }
 
-                    public void setStatus(Integer status) {
+                    public void setStatus(Long status) {
                         this.status = status;
                     }
 
@@ -2808,33 +2809,33 @@ public class BangumiDetailPageBean{
 
                     public static class Dimension {
                         @SerializedName("height")
-                        private Integer height;
+                        private Long height;
                         @SerializedName("rotate")
-                        private Integer rotate;
+                        private Long rotate;
                         @SerializedName("width")
-                        private Integer width;
+                        private Long width;
 
-                        public Integer getHeight() {
+                        public Long getHeight() {
                             return height;
                         }
 
-                        public void setHeight(Integer height) {
+                        public void setHeight(Long height) {
                             this.height = height;
                         }
 
-                        public Integer getRotate() {
+                        public Long getRotate() {
                             return rotate;
                         }
 
-                        public void setRotate(Integer rotate) {
+                        public void setRotate(Long rotate) {
                             this.rotate = rotate;
                         }
 
-                        public Integer getWidth() {
+                        public Long getWidth() {
                             return width;
                         }
 
-                        public void setWidth(Integer width) {
+                        public void setWidth(Long width) {
                             this.width = width;
                         }
                     }
@@ -2914,131 +2915,131 @@ public class BangumiDetailPageBean{
 
                     public static class Rights {
                         @SerializedName("allow_demand")
-                        private Integer allowDemand;
+                        private Long allowDemand;
                         @SerializedName("allow_dm")
-                        private Integer allowDm;
+                        private Long allowDm;
                         @SerializedName("allow_download")
-                        private Integer allowDownload;
+                        private Long allowDownload;
                         @SerializedName("area_limit")
-                        private Integer areaLimit;
+                        private Long areaLimit;
 
-                        public Integer getAllowDemand() {
+                        public Long getAllowDemand() {
                             return allowDemand;
                         }
 
-                        public void setAllowDemand(Integer allowDemand) {
+                        public void setAllowDemand(Long allowDemand) {
                             this.allowDemand = allowDemand;
                         }
 
-                        public Integer getAllowDm() {
+                        public Long getAllowDm() {
                             return allowDm;
                         }
 
-                        public void setAllowDm(Integer allowDm) {
+                        public void setAllowDm(Long allowDm) {
                             this.allowDm = allowDm;
                         }
 
-                        public Integer getAllowDownload() {
+                        public Long getAllowDownload() {
                             return allowDownload;
                         }
 
-                        public void setAllowDownload(Integer allowDownload) {
+                        public void setAllowDownload(Long allowDownload) {
                             this.allowDownload = allowDownload;
                         }
 
-                        public Integer getAreaLimit() {
+                        public Long getAreaLimit() {
                             return areaLimit;
                         }
 
-                        public void setAreaLimit(Integer areaLimit) {
+                        public void setAreaLimit(Long areaLimit) {
                             this.areaLimit = areaLimit;
                         }
                     }
 
                     public static class Stat {
                         @SerializedName("coin")
-                        private Integer coin;
+                        private Long coin;
                         @SerializedName("danmakus")
-                        private Integer danmakus;
+                        private Long danmakus;
                         @SerializedName("likes")
-                        private Integer likes;
+                        private Long likes;
                         @SerializedName("play")
-                        private Integer play;
+                        private Long play;
                         @SerializedName("reply")
-                        private Integer reply;
+                        private Long reply;
 
-                        public Integer getCoin() {
+                        public Long getCoin() {
                             return coin;
                         }
 
-                        public void setCoin(Integer coin) {
+                        public void setCoin(Long coin) {
                             this.coin = coin;
                         }
 
-                        public Integer getDanmakus() {
+                        public Long getDanmakus() {
                             return danmakus;
                         }
 
-                        public void setDanmakus(Integer danmakus) {
+                        public void setDanmakus(Long danmakus) {
                             this.danmakus = danmakus;
                         }
 
-                        public Integer getLikes() {
+                        public Long getLikes() {
                             return likes;
                         }
 
-                        public void setLikes(Integer likes) {
+                        public void setLikes(Long likes) {
                             this.likes = likes;
                         }
 
-                        public Integer getPlay() {
+                        public Long getPlay() {
                             return play;
                         }
 
-                        public void setPlay(Integer play) {
+                        public void setPlay(Long play) {
                             this.play = play;
                         }
 
-                        public Integer getReply() {
+                        public Long getReply() {
                             return reply;
                         }
 
-                        public void setReply(Integer reply) {
+                        public void setReply(Long reply) {
                             this.reply = reply;
                         }
                     }
 
                     public static class UpInfos {
                         @SerializedName("follower")
-                        private Integer follower;
+                        private Long follower;
                         @SerializedName("is_follow")
-                        private Integer isFollow;
+                        private Long isFollow;
                         @SerializedName("mid")
-                        private Integer mid;
+                        private Long mid;
                         @SerializedName("title")
                         private String title;
 
-                        public Integer getFollower() {
+                        public Long getFollower() {
                             return follower;
                         }
 
-                        public void setFollower(Integer follower) {
+                        public void setFollower(Long follower) {
                             this.follower = follower;
                         }
 
-                        public Integer getIsFollow() {
+                        public Long getIsFollow() {
                             return isFollow;
                         }
 
-                        public void setIsFollow(Integer isFollow) {
+                        public void setIsFollow(Long isFollow) {
                             this.isFollow = isFollow;
                         }
 
-                        public Integer getMid() {
+                        public Long getMid() {
                             return mid;
                         }
 
-                        public void setMid(Integer mid) {
+                        public void setMid(Long mid) {
                             this.mid = mid;
                         }
 
@@ -3055,23 +3056,23 @@ public class BangumiDetailPageBean{
 
             public static class ModuleStyle {
                 @SerializedName("hidden")
-                private Integer hidden;
+                private Long hidden;
                 @SerializedName("line")
-                private Integer line;
+                private Long line;
 
-                public Integer getHidden() {
+                public Long getHidden() {
                     return hidden;
                 }
 
-                public void setHidden(Integer hidden) {
+                public void setHidden(Long hidden) {
                     this.hidden = hidden;
                 }
 
-                public Integer getLine() {
+                public Long getLine() {
                     return line;
                 }
 
-                public void setLine(Integer line) {
+                public void setLine(Long line) {
                     this.line = line;
                 }
             }
@@ -3132,17 +3133,17 @@ public class BangumiDetailPageBean{
 
         public static class Styles {
             @SerializedName("id")
-            private Integer id;
+            private Long id;
             @SerializedName("name")
             private String name;
             @SerializedName("url")
             private String url;
 
-            public Integer getId() {
+            public Long getId() {
                 return id;
             }
 
-            public void setId(Integer id) {
+            public void setId(Long id) {
                 this.id = id;
             }
 

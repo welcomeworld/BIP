@@ -2,10 +2,11 @@ package com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retr
 
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class WebLoginInfoBean {
 
     @SerializedName("code")
-    private Integer code;
+    private Long code;
     @SerializedName("status")
     private Boolean status;
     @SerializedName("ts")
@@ -13,11 +14,11 @@ public class WebLoginInfoBean {
     @SerializedName("data")
     private Data data;
 
-    public Integer getCode() {
+    public Long getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(Long code) {
         this.code = code;
     }
 

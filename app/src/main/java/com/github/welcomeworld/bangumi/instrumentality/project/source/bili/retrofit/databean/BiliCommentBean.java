@@ -2,6 +2,7 @@ package com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retr
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class BiliCommentBean {
 
 
@@ -515,7 +516,6 @@ public class BiliCommentBean {
                 public void setReplies(List<RepliesBean> replies) {
                     this.replies = replies;
                 }
-
 
 
                 public static class ContentBean {

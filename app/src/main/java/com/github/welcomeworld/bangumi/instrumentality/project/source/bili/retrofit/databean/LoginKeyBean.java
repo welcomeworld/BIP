@@ -10,6 +10,7 @@ import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
 
+@SuppressWarnings("unused")
 public class LoginKeyBean {
 
     @SerializedName("ts")
