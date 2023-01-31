@@ -14,25 +14,25 @@ import javax.crypto.Cipher;
 public class LoginKeyBean {
 
     @SerializedName("ts")
-    private int ts;
+    private long ts;
     @SerializedName("code")
-    private int code;
+    private long code;
     @SerializedName("data")
     private AuthKey data;
 
-    public int getTs() {
+    public long getTs() {
         return ts;
     }
 
-    public void setTs(int ts) {
+    public void setTs(long ts) {
         this.ts = ts;
     }
 
-    public int getCode() {
+    public long getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(long code) {
         this.code = code;
     }
 

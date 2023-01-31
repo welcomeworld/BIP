@@ -8,19 +8,19 @@ import java.util.List;
 public class SearchResultBean {
 
     @SerializedName("code")
-    private int code;
+    private long code;
     @SerializedName("message")
     private String message;
     @SerializedName("ttl")
-    private int ttl;
+    private long ttl;
     @SerializedName("data")
     private DataBean data;
 
-    public int getCode() {
+    public long getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(long code) {
         this.code = code;
     }
 
@@ -32,11 +32,11 @@ public class SearchResultBean {
         this.message = message;
     }
 
-    public int getTtl() {
+    public long getTtl() {
         return ttl;
     }
 
-    public void setTtl(int ttl) {
+    public void setTtl(long ttl) {
         this.ttl = ttl;
     }
 
@@ -52,13 +52,13 @@ public class SearchResultBean {
         @SerializedName("trackid")
         private String trackid;
         @SerializedName("page")
-        private int page;
+        private long page;
         @SerializedName("items")
         private ItemsBean items;
         @SerializedName("array")
-        private int array;
+        private long array;
         @SerializedName("attribute")
-        private int attribute;
+        private long attribute;
         @SerializedName("nav")
         private List<NavBean> nav;
         @SerializedName("item")
@@ -72,11 +72,11 @@ public class SearchResultBean {
             this.trackid = trackid;
         }
 
-        public int getPage() {
+        public long getPage() {
             return page;
         }
 
-        public void setPage(int page) {
+        public void setPage(long page) {
             this.page = page;
         }
 
@@ -88,19 +88,19 @@ public class SearchResultBean {
             this.items = items;
         }
 
-        public int getArray() {
+        public long getArray() {
             return array;
         }
 
-        public void setArray(int array) {
+        public void setArray(long array) {
             this.array = array;
         }
 
-        public int getAttribute() {
+        public long getAttribute() {
             return attribute;
         }
 
-        public void setAttribute(int attribute) {
+        public void setAttribute(long attribute) {
             this.attribute = attribute;
         }
 
@@ -127,11 +127,11 @@ public class SearchResultBean {
             @SerializedName("name")
             private String name;
             @SerializedName("total")
-            private int total;
+            private long total;
             @SerializedName("pages")
-            private int pages;
+            private long pages;
             @SerializedName("type")
-            private int type;
+            private long type;
 
             public String getName() {
                 return name;
@@ -141,27 +141,27 @@ public class SearchResultBean {
                 this.name = name;
             }
 
-            public int getTotal() {
+            public long getTotal() {
                 return total;
             }
 
-            public void setTotal(int total) {
+            public void setTotal(long total) {
                 this.total = total;
             }
 
-            public int getPages() {
+            public long getPages() {
                 return pages;
             }
 
-            public void setPages(int pages) {
+            public void setPages(long pages) {
                 this.pages = pages;
             }
 
-            public int getType() {
+            public long getType() {
                 return type;
             }
 
-            public void setType(int type) {
+            public void setType(long type) {
                 this.type = type;
             }
         }
@@ -172,7 +172,7 @@ public class SearchResultBean {
             @SerializedName("linktype")
             private String linktype;
             @SerializedName("position")
-            private int position;
+            private long position;
             @SerializedName("title")
             private String title;
             @SerializedName("cover")
@@ -186,21 +186,21 @@ public class SearchResultBean {
             @SerializedName("sign")
             private String sign;
             @SerializedName("fans")
-            private int fans;
+            private long fans;
             @SerializedName("level")
-            private int level;
+            private long level;
             @SerializedName("official_verify")
             private OfficialVerifyBean officialVerify;
             @SerializedName("is_up")
             private boolean isUp;
             @SerializedName("archives")
-            private int archives;
+            private long archives;
             @SerializedName("mid")
-            private int mid;
+            private long mid;
             @SerializedName("play")
-            private int play;
+            private long play;
             @SerializedName("danmaku")
-            private int danmaku;
+            private long danmaku;
             @SerializedName("author")
             private String author;
             @SerializedName("desc")
@@ -234,11 +234,11 @@ public class SearchResultBean {
                 this.linktype = linktype;
             }
 
-            public int getPosition() {
+            public long getPosition() {
                 return position;
             }
 
-            public void setPosition(int position) {
+            public void setPosition(long position) {
                 this.position = position;
             }
 
@@ -290,19 +290,19 @@ public class SearchResultBean {
                 this.sign = sign;
             }
 
-            public int getFans() {
+            public long getFans() {
                 return fans;
             }
 
-            public void setFans(int fans) {
+            public void setFans(long fans) {
                 this.fans = fans;
             }
 
-            public int getLevel() {
+            public long getLevel() {
                 return level;
             }
 
-            public void setLevel(int level) {
+            public void setLevel(long level) {
                 this.level = level;
             }
 
@@ -322,35 +322,35 @@ public class SearchResultBean {
                 this.isUp = isUp;
             }
 
-            public int getArchives() {
+            public long getArchives() {
                 return archives;
             }
 
-            public void setArchives(int archives) {
+            public void setArchives(long archives) {
                 this.archives = archives;
             }
 
-            public int getMid() {
+            public long getMid() {
                 return mid;
             }
 
-            public void setMid(int mid) {
+            public void setMid(long mid) {
                 this.mid = mid;
             }
 
-            public int getPlay() {
+            public long getPlay() {
                 return play;
             }
 
-            public void setPlay(int play) {
+            public void setPlay(long play) {
                 this.play = play;
             }
 
-            public int getDanmaku() {
+            public long getDanmaku() {
                 return danmaku;
             }
 
-            public void setDanmaku(int danmaku) {
+            public void setDanmaku(long danmaku) {
                 this.danmaku = danmaku;
             }
 
@@ -420,15 +420,15 @@ public class SearchResultBean {
 
             public static class OfficialVerifyBean {
                 @SerializedName("type")
-                private int type;
+                private long type;
                 @SerializedName("desc")
                 private String desc;
 
-                public int getType() {
+                public long getType() {
                     return type;
                 }
 
-                public void setType(int type) {
+                public void setType(long type) {
                     this.type = type;
                 }
 
@@ -453,11 +453,11 @@ public class SearchResultBean {
                 @SerializedName("goto")
                 private String gotoX;
                 @SerializedName("play")
-                private int play;
+                private long play;
                 @SerializedName("danmaku")
-                private int danmaku;
+                private long danmaku;
                 @SerializedName("ctime")
-                private int ctime;
+                private long ctime;
                 @SerializedName("duration")
                 private String duration;
 
@@ -501,27 +501,27 @@ public class SearchResultBean {
                     this.gotoX = gotoX;
                 }
 
-                public int getPlay() {
+                public long getPlay() {
                     return play;
                 }
 
-                public void setPlay(int play) {
+                public void setPlay(long play) {
                     this.play = play;
                 }
 
-                public int getDanmaku() {
+                public long getDanmaku() {
                     return danmaku;
                 }
 
-                public void setDanmaku(int danmaku) {
+                public void setDanmaku(long danmaku) {
                     this.danmaku = danmaku;
                 }
 
-                public int getCtime() {
+                public long getCtime() {
                     return ctime;
                 }
 
-                public void setCtime(int ctime) {
+                public void setCtime(long ctime) {
                     this.ctime = ctime;
                 }
 
@@ -565,7 +565,7 @@ public class SearchResultBean {
                 @SerializedName("border_color_night")
                 private String borderColorNight;
                 @SerializedName("bg_style")
-                private int bgStyle;
+                private long bgStyle;
 
                 public String getText() {
                     return text;
@@ -623,11 +623,11 @@ public class SearchResultBean {
                     this.borderColorNight = borderColorNight;
                 }
 
-                public int getBgStyle() {
+                public long getBgStyle() {
                     return bgStyle;
                 }
 
-                public void setBgStyle(int bgStyle) {
+                public void setBgStyle(long bgStyle) {
                     this.bgStyle = bgStyle;
                 }
 

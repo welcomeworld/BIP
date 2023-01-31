@@ -10,25 +10,25 @@ public class BangumiUrlBean {
     @SerializedName("accept_format")
     private String acceptFormat;
     @SerializedName("code")
-    private int code;
+    private long code;
     @SerializedName("seek_param")
     private String seekParam;
     @SerializedName("is_preview")
-    private int isPreview;
+    private long isPreview;
     @SerializedName("format")
     private String format;
     @SerializedName("fnval")
-    private int fnval;
+    private long fnval;
     @SerializedName("video_project")
     private boolean videoProject;
     @SerializedName("fnver")
-    private int fnver;
+    private long fnver;
     @SerializedName("bp")
-    private int bp;
+    private long bp;
     @SerializedName("quality")
-    private int quality;
+    private long quality;
     @SerializedName("timelength")
-    private int timelength;
+    private long timelength;
     @SerializedName("result")
     private String result;
     @SerializedName("seek_type")
@@ -40,9 +40,9 @@ public class BangumiUrlBean {
     @SerializedName("dash")
     private DashBean dash;
     @SerializedName("video_codecid")
-    private int videoCodecid;
+    private long videoCodecid;
     @SerializedName("status")
-    private int status;
+    private long status;
     @SerializedName("accept_quality")
     private List<Integer> acceptQuality;
     @SerializedName("accept_description")
@@ -57,11 +57,11 @@ public class BangumiUrlBean {
         this.acceptFormat = acceptFormat;
     }
 
-    public int getCode() {
+    public long getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(long code) {
         this.code = code;
     }
 
@@ -73,11 +73,11 @@ public class BangumiUrlBean {
         this.seekParam = seekParam;
     }
 
-    public int getIsPreview() {
+    public long getIsPreview() {
         return isPreview;
     }
 
-    public void setIsPreview(int isPreview) {
+    public void setIsPreview(long isPreview) {
         this.isPreview = isPreview;
     }
 
@@ -89,11 +89,11 @@ public class BangumiUrlBean {
         this.format = format;
     }
 
-    public int getFnval() {
+    public long getFnval() {
         return fnval;
     }
 
-    public void setFnval(int fnval) {
+    public void setFnval(long fnval) {
         this.fnval = fnval;
     }
 
@@ -105,35 +105,35 @@ public class BangumiUrlBean {
         this.videoProject = videoProject;
     }
 
-    public int getFnver() {
+    public long getFnver() {
         return fnver;
     }
 
-    public void setFnver(int fnver) {
+    public void setFnver(long fnver) {
         this.fnver = fnver;
     }
 
-    public int getBp() {
+    public long getBp() {
         return bp;
     }
 
-    public void setBp(int bp) {
+    public void setBp(long bp) {
         this.bp = bp;
     }
 
-    public int getQuality() {
+    public long getQuality() {
         return quality;
     }
 
-    public void setQuality(int quality) {
+    public void setQuality(long quality) {
         this.quality = quality;
     }
 
-    public int getTimelength() {
+    public long getTimelength() {
         return timelength;
     }
 
-    public void setTimelength(int timelength) {
+    public void setTimelength(long timelength) {
         this.timelength = timelength;
     }
 
@@ -177,19 +177,19 @@ public class BangumiUrlBean {
         this.dash = dash;
     }
 
-    public int getVideoCodecid() {
+    public long getVideoCodecid() {
         return videoCodecid;
     }
 
-    public void setVideoCodecid(int videoCodecid) {
+    public void setVideoCodecid(long videoCodecid) {
         this.videoCodecid = videoCodecid;
     }
 
-    public int getStatus() {
+    public long getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(long status) {
         this.status = status;
     }
 
@@ -218,17 +218,17 @@ public class BangumiUrlBean {
     }
 
     public static class DurlBean {
-        private int order;
+        private long order;
         private long length;
         private long size;
         private String url;
         private List<String> backup_url;
 
-        public int getOrder() {
+        public long getOrder() {
             return order;
         }
 
-        public void setOrder(int order) {
+        public void setOrder(long order) {
             this.order = order;
         }
 
@@ -291,13 +291,13 @@ public class BangumiUrlBean {
             @SerializedName("baseUrl")
             private String baseUrl;
             @SerializedName("codecid")
-            private int codecid;
+            private long codecid;
             @SerializedName("bandwidth")
-            private int bandwidth;
+            private long bandwidth;
             @SerializedName("base_url")
             private String baseUrl1;
             @SerializedName("id")
-            private int id;
+            private long id;
             @SerializedName("backupUrl")
             private List<String> backupUrl;
             @SerializedName("backup_url")
@@ -311,19 +311,19 @@ public class BangumiUrlBean {
                 this.baseUrl1 = baseUrl;
             }
 
-            public int getCodecid() {
+            public long getCodecid() {
                 return codecid;
             }
 
-            public void setCodecid(int codecid) {
+            public void setCodecid(long codecid) {
                 this.codecid = codecid;
             }
 
-            public int getBandwidth() {
+            public long getBandwidth() {
                 return bandwidth;
             }
 
-            public void setBandwidth(int bandwidth) {
+            public void setBandwidth(long bandwidth) {
                 this.bandwidth = bandwidth;
             }
 
@@ -335,11 +335,11 @@ public class BangumiUrlBean {
                 this.baseUrl = baseUrl;
             }
 
-            public int getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(long id) {
                 this.id = id;
             }
 
@@ -364,11 +364,11 @@ public class BangumiUrlBean {
             @SerializedName("baseUrl")
             private String baseUrl;
             @SerializedName("bandwidth")
-            private int bandwidth;
+            private long bandwidth;
             @SerializedName("base_url")
             private String baseUrl1;
             @SerializedName("id")
-            private int id;
+            private long id;
             @SerializedName("backupUrl")
             private List<String> backupUrl;
             @SerializedName("backup_url")
@@ -382,11 +382,11 @@ public class BangumiUrlBean {
                 this.baseUrl1 = baseUrl;
             }
 
-            public int getBandwidth() {
+            public long getBandwidth() {
                 return bandwidth;
             }
 
-            public void setBandwidth(int bandwidth) {
+            public void setBandwidth(long bandwidth) {
                 this.bandwidth = bandwidth;
             }
 
@@ -398,11 +398,11 @@ public class BangumiUrlBean {
                 this.baseUrl = baseUrl;
             }
 
-            public int getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(long id) {
                 this.id = id;
             }
 

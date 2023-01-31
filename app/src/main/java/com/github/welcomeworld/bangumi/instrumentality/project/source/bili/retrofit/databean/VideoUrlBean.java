@@ -12,16 +12,16 @@ public class VideoUrlBean {
      * data : {"from":"local","result":"suee","quality":32,"format":"flv480","timelength":192593,"accept_format":"flv,flv720,flv480,flv360","accept_description":["高清 1080P","高清 720P","清晰 480P","流畅 360P"],"accept_quality":[80,64,32,16],"video_codecid":7,"fnver":0,"fnval":16,"video_project":true,"seek_param":"start","seek_type":"offset","dash":{"video":[{"id":16,"base_url":"https://cn-zjjh4-dx-v-05.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30015.m4s?expires=1548348900&platform=android&ssig=Q9Q9KoN1lR-tN3iTxJLLKg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","backup_url":["https://cn-zjwz4-dx-v-03.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30015.m4s?expires=1548348900&platform=android&ssig=Q9Q9KoN1lR-tN3iTxJLLKg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","https://cn-zjwz3-dx-v-08.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30015.m4s?expires=1548348900&platform=android&ssig=Q9Q9KoN1lR-tN3iTxJLLKg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1"],"bandwidth":410109,"codecid":7},{"id":32,"base_url":"https://cn-zjjh4-dx-v-09.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30032.m4s?expires=1548348900&platform=android&ssig=6tx8-wgt6Wj9IjIzKctRGg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","backup_url":["https://cn-zjwz4-dx-v-07.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30032.m4s?expires=1548348900&platform=android&ssig=6tx8-wgt6Wj9IjIzKctRGg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","https://cn-zjwz3-dx-v-07.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30032.m4s?expires=1548348900&platform=android&ssig=6tx8-wgt6Wj9IjIzKctRGg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1"],"bandwidth":921610,"codecid":7},{"id":64,"base_url":"https://cn-zjjh4-dx-v-07.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30064.m4s?expires=1548348900&platform=android&ssig=ay_kEW15uMB2UEFEgIAlDg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","backup_url":["https://cn-zjwz4-dx-v-05.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30064.m4s?expires=1548348900&platform=android&ssig=ay_kEW15uMB2UEFEgIAlDg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","https://cn-zjwz3-dx-v-08.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30064.m4s?expires=1548348900&platform=android&ssig=ay_kEW15uMB2UEFEgIAlDg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1"],"bandwidth":2048762,"codecid":7},{"id":80,"base_url":"https://cn-zjjh4-dx-v-08.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30080.m4s?expires=1548348900&platform=android&ssig=etFB_rY6Ag7-dBR2lGVFHg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","backup_url":["https://cn-zjwz4-dx-v-06.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30080.m4s?expires=1548348900&platform=android&ssig=etFB_rY6Ag7-dBR2lGVFHg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","https://cn-zjwz3-dx-v-08.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30080.m4s?expires=1548348900&platform=android&ssig=etFB_rY6Ag7-dBR2lGVFHg&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1"],"bandwidth":2164125,"codecid":7}],"audio":[{"id":30280,"base_url":"https://cn-zjjh4-dx-v-04.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30280.m4s?expires=1548348900&platform=android&ssig=Eb8Mf82imumrAeHZYKDXQw&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","backup_url":["https://cn-zjwz4-dx-v-04.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30280.m4s?expires=1548348900&platform=android&ssig=Eb8Mf82imumrAeHZYKDXQw&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","https://cn-zjwz3-dx-v-10.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30280.m4s?expires=1548348900&platform=android&ssig=Eb8Mf82imumrAeHZYKDXQw&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1"],"bandwidth":193663,"codecid":0},{"id":30216,"base_url":"https://cn-zjjh4-dx-v-03.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30216.m4s?expires=1548348900&platform=android&ssig=eYbCfydBYtfI4eVsEkek-g&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","backup_url":["https://cn-zjwz4-dx-v-01.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30216.m4s?expires=1548348900&platform=android&ssig=eYbCfydBYtfI4eVsEkek-g&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1","https://cn-zjwz3-dx-v-03.acgvideo.com/upgcxcode/37/00/59840037/59840037-1-30216.m4s?expires=1548348900&platform=android&ssig=eYbCfydBYtfI4eVsEkek-g&oi=3071419030&hfb=NzUxMjI5MWJlMDBjMDY0YTQxNjFjMTJiYWE0MjEwYmQ=&trid=ff212041d0494f85a537cdb8b7f99620&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1"],"bandwidth":67176,"codecid":0}]}}
      */
 
-    private int code;
+    private long code;
     private String message;
-    private int ttl;
+    private long ttl;
     private DataBean data;
 
-    public int getCode() {
+    public long getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(long code) {
         this.code = code;
     }
 
@@ -33,11 +33,11 @@ public class VideoUrlBean {
         this.message = message;
     }
 
-    public int getTtl() {
+    public long getTtl() {
         return ttl;
     }
 
-    public void setTtl(int ttl) {
+    public void setTtl(long ttl) {
         this.ttl = ttl;
     }
 
@@ -72,11 +72,11 @@ public class VideoUrlBean {
         private String result;
         private int quality;
         private String format;
-        private int timelength;
+        private long timelength;
         private String accept_format;
-        private int video_codecid;
-        private int fnver;
-        private int fnval;
+        private long video_codecid;
+        private long fnver;
+        private long fnval;
         private boolean video_project;
         private String seek_param;
         private String seek_type;
@@ -117,11 +117,11 @@ public class VideoUrlBean {
             this.format = format;
         }
 
-        public int getTimelength() {
+        public long getTimelength() {
             return timelength;
         }
 
-        public void setTimelength(int timelength) {
+        public void setTimelength(long timelength) {
             this.timelength = timelength;
         }
 
@@ -133,27 +133,27 @@ public class VideoUrlBean {
             this.accept_format = accept_format;
         }
 
-        public int getVideo_codecid() {
+        public long getVideo_codecid() {
             return video_codecid;
         }
 
-        public void setVideo_codecid(int video_codecid) {
+        public void setVideo_codecid(long video_codecid) {
             this.video_codecid = video_codecid;
         }
 
-        public int getFnver() {
+        public long getFnver() {
             return fnver;
         }
 
-        public void setFnver(int fnver) {
+        public void setFnver(long fnver) {
             this.fnver = fnver;
         }
 
-        public int getFnval() {
+        public long getFnval() {
             return fnval;
         }
 
-        public void setFnval(int fnval) {
+        public void setFnval(long fnval) {
             this.fnval = fnval;
         }
 
@@ -206,17 +206,17 @@ public class VideoUrlBean {
         }
 
         public static class DurlBean {
-            private int order;
+            private long order;
             private long length;
             private long size;
             private String url;
             private List<String> backup_url;
 
-            public int getOrder() {
+            public long getOrder() {
                 return order;
             }
 
-            public void setOrder(int order) {
+            public void setOrder(long order) {
                 this.order = order;
             }
 
@@ -292,8 +292,8 @@ public class VideoUrlBean {
 
                 private int id;
                 private String base_url;
-                private int bandwidth;
-                private int codecid;
+                private long bandwidth;
+                private long codecid;
                 private List<String> backup_url;
 
                 public int getId() {
@@ -312,19 +312,19 @@ public class VideoUrlBean {
                     this.base_url = base_url;
                 }
 
-                public int getBandwidth() {
+                public long getBandwidth() {
                     return bandwidth;
                 }
 
-                public void setBandwidth(int bandwidth) {
+                public void setBandwidth(long bandwidth) {
                     this.bandwidth = bandwidth;
                 }
 
-                public int getCodecid() {
+                public long getCodecid() {
                     return codecid;
                 }
 
-                public void setCodecid(int codecid) {
+                public void setCodecid(long codecid) {
                     this.codecid = codecid;
                 }
 
@@ -346,17 +346,17 @@ public class VideoUrlBean {
                  * codecid : 0
                  */
 
-                private int id;
+                private long id;
                 private String base_url;
-                private int bandwidth;
-                private int codecid;
+                private long bandwidth;
+                private long codecid;
                 private List<String> backup_url;
 
-                public int getId() {
+                public long getId() {
                     return id;
                 }
 
-                public void setId(int id) {
+                public void setId(long id) {
                     this.id = id;
                 }
 
@@ -368,19 +368,19 @@ public class VideoUrlBean {
                     this.base_url = base_url;
                 }
 
-                public int getBandwidth() {
+                public long getBandwidth() {
                     return bandwidth;
                 }
 
-                public void setBandwidth(int bandwidth) {
+                public void setBandwidth(long bandwidth) {
                     this.bandwidth = bandwidth;
                 }
 
-                public int getCodecid() {
+                public long getCodecid() {
                     return codecid;
                 }
 
-                public void setCodecid(int codecid) {
+                public void setCodecid(long codecid) {
                     this.codecid = codecid;
                 }
 

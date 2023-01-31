@@ -11,27 +11,27 @@ import java.util.List;
 public class LoginResultBean {
 
     @SerializedName("ts")
-    private int ts;
+    private long ts;
     @SerializedName("code")
-    private int code;
+    private long code;
     @SerializedName("data")
     private DataBean data;
     @SerializedName("message")
     private String message;
 
-    public int getTs() {
+    public long getTs() {
         return ts;
     }
 
-    public void setTs(int ts) {
+    public void setTs(long ts) {
         this.ts = ts;
     }
 
-    public int getCode() {
+    public long getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(long code) {
         this.code = code;
     }
 
@@ -53,7 +53,7 @@ public class LoginResultBean {
 
     public class DataBean {
         @SerializedName("status")
-        private int status;
+        private long status;
         @SerializedName("token_info")
         private TokenInfoBean tokenInfo;
         @SerializedName("cookie_info")
@@ -63,11 +63,11 @@ public class LoginResultBean {
         @SerializedName("url")
         private String url;
 
-        public int getStatus() {
+        public long getStatus() {
             return status;
         }
 
-        public void setStatus(int status) {
+        public void setStatus(long status) {
             this.status = status;
         }
 
@@ -133,9 +133,9 @@ public class LoginResultBean {
             @SerializedName("value")
             private String value;
             @SerializedName("http_only")
-            private int httpOnly;
+            private long httpOnly;
             @SerializedName("expires")
-            private int expires;
+            private long expires;
 
             public String getName() {
                 return name;
@@ -153,19 +153,19 @@ public class LoginResultBean {
                 this.value = value;
             }
 
-            public int getHttpOnly() {
+            public long getHttpOnly() {
                 return httpOnly;
             }
 
-            public void setHttpOnly(int httpOnly) {
+            public void setHttpOnly(long httpOnly) {
                 this.httpOnly = httpOnly;
             }
 
-            public int getExpires() {
+            public long getExpires() {
                 return expires;
             }
 
-            public void setExpires(int expires) {
+            public void setExpires(long expires) {
                 this.expires = expires;
             }
         }
@@ -175,31 +175,31 @@ public class LoginResultBean {
     @Entity(tableName = "token")
     public static class TokenInfoBean {
         @PrimaryKey(autoGenerate = true)
-        private int id;
+        private long id;
 
-        public int getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(long id) {
             this.id = id;
         }
 
         @SerializedName("mid")
-        private int mid;
+        private long mid;
         @SerializedName("access_token")
         private String accessToken;
         @SerializedName("refresh_token")
         private String refreshToken;
         @SerializedName("expires_in")
-        private int expiresIn;
+        private long expiresIn;
 
 
-        public int getMid() {
+        public long getMid() {
             return mid;
         }
 
-        public void setMid(int mid) {
+        public void setMid(long mid) {
             this.mid = mid;
         }
 
@@ -219,11 +219,11 @@ public class LoginResultBean {
             this.refreshToken = refreshToken;
         }
 
-        public int getExpiresIn() {
+        public long getExpiresIn() {
             return expiresIn;
         }
 
-        public void setExpiresIn(int expiresIn) {
+        public void setExpiresIn(long expiresIn) {
             this.expiresIn = expiresIn;
         }
 

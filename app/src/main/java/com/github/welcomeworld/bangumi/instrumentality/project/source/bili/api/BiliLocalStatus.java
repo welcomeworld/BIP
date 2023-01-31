@@ -7,7 +7,7 @@ import com.github.welcomeworld.devbase.utils.KVUtil;
 public class BiliLocalStatus {
     private static String accessKey = "";
     private static boolean isLogin = false;
-    private static int mid = -1;
+    private static long mid = -1;
     private static String avatar = "";
     private static String name = "";
 
@@ -36,11 +36,11 @@ public class BiliLocalStatus {
         isLogin = login;
     }
 
-    public static int getMid() {
+    public static long getMid() {
         return mid;
     }
 
-    public static void setMid(int mid) {
+    public static void setMid(long mid) {
         BiliLocalStatus.mid = mid;
     }
 

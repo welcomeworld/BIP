@@ -10,27 +10,27 @@ public class IndexRecommendDataBean {
     private String param;
     @SerializedName("goto")
     private String gotoX;
-    private int idx;
-    private int autoplay_card;
+    private long idx;
+    private long autoplay_card;
     private String title;
     private String cover;
     private String uri;
     private String desc;
-    private int play;
-    private int danmaku;
-    private int reply;
-    private int favorite;
-    private int coin;
-    private int share;
-    private int like;
-    private int duration;
-    private int cid;
-    private int tid;
+    private long play;
+    private long danmaku;
+    private long reply;
+    private long favorite;
+    private long coin;
+    private long share;
+    private long like;
+    private long duration;
+    private long cid;
+    private long tid;
     private String tname;
     private TagBean tag;
-    private int ctime;
-    private int autoplay;
-    private int mid;
+    private long ctime;
+    private long autoplay;
+    private long mid;
     private String name;
     private String face;
     private OfficialBean official;
@@ -55,19 +55,19 @@ public class IndexRecommendDataBean {
         this.gotoX = gotoX;
     }
 
-    public int getIdx() {
+    public long getIdx() {
         return idx;
     }
 
-    public void setIdx(int idx) {
+    public void setIdx(long idx) {
         this.idx = idx;
     }
 
-    public int getAutoplay_card() {
+    public long getAutoplay_card() {
         return autoplay_card;
     }
 
-    public void setAutoplay_card(int autoplay_card) {
+    public void setAutoplay_card(long autoplay_card) {
         this.autoplay_card = autoplay_card;
     }
 
@@ -103,83 +103,83 @@ public class IndexRecommendDataBean {
         this.desc = desc;
     }
 
-    public int getPlay() {
+    public long getPlay() {
         return play;
     }
 
-    public void setPlay(int play) {
+    public void setPlay(long play) {
         this.play = play;
     }
 
-    public int getDanmaku() {
+    public long getDanmaku() {
         return danmaku;
     }
 
-    public void setDanmaku(int danmaku) {
+    public void setDanmaku(long danmaku) {
         this.danmaku = danmaku;
     }
 
-    public int getReply() {
+    public long getReply() {
         return reply;
     }
 
-    public void setReply(int reply) {
+    public void setReply(long reply) {
         this.reply = reply;
     }
 
-    public int getFavorite() {
+    public long getFavorite() {
         return favorite;
     }
 
-    public void setFavorite(int favorite) {
+    public void setFavorite(long favorite) {
         this.favorite = favorite;
     }
 
-    public int getCoin() {
+    public long getCoin() {
         return coin;
     }
 
-    public void setCoin(int coin) {
+    public void setCoin(long coin) {
         this.coin = coin;
     }
 
-    public int getShare() {
+    public long getShare() {
         return share;
     }
 
-    public void setShare(int share) {
+    public void setShare(long share) {
         this.share = share;
     }
 
-    public int getLike() {
+    public long getLike() {
         return like;
     }
 
-    public void setLike(int like) {
+    public void setLike(long like) {
         this.like = like;
     }
 
-    public int getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
-    public int getCid() {
+    public long getCid() {
         return cid;
     }
 
-    public void setCid(int cid) {
+    public void setCid(long cid) {
         this.cid = cid;
     }
 
-    public int getTid() {
+    public long getTid() {
         return tid;
     }
 
-    public void setTid(int tid) {
+    public void setTid(long tid) {
         this.tid = tid;
     }
 
@@ -199,27 +199,27 @@ public class IndexRecommendDataBean {
         this.tag = tag;
     }
 
-    public int getCtime() {
+    public long getCtime() {
         return ctime;
     }
 
-    public void setCtime(int ctime) {
+    public void setCtime(long ctime) {
         this.ctime = ctime;
     }
 
-    public int getAutoplay() {
+    public long getAutoplay() {
         return autoplay;
     }
 
-    public void setAutoplay(int autoplay) {
+    public void setAutoplay(long autoplay) {
         this.autoplay = autoplay;
     }
 
-    public int getMid() {
+    public long getMid() {
         return mid;
     }
 
-    public void setMid(int mid) {
+    public void setMid(long mid) {
         this.mid = mid;
     }
 
@@ -281,15 +281,15 @@ public class IndexRecommendDataBean {
 
     public static class TagBean {
 
-        private int tag_id;
+        private long tag_id;
         private String tag_name;
         private CountBean count;
 
-        public int getTag_id() {
+        public long getTag_id() {
             return tag_id;
         }
 
-        public void setTag_id(int tag_id) {
+        public void setTag_id(long tag_id) {
             this.tag_id = tag_id;
         }
 
@@ -311,13 +311,13 @@ public class IndexRecommendDataBean {
 
         public static class CountBean {
 
-            private int atten;
+            private long atten;
 
-            public int getAtten() {
+            public long getAtten() {
                 return atten;
             }
 
-            public void setAtten(int atten) {
+            public void setAtten(long atten) {
                 this.atten = atten;
             }
 
@@ -341,14 +341,14 @@ public class IndexRecommendDataBean {
 
     public static class OfficialBean {
 
-        private int role;
+        private long role;
         private String title;
 
-        public int getRole() {
+        public long getRole() {
             return role;
         }
 
-        public void setRole(int role) {
+        public void setRole(long role) {
             this.role = role;
         }
 
@@ -371,16 +371,16 @@ public class IndexRecommendDataBean {
 
     public static class RcmdReasonBean {
 
-        private int id;
+        private long id;
         private String content;
         private String bg_color;
         private String icon_location;
 
-        public int getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(long id) {
             this.id = id;
         }
 
@@ -421,14 +421,14 @@ public class IndexRecommendDataBean {
 
     public static class DislikeReasonsBean {
 
-        private int reason_id;
+        private long reason_id;
         private String reason_name;
 
-        public int getReason_id() {
+        public long getReason_id() {
             return reason_id;
         }
 
-        public void setReason_id(int reason_id) {
+        public void setReason_id(long reason_id) {
             this.reason_id = reason_id;
         }
 

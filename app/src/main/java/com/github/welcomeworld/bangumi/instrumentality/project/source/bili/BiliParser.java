@@ -638,7 +638,7 @@ public class BiliParser extends BaseParser {
             boolean useListTitle = response.body().getData().getPages().size() <= 1;
             for (int i = 0; i < response.body().getData().getPages().size(); i++) {
                 LogUtil.e("BiliParser", "parse Data:" + response.body().getData().getPages().get(i));
-                int cid = response.body().getData().getPages().get(i).getCid();
+                long cid = response.body().getData().getPages().get(i).getCid();
                 if (currentCid == null || !currentCid.equals("" + cid)) {
                     VideoBean videoBean = new VideoBean();
                     boolean haveData = false;
