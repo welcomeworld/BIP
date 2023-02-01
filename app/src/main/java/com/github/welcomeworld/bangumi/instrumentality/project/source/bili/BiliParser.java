@@ -2,7 +2,6 @@ package com.github.welcomeworld.bangumi.instrumentality.project.source.bili;
 
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.CookieManager;
 
 import androidx.fragment.app.Fragment;
@@ -77,10 +76,6 @@ public class BiliParser extends BaseParser {
         result.put(DefaultBIPPlayer.OPT_CATEGORY_PLAYER, playerOptions);
 
         Map<String, String> formatOptions = new HashMap<>();
-//        formatOptions.put("reconnect","1");
-//        formatOptions.put("safe","0");
-//        formatOptions.put("dns_cache_clear","1");
-//        formatOptions.put("protocol_whitelist","rtmp,concat,ffconcat,file,subfile,http,https,tls,rtp,tcp,udp,crypto");
         formatOptions.put("user_agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36");
         formatOptions.put("headers", "referer:https://www.bilibili.com\r\n");
         result.put(DefaultBIPPlayer.OPT_CATEGORY_FORMAT, formatOptions);
@@ -103,7 +98,9 @@ public class BiliParser extends BaseParser {
         Call<IndexRecommendBean> indexBeanCall = indexNetAPI.getIndexRecommend(parameters);
         try {
             Response<IndexRecommendBean> response = indexBeanCall.execute();
-            if (response.body().getData() == null) {
+            if (response.body() == null || response.body().getData() == null) {
+                LogUtil.e("DataLog", "获取不到数据" +
+                        "");
 //                Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
                 return result;
             }
@@ -111,6 +108,7 @@ public class BiliParser extends BaseParser {
             moreData = response.body().getData();
             for (int i = 0; i < moreData.size(); i++) {
                 if (!moreData.get(i).getGotoX().equalsIgnoreCase("av")) {
+                    LogUtil.e("DataLog", "跳过非av:" + moreData.get(i).getGotoX());
                     moreData.remove(i);
                     i--;
                 } else {
@@ -279,7 +277,7 @@ public class BiliParser extends BaseParser {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("BiliNextError", "error:" + e.getMessage());
+            LogUtil.e("BiliNextError", "error:" + e.getMessage());
         }
     }
 
@@ -292,7 +290,7 @@ public class BiliParser extends BaseParser {
         SearchNetAPI searchNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(SearchNetAPI.class);
         try {
             Response<SearchResultBean> response = searchNetAPI.getSearchResult(parameters).execute();
-            if (response.body().getData() == null) {
+            if (response.body() == null || response.body().getData() == null) {
 //                Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
                 return result;
             }
@@ -377,17 +375,17 @@ public class BiliParser extends BaseParser {
 
     public static String login(String userName, String rawPassword) {
         if (BiliLocalStatus.isLogin()) {
-            Log.e("jsTest", "user already login");
+            LogUtil.e("jsTest", "user already login");
             return "success";
         }
         UserNetAPI userNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.PASSPORTURL).create(UserNetAPI.class);
         try {
             Response<LoginKeyBean> response = userNetAPI.getKey().execute();
             if (response.body() == null || response.body().getData() == null) {
-                Log.e("jsTest", "key response is null");
+                LogUtil.e("jsTest", "key response is null");
                 return "";
             }
-            Log.e("jsTest", "key response normal");
+            LogUtil.e("jsTest", "key response normal");
             LoginKeyBean.AuthKey authKey = response.body().getData();
             String password = authKey.encypt(authKey.getHash() + rawPassword, authKey.getKey());
             Response<LoginResultBean> loginResponse = userNetAPI.login(userName, password, "device_meta", "dt", "main.homepage.avatar-nologin.all.click", "bilibili://live/home").execute();
@@ -400,7 +398,7 @@ public class BiliParser extends BaseParser {
     }
 
     public static String acquireAccessTokenV2(String code) {
-        Log.e("JsBridgeDispatcher", "acquireAccess by code" + code);
+        LogUtil.e("JsBridgeDispatcher", "acquireAccess by code" + code);
         UserNetAPI userNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.PASSPORTURL).create(UserNetAPI.class);
         try {
             Response<LoginResultBean> loginResponse = userNetAPI.acquireAccessTokenV2(code, "authorization_code").execute();
@@ -414,7 +412,7 @@ public class BiliParser extends BaseParser {
 
     private static String parseLoginResponse(Response<LoginResultBean> loginResponse) {
         if (loginResponse.body() == null) {
-            Log.e("jsTest", "login response is null");
+            LogUtil.e("jsTest", "login response is null");
             return "";
         }
         if (loginResponse.body().getCode() == 0) {
@@ -422,7 +420,7 @@ public class BiliParser extends BaseParser {
             if (redirectUrl != null && !redirectUrl.isEmpty()) {
                 return redirectUrl;
             }
-            Log.e("LoginActivity", "登录成功" + loginResponse.body().getCode());
+            LogUtil.e("LoginActivity", "登录成功" + loginResponse.body().getCode());
             LoginResultBean.TokenInfoBean token = loginResponse.body().getData().getTokenInfo();
             BiliLocalStatus.setLogin(true);
             BiliLocalStatus.setAccessKey(token.getAccessToken());
@@ -438,10 +436,10 @@ public class BiliParser extends BaseParser {
             return "success";
         } else if (loginResponse.body().getCode() == -105) {
             Uri uri = Uri.parse(loginResponse.body().getData().getUrl());
-            Log.e("jsTest", "url:" + uri);
+            LogUtil.e("jsTest", "url:" + uri);
             return loginResponse.body().getData().getUrl();
         } else {
-            Log.e("LoginActivity", "fail:" + loginResponse.body().getCode());
+            LogUtil.e("LoginActivity", "fail:" + loginResponse.body().getCode());
         }
         return "";
     }
@@ -585,7 +583,7 @@ public class BiliParser extends BaseParser {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("BiliNextError", "error:" + e.getMessage());
+            LogUtil.e("BiliNextError", "error:" + e.getMessage());
         }
         return videoListBeans;
     }
@@ -694,7 +692,7 @@ public class BiliParser extends BaseParser {
             videoListBeans.add(videoListBean);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("BiliNextError", "error:" + e.getMessage());
+            LogUtil.e("BiliNextError", "error:" + e.getMessage());
         }
         return videoListBeans;
     }
@@ -705,7 +703,6 @@ public class BiliParser extends BaseParser {
         try {
             Response<BvToAvBean> response = videoDetailNetAPI.getAvInfo(bvid).execute();
             if (response.body() == null || response.body().getCode() != 0) {
-                LogUtil.e("BiliParser", "response error:" + response.body().getCode());
                 return result;
             }
             result.add("" + response.body().getData().getAid());
@@ -769,7 +766,7 @@ public class BiliParser extends BaseParser {
         try {
             Response<WebLoginUrlBean> response = userWebAPI.getLoginUrl().execute();
             if (response.body() == null || response.body().getData() == null) {
-                Log.e("jsTest", "key response is null");
+                LogUtil.e("jsTest", "key response is null");
                 return null;
             }
             return response.body().getData();
