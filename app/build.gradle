@@ -135,7 +135,7 @@ dependencies {
     implementation 'com.tencent.bugly:nativecrashreport:3.9.2'
 
     //custom library
-    implementation 'com.github.welcomeworld:BIPPlayer:1.0.24'
+    implementation 'com.github.welcomeworld:BIPPlayer:1.0.25'
     implementation 'com.github.welcomeworld:DevTool:1.0.03'
     implementation project(path: ':app_update')
     implementation project(path: ':zxing')
