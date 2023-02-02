@@ -31,24 +31,41 @@
     <init>(java.lang.Throwable);
 }
 
-#友盟开始
--keep class com.umeng.** { *; }
-
--keep class com.uc.** { *; }
-
--keep class com.efs.** { *; }
-
--keepclassmembers class*{
-     public<init>(org.json.JSONObject);
+#gson 开始
+# Prevent R8 from leaving Data object members always null
+-keepclassmembers,allowobfuscation class * {
+    @com.google.gson.annotations.SerializedName <fields>;
 }
--keepclassmembers enum*{
-      publicstatic**[] values();
-      publicstatic** valueOf(java.lang.String);
+# Prevent proguard from stripping interface information from TypeAdapter, TypeAdapterFactory,
+# JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
+-keep class * extends com.google.gson.TypeAdapter
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+
+-keepattributes Signature
+# For using GSON @Expose annotation
+-keepattributes *Annotation*
+# Retain generic signatures of TypeToken and its subclasses with R8 version 3.0 and higher.
+-keep,allowobfuscation,allowshrinking class com.google.gson.reflect.TypeToken
+-keep,allowobfuscation,allowshrinking class * extends com.google.gson.reflect.TypeToken
+#gson 结束
+
+#keep 数据类开始
+-keep class com.github.welcomeworld.bangumi.instrumentality.project.model.**{*;}
+-keep class com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.**{*;}
+-keep class com.github.welcomeworld.bangumi.instrumentality.project.source.bimibimi.databean.**{*;}
+-keep class com.github.welcomeworld.bangumi.instrumentality.project.source.agefans.PlayUrlBean
+#keep 数据类结束
+
+
+#keep class which has native method
+-keepclasseswithmembers class * {
+    native <methods>;
 }
--keep publicclass com.github.welcomeworld.bangumi.instrumentality.project.R$*{
-      publicstaticfinalint*;
-}
-#友盟结束
+
+#keep viewbinding
+-keep class * extends androidx.viewbinding.ViewBinding
 
 #bugly 开始
 -dontwarn com.tencent.bugly.**
