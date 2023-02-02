@@ -3,8 +3,10 @@ package com.github.welcomeworld.bangumi.instrumentality.project.persistence;
 import android.os.Looper;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.model.HistoryBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryConfig {
@@ -22,7 +24,17 @@ public class HistoryConfig {
     }
 
     public static List<HistoryBean> getFav() {
-        return AppBaseDatabase.getInstance().getHistoryDao().getAllFav();
+        List<HistoryBean> result = new ArrayList<>();
+        List<HistoryBean> allFav = AppBaseDatabase.getInstance().getHistoryDao().getAllFav();
+        for (HistoryBean fav : allFav) {
+            List<VideoListBean> videoList = fav.getVideoData();
+            if (videoList != null && videoList.size() > fav.getSelectSourceIndex()) {
+                result.add(fav);
+            } else if (videoList == null || videoList.size() == 0) {
+                AppBaseDatabase.getInstance().getHistoryDao().deleteHistory(fav);
+            }
+        }
+        return result;
     }
 
     public static HistoryBean findHistory(int uid, String vid) {

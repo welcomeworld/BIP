@@ -259,7 +259,7 @@ public class VideoPlayViewModel extends ViewModel {
 
     private void saveHistory() {
         historyBean.setSelectSourceIndex(selectSourceIndex);
-        if (videoListBeans != null && videoListBeans.size() > 0) {
+        if (videoListBeans != null && videoListBeans.size() > selectSourceIndex) {
             historyBean.setVideoData(videoListBeans);
         }
         historyBean.setViewTime(System.currentTimeMillis());
@@ -271,6 +271,9 @@ public class VideoPlayViewModel extends ViewModel {
         historyBean.setFav(fav);
         if (fav) {
             historyBean.setFavTime(System.currentTimeMillis());
+        }
+        if (videoListBeans != null && videoListBeans.size() > selectSourceIndex) {
+            historyBean.setVideoData(videoListBeans);
         }
         HistoryConfig.updateOrSaveHistory(historyBean);
     }

@@ -113,7 +113,7 @@ public class HistoryBean {
     }
 
     public List<VideoListBean> getVideoData() {
-        return videoData;
+        return new ArrayList<>(videoData);
     }
 
     public void setVideoData(List<VideoListBean> videoData) {
