@@ -218,10 +218,14 @@ public class BimiNetApi {
         return videoListBeans;
     }
 
+    /**
+     * 根据https://www.bimiacg4.net/static/player/${fromKey}.js生成路径
+     */
     private static String genPath(String fromKey, String urlKey) {
         String fromResult = "play";
         switch (fromKey) {
             case "pic":
+            case "miui":
             case "danmakk":
                 fromResult = "pic";
                 break;
@@ -233,7 +237,6 @@ public class BimiNetApi {
                 break;
             case "special":
             case "zhilian":
-            case "miui":
             case "ckplayer":
                 if (urlKey.contains(".m3u8")) {
                     fromResult = "m3u8";
