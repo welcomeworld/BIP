@@ -20,7 +20,17 @@ public class HistoryConfig {
     }
 
     public static List<HistoryBean> getHistory() {
-        return AppBaseDatabase.getInstance().getHistoryDao().getAllHistory();
+        List<HistoryBean> result = new ArrayList<>();
+        List<HistoryBean> allHistory = AppBaseDatabase.getInstance().getHistoryDao().getAllHistory();
+        for (HistoryBean history : allHistory) {
+            List<VideoListBean> videoList = history.getVideoData();
+            if (videoList != null && videoList.size() > history.getSelectSourceIndex()) {
+                result.add(history);
+            } else if (videoList == null || videoList.size() == 0) {
+                AppBaseDatabase.getInstance().getHistoryDao().deleteHistory(history);
+            }
+        }
+        return result;
     }
 
     public static List<HistoryBean> getFav() {
