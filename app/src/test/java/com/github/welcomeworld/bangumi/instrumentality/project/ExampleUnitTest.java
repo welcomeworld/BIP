@@ -1,6 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project;
 
-import com.eclipsesource.v8.V8;
+import static org.junit.Assert.assertEquals;
+
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.BiliSortAndSignInterceptor;
 
 import org.jsoup.Connection;
@@ -9,8 +10,6 @@ import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -21,17 +20,6 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
         assertEquals("jf", BiliSortAndSignInterceptor.getSign("aid=931289831&appkey=1d8b6e7d45233436&autoplay=0&bili_local_id=&build=6210600&buvid=XWB4D15BA2D803A3045A6877CCCDE4E4975FA&c_locale=zh_CN&device=phone&device_id=&device_name=XiaomiRedmi Note 7&device_platform=Android10XiaomiRedmi Note 7&fnval=16&fnver=0&force_host=0&from=7&local_id=XWB4D15BA2D803A3045A6877CCCDE4E4975FA&mobi_app=android&plat=0&platform=android&s_locale=zh_CN&ts=1626408638931"));
-    }
-
-    @Test
-    public void testJs() {
-        V8 runtime = V8.createV8Runtime();
-        runtime.setData("hello","helloTest");
-        runtime.executeVoidScript("" +
-                "var jsVar = 'jsDATA';");
-        System.out.println(runtime.getString("hello"));
-        System.out.println(runtime.getString("jsVar"));
-        runtime.release(true);
     }
 
     @Test

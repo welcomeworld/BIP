@@ -34,13 +34,13 @@ def getVersionName = { ->
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.github.welcomeworld.bangumi.instrumentality.project"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode getVersionCode()
         versionName getVersionName()
 
@@ -130,10 +130,6 @@ dependencies {
 
     implementation 'com.alibaba:fastjson:1.1.72.android'
     implementation 'com.github.welcomeworld:DanmakuFlameMaster-Jitpack:v0.9.25'
-
-    //bugly
-    implementation 'com.tencent.bugly:crashreport:3.4.4'
-    implementation 'com.tencent.bugly:nativecrashreport:3.9.2'
 
     //custom library
     implementation 'com.github.welcomeworld:BIPPlayer:1.0.25'
