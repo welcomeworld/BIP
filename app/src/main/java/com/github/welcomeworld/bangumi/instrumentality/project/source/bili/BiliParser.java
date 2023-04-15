@@ -615,7 +615,7 @@ public class BiliParser extends BaseParser {
         LogUtil.e("BiliParser", "final aid:" + currentAid);
         Map<String, String> parameters = new HashMap<>();
         parameters.put("aid", currentAid);
-        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(VideoDetailNetAPI.class);
+        VideoWebAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoWebAPI.class);
         try {
             Response<VideoDetailPageBean> response = videoDetailNetAPI.getAvDetailPageInfo(parameters).execute();
             if (response.body() == null || response.body().getCode() != 0) {
@@ -699,7 +699,7 @@ public class BiliParser extends BaseParser {
 
     private List<String> getAvInfo(String bvid) {
         List<String> result = new ArrayList<>();
-        VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoDetailNetAPI.class);
+        VideoWebAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoWebAPI.class);
         try {
             Response<BvToAvBean> response = videoDetailNetAPI.getAvInfo(bvid).execute();
             if (response.body() == null || response.body().getCode() != 0) {
