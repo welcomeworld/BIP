@@ -88,7 +88,6 @@ public class BipPlayView extends ConstraintLayout {
     boolean isFullScreen;
     VideoBean currentVideoBean;
     DanmakuContext danmakuContext;
-    BaseDanmakuParser baseDanmakuParser;
     private long duration = 0;
     private final int SEEKBAR_MAX = 1000;
     private double lastXpercentage = 0;
@@ -106,6 +105,8 @@ public class BipPlayView extends ConstraintLayout {
     private BIPPlayer.OnSeekCompleteListener mOnSeekCompleteListener;
     private BIPPlayer.OnErrorListener mOnErrorListener;
     private BIPPlayer.OnInfoListener mOnInfoListener;
+
+    private OkHttpClient okHttpClient;
 
     private static final String TAG = "BipPlayView";
 
@@ -218,6 +219,7 @@ public class BipPlayView extends ConstraintLayout {
         danmakuSwitchView = itemView.findViewById(R.id.bip_play_view_danmaku_switch);
         danmakuSwitchView.setOnClickListener(playItemClickListener);
         danmakuSwitchView.setSelected(SettingConfig.isDanmakuOpen());
+        initDanmaku();
     }
 
     SurfaceHolder.Callback surfaceHolderCallback = new SurfaceHolder.Callback() {
@@ -686,7 +688,7 @@ public class BipPlayView extends ConstraintLayout {
                 titleView.setText(currentVideoBean.getTitle());
             }
             if (!StringUtil.isEmpty(currentVideoBean.getDanmakuUrl())) {
-                initDanmaku();
+                createDanmakuParser(currentVideoBean.getDanmakuUrl());
             }
         }
     }
@@ -775,7 +777,7 @@ public class BipPlayView extends ConstraintLayout {
 
     private void initDanmaku() {
         HashMap<Integer, Integer> maxLinesPair = new HashMap<>();
-        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 5);
+        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 6);
         HashMap<Integer, Boolean> overlappingEnable = new HashMap<>();
         overlappingEnable.put(BaseDanmaku.TYPE_FIX_TOP, true);
         overlappingEnable.put(BaseDanmaku.TYPE_SCROLL_RL, true);
@@ -789,7 +791,7 @@ public class BipPlayView extends ConstraintLayout {
         danmakuView.setCallback(new DrawHandler.Callback() {
             @Override
             public void prepared() {
-                Log.e("danmaku", "prepared");
+                Log.e(TAG, "prepared");
                 post(() -> {
                     if (bipPlayer != null && bipPlayer.isPlaying()) {
                         danmakuView.start(bipPlayer.getCurrentPosition());
@@ -809,11 +811,11 @@ public class BipPlayView extends ConstraintLayout {
 
             @Override
             public void drawingFinished() {
-                Log.e("danmaku", "finished");
+                Log.e(TAG, "finished");
             }
         });
-        createDanmakuParser(currentVideoBean.getDanmakuUrl());
         danmakuView.enableDanmakuDrawingCache(true);
+        okHttpClient = new OkHttpClient().newBuilder().build();
     }
 
     private void createDanmakuParser(String uri) {
@@ -821,7 +823,6 @@ public class BipPlayView extends ConstraintLayout {
             return;
         }
         ILoader iLoader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
-        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().build();
         okHttpClient.newCall(new Request.Builder().url(uri).build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -853,8 +854,7 @@ public class BipPlayView extends ConstraintLayout {
                 }
                 BaseDanmakuParser parser = new BiliDanmukuParser();
                 parser.load(iLoader.getDataSource());
-                baseDanmakuParser = parser;
-                danmakuView.prepare(baseDanmakuParser, danmakuContext);
+                danmakuView.prepare(parser, danmakuContext);
             }
         });
     }
@@ -901,5 +901,6 @@ public class BipPlayView extends ConstraintLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         danmakuView.release();
+        okHttpClient.dispatcher().cancelAll();
     }
 }
