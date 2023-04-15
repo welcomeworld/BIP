@@ -652,7 +652,7 @@ public class BiliParser extends BaseParser {
                     extraData.put("aid", currentAid);
                     extraData.put("cid", String.valueOf(cid));
                     videoBean.setSourceExternalData(new Gson().toJson(extraData));
-                    videoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
+                    videoBean.setDanmakuUrl("http://comment.bilibili.com/" + cid + ".xml");
                     if (useListTitle) {
                         videoBean.setTitle(videoListBean.getTitle());
                     } else {
@@ -673,7 +673,7 @@ public class BiliParser extends BaseParser {
                 extraData.put("aid", currentAid);
                 extraData.put("cid", String.valueOf(cid));
                 currentVideoBean.setSourceExternalData(new Gson().toJson(extraData));
-                currentVideoBean.setDanmakuUrl(response.body().getData().getPages().get(i).getDmlink());
+                currentVideoBean.setDanmakuUrl("http://comment.bilibili.com/" + cid + ".xml");
                 if (useListTitle) {
                     currentVideoBean.setTitle(videoListBean.getTitle());
                 } else {
