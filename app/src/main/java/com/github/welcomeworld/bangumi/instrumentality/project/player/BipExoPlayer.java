@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.BIPApp;
 import com.github.welcomeworld.bipplayer.BIPPlayer;
+import com.github.welcomeworld.bipplayer.BipDataSource;
 import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
@@ -23,10 +24,10 @@ import com.google.android.exoplayer2.util.EventLogger;
 
 import java.io.FileDescriptor;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BipExoPlayer implements BIPPlayer {
-    private final String TAG = "BipExoPlayer";
     private final ExoPlayer exoPlayer;
     DefaultHttpDataSource.Factory httpFactory;
     DefaultMediaSourceFactory mediaSourceFactory;
@@ -321,5 +322,15 @@ public class BipExoPlayer implements BIPPlayer {
     @Override
     public void setSpeed(float speed) {
         exoPlayer.setPlaybackSpeed(speed);
+    }
+
+    @Override
+    public void setDataSource(List<BipDataSource> bipDataSources) {
+        setDataSource(bipDataSources.get(0).source);
+    }
+
+    @Override
+    public void prepareQualityAsync(List<BipDataSource> bipDataSources) {
+        prepareQualityAsync(bipDataSources.get(0).source);
     }
 }

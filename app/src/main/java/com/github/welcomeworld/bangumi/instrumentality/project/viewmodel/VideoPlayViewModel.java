@@ -22,10 +22,12 @@ import com.github.welcomeworld.bangumi.instrumentality.project.persistence.Histo
 import com.github.welcomeworld.bangumi.instrumentality.project.player.BipExoPlayer;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.SettingsFragment;
 import com.github.welcomeworld.bipplayer.BIPPlayer;
+import com.github.welcomeworld.bipplayer.BipDataSource;
 import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 import com.github.welcomeworld.devbase.utils.ToastUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -212,7 +214,7 @@ public class VideoPlayViewModel extends ViewModel {
                     currentVideoBean.getQualityBeans().add(videoQualityBean);
                 }
                 currentVideoBean.getCurrentQualityBean().setRealVideoUrl(downloadInfoBean.getLocalPath());
-            } else if (currentVideoBean.getCurrentQualityBean() == null || currentVideoBean.getCurrentQualityBean().getRealVideoUrl() == null) {
+            } else if (currentVideoBean.getCurrentQualityBean() == null || !currentVideoBean.getCurrentQualityBean().isAvailable()) {
                 changeVideoListBeans(ParserManager.getInstance().updateVideoList(videoListBeans, selectSourceIndex));
             }
         }).fail((throwable) -> {
@@ -222,7 +224,7 @@ public class VideoPlayViewModel extends ViewModel {
             if (isFinishing) {
                 return;
             }
-            if (currentVideoBean == null || currentVideoBean.getCurrentQualityBean() == null || currentVideoBean.getCurrentQualityBean().getRealVideoUrl() == null) {
+            if (currentVideoBean == null || currentVideoBean.getCurrentQualityBean() == null || !currentVideoBean.getCurrentQualityBean().isAvailable()) {
                 ToastUtil.showToast(R.string.video_url_parse_error);
                 return;
             }
@@ -231,9 +233,9 @@ public class VideoPlayViewModel extends ViewModel {
                 return;
             }
             if (fromQuality) {
-                bipPlayer.prepareQualityAsync(currentVideoBean.getCurrentQualityBean().getRealVideoUrl());
+                bipPlayer.prepareQualityAsync(getDataSource(currentVideoBean.getCurrentQualityBean(), true, 0));
             } else {
-                bipPlayer.setDataSource(currentVideoBean.getCurrentQualityBean().getRealVideoUrl());
+                bipPlayer.setDataSource(getDataSource(currentVideoBean.getCurrentQualityBean(), false, currentVideoBean.getPlayPosition()));
                 bipPlayer.prepareAsync();
             }
         });
@@ -315,5 +317,28 @@ public class VideoPlayViewModel extends ViewModel {
             currentVideoBean.getCurrentQualityBean().setRealVideoUrl(null);
         }
         parseVideoBeanDetail(false);
+    }
+
+    private List<BipDataSource> getDataSource(VideoQualityBean qualityBean, boolean sync, long seekPosition) {
+        List<BipDataSource> sources = new ArrayList<>();
+        boolean hasVideo = qualityBean.getRealVideoUrl() != null && !qualityBean.getRealVideoUrl().isEmpty();
+        boolean hasAudio = qualityBean.getRealAudioUrl() != null && !qualityBean.getRealAudioUrl().isEmpty();
+        if (hasVideo) {
+            BipDataSource videoSource = new BipDataSource();
+            videoSource.source = qualityBean.getRealVideoUrl();
+            videoSource.isSync = sync;
+            videoSource.seekPosition = seekPosition;
+            videoSource.isSingleSource = !hasAudio;
+            sources.add(videoSource);
+        }
+        if (hasAudio) {
+            BipDataSource audioSource = new BipDataSource();
+            audioSource.source = qualityBean.getRealAudioUrl();
+            audioSource.isSync = sync;
+            audioSource.isSingleSource = !hasVideo;
+            audioSource.seekPosition = seekPosition;
+            sources.add(audioSource);
+        }
+        return sources;
     }
 }

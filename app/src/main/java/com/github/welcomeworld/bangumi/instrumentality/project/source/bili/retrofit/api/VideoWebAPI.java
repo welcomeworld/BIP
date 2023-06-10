@@ -20,6 +20,6 @@ public interface VideoWebAPI {
     public Call<VideoDetailPageBean> getAvDetailPageInfo(@QueryMap Map<String, String> parameters);
 
     @Streaming
-    @GET("x/player/playurl?fnval=0&fnver=0&otype=json")
+    @GET("x/player/playurl?fnval=4048&fnver=0&otype=json&fourk=1")
     public Call<VideoUrlBean> getVideoUrl(@QueryMap Map<String, String> parameters);
 }

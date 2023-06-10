@@ -202,9 +202,6 @@ public class BiliParser extends BaseParser {
         parameters.put("avid", aid);
         parameters.put("cid", cid + "");
         String qn = getUserQuality();
-        if ("120".equals(qn)) {
-            parameters.put("fourk", "1");
-        }
         parameters.put("qn", qn);
         VideoWebAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoWebAPI.class);
         try {
@@ -213,6 +210,7 @@ public class BiliParser extends BaseParser {
                 return;
             }
             String description;
+            //排序分辨率和确定当前选择的分辨率
             if (currentVideoBean.getQualityBeans().size() <= 1) {
                 currentVideoBean.getQualityBeans().clear();
                 List<Integer> qualityList = urlResponse.body().getData().getAccept_quality();
@@ -221,58 +219,61 @@ public class BiliParser extends BaseParser {
                     qualityMap.put(quality, getVideoQuality(quality));
                 }
                 int selectIndex = 0;
+                boolean matchQuality = false;
                 for (String quality : qualityMap.values()) {
                     VideoQualityBean videoQualityBean = new VideoQualityBean();
                     videoQualityBean.setQuality(quality);
                     currentVideoBean.getQualityBeans().add(videoQualityBean);
-                    if (quality.equals(SettingConfig.getCurrentQuality())) {
+                    if (!matchQuality) {
+                        matchQuality = quality.equals(SettingConfig.getCurrentQuality());
                         currentVideoBean.setCurrentQualityIndex(selectIndex);
                     }
                     selectIndex++;
                 }
             }
-            if (urlResponse.body().getData().getDash() != null) {
-                currentVideoBean.setDash(true);
-                for (int j = 0; j < urlResponse.body().getData().getDash().getVideo().size(); j++) {
-                    VideoQualityBean qualityBean = new VideoQualityBean();
-                    description = getVideoQuality(urlResponse.body().getData().getDash().getVideo().get(j).getId());
-                    boolean qualityMatch = false;
-                    for (int innerIndex = 0; innerIndex < currentVideoBean.getQualityBeans().size(); innerIndex++) {
-                        VideoQualityBean innerBean = currentVideoBean.getQualityBeans().get(innerIndex);
-                        if (description.equals(innerBean.getQuality())) {
-                            qualityBean = innerBean;
-                            qualityMatch = true;
-                            currentVideoBean.setCurrentQualityIndex(innerIndex);
-                            break;
-                        }
-                    }
-                    qualityBean.setRealVideoUrl(urlResponse.body().getData().getDash().getVideo().get(j).getBase_url());
-                    qualityBean.setQuality(description);
-                    qualityBean.setRealAudioUrl(urlResponse.body().getData().getDash().getAudio().get(0).getBase_url());
-                    LogUtil.e("DataLog", qualityBean.getRealVideoUrl());
-                    if (!qualityMatch) {
-                        currentVideoBean.getQualityBeans().add(qualityBean);
-                    }
+            currentVideoBean.setDash(true);
+            VideoUrlBean.DataBean.DashBean dashData = urlResponse.body().getData().getDash();
+            //select the best audio
+            VideoUrlBean.DataBean.DashBean.AudioBean bestAudioBean = dashData.getAudio().get(0);
+            for (VideoUrlBean.DataBean.DashBean.AudioBean audioBean : dashData.getAudio()) {
+                if (audioBean.getId() > bestAudioBean.getId()) {
+                    bestAudioBean = audioBean;
                 }
-            } else {
-                currentVideoBean.setDash(false);
+            }
+            //update qualityBean's source url
+            for (int j = 0; j < dashData.getVideo().size(); j++) {
+                VideoUrlBean.DataBean.DashBean.VideoBean videoBean = dashData.getVideo().get(j);
+                if (videoBean.getCodecid() != 12) {
+                    //ignore codec without hevc
+                    continue;
+                }
                 VideoQualityBean qualityBean = new VideoQualityBean();
-                description = getVideoQuality(urlResponse.body().getData().getQuality());
+                description = getVideoQuality(videoBean.getId());
                 boolean qualityMatch = false;
                 for (int innerIndex = 0; innerIndex < currentVideoBean.getQualityBeans().size(); innerIndex++) {
                     VideoQualityBean innerBean = currentVideoBean.getQualityBeans().get(innerIndex);
                     if (description.equals(innerBean.getQuality())) {
                         qualityBean = innerBean;
                         qualityMatch = true;
-                        currentVideoBean.setCurrentQualityIndex(innerIndex);
                         break;
                     }
                 }
-                qualityBean.setRealVideoUrl(urlResponse.body().getData().getDurl().get(0).getUrl());
+                qualityBean.setRealVideoUrl(videoBean.getBase_url());
                 qualityBean.setQuality(description);
+                qualityBean.setRealAudioUrl(bestAudioBean.getBase_url());
                 LogUtil.e("DataLog", qualityBean.getRealVideoUrl());
+                //加入没有匹配到即原列表没有的分辨率
                 if (!qualityMatch) {
                     currentVideoBean.getQualityBeans().add(qualityBean);
+                }
+            }
+            //fix if the select quality source is null
+            if (!currentVideoBean.getCurrentQualityBean().isAvailable()) {
+                for (int select = currentVideoBean.getQualityBeans().size() - 1; select >= 0; select--) {
+                    if (currentVideoBean.getQualityBeans().get(select).isAvailable()) {
+                        currentVideoBean.setCurrentQualityIndex(select);
+                        break;
+                    }
                 }
             }
         } catch (Exception e) {
@@ -731,6 +732,12 @@ public class BiliParser extends BaseParser {
                 return "116";
             case "4K":
                 return "120";
+            case "HDR":
+                return "125";
+            case "杜比视界":
+                return "126";
+            case "8K":
+                return "127";
             case "1080P+":
             default:
                 return "112";
@@ -755,6 +762,12 @@ public class BiliParser extends BaseParser {
                 return "1080P60";
             case 120:
                 return "4K";
+            case 125:
+                return "HDR";
+            case 126:
+                return "杜比视界";
+            case 127:
+                return "8K";
             default:
             case 64:
                 return "720P";

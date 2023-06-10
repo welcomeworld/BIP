@@ -538,9 +538,6 @@ public class BipPlayView extends ConstraintLayout {
             if (duration > 0 && currentVideoBean != null) {
                 currentVideoBean.setDuration(duration);
             }
-            if (currentVideoBean != null && currentVideoBean.getPlayPosition() > 1000 && currentVideoBean.getPlayPosition() < bipPlayer.getDuration() - 5000) {
-                bipPlayer.seekTo(currentVideoBean.getPlayPosition());
-            }
             if (isControllerShowing() && !isFullScreen) {
                 videoFullScreenView.setVisibility(VISIBLE);
             }
@@ -560,7 +557,6 @@ public class BipPlayView extends ConstraintLayout {
             if (mOnErrorListener != null) {
                 mOnErrorListener.onError(mp, what, extra);
             }
-            return false;
         });
         bipPlayer.setOnCompletionListener(bp -> {
             removeCallbacks(progressChangeRunnable);
@@ -791,7 +787,7 @@ public class BipPlayView extends ConstraintLayout {
         danmakuView.setCallback(new DrawHandler.Callback() {
             @Override
             public void prepared() {
-                Log.e(TAG, "prepared");
+                Log.e(TAG, "danmakuView prepared");
                 post(() -> {
                     if (bipPlayer != null && bipPlayer.isPlaying()) {
                         danmakuView.start(bipPlayer.getCurrentPosition());

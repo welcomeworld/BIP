@@ -8,7 +8,7 @@ public class VideoQualityBean implements Parcelable {
     private String realAudioUrl;
     private String quality;
 
-    public VideoQualityBean(){
+    public VideoQualityBean() {
 
     }
 
@@ -65,5 +65,9 @@ public class VideoQualityBean implements Parcelable {
         parcel.writeString(realVideoUrl);
         parcel.writeString(realAudioUrl);
         parcel.writeString(quality);
+    }
+
+    public boolean isAvailable() {
+        return realVideoUrl != null || realAudioUrl != null;
     }
 }

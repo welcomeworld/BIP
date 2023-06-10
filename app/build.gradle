@@ -132,7 +132,7 @@ dependencies {
     implementation 'com.github.welcomeworld:DanmakuFlameMaster-Jitpack:v0.9.25'
 
     //custom library
-    implementation 'com.github.welcomeworld:BIPPlayer:1.0.26'
+    implementation 'com.github.welcomeworld:BIPPlayer:1.0.29'
     implementation 'com.github.welcomeworld:DevTool:1.0.03'
     implementation project(path: ':app_update')
     implementation project(path: ':zxing')
