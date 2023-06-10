@@ -13,13 +13,11 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBe
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SettingConfig;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.api.BiliLocalStatus;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.fragment.WebLoginFragment;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BaseUrl;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BiliRetrofitManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.IndexNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.SearchNetAPI;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.UserNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.UserWebAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.VideoDetailNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.VideoWebAPI;
@@ -28,8 +26,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retro
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BvToAvBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendDataBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.LoginKeyBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.LoginResultBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.SearchResultBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoDetailPageBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoUrlBean;
@@ -372,77 +368,6 @@ public class BiliParser extends BaseParser {
             }
         }
         return result;
-    }
-
-    public static String login(String userName, String rawPassword) {
-        if (BiliLocalStatus.isLogin()) {
-            LogUtil.e("jsTest", "user already login");
-            return "success";
-        }
-        UserNetAPI userNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.PASSPORTURL).create(UserNetAPI.class);
-        try {
-            Response<LoginKeyBean> response = userNetAPI.getKey().execute();
-            if (response.body() == null || response.body().getData() == null) {
-                LogUtil.e("jsTest", "key response is null");
-                return "";
-            }
-            LogUtil.e("jsTest", "key response normal");
-            LoginKeyBean.AuthKey authKey = response.body().getData();
-            String password = authKey.encypt(authKey.getHash() + rawPassword, authKey.getKey());
-            Response<LoginResultBean> loginResponse = userNetAPI.login(userName, password, "device_meta", "dt", "main.homepage.avatar-nologin.all.click", "bilibili://live/home").execute();
-            return parseLoginResponse(loginResponse);
-        } catch (Exception e) {
-            e.printStackTrace();
-            //
-        }
-        return "";
-    }
-
-    public static String acquireAccessTokenV2(String code) {
-        LogUtil.e("JsBridgeDispatcher", "acquireAccess by code" + code);
-        UserNetAPI userNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.PASSPORTURL).create(UserNetAPI.class);
-        try {
-            Response<LoginResultBean> loginResponse = userNetAPI.acquireAccessTokenV2(code, "authorization_code").execute();
-            return parseLoginResponse(loginResponse);
-        } catch (Exception e) {
-            e.printStackTrace();
-            //
-        }
-        return "";
-    }
-
-    private static String parseLoginResponse(Response<LoginResultBean> loginResponse) {
-        if (loginResponse.body() == null) {
-            LogUtil.e("jsTest", "login response is null");
-            return "";
-        }
-        if (loginResponse.body().getCode() == 0) {
-            String redirectUrl = loginResponse.body().getData().getUrl();
-            if (redirectUrl != null && !redirectUrl.isEmpty()) {
-                return redirectUrl;
-            }
-            LogUtil.e("LoginActivity", "登录成功" + loginResponse.body().getCode());
-            LoginResultBean.TokenInfoBean token = loginResponse.body().getData().getTokenInfo();
-            BiliLocalStatus.setLogin(true);
-            BiliLocalStatus.setAccessKey(token.getAccessToken());
-            BiliLocalStatus.setMid(token.getMid());
-            BiliLocalStatus.setToken(token);
-            CookieManager cookieManager = CookieManager.getInstance();
-            LoginResultBean.CookieInfoBean cookieInfoBean = loginResponse.body().getData().getCookieInfo();
-            for (String domain : cookieInfoBean.getDomains()) {
-                for (int i = 0; i < cookieInfoBean.getCookies().size(); i++) {
-                    cookieManager.setCookie(domain, cookieInfoBean.getCookies().get(i).getName() + "=" + cookieInfoBean.getCookies().get(i).getValue());
-                }
-            }
-            return "success";
-        } else if (loginResponse.body().getCode() == -105) {
-            Uri uri = Uri.parse(loginResponse.body().getData().getUrl());
-            LogUtil.e("jsTest", "url:" + uri);
-            return loginResponse.body().getData().getUrl();
-        } else {
-            LogUtil.e("LoginActivity", "fail:" + loginResponse.body().getCode());
-        }
-        return "";
     }
 
     @Override
