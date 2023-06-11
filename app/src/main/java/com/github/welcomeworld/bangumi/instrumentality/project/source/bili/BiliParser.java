@@ -199,7 +199,7 @@ public class BiliParser extends BaseParser {
         parameters.put("cid", cid + "");
         String qn = getUserQuality();
         parameters.put("qn", qn);
-        VideoWebAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoWebAPI.class);
+        VideoWebAPI videoDetailNetAPI = BiliRetrofitManager.getWbiRetrofit(BaseUrl.APIURL).create(VideoWebAPI.class);
         try {
             Response<VideoUrlBean> urlResponse = videoDetailNetAPI.getVideoUrl(parameters).execute();
             if (urlResponse.body() == null || urlResponse.body().getCode() != 0) {

@@ -2,6 +2,7 @@ package com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retr
 
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginInfoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginUrlBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebNavBean;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -13,4 +14,7 @@ public interface UserWebAPI {
 
     @GET("x/passport-login/web/qrcode/poll")
     Call<WebLoginInfoBean> getLoginInfo(@Query("qrcode_key") String oauthKey);
+
+    @GET("x/web-interface/nav")
+    Call<WebNavBean> getNav();
 }

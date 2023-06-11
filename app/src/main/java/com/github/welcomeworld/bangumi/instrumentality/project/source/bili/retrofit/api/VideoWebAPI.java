@@ -14,12 +14,12 @@ import retrofit2.http.Streaming;
 
 public interface VideoWebAPI {
     @GET("x/web-interface/view")
-    public Call<BvToAvBean> getAvInfo(@Query("bvid") String bvid);
+    Call<BvToAvBean> getAvInfo(@Query("bvid") String bvid);
 
     @GET("x/web-interface/view")
-    public Call<VideoDetailPageBean> getAvDetailPageInfo(@QueryMap Map<String, String> parameters);
+    Call<VideoDetailPageBean> getAvDetailPageInfo(@QueryMap Map<String, String> parameters);
 
     @Streaming
-    @GET("x/player/playurl?fnval=4048&fnver=0&otype=json&fourk=1")
-    public Call<VideoUrlBean> getVideoUrl(@QueryMap Map<String, String> parameters);
+    @GET("x/player/wbi/playurl?fnval=4048&fnver=0&otype=json&fourk=1")
+    Call<VideoUrlBean> getVideoUrl(@QueryMap Map<String, String> parameters);
 }
