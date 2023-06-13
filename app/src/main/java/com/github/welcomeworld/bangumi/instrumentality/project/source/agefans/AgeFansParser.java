@@ -22,16 +22,6 @@ public class AgeFansParser extends BaseParser {
     }
 
     @Override
-    public List<VideoListBean> refreshRecommend() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<VideoListBean> getMoreRecommend() {
-        return Collections.emptyList();
-    }
-
-    @Override
     public List<VideoListBean> updateVideoList(List<VideoListBean> videoListBeans, int selectSourceIndex) {
         return AgeFansNetApi.updateVideoList(videoListBeans, selectSourceIndex);
     }

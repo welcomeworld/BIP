@@ -3,8 +3,10 @@ package com.github.welcomeworld.bangumi.instrumentality.project.source.bili.inte
 import androidx.annotation.NonNull;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.WbiManager;
+import com.google.common.base.Charsets;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -30,7 +32,7 @@ public class WbiSortAndSignInterceptor implements Interceptor {
             for (String name : names) {
                 List<String> values = url.queryParameterValues(name);
                 for (String value : values) {
-                    namesAndValues.add(String.format("%s=%s", name, value));
+                    namesAndValues.add(String.format("%s=%s", name, URLEncoder.encode(value, Charsets.UTF_8.name())));
                 }
             }
         } else if ("POST".equalsIgnoreCase(request.method())) {

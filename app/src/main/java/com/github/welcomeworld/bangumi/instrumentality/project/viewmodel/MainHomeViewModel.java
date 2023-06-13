@@ -11,6 +11,8 @@ import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 public class MainHomeViewModel extends ViewModel {
+    private int pageNumber = 1;
+    private boolean isLoading = false;
     MutableLiveData<ListActionWrapper<VideoListBean>> homeData = new MutableLiveData<>();
 
     public LiveData<ListActionWrapper<VideoListBean>> getHomeDataLive() {
@@ -18,22 +20,28 @@ public class MainHomeViewModel extends ViewModel {
     }
 
     public void loadMore() {
-        ThreadUtil.defer().when(() -> ParserManager.getInstance().getMoreRecommend()).fail(ex -> {
-            LogUtil.e("Home", "loadMore fail");
-            ex.printStackTrace();
-        }).done(result -> {
-            LogUtil.d("Home", "loadMore Success" + result.size());
-            homeData.setValue(new ListActionWrapper<>(ListActionWrapper.MORE, result));
-        });
+        if (!isLoading) {
+            getRecommend(pageNumber);
+            pageNumber++;
+        }
     }
 
     public void refresh() {
-        ThreadUtil.defer().when(() -> ParserManager.getInstance().refreshRecommend()).fail(ex -> {
-            LogUtil.e("Home", "refresh fail");
+        if (!isLoading) {
+            pageNumber = 1;
+            getRecommend(pageNumber);
+        }
+    }
+
+    private void getRecommend(int page) {
+        ThreadUtil.defer().when(() -> ParserManager.getInstance().refreshRecommend(pageNumber)).fail(ex -> {
+            pageNumber--;
+            isLoading = false;
             ex.printStackTrace();
         }).done(result -> {
-            LogUtil.d("Home", "refresh success:" + result.size());
-            homeData.setValue(new ListActionWrapper<>(ListActionWrapper.REFRESH, result));
+            isLoading = false;
+            LogUtil.d("Home", "get recommend success:" + result.size());
+            homeData.setValue(new ListActionWrapper<>(page == 1 ? ListActionWrapper.REFRESH : ListActionWrapper.MORE, result));
         });
     }
 }

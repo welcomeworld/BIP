@@ -10,21 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BimiParser extends BaseParser {
-    private static HashMap<String, Integer> searchMaxPageCache = new HashMap<>();
+    private static final HashMap<String, Integer> searchMaxPageCache = new HashMap<>();
 
     @Override
     public String getTag() {
         return Constants.Source.BIMI;
-    }
-
-    @Override
-    public List<VideoListBean> refreshRecommend() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<VideoListBean> getMoreRecommend() {
-        return Collections.emptyList();
     }
 
     @Override

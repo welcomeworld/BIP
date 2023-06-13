@@ -1,7 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api;
 
 
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebHomeRcmdData;
 
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 
 public interface IndexNetAPI {
-    @GET("x/feed/index?banner_hash=5370060068233862947&idx=1547815474&login_event=0&network=wifi&style=2&open_event=")
-    Call<IndexRecommendBean> getIndexRecommend(@QueryMap Map<String,String> parameters);
+    @GET("x/web-interface/wbi/index/top/feed/rcmd?fresh_type=4&feed_version=V8&homepage_ver=1&ps=12")
+    Call<WebHomeRcmdData> getRecommend(@QueryMap Map<String, String> parameters);
 
 }

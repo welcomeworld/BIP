@@ -23,18 +23,10 @@ public class ParserManager {
 
     private final LinkedHashMap<String, BaseParser> mParsers = new LinkedHashMap<>();
 
-    public List<VideoListBean> refreshRecommend() {
+    public List<VideoListBean> refreshRecommend(int pageNumber) {
         List<VideoListBean> result = new ArrayList<>();
         for (BaseParser parser : mParsers.values()) {
-            result.addAll(parser.refreshRecommend());
-        }
-        return result;
-    }
-
-    public List<VideoListBean> getMoreRecommend() {
-        List<VideoListBean> result = new ArrayList<>();
-        for (BaseParser parser : mParsers.values()) {
-            result.addAll(parser.getMoreRecommend());
+            result.addAll(parser.getRecommend(pageNumber));
         }
         return result;
     }

@@ -10,6 +10,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBe
 import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,9 @@ import java.util.Map;
 public abstract class BaseParser {
     public abstract String getTag();
 
-    public abstract List<VideoListBean> refreshRecommend();
-
-    public abstract List<VideoListBean> getMoreRecommend();
+    public List<VideoListBean> getRecommend(int pageNumber) {
+        return Collections.emptyList();
+    }
 
     /**
      * @param key searchWord

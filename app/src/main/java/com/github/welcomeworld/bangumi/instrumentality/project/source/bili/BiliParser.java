@@ -24,11 +24,10 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retro
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BangumiDetailPageBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BiliCommentBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BvToAvBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.IndexRecommendDataBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.SearchResultBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoDetailPageBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoUrlBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebHomeRcmdData;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginInfoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
@@ -36,7 +35,10 @@ import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +49,8 @@ import retrofit2.Response;
 
 public class BiliParser extends BaseParser {
     private static BiliParser instance;
+    private static final List<String> typeWhiteList = Arrays.asList("av", "ogv", "bangumi");
+    private static final Deque<List<String>> lastShowListDeque = new ArrayDeque<>();
 
     public static BiliParser getInstance() {
         if (instance == null) {
@@ -86,111 +90,94 @@ public class BiliParser extends BaseParser {
     }
 
     @Override
-    public List<VideoListBean> refreshRecommend() {
+    public List<VideoListBean> getRecommend(int pageNumber) {
         List<VideoListBean> result = new ArrayList<>();
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("pull", "true");
-        IndexNetAPI indexNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(IndexNetAPI.class);
-        Call<IndexRecommendBean> indexBeanCall = indexNetAPI.getIndexRecommend(parameters);
+        parameters.put("fresh_idx_1h", "" + pageNumber);
+        parameters.put("fetch_row", (pageNumber * 3 + 1) + "");
+        parameters.put("fresh_idx", pageNumber + "");
+        parameters.put("brush", pageNumber + "");
+        if (pageNumber == 1) {
+            lastShowListDeque.clear();
+        } else {
+            String lastShowList = getLastShowList();
+            if (!lastShowList.isEmpty()) {
+                parameters.put("last_showlist", lastShowList);
+            }
+        }
+        IndexNetAPI indexNetAPI = BiliRetrofitManager.getWbiRetrofit(BaseUrl.APIURL).create(IndexNetAPI.class);
+        Call<WebHomeRcmdData> indexBeanCall = indexNetAPI.getRecommend(parameters);
         try {
-            Response<IndexRecommendBean> response = indexBeanCall.execute();
+            Response<WebHomeRcmdData> response = indexBeanCall.execute();
             if (response.body() == null || response.body().getData() == null) {
                 LogUtil.e("DataLog", "获取不到数据" +
                         "");
 //                Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
                 return result;
             }
-            List<IndexRecommendDataBean> moreData;
-            moreData = response.body().getData();
+            WebHomeRcmdData.Data rcmdData = response.body().getData();
+            List<WebHomeRcmdData.Data.Item> moreData = rcmdData.getItem();
+            List<String> lastShowList = new ArrayList<>();
             for (int i = 0; i < moreData.size(); i++) {
-                if (!moreData.get(i).getGotoX().equalsIgnoreCase("av")) {
+                WebHomeRcmdData.Data.Item item = moreData.get(i);
+                if (item.getId() == 0) {
+                    lastShowList.add(item.getGotoX() + "_n_" + item.getBusinessInfo().getSrcId());
+                } else {
+                    lastShowList.add(item.getGotoX() + "_n_" + item.getId());
+                }
+                if (!typeWhiteList.contains(item.getGotoX())) {
                     LogUtil.e("DataLog", "跳过非av:" + moreData.get(i).getGotoX());
                     moreData.remove(i);
                     i--;
                 } else {
-                    LogUtil.e("DataLog", "RecommendData:" + moreData.get(i).toString());
+                    LogUtil.e("DataLog", "RecommendData:" + item);
                     VideoListBean videoListBean = new VideoListBean();
                     videoListBean.setSourceName(Constants.Source.BILI);
-                    videoListBean.setTitle(moreData.get(i).getTitle());
-                    String tagName = moreData.get(i).getTname();
-                    IndexRecommendDataBean.TagBean tagBean = moreData.get(i).getTag();
-                    if (tagBean != null) {
-                        tagName += "·" + tagBean.getTag_name();
-                    }
+                    videoListBean.setTitle(item.getTitle());
+                    String tagName = item.getOwner().getName();
                     videoListBean.setTag(tagName);
                     videoListBean.setCoverPortrait(false);
-                    videoListBean.setCover(moreData.get(i).getCover() + "@320w_200h_1e_1c.webp");
+                    videoListBean.setCover(item.getPic() + "@320w_200h_1e_1c.webp");
                     ArrayList<VideoBean> videoBeans = new ArrayList<>();
                     VideoBean videoBean = new VideoBean();
                     HashMap<String, String> extraMap = new HashMap<>();
                     extraMap.put("videoType", "av");
+                    extraMap.put("bvid", item.getBvid());
                     videoBean.setSourceExternalData(new Gson().toJson(extraMap));
-                    videoBean.setTitle(moreData.get(i).getTitle());
+                    videoBean.setTitle(item.getTitle());
                     videoBean.setCover(videoListBean.getCover());
-                    videoBean.setDuration(moreData.get(i).getDuration() * 1000L);
-                    videoBean.setVideoKey(String.valueOf(moreData.get(i).getCid()));
-                    videoBean.setUrl(moreData.get(i).getUri());
+                    videoBean.setDuration(item.getDuration() * 1000L);
+                    videoBean.setVideoKey(String.valueOf(item.getCid()));
+                    videoBean.setUrl(item.getUri());
                     videoBeans.add(videoBean);
                     videoListBean.setVideoBeanList(videoBeans);
                     result.add(videoListBean);
                 }
             }
+            pushLastShowList(lastShowList);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return result;
     }
 
-    @Override
-    public List<VideoListBean> getMoreRecommend() {
-        List<VideoListBean> result = new ArrayList<>();
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("pull", "false");
-        IndexNetAPI indexNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(IndexNetAPI.class);
-        Call<IndexRecommendBean> indexBeanCall = indexNetAPI.getIndexRecommend(parameters);
-        try {
-            Response<IndexRecommendBean> response = indexBeanCall.execute();
-            if (response.body().getData() == null) {
-//                Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
-                return result;
+    private String getLastShowList() {
+        StringBuilder lastShowListBuilder = new StringBuilder();
+        for (List<String> lastShowList : lastShowListDeque) {
+            for (String showId : lastShowList) {
+                lastShowListBuilder.append(showId);
+                lastShowListBuilder.append(",");
             }
-            List<IndexRecommendDataBean> moreData;
-            moreData = response.body().getData();
-            for (int i = 0; i < moreData.size(); i++) {
-                if (!moreData.get(i).getGotoX().equalsIgnoreCase("av")) {
-                    moreData.remove(i);
-                    i--;
-                } else {
-                    VideoListBean videoListBean = new VideoListBean();
-                    videoListBean.setTitle(moreData.get(i).getTitle());
-                    videoListBean.setSourceName(Constants.Source.BILI);
-                    String tagName = moreData.get(i).getTname();
-                    IndexRecommendDataBean.TagBean tagBean = moreData.get(i).getTag();
-                    if (tagBean != null) {
-                        tagName += "·" + tagBean.getTag_name();
-                    }
-                    videoListBean.setTag(tagName);
-                    videoListBean.setCoverPortrait(false);
-                    videoListBean.setCover(moreData.get(i).getCover() + "@320w_200h_1e_1c.webp");
-                    ArrayList<VideoBean> videoBeans = new ArrayList<>();
-                    VideoBean videoBean = new VideoBean();
-                    HashMap<String, String> extraMap = new HashMap<>();
-                    extraMap.put("videoType", "av");
-                    videoBean.setSourceExternalData(new Gson().toJson(extraMap));
-                    videoBean.setVideoKey(String.valueOf(moreData.get(i).getCid()));
-                    videoBean.setTitle(moreData.get(i).getTitle());
-                    videoBean.setDuration(moreData.get(i).getDuration() * 1000L);
-                    videoBean.setCover(videoListBean.getCover());
-                    videoBean.setUrl(moreData.get(i).getUri());
-                    videoBeans.add(videoBean);
-                    videoListBean.setVideoBeanList(videoBeans);
-                    result.add(videoListBean);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return result;
+        lastShowListBuilder.deleteCharAt(lastShowListBuilder.length() - 1);
+        return lastShowListBuilder.toString();
+    }
+
+    private void pushLastShowList(List<String> showList) {
+        lastShowListDeque.addLast(showList);
+        if (lastShowListDeque.size() > 6) {
+            lastShowListDeque.removeFirst();
+        }
     }
 
     private void queryAVItemDetail(VideoBean currentVideoBean, String aid, String cid) {
@@ -528,9 +515,17 @@ public class BiliParser extends BaseParser {
         for (VideoBean cacheBean : orignal.getVideoBeanList()) {
             cacheVideoBeans.put(cacheBean.getVideoKey(), cacheBean);
         }
-        Uri currentUri = Uri.parse(currentVideoBean.getUrl());
-        LogUtil.e("BiliParser", "uri:" + currentUri);
-        currentAid = currentUri.getPath().substring(1);
+        String bvid = extraData.get("bvid");
+        if (bvid != null) {
+            List<String> ids = getAvInfo(bvid);
+            if (ids.size() >= 2) {
+                currentAid = ids.get(0);
+            }
+        } else {
+            Uri currentUri = Uri.parse(currentVideoBean.getUrl());
+            LogUtil.e("BiliParser", "uri:" + currentUri);
+            currentAid = currentUri.getPath().substring(1);
+        }
         try {
             currentCid = currentVideoBean.getVideoKey();
         } catch (Exception e) {
