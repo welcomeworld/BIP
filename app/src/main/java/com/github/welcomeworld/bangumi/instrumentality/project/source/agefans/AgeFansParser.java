@@ -7,9 +7,9 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
+import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,19 +27,20 @@ public class AgeFansParser extends BaseParser {
     }
 
     @Override
-    public List<VideoListBean> search(String key, String pn) {
+    public void search(String key, String pn, SearchCallback searchCallback) {
         Integer currentPn = Integer.parseInt(pn);
         Integer cachePn = searchMaxPageCache.get(key);
         if (cachePn != null && currentPn >= cachePn) {
             LogUtil.e("AgeFansParser:", "skip search because out of max page max:" + cachePn + " current:" + currentPn);
-            return Collections.emptyList();
+            return;
         }
-        List<VideoListBean> result = AgeFansNetApi.search(key, pn);
-        if (result == null) {
-            searchMaxPageCache.put(key, currentPn);
-            return Collections.emptyList();
-        }
-        return result;
+        ThreadUtil.defer().when(() -> AgeFansNetApi.search(key, pn)).done((result) -> {
+            if (result == null) {
+                searchMaxPageCache.put(key, currentPn);
+            } else {
+                searchCallback.onSearchResult(result);
+            }
+        });
     }
 
     @Override

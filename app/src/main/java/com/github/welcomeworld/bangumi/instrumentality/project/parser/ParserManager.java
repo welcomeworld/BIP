@@ -35,9 +35,9 @@ public class ParserManager {
      * @param searchKey searchWord
      * @param pn        start with 1
      */
-    public void search(String searchKey, String pn, SearchCallback callback) {
+    public void search(String searchKey, String pn, BaseParser.SearchCallback callback) {
         for (BaseParser parser : mParsers.values()) {
-            ThreadUtil.defer().when(() -> parser.search(searchKey, pn)).done(callback::onSearchResult);
+            parser.search(searchKey, pn, callback);
         }
     }
 
@@ -96,9 +96,5 @@ public class ParserManager {
             }
         }
         return null;
-    }
-
-    public interface SearchCallback {
-        void onSearchResult(List<VideoListBean> result);
     }
 }

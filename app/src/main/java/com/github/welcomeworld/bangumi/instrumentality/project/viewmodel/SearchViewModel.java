@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.ListActionWrapper;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
 
 import java.util.List;
@@ -62,7 +63,7 @@ public class SearchViewModel extends ViewModel {
         });
     }
 
-    static abstract class SearchCallback implements ParserManager.SearchCallback {
+    static abstract class SearchCallback implements BaseParser.SearchCallback {
         String searchValidateKey;
 
         SearchCallback(String searchRandomKey) {

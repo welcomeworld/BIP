@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constants;
@@ -45,6 +46,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BiliParser extends BaseParser {
@@ -112,7 +114,6 @@ public class BiliParser extends BaseParser {
             if (response.body() == null || response.body().getData() == null) {
                 LogUtil.e("DataLog", "获取不到数据" +
                         "");
-//                Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
                 return result;
             }
             WebHomeRcmdData.Data rcmdData = response.body().getData();
@@ -266,67 +267,70 @@ public class BiliParser extends BaseParser {
     }
 
     @Override
-    public List<VideoListBean> search(String searchKey, String pn) {
-        List<VideoListBean> result = new ArrayList<>();
+    public void search(String searchKey, String pn, SearchCallback searchCallback) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("pn", pn);
         parameters.put("keyword", searchKey);
         SearchNetAPI searchNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(SearchNetAPI.class);
-        try {
-            Response<SearchResultBean> response = searchNetAPI.getSearchResult(parameters).execute();
-            if (response.body() == null || response.body().getData() == null) {
-//                Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
-                return result;
-            }
-            List<SearchResultBean.DataBean.ItemBean> moreData;
-            moreData = response.body().getData().getItem();
-            if (moreData == null || moreData.size() == 0) {
-                return result;
-            }
-            for (int i = 0; i < moreData.size(); i++) {
-                if (!moreData.get(i).getGotoX().equalsIgnoreCase("av") && !moreData.get(i).getGotoX().equalsIgnoreCase("bangumi")) {
-                    moreData.remove(i);
-                    i--;
-                } else {
-                    boolean isBangumi = moreData.get(i).getGotoX().equalsIgnoreCase("bangumi");
-                    LogUtil.e("DataLog", "SearchData:" + moreData.get(i).toString());
-//                    LogUtil.e("BiliParser", moreData.get(i).toString());
-                    VideoListBean videoListBean = new VideoListBean();
-                    videoListBean.setSourceName(Constants.Source.BILI);
-                    videoListBean.setTitle(moreData.get(i).getTitle());
-                    videoListBean.setTag(isBangumi ? "bili番剧" : moreData.get(i).getAuthor());
-                    videoListBean.setCoverPortrait(isBangumi);
-                    videoListBean.setCover(moreData.get(i).getCover() + (isBangumi ? "@240w_320h_1e_1c.webp" : "@320w_200h_1e_1c.webp"));
-                    ArrayList<VideoBean> videoBeans = new ArrayList<>();
-                    VideoBean videoBean = new VideoBean();
-                    videoBean.setTitle(moreData.get(i).getTitle());
-                    videoBean.setCover(videoListBean.getCover());
-                    HashMap<String, String> extraMap = new HashMap<>();
-                    extraMap.put("videoType", isBangumi ? "bangumi" : "av");
-                    videoBean.setSourceExternalData(new Gson().toJson(extraMap));
-                    String uriString = moreData.get(i).getUri();
-                    if (uriString.endsWith("/")) {
-                        uriString = uriString.substring(0, uriString.length() - 1);
-                    }
-                    Uri currentUri = Uri.parse(uriString);
-                    if (isBangumi) {
-                        videoBean.setVideoKey(currentUri.getPath().substring(currentUri.getPath().lastIndexOf('/') + 3));
-                    } else {
-                        String currentAid = currentUri.getPath().substring(1);
-                        currentAid = currentAid.substring(0, currentAid.contains("/") ? currentAid.indexOf("/") : currentAid.length());
-                        videoBean.setVideoKey(currentAid);
-                    }
-                    videoBean.setUrl(moreData.get(i).getUri());
-                    videoBean.setDuration(parseDuration(moreData.get(i).getDuration()) * 1000L);
-                    videoBeans.add(videoBean);
-                    videoListBean.setVideoBeanList(videoBeans);
-                    result.add(videoListBean);
+        searchNetAPI.getSearchResult(parameters).enqueue(new Callback<SearchResultBean>() {
+            @Override
+            public void onResponse(@NonNull Call<SearchResultBean> call, @NonNull Response<SearchResultBean> response) {
+                if (response.body() == null || response.body().getData() == null) {
+                    return;
                 }
+                List<SearchResultBean.DataBean.ItemBean> moreData;
+                moreData = response.body().getData().getItem();
+                if (moreData == null || moreData.size() == 0) {
+                    return;
+                }
+                List<VideoListBean> result = new ArrayList<>();
+                for (int i = 0; i < moreData.size(); i++) {
+                    if (!moreData.get(i).getGotoX().equalsIgnoreCase("av") && !moreData.get(i).getGotoX().equalsIgnoreCase("bangumi")) {
+                        moreData.remove(i);
+                        i--;
+                    } else {
+                        boolean isBangumi = moreData.get(i).getGotoX().equalsIgnoreCase("bangumi");
+                        LogUtil.e("DataLog", "SearchData:" + moreData.get(i).toString());
+                        VideoListBean videoListBean = new VideoListBean();
+                        videoListBean.setSourceName(Constants.Source.BILI);
+                        videoListBean.setTitle(moreData.get(i).getTitle());
+                        videoListBean.setTag(isBangumi ? "bili番剧" : moreData.get(i).getAuthor());
+                        videoListBean.setCoverPortrait(isBangumi);
+                        videoListBean.setCover(moreData.get(i).getCover() + (isBangumi ? "@240w_320h_1e_1c.webp" : "@320w_200h_1e_1c.webp"));
+                        ArrayList<VideoBean> videoBeans = new ArrayList<>();
+                        VideoBean videoBean = new VideoBean();
+                        videoBean.setTitle(moreData.get(i).getTitle());
+                        videoBean.setCover(videoListBean.getCover());
+                        HashMap<String, String> extraMap = new HashMap<>();
+                        extraMap.put("videoType", isBangumi ? "bangumi" : "av");
+                        videoBean.setSourceExternalData(new Gson().toJson(extraMap));
+                        String uriString = moreData.get(i).getUri();
+                        if (uriString.endsWith("/")) {
+                            uriString = uriString.substring(0, uriString.length() - 1);
+                        }
+                        Uri currentUri = Uri.parse(uriString);
+                        if (isBangumi) {
+                            videoBean.setVideoKey(currentUri.getPath().substring(currentUri.getPath().lastIndexOf('/') + 3));
+                        } else {
+                            String currentAid = currentUri.getPath().substring(1);
+                            currentAid = currentAid.substring(0, currentAid.contains("/") ? currentAid.indexOf("/") : currentAid.length());
+                            videoBean.setVideoKey(currentAid);
+                        }
+                        videoBean.setUrl(moreData.get(i).getUri());
+                        videoBean.setDuration(parseDuration(moreData.get(i).getDuration()) * 1000L);
+                        videoBeans.add(videoBean);
+                        videoListBean.setVideoBeanList(videoBeans);
+                        result.add(videoListBean);
+                    }
+                }
+                searchCallback.onSearchResult(result);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
+
+            @Override
+            public void onFailure(@NonNull Call<SearchResultBean> call, @NonNull Throwable t) {
+
+            }
+        });
     }
 
     @Override

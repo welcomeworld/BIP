@@ -26,7 +26,7 @@ public abstract class BaseParser {
      * @param key searchWord
      * @param pn  start with 1
      */
-    public abstract List<VideoListBean> search(String key, String pn);
+    public abstract void search(String key, String pn, SearchCallback searchCallback);
 
     public abstract boolean isMatchParser(String key);
 
@@ -83,5 +83,7 @@ public abstract class BaseParser {
         return new ArrayList<>();
     }
 
-
+    public interface SearchCallback {
+        void onSearchResult(List<VideoListBean> result);
+    }
 }
