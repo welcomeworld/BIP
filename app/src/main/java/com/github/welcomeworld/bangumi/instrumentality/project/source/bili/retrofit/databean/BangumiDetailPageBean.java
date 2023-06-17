@@ -4,30 +4,21 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class BangumiDetailPageBean {
 
     @SerializedName("code")
-    private Long code;
-    @SerializedName("data")
-    private Result result;
+    private long code;
     @SerializedName("message")
     private String message;
+    @SerializedName("result")
+    private Result result;
 
-    public Long getCode() {
+    public long getCode() {
         return code;
     }
 
-    public void setCode(Long code) {
+    public void setCode(long code) {
         this.code = code;
-    }
-
-    public Result getResult() {
-        return result;
-    }
-
-    public void setResult(Result result) {
-        this.result = result;
     }
 
     public String getMessage() {
@@ -38,124 +29,112 @@ public class BangumiDetailPageBean {
         this.message = message;
     }
 
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
     public static class Result {
-        @SerializedName("activity_tab")
-        private ActivityTab activityTab;
-        @SerializedName("actor")
-        private Actor actor;
+        @SerializedName("activity")
+        private Activity activity;
+        @SerializedName("actors")
+        private String actors;
         @SerializedName("alias")
         private String alias;
-        @SerializedName("all_buttons")
-        private AllButtons allButtons;
-        @SerializedName("all_up_infos")
-        private AllUpInfos allUpInfos;
         @SerializedName("areas")
         private List<Areas> areas;
-        @SerializedName("badge")
-        private String badge;
-        @SerializedName("badge_info")
-        private BadgeInfo badgeInfo;
-        @SerializedName("celebrity")
-        private List<Celebrity> celebrity;
+        @SerializedName("bkg_cover")
+        private String bkgCover;
         @SerializedName("cover")
         private String cover;
-        @SerializedName("detail")
-        private String detail;
-        @SerializedName("dynamic_subtitle")
-        private String dynamicSubtitle;
+        @SerializedName("episodes")
+        private List<Episodes> episodes;
         @SerializedName("evaluate")
         private String evaluate;
+        @SerializedName("freya")
+        private Freya freya;
+        @SerializedName("jp_title")
+        private String jpTitle;
         @SerializedName("link")
         private String link;
         @SerializedName("media_id")
-        private Long mediaId;
+        private long mediaId;
         @SerializedName("mode")
-        private Long mode;
-        @SerializedName("modules")
-        private List<Modules> modules;
+        private long mode;
         @SerializedName("new_ep")
         private NewEp newEp;
-        @SerializedName("origin_name")
-        private String originName;
-        @SerializedName("paster")
-        private Paster paster;
         @SerializedName("payment")
         private Payment payment;
         @SerializedName("play_strategy")
         private PlayStrategy playStrategy;
-        @SerializedName("player_icon")
-        private PlayerIcon playerIcon;
-        @SerializedName("premieres")
-        private List<?> premieres;
+        @SerializedName("positive")
+        private Positive positive;
         @SerializedName("publish")
         private Publish publish;
-        @SerializedName("rating")
-        private Rating rating;
         @SerializedName("record")
         private String record;
-        @SerializedName("refine_cover")
-        private String refineCover;
-        @SerializedName("reserve")
-        private Reserve reserve;
         @SerializedName("rights")
         private Rights rights;
         @SerializedName("season_id")
-        private Long seasonId;
+        private long seasonId;
         @SerializedName("season_title")
         private String seasonTitle;
+        @SerializedName("seasons")
+        private List<Seasons> seasons;
+        @SerializedName("section")
+        private List<Section> section;
         @SerializedName("series")
         private Series series;
         @SerializedName("share_copy")
         private String shareCopy;
+        @SerializedName("share_sub_title")
+        private String shareSubTitle;
         @SerializedName("share_url")
         private String shareUrl;
-        @SerializedName("short_link")
-        private String shortLink;
+        @SerializedName("show")
+        private Show show;
+        @SerializedName("show_season_type")
+        private long showSeasonType;
         @SerializedName("square_cover")
         private String squareCover;
         @SerializedName("staff")
-        private Staff staff;
+        private String staff;
         @SerializedName("stat")
         private Stat stat;
         @SerializedName("status")
-        private Long status;
+        private long status;
         @SerializedName("styles")
-        private List<Styles> styles;
+        private List<String> styles;
         @SerializedName("subtitle")
         private String subtitle;
-        @SerializedName("tags")
-        private List<?> tags;
-        @SerializedName("test_switch")
-        private TestSwitch testSwitch;
         @SerializedName("title")
         private String title;
         @SerializedName("total")
-        private Long total;
+        private long total;
         @SerializedName("type")
-        private Long type;
-        @SerializedName("type_desc")
-        private String typeDesc;
-        @SerializedName("type_name")
-        private String typeName;
+        private long type;
         @SerializedName("up_info")
         private UpInfo upInfo;
         @SerializedName("user_status")
         private UserStatus userStatus;
 
-        public ActivityTab getActivityTab() {
-            return activityTab;
+        public Activity getActivity() {
+            return activity;
         }
 
-        public void setActivityTab(ActivityTab activityTab) {
-            this.activityTab = activityTab;
+        public void setActivity(Activity activity) {
+            this.activity = activity;
         }
 
-        public Actor getActor() {
-            return actor;
+        public String getActors() {
+            return actors;
         }
 
-        public void setActor(Actor actor) {
-            this.actor = actor;
+        public void setActors(String actors) {
+            this.actors = actors;
         }
 
         public String getAlias() {
@@ -166,22 +145,6 @@ public class BangumiDetailPageBean {
             this.alias = alias;
         }
 
-        public AllButtons getAllButtons() {
-            return allButtons;
-        }
-
-        public void setAllButtons(AllButtons allButtons) {
-            this.allButtons = allButtons;
-        }
-
-        public AllUpInfos getAllUpInfos() {
-            return allUpInfos;
-        }
-
-        public void setAllUpInfos(AllUpInfos allUpInfos) {
-            this.allUpInfos = allUpInfos;
-        }
-
         public List<Areas> getAreas() {
             return areas;
         }
@@ -190,28 +153,12 @@ public class BangumiDetailPageBean {
             this.areas = areas;
         }
 
-        public String getBadge() {
-            return badge;
+        public String getBkgCover() {
+            return bkgCover;
         }
 
-        public void setBadge(String badge) {
-            this.badge = badge;
-        }
-
-        public BadgeInfo getBadgeInfo() {
-            return badgeInfo;
-        }
-
-        public void setBadgeInfo(BadgeInfo badgeInfo) {
-            this.badgeInfo = badgeInfo;
-        }
-
-        public List<Celebrity> getCelebrity() {
-            return celebrity;
-        }
-
-        public void setCelebrity(List<Celebrity> celebrity) {
-            this.celebrity = celebrity;
+        public void setBkgCover(String bkgCover) {
+            this.bkgCover = bkgCover;
         }
 
         public String getCover() {
@@ -222,20 +169,12 @@ public class BangumiDetailPageBean {
             this.cover = cover;
         }
 
-        public String getDetail() {
-            return detail;
+        public List<Episodes> getEpisodes() {
+            return episodes;
         }
 
-        public void setDetail(String detail) {
-            this.detail = detail;
-        }
-
-        public String getDynamicSubtitle() {
-            return dynamicSubtitle;
-        }
-
-        public void setDynamicSubtitle(String dynamicSubtitle) {
-            this.dynamicSubtitle = dynamicSubtitle;
+        public void setEpisodes(List<Episodes> episodes) {
+            this.episodes = episodes;
         }
 
         public String getEvaluate() {
@@ -246,6 +185,22 @@ public class BangumiDetailPageBean {
             this.evaluate = evaluate;
         }
 
+        public Freya getFreya() {
+            return freya;
+        }
+
+        public void setFreya(Freya freya) {
+            this.freya = freya;
+        }
+
+        public String getJpTitle() {
+            return jpTitle;
+        }
+
+        public void setJpTitle(String jpTitle) {
+            this.jpTitle = jpTitle;
+        }
+
         public String getLink() {
             return link;
         }
@@ -254,28 +209,20 @@ public class BangumiDetailPageBean {
             this.link = link;
         }
 
-        public Long getMediaId() {
+        public long getMediaId() {
             return mediaId;
         }
 
-        public void setMediaId(Long mediaId) {
+        public void setMediaId(long mediaId) {
             this.mediaId = mediaId;
         }
 
-        public Long getMode() {
+        public long getMode() {
             return mode;
         }
 
-        public void setMode(Long mode) {
+        public void setMode(long mode) {
             this.mode = mode;
-        }
-
-        public List<Modules> getModules() {
-            return modules;
-        }
-
-        public void setModules(List<Modules> modules) {
-            this.modules = modules;
         }
 
         public NewEp getNewEp() {
@@ -284,22 +231,6 @@ public class BangumiDetailPageBean {
 
         public void setNewEp(NewEp newEp) {
             this.newEp = newEp;
-        }
-
-        public String getOriginName() {
-            return originName;
-        }
-
-        public void setOriginName(String originName) {
-            this.originName = originName;
-        }
-
-        public Paster getPaster() {
-            return paster;
-        }
-
-        public void setPaster(Paster paster) {
-            this.paster = paster;
         }
 
         public Payment getPayment() {
@@ -318,20 +249,12 @@ public class BangumiDetailPageBean {
             this.playStrategy = playStrategy;
         }
 
-        public PlayerIcon getPlayerIcon() {
-            return playerIcon;
+        public Positive getPositive() {
+            return positive;
         }
 
-        public void setPlayerIcon(PlayerIcon playerIcon) {
-            this.playerIcon = playerIcon;
-        }
-
-        public List<?> getPremieres() {
-            return premieres;
-        }
-
-        public void setPremieres(List<?> premieres) {
-            this.premieres = premieres;
+        public void setPositive(Positive positive) {
+            this.positive = positive;
         }
 
         public Publish getPublish() {
@@ -342,36 +265,12 @@ public class BangumiDetailPageBean {
             this.publish = publish;
         }
 
-        public Rating getRating() {
-            return rating;
-        }
-
-        public void setRating(Rating rating) {
-            this.rating = rating;
-        }
-
         public String getRecord() {
             return record;
         }
 
         public void setRecord(String record) {
             this.record = record;
-        }
-
-        public String getRefineCover() {
-            return refineCover;
-        }
-
-        public void setRefineCover(String refineCover) {
-            this.refineCover = refineCover;
-        }
-
-        public Reserve getReserve() {
-            return reserve;
-        }
-
-        public void setReserve(Reserve reserve) {
-            this.reserve = reserve;
         }
 
         public Rights getRights() {
@@ -382,11 +281,11 @@ public class BangumiDetailPageBean {
             this.rights = rights;
         }
 
-        public Long getSeasonId() {
+        public long getSeasonId() {
             return seasonId;
         }
 
-        public void setSeasonId(Long seasonId) {
+        public void setSeasonId(long seasonId) {
             this.seasonId = seasonId;
         }
 
@@ -396,6 +295,22 @@ public class BangumiDetailPageBean {
 
         public void setSeasonTitle(String seasonTitle) {
             this.seasonTitle = seasonTitle;
+        }
+
+        public List<Seasons> getSeasons() {
+            return seasons;
+        }
+
+        public void setSeasons(List<Seasons> seasons) {
+            this.seasons = seasons;
+        }
+
+        public List<Section> getSection() {
+            return section;
+        }
+
+        public void setSection(List<Section> section) {
+            this.section = section;
         }
 
         public Series getSeries() {
@@ -414,6 +329,14 @@ public class BangumiDetailPageBean {
             this.shareCopy = shareCopy;
         }
 
+        public String getShareSubTitle() {
+            return shareSubTitle;
+        }
+
+        public void setShareSubTitle(String shareSubTitle) {
+            this.shareSubTitle = shareSubTitle;
+        }
+
         public String getShareUrl() {
             return shareUrl;
         }
@@ -422,12 +345,20 @@ public class BangumiDetailPageBean {
             this.shareUrl = shareUrl;
         }
 
-        public String getShortLink() {
-            return shortLink;
+        public Show getShow() {
+            return show;
         }
 
-        public void setShortLink(String shortLink) {
-            this.shortLink = shortLink;
+        public void setShow(Show show) {
+            this.show = show;
+        }
+
+        public long getShowSeasonType() {
+            return showSeasonType;
+        }
+
+        public void setShowSeasonType(long showSeasonType) {
+            this.showSeasonType = showSeasonType;
         }
 
         public String getSquareCover() {
@@ -438,11 +369,11 @@ public class BangumiDetailPageBean {
             this.squareCover = squareCover;
         }
 
-        public Staff getStaff() {
+        public String getStaff() {
             return staff;
         }
 
-        public void setStaff(Staff staff) {
+        public void setStaff(String staff) {
             this.staff = staff;
         }
 
@@ -454,19 +385,19 @@ public class BangumiDetailPageBean {
             this.stat = stat;
         }
 
-        public Long getStatus() {
+        public long getStatus() {
             return status;
         }
 
-        public void setStatus(Long status) {
+        public void setStatus(long status) {
             this.status = status;
         }
 
-        public List<Styles> getStyles() {
+        public List<String> getStyles() {
             return styles;
         }
 
-        public void setStyles(List<Styles> styles) {
+        public void setStyles(List<String> styles) {
             this.styles = styles;
         }
 
@@ -478,22 +409,6 @@ public class BangumiDetailPageBean {
             this.subtitle = subtitle;
         }
 
-        public List<?> getTags() {
-            return tags;
-        }
-
-        public void setTags(List<?> tags) {
-            this.tags = tags;
-        }
-
-        public TestSwitch getTestSwitch() {
-            return testSwitch;
-        }
-
-        public void setTestSwitch(TestSwitch testSwitch) {
-            this.testSwitch = testSwitch;
-        }
-
         public String getTitle() {
             return title;
         }
@@ -502,36 +417,20 @@ public class BangumiDetailPageBean {
             this.title = title;
         }
 
-        public Long getTotal() {
+        public long getTotal() {
             return total;
         }
 
-        public void setTotal(Long total) {
+        public void setTotal(long total) {
             this.total = total;
         }
 
-        public Long getType() {
+        public long getType() {
             return type;
         }
 
-        public void setType(Long type) {
+        public void setType(long type) {
             this.type = type;
-        }
-
-        public String getTypeDesc() {
-            return typeDesc;
-        }
-
-        public void setTypeDesc(String typeDesc) {
-            this.typeDesc = typeDesc;
-        }
-
-        public String getTypeName() {
-            return typeName;
-        }
-
-        public void setTypeName(String typeName) {
-            this.typeName = typeName;
         }
 
         public UpInfo getUpInfo() {
@@ -550,103 +449,30 @@ public class BangumiDetailPageBean {
             this.userStatus = userStatus;
         }
 
-        public static class ActivityTab {
-            @SerializedName("h5_link")
-            private String h5Link;
+        public static class Activity {
+            @SerializedName("head_bg_url")
+            private String headBgUrl;
             @SerializedName("id")
-            private Long id;
-            @SerializedName("link")
-            private String link;
-            @SerializedName("picurl")
-            private String picurl;
-            @SerializedName("picurl_selected")
-            private String picurlSelected;
-            @SerializedName("show_name")
-            private String showName;
+            private long id;
             @SerializedName("title")
             private String title;
-            @SerializedName("type")
-            private Long type;
 
-            public String getH5Link() {
-                return h5Link;
+            public String getHeadBgUrl() {
+                return headBgUrl;
             }
 
-            public void setH5Link(String h5Link) {
-                this.h5Link = h5Link;
+            public void setHeadBgUrl(String headBgUrl) {
+                this.headBgUrl = headBgUrl;
             }
 
-            public Long getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(Long id) {
+            public void setId(long id) {
                 this.id = id;
             }
 
-            public String getLink() {
-                return link;
-            }
-
-            public void setLink(String link) {
-                this.link = link;
-            }
-
-            public String getPicurl() {
-                return picurl;
-            }
-
-            public void setPicurl(String picurl) {
-                this.picurl = picurl;
-            }
-
-            public String getPicurlSelected() {
-                return picurlSelected;
-            }
-
-            public void setPicurlSelected(String picurlSelected) {
-                this.picurlSelected = picurlSelected;
-            }
-
-            public String getShowName() {
-                return showName;
-            }
-
-            public void setShowName(String showName) {
-                this.showName = showName;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
-
-            public Long getType() {
-                return type;
-            }
-
-            public void setType(Long type) {
-                this.type = type;
-            }
-        }
-
-        public static class Actor {
-            @SerializedName("info")
-            private String info;
-            @SerializedName("title")
-            private String title;
-
-            public String getInfo() {
-                return info;
-            }
-
-            public void setInfo(String info) {
-                this.info = info;
-            }
-
             public String getTitle() {
                 return title;
             }
@@ -656,264 +482,36 @@ public class BangumiDetailPageBean {
             }
         }
 
-        public static class AllButtons {
-            @SerializedName("watch_formal")
-            private String watchFormal;
+        public static class Freya {
+            @SerializedName("bubble_desc")
+            private String bubbleDesc;
+            @SerializedName("bubble_show_cnt")
+            private long bubbleShowCnt;
+            @SerializedName("icon_show")
+            private long iconShow;
 
-            public String getWatchFormal() {
-                return watchFormal;
+            public String getBubbleDesc() {
+                return bubbleDesc;
             }
 
-            public void setWatchFormal(String watchFormal) {
-                this.watchFormal = watchFormal;
-            }
-        }
-
-        public static class AllUpInfos {
-            @SerializedName("181960")
-            private _$181960 $181960;
-            @SerializedName("5632230")
-            private _$5632230 $5632230;
-
-            public _$181960 get$181960() {
-                return $181960;
+            public void setBubbleDesc(String bubbleDesc) {
+                this.bubbleDesc = bubbleDesc;
             }
 
-            public void set$181960(_$181960 $181960) {
-                this.$181960 = $181960;
+            public long getBubbleShowCnt() {
+                return bubbleShowCnt;
             }
 
-            public _$5632230 get$5632230() {
-                return $5632230;
+            public void setBubbleShowCnt(long bubbleShowCnt) {
+                this.bubbleShowCnt = bubbleShowCnt;
             }
 
-            public void set$5632230(_$5632230 $5632230) {
-                this.$5632230 = $5632230;
+            public long getIconShow() {
+                return iconShow;
             }
 
-            public static class _$181960 {
-                @SerializedName("avatar")
-                private String avatar;
-                @SerializedName("follower")
-                private Long follower;
-                @SerializedName("is_follow")
-                private Long isFollow;
-                @SerializedName("mid")
-                private Long mid;
-                @SerializedName("uname")
-                private String uname;
-                @SerializedName("vip_label")
-                private VipLabel vipLabel;
-
-                public String getAvatar() {
-                    return avatar;
-                }
-
-                public void setAvatar(String avatar) {
-                    this.avatar = avatar;
-                }
-
-                public Long getFollower() {
-                    return follower;
-                }
-
-                public void setFollower(Long follower) {
-                    this.follower = follower;
-                }
-
-                public Long getIsFollow() {
-                    return isFollow;
-                }
-
-                public void setIsFollow(Long isFollow) {
-                    this.isFollow = isFollow;
-                }
-
-                public Long getMid() {
-                    return mid;
-                }
-
-                public void setMid(Long mid) {
-                    this.mid = mid;
-                }
-
-                public String getUname() {
-                    return uname;
-                }
-
-                public void setUname(String uname) {
-                    this.uname = uname;
-                }
-
-                public VipLabel getVipLabel() {
-                    return vipLabel;
-                }
-
-                public void setVipLabel(VipLabel vipLabel) {
-                    this.vipLabel = vipLabel;
-                }
-
-                public static class VipLabel {
-                    @SerializedName("label_theme")
-                    private String labelTheme;
-                    @SerializedName("path")
-                    private String path;
-                    @SerializedName("text")
-                    private String text;
-
-                    public String getLabelTheme() {
-                        return labelTheme;
-                    }
-
-                    public void setLabelTheme(String labelTheme) {
-                        this.labelTheme = labelTheme;
-                    }
-
-                    public String getPath() {
-                        return path;
-                    }
-
-                    public void setPath(String path) {
-                        this.path = path;
-                    }
-
-                    public String getText() {
-                        return text;
-                    }
-
-                    public void setText(String text) {
-                        this.text = text;
-                    }
-                }
-            }
-
-            public static class _$5632230 {
-                @SerializedName("avatar")
-                private String avatar;
-                @SerializedName("follower")
-                private Long follower;
-                @SerializedName("is_follow")
-                private Long isFollow;
-                @SerializedName("mid")
-                private Long mid;
-                @SerializedName("uname")
-                private String uname;
-                @SerializedName("vip_label")
-                private VipLabel vipLabel;
-
-                public String getAvatar() {
-                    return avatar;
-                }
-
-                public void setAvatar(String avatar) {
-                    this.avatar = avatar;
-                }
-
-                public Long getFollower() {
-                    return follower;
-                }
-
-                public void setFollower(Long follower) {
-                    this.follower = follower;
-                }
-
-                public Long getIsFollow() {
-                    return isFollow;
-                }
-
-                public void setIsFollow(Long isFollow) {
-                    this.isFollow = isFollow;
-                }
-
-                public Long getMid() {
-                    return mid;
-                }
-
-                public void setMid(Long mid) {
-                    this.mid = mid;
-                }
-
-                public String getUname() {
-                    return uname;
-                }
-
-                public void setUname(String uname) {
-                    this.uname = uname;
-                }
-
-                public VipLabel getVipLabel() {
-                    return vipLabel;
-                }
-
-                public void setVipLabel(VipLabel vipLabel) {
-                    this.vipLabel = vipLabel;
-                }
-
-                public static class VipLabel {
-                    @SerializedName("label_theme")
-                    private String labelTheme;
-                    @SerializedName("path")
-                    private String path;
-                    @SerializedName("text")
-                    private String text;
-
-                    public String getLabelTheme() {
-                        return labelTheme;
-                    }
-
-                    public void setLabelTheme(String labelTheme) {
-                        this.labelTheme = labelTheme;
-                    }
-
-                    public String getPath() {
-                        return path;
-                    }
-
-                    public void setPath(String path) {
-                        this.path = path;
-                    }
-
-                    public String getText() {
-                        return text;
-                    }
-
-                    public void setText(String text) {
-                        this.text = text;
-                    }
-                }
-            }
-        }
-
-        public static class BadgeInfo {
-            @SerializedName("bg_color")
-            private String bgColor;
-            @SerializedName("bg_color_night")
-            private String bgColorNight;
-            @SerializedName("text")
-            private String text;
-
-            public String getBgColor() {
-                return bgColor;
-            }
-
-            public void setBgColor(String bgColor) {
-                this.bgColor = bgColor;
-            }
-
-            public String getBgColorNight() {
-                return bgColorNight;
-            }
-
-            public void setBgColorNight(String bgColorNight) {
-                this.bgColorNight = bgColorNight;
-            }
-
-            public String getText() {
-                return text;
-            }
-
-            public void setText(String text) {
-                this.text = text;
+            public void setIconShow(long iconShow) {
+                this.iconShow = iconShow;
             }
         }
 
@@ -921,11 +519,9 @@ public class BangumiDetailPageBean {
             @SerializedName("desc")
             private String desc;
             @SerializedName("id")
-            private Long id;
+            private long id;
             @SerializedName("is_new")
-            private Long isNew;
-            @SerializedName("more")
-            private String more;
+            private long isNew;
             @SerializedName("title")
             private String title;
 
@@ -937,28 +533,20 @@ public class BangumiDetailPageBean {
                 this.desc = desc;
             }
 
-            public Long getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(Long id) {
+            public void setId(long id) {
                 this.id = id;
             }
 
-            public Long getIsNew() {
+            public long getIsNew() {
                 return isNew;
             }
 
-            public void setIsNew(Long isNew) {
+            public void setIsNew(long isNew) {
                 this.isNew = isNew;
-            }
-
-            public String getMore() {
-                return more;
-            }
-
-            public void setMore(String more) {
-                this.more = more;
             }
 
             public String getTitle() {
@@ -970,103 +558,34 @@ public class BangumiDetailPageBean {
             }
         }
 
-        public static class Paster {
-            @SerializedName("aid")
-            private Long aid;
-            @SerializedName("allow_jump")
-            private Long allowJump;
-            @SerializedName("cid")
-            private Long cid;
-            @SerializedName("duration")
-            private Long duration;
-            @SerializedName("type")
-            private Long type;
-            @SerializedName("url")
-            private String url;
-
-            public Long getAid() {
-                return aid;
-            }
-
-            public void setAid(Long aid) {
-                this.aid = aid;
-            }
-
-            public Long getAllowJump() {
-                return allowJump;
-            }
-
-            public void setAllowJump(Long allowJump) {
-                this.allowJump = allowJump;
-            }
-
-            public Long getCid() {
-                return cid;
-            }
-
-            public void setCid(Long cid) {
-                this.cid = cid;
-            }
-
-            public Long getDuration() {
-                return duration;
-            }
-
-            public void setDuration(Long duration) {
-                this.duration = duration;
-            }
-
-            public Long getType() {
-                return type;
-            }
-
-            public void setType(Long type) {
-                this.type = type;
-            }
-
-            public String getUrl() {
-                return url;
-            }
-
-            public void setUrl(String url) {
-                this.url = url;
-            }
-        }
-
         public static class Payment {
-            @SerializedName("dialog")
-            private Dialog dialog;
-            @SerializedName("pay_tip")
-            private PayTip payTip;
+            @SerializedName("discount")
+            private long discount;
             @SerializedName("pay_type")
             private PayType payType;
             @SerializedName("price")
             private String price;
-            @SerializedName("report_type")
-            private Long reportType;
-            @SerializedName("tv_price")
-            private String tvPrice;
-            @SerializedName("vip_pay_link")
-            private String vipPayLink;
+            @SerializedName("promotion")
+            private String promotion;
+            @SerializedName("tip")
+            private String tip;
+            @SerializedName("view_start_time")
+            private long viewStartTime;
+            @SerializedName("vip_discount")
+            private long vipDiscount;
+            @SerializedName("vip_first_promotion")
+            private String vipFirstPromotion;
+            @SerializedName("vip_price")
+            private String vipPrice;
             @SerializedName("vip_promotion")
             private String vipPromotion;
-            @SerializedName("vip_report")
-            private VipReport vipReport;
 
-            public Dialog getDialog() {
-                return dialog;
+            public long getDiscount() {
+                return discount;
             }
 
-            public void setDialog(Dialog dialog) {
-                this.dialog = dialog;
-            }
-
-            public PayTip getPayTip() {
-                return payTip;
-            }
-
-            public void setPayTip(PayTip payTip) {
-                this.payTip = payTip;
+            public void setDiscount(long discount) {
+                this.discount = discount;
             }
 
             public PayType getPayType() {
@@ -1085,28 +604,52 @@ public class BangumiDetailPageBean {
                 this.price = price;
             }
 
-            public Long getReportType() {
-                return reportType;
+            public String getPromotion() {
+                return promotion;
             }
 
-            public void setReportType(Long reportType) {
-                this.reportType = reportType;
+            public void setPromotion(String promotion) {
+                this.promotion = promotion;
             }
 
-            public String getTvPrice() {
-                return tvPrice;
+            public String getTip() {
+                return tip;
             }
 
-            public void setTvPrice(String tvPrice) {
-                this.tvPrice = tvPrice;
+            public void setTip(String tip) {
+                this.tip = tip;
             }
 
-            public String getVipPayLink() {
-                return vipPayLink;
+            public long getViewStartTime() {
+                return viewStartTime;
             }
 
-            public void setVipPayLink(String vipPayLink) {
-                this.vipPayLink = vipPayLink;
+            public void setViewStartTime(long viewStartTime) {
+                this.viewStartTime = viewStartTime;
+            }
+
+            public long getVipDiscount() {
+                return vipDiscount;
+            }
+
+            public void setVipDiscount(long vipDiscount) {
+                this.vipDiscount = vipDiscount;
+            }
+
+            public String getVipFirstPromotion() {
+                return vipFirstPromotion;
+            }
+
+            public void setVipFirstPromotion(String vipFirstPromotion) {
+                this.vipFirstPromotion = vipFirstPromotion;
+            }
+
+            public String getVipPrice() {
+                return vipPrice;
+            }
+
+            public void setVipPrice(String vipPrice) {
+                this.vipPrice = vipPrice;
             }
 
             public String getVipPromotion() {
@@ -1117,359 +660,73 @@ public class BangumiDetailPageBean {
                 this.vipPromotion = vipPromotion;
             }
 
-            public VipReport getVipReport() {
-                return vipReport;
-            }
-
-            public void setVipReport(VipReport vipReport) {
-                this.vipReport = vipReport;
-            }
-
-            public static class Dialog {
-            }
-
-            public static class PayTip {
-                @SerializedName("primary")
-                private Primary primary;
-
-                public Primary getPrimary() {
-                    return primary;
-                }
-
-                public void setPrimary(Primary primary) {
-                    this.primary = primary;
-                }
-
-                public static class Primary {
-                    @SerializedName("angle_style")
-                    private Long angleStyle;
-                    @SerializedName("bg_day_color")
-                    private String bgDayColor;
-                    @SerializedName("bg_line_color")
-                    private String bgLineColor;
-                    @SerializedName("bg_night_color")
-                    private String bgNightColor;
-                    @SerializedName("bg_night_line_color")
-                    private String bgNightLineColor;
-                    @SerializedName("icon")
-                    private String icon;
-                    @SerializedName("report")
-                    private Report report;
-                    @SerializedName("showTypeEnum")
-                    private String showTypeEnum;
-                    @SerializedName("show_type")
-                    private Long showType;
-                    @SerializedName("text_color")
-                    private String textColor;
-                    @SerializedName("text_night_color")
-                    private String textNightColor;
-                    @SerializedName("title")
-                    private String title;
-                    @SerializedName("type")
-                    private Long type;
-                    @SerializedName("url")
-                    private String url;
-                    @SerializedName("url_open_type")
-                    private Long urlOpenType;
-                    @SerializedName("view_start_time")
-                    private Long viewStartTime;
-
-                    public Long getAngleStyle() {
-                        return angleStyle;
-                    }
-
-                    public void setAngleStyle(Long angleStyle) {
-                        this.angleStyle = angleStyle;
-                    }
-
-                    public String getBgDayColor() {
-                        return bgDayColor;
-                    }
-
-                    public void setBgDayColor(String bgDayColor) {
-                        this.bgDayColor = bgDayColor;
-                    }
-
-                    public String getBgLineColor() {
-                        return bgLineColor;
-                    }
-
-                    public void setBgLineColor(String bgLineColor) {
-                        this.bgLineColor = bgLineColor;
-                    }
-
-                    public String getBgNightColor() {
-                        return bgNightColor;
-                    }
-
-                    public void setBgNightColor(String bgNightColor) {
-                        this.bgNightColor = bgNightColor;
-                    }
-
-                    public String getBgNightLineColor() {
-                        return bgNightLineColor;
-                    }
-
-                    public void setBgNightLineColor(String bgNightLineColor) {
-                        this.bgNightLineColor = bgNightLineColor;
-                    }
-
-                    public String getIcon() {
-                        return icon;
-                    }
-
-                    public void setIcon(String icon) {
-                        this.icon = icon;
-                    }
-
-                    public Report getReport() {
-                        return report;
-                    }
-
-                    public void setReport(Report report) {
-                        this.report = report;
-                    }
-
-                    public String getShowTypeEnum() {
-                        return showTypeEnum;
-                    }
-
-                    public void setShowTypeEnum(String showTypeEnum) {
-                        this.showTypeEnum = showTypeEnum;
-                    }
-
-                    public Long getShowType() {
-                        return showType;
-                    }
-
-                    public void setShowType(Long showType) {
-                        this.showType = showType;
-                    }
-
-                    public String getTextColor() {
-                        return textColor;
-                    }
-
-                    public void setTextColor(String textColor) {
-                        this.textColor = textColor;
-                    }
-
-                    public String getTextNightColor() {
-                        return textNightColor;
-                    }
-
-                    public void setTextNightColor(String textNightColor) {
-                        this.textNightColor = textNightColor;
-                    }
-
-                    public String getTitle() {
-                        return title;
-                    }
-
-                    public void setTitle(String title) {
-                        this.title = title;
-                    }
-
-                    public Long getType() {
-                        return type;
-                    }
-
-                    public void setType(Long type) {
-                        this.type = type;
-                    }
-
-                    public String getUrl() {
-                        return url;
-                    }
-
-                    public void setUrl(String url) {
-                        this.url = url;
-                    }
-
-                    public Long getUrlOpenType() {
-                        return urlOpenType;
-                    }
-
-                    public void setUrlOpenType(Long urlOpenType) {
-                        this.urlOpenType = urlOpenType;
-                    }
-
-                    public Long getViewStartTime() {
-                        return viewStartTime;
-                    }
-
-                    public void setViewStartTime(Long viewStartTime) {
-                        this.viewStartTime = viewStartTime;
-                    }
-
-                    public static class Report {
-                        @SerializedName("click_event_id")
-                        private String clickEventId;
-                        @SerializedName("extends")
-                        private Extends extendsX;
-                        @SerializedName("show_event_id")
-                        private String showEventId;
-
-                        public String getClickEventId() {
-                            return clickEventId;
-                        }
-
-                        public void setClickEventId(String clickEventId) {
-                            this.clickEventId = clickEventId;
-                        }
-
-                        public Extends getExtendsX() {
-                            return extendsX;
-                        }
-
-                        public void setExtendsX(Extends extendsX) {
-                            this.extendsX = extendsX;
-                        }
-
-                        public String getShowEventId() {
-                            return showEventId;
-                        }
-
-                        public void setShowEventId(String showEventId) {
-                            this.showEventId = showEventId;
-                        }
-
-                        public static class Extends {
-                            @SerializedName("season_type")
-                            private String seasonType;
-                            @SerializedName("season_id")
-                            private String seasonId;
-
-                            public String getSeasonType() {
-                                return seasonType;
-                            }
-
-                            public void setSeasonType(String seasonType) {
-                                this.seasonType = seasonType;
-                            }
-
-                            public String getSeasonId() {
-                                return seasonId;
-                            }
-
-                            public void setSeasonId(String seasonId) {
-                                this.seasonId = seasonId;
-                            }
-                        }
-                    }
-                }
-            }
-
             public static class PayType {
+                @SerializedName("allow_discount")
+                private long allowDiscount;
+                @SerializedName("allow_pack")
+                private long allowPack;
                 @SerializedName("allow_ticket")
-                private Long allowTicket;
+                private long allowTicket;
+                @SerializedName("allow_time_limit")
+                private long allowTimeLimit;
+                @SerializedName("allow_vip_discount")
+                private long allowVipDiscount;
+                @SerializedName("forbid_bb")
+                private long forbidBb;
 
-                public Long getAllowTicket() {
+                public long getAllowDiscount() {
+                    return allowDiscount;
+                }
+
+                public void setAllowDiscount(long allowDiscount) {
+                    this.allowDiscount = allowDiscount;
+                }
+
+                public long getAllowPack() {
+                    return allowPack;
+                }
+
+                public void setAllowPack(long allowPack) {
+                    this.allowPack = allowPack;
+                }
+
+                public long getAllowTicket() {
                     return allowTicket;
                 }
 
-                public void setAllowTicket(Long allowTicket) {
+                public void setAllowTicket(long allowTicket) {
                     this.allowTicket = allowTicket;
                 }
-            }
 
-            public static class VipReport {
-                @SerializedName("season_type")
-                private String seasonType;
-                @SerializedName("vip_type")
-                private String vipType;
-                @SerializedName("vip_status")
-                private String vipStatus;
-                @SerializedName("exp_tag")
-                private String expTag;
-                @SerializedName("season_id")
-                private String seasonId;
-                @SerializedName("tips_id")
-                private String tipsId;
-                @SerializedName("exp_group_tag")
-                private String expGroupTag;
-
-                public String getSeasonType() {
-                    return seasonType;
+                public long getAllowTimeLimit() {
+                    return allowTimeLimit;
                 }
 
-                public void setSeasonType(String seasonType) {
-                    this.seasonType = seasonType;
+                public void setAllowTimeLimit(long allowTimeLimit) {
+                    this.allowTimeLimit = allowTimeLimit;
                 }
 
-                public String getVipType() {
-                    return vipType;
+                public long getAllowVipDiscount() {
+                    return allowVipDiscount;
                 }
 
-                public void setVipType(String vipType) {
-                    this.vipType = vipType;
+                public void setAllowVipDiscount(long allowVipDiscount) {
+                    this.allowVipDiscount = allowVipDiscount;
                 }
 
-                public String getVipStatus() {
-                    return vipStatus;
+                public long getForbidBb() {
+                    return forbidBb;
                 }
 
-                public void setVipStatus(String vipStatus) {
-                    this.vipStatus = vipStatus;
-                }
-
-                public String getExpTag() {
-                    return expTag;
-                }
-
-                public void setExpTag(String expTag) {
-                    this.expTag = expTag;
-                }
-
-                public String getSeasonId() {
-                    return seasonId;
-                }
-
-                public void setSeasonId(String seasonId) {
-                    this.seasonId = seasonId;
-                }
-
-                public String getTipsId() {
-                    return tipsId;
-                }
-
-                public void setTipsId(String tipsId) {
-                    this.tipsId = tipsId;
-                }
-
-                public String getExpGroupTag() {
-                    return expGroupTag;
-                }
-
-                public void setExpGroupTag(String expGroupTag) {
-                    this.expGroupTag = expGroupTag;
+                public void setForbidBb(long forbidBb) {
+                    this.forbidBb = forbidBb;
                 }
             }
         }
 
         public static class PlayStrategy {
-            @SerializedName("auto_play_toast")
-            private String autoPlayToast;
-            @SerializedName("recommend_show_strategy")
-            private Long recommendShowStrategy;
             @SerializedName("strategies")
             private List<String> strategies;
-
-            public String getAutoPlayToast() {
-                return autoPlayToast;
-            }
-
-            public void setAutoPlayToast(String autoPlayToast) {
-                this.autoPlayToast = autoPlayToast;
-            }
-
-            public Long getRecommendShowStrategy() {
-                return recommendShowStrategy;
-            }
-
-            public void setRecommendShowStrategy(Long recommendShowStrategy) {
-                this.recommendShowStrategy = recommendShowStrategy;
-            }
 
             public List<String> getStrategies() {
                 return strategies;
@@ -1480,90 +737,56 @@ public class BangumiDetailPageBean {
             }
         }
 
-        public static class PlayerIcon {
-            @SerializedName("ctime")
-            private Long ctime;
-            @SerializedName("hash1")
-            private String hash1;
-            @SerializedName("hash2")
-            private String hash2;
-            @SerializedName("url1")
-            private String url1;
-            @SerializedName("url2")
-            private String url2;
+        public static class Positive {
+            @SerializedName("id")
+            private long id;
+            @SerializedName("title")
+            private String title;
 
-            public Long getCtime() {
-                return ctime;
+            public long getId() {
+                return id;
             }
 
-            public void setCtime(Long ctime) {
-                this.ctime = ctime;
+            public void setId(long id) {
+                this.id = id;
             }
 
-            public String getHash1() {
-                return hash1;
+            public String getTitle() {
+                return title;
             }
 
-            public void setHash1(String hash1) {
-                this.hash1 = hash1;
-            }
-
-            public String getHash2() {
-                return hash2;
-            }
-
-            public void setHash2(String hash2) {
-                this.hash2 = hash2;
-            }
-
-            public String getUrl1() {
-                return url1;
-            }
-
-            public void setUrl1(String url1) {
-                this.url1 = url1;
-            }
-
-            public String getUrl2() {
-                return url2;
-            }
-
-            public void setUrl2(String url2) {
-                this.url2 = url2;
+            public void setTitle(String title) {
+                this.title = title;
             }
         }
 
         public static class Publish {
             @SerializedName("is_finish")
-            private Long isFinish;
+            private long isFinish;
             @SerializedName("is_started")
-            private Long isStarted;
+            private long isStarted;
             @SerializedName("pub_time")
             private String pubTime;
             @SerializedName("pub_time_show")
             private String pubTimeShow;
-            @SerializedName("release_date_show")
-            private String releaseDateShow;
-            @SerializedName("time_length_show")
-            private String timeLengthShow;
             @SerializedName("unknow_pub_date")
-            private Long unknowPubDate;
+            private long unknowPubDate;
             @SerializedName("weekday")
-            private Long weekday;
+            private long weekday;
 
-            public Long getIsFinish() {
+            public long getIsFinish() {
                 return isFinish;
             }
 
-            public void setIsFinish(Long isFinish) {
+            public void setIsFinish(long isFinish) {
                 this.isFinish = isFinish;
             }
 
-            public Long getIsStarted() {
+            public long getIsStarted() {
                 return isStarted;
             }
 
-            public void setIsStarted(Long isStarted) {
+            public void setIsStarted(long isStarted) {
                 this.isStarted = isStarted;
             }
 
@@ -1583,170 +806,108 @@ public class BangumiDetailPageBean {
                 this.pubTimeShow = pubTimeShow;
             }
 
-            public String getReleaseDateShow() {
-                return releaseDateShow;
-            }
-
-            public void setReleaseDateShow(String releaseDateShow) {
-                this.releaseDateShow = releaseDateShow;
-            }
-
-            public String getTimeLengthShow() {
-                return timeLengthShow;
-            }
-
-            public void setTimeLengthShow(String timeLengthShow) {
-                this.timeLengthShow = timeLengthShow;
-            }
-
-            public Long getUnknowPubDate() {
+            public long getUnknowPubDate() {
                 return unknowPubDate;
             }
 
-            public void setUnknowPubDate(Long unknowPubDate) {
+            public void setUnknowPubDate(long unknowPubDate) {
                 this.unknowPubDate = unknowPubDate;
             }
 
-            public Long getWeekday() {
+            public long getWeekday() {
                 return weekday;
             }
 
-            public void setWeekday(Long weekday) {
+            public void setWeekday(long weekday) {
                 this.weekday = weekday;
-            }
-        }
-
-        public static class Rating {
-            @SerializedName("count")
-            private Long count;
-            @SerializedName("score")
-            private Double score;
-
-            public Long getCount() {
-                return count;
-            }
-
-            public void setCount(Long count) {
-                this.count = count;
-            }
-
-            public Double getScore() {
-                return score;
-            }
-
-            public void setScore(Double score) {
-                this.score = score;
-            }
-        }
-
-        public static class Reserve {
-            @SerializedName("episodes")
-            private List<?> episodes;
-            @SerializedName("tip")
-            private String tip;
-
-            public List<?> getEpisodes() {
-                return episodes;
-            }
-
-            public void setEpisodes(List<?> episodes) {
-                this.episodes = episodes;
-            }
-
-            public String getTip() {
-                return tip;
-            }
-
-            public void setTip(String tip) {
-                this.tip = tip;
             }
         }
 
         public static class Rights {
             @SerializedName("allow_bp")
-            private Long allowBp;
+            private long allowBp;
             @SerializedName("allow_bp_rank")
-            private Long allowBpRank;
+            private long allowBpRank;
             @SerializedName("allow_download")
-            private Long allowDownload;
+            private long allowDownload;
             @SerializedName("allow_review")
-            private Long allowReview;
+            private long allowReview;
             @SerializedName("area_limit")
-            private Long areaLimit;
+            private long areaLimit;
             @SerializedName("ban_area_show")
-            private Long banAreaShow;
+            private long banAreaShow;
             @SerializedName("can_watch")
-            private Long canWatch;
+            private long canWatch;
             @SerializedName("copyright")
             private String copyright;
-            @SerializedName("copyright_name")
-            private String copyrightName;
             @SerializedName("forbid_pre")
-            private Long forbidPre;
+            private long forbidPre;
+            @SerializedName("freya_white")
+            private long freyaWhite;
             @SerializedName("is_cover_show")
-            private Long isCoverShow;
+            private long isCoverShow;
             @SerializedName("is_preview")
-            private Long isPreview;
+            private long isPreview;
             @SerializedName("only_vip_download")
-            private Long onlyVipDownload;
+            private long onlyVipDownload;
             @SerializedName("resource")
             private String resource;
             @SerializedName("watch_platform")
-            private Long watchPlatform;
+            private long watchPlatform;
 
-            public Long getAllowBp() {
+            public long getAllowBp() {
                 return allowBp;
             }
 
-            public void setAllowBp(Long allowBp) {
+            public void setAllowBp(long allowBp) {
                 this.allowBp = allowBp;
             }
 
-            public Long getAllowBpRank() {
+            public long getAllowBpRank() {
                 return allowBpRank;
             }
 
-            public void setAllowBpRank(Long allowBpRank) {
+            public void setAllowBpRank(long allowBpRank) {
                 this.allowBpRank = allowBpRank;
             }
 
-            public Long getAllowDownload() {
+            public long getAllowDownload() {
                 return allowDownload;
             }
 
-            public void setAllowDownload(Long allowDownload) {
+            public void setAllowDownload(long allowDownload) {
                 this.allowDownload = allowDownload;
             }
 
-            public Long getAllowReview() {
+            public long getAllowReview() {
                 return allowReview;
             }
 
-            public void setAllowReview(Long allowReview) {
+            public void setAllowReview(long allowReview) {
                 this.allowReview = allowReview;
             }
 
-            public Long getAreaLimit() {
+            public long getAreaLimit() {
                 return areaLimit;
             }
 
-            public void setAreaLimit(Long areaLimit) {
+            public void setAreaLimit(long areaLimit) {
                 this.areaLimit = areaLimit;
             }
 
-            public Long getBanAreaShow() {
+            public long getBanAreaShow() {
                 return banAreaShow;
             }
 
-            public void setBanAreaShow(Long banAreaShow) {
+            public void setBanAreaShow(long banAreaShow) {
                 this.banAreaShow = banAreaShow;
             }
 
-            public Long getCanWatch() {
+            public long getCanWatch() {
                 return canWatch;
             }
 
-            public void setCanWatch(Long canWatch) {
+            public void setCanWatch(long canWatch) {
                 this.canWatch = canWatch;
             }
 
@@ -1758,43 +919,43 @@ public class BangumiDetailPageBean {
                 this.copyright = copyright;
             }
 
-            public String getCopyrightName() {
-                return copyrightName;
-            }
-
-            public void setCopyrightName(String copyrightName) {
-                this.copyrightName = copyrightName;
-            }
-
-            public Long getForbidPre() {
+            public long getForbidPre() {
                 return forbidPre;
             }
 
-            public void setForbidPre(Long forbidPre) {
+            public void setForbidPre(long forbidPre) {
                 this.forbidPre = forbidPre;
             }
 
-            public Long getIsCoverShow() {
+            public long getFreyaWhite() {
+                return freyaWhite;
+            }
+
+            public void setFreyaWhite(long freyaWhite) {
+                this.freyaWhite = freyaWhite;
+            }
+
+            public long getIsCoverShow() {
                 return isCoverShow;
             }
 
-            public void setIsCoverShow(Long isCoverShow) {
+            public void setIsCoverShow(long isCoverShow) {
                 this.isCoverShow = isCoverShow;
             }
 
-            public Long getIsPreview() {
+            public long getIsPreview() {
                 return isPreview;
             }
 
-            public void setIsPreview(Long isPreview) {
+            public void setIsPreview(long isPreview) {
                 this.isPreview = isPreview;
             }
 
-            public Long getOnlyVipDownload() {
+            public long getOnlyVipDownload() {
                 return onlyVipDownload;
             }
 
-            public void setOnlyVipDownload(Long onlyVipDownload) {
+            public void setOnlyVipDownload(long onlyVipDownload) {
                 this.onlyVipDownload = onlyVipDownload;
             }
 
@@ -1806,26 +967,36 @@ public class BangumiDetailPageBean {
                 this.resource = resource;
             }
 
-            public Long getWatchPlatform() {
+            public long getWatchPlatform() {
                 return watchPlatform;
             }
 
-            public void setWatchPlatform(Long watchPlatform) {
+            public void setWatchPlatform(long watchPlatform) {
                 this.watchPlatform = watchPlatform;
             }
         }
 
         public static class Series {
+            @SerializedName("display_type")
+            private long displayType;
             @SerializedName("series_id")
-            private Long seriesId;
+            private long seriesId;
             @SerializedName("series_title")
             private String seriesTitle;
 
-            public Long getSeriesId() {
+            public long getDisplayType() {
+                return displayType;
+            }
+
+            public void setDisplayType(long displayType) {
+                this.displayType = displayType;
+            }
+
+            public long getSeriesId() {
                 return seriesId;
             }
 
-            public void setSeriesId(Long seriesId) {
+            public void setSeriesId(long seriesId) {
                 this.seriesId = seriesId;
             }
 
@@ -1838,198 +1009,129 @@ public class BangumiDetailPageBean {
             }
         }
 
-        public static class Staff {
-            @SerializedName("info")
-            private String info;
-            @SerializedName("title")
-            private String title;
+        public static class Show {
+            @SerializedName("wide_screen")
+            private long wideScreen;
 
-            public String getInfo() {
-                return info;
+            public long getWideScreen() {
+                return wideScreen;
             }
 
-            public void setInfo(String info) {
-                this.info = info;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
+            public void setWideScreen(long wideScreen) {
+                this.wideScreen = wideScreen;
             }
         }
 
         public static class Stat {
             @SerializedName("coins")
-            private Long coins;
+            private long coins;
             @SerializedName("danmakus")
-            private Long danmakus;
+            private long danmakus;
             @SerializedName("favorite")
-            private Long favorite;
+            private long favorite;
             @SerializedName("favorites")
-            private Long favorites;
-            @SerializedName("followers")
-            private String followers;
+            private long favorites;
             @SerializedName("likes")
-            private Long likes;
-            @SerializedName("play")
-            private String play;
+            private long likes;
             @SerializedName("reply")
-            private Long reply;
+            private long reply;
             @SerializedName("share")
-            private Long share;
+            private long share;
             @SerializedName("views")
-            private Long views;
+            private long views;
 
-            public Long getCoins() {
+            public long getCoins() {
                 return coins;
             }
 
-            public void setCoins(Long coins) {
+            public void setCoins(long coins) {
                 this.coins = coins;
             }
 
-            public Long getDanmakus() {
+            public long getDanmakus() {
                 return danmakus;
             }
 
-            public void setDanmakus(Long danmakus) {
+            public void setDanmakus(long danmakus) {
                 this.danmakus = danmakus;
             }
 
-            public Long getFavorite() {
+            public long getFavorite() {
                 return favorite;
             }
 
-            public void setFavorite(Long favorite) {
+            public void setFavorite(long favorite) {
                 this.favorite = favorite;
             }
 
-            public Long getFavorites() {
+            public long getFavorites() {
                 return favorites;
             }
 
-            public void setFavorites(Long favorites) {
+            public void setFavorites(long favorites) {
                 this.favorites = favorites;
             }
 
-            public String getFollowers() {
-                return followers;
-            }
-
-            public void setFollowers(String followers) {
-                this.followers = followers;
-            }
-
-            public Long getLikes() {
+            public long getLikes() {
                 return likes;
             }
 
-            public void setLikes(Long likes) {
+            public void setLikes(long likes) {
                 this.likes = likes;
             }
 
-            public String getPlay() {
-                return play;
-            }
-
-            public void setPlay(String play) {
-                this.play = play;
-            }
-
-            public Long getReply() {
+            public long getReply() {
                 return reply;
             }
 
-            public void setReply(Long reply) {
+            public void setReply(long reply) {
                 this.reply = reply;
             }
 
-            public Long getShare() {
+            public long getShare() {
                 return share;
             }
 
-            public void setShare(Long share) {
+            public void setShare(long share) {
                 this.share = share;
             }
 
-            public Long getViews() {
+            public long getViews() {
                 return views;
             }
 
-            public void setViews(Long views) {
+            public void setViews(long views) {
                 this.views = views;
-            }
-        }
-
-        public static class TestSwitch {
-            @SerializedName("is_merge_preview_section")
-            private Boolean isMergePreviewSection;
-            @SerializedName("is_ogv_fav_exp")
-            private Boolean isOgvFavExp;
-            @SerializedName("movie_mark_action")
-            private Long movieMarkAction;
-            @SerializedName("was_pugv_style_optimize")
-            private Boolean wasPugvStyleOptimize;
-
-            public Boolean getIsMergePreviewSection() {
-                return isMergePreviewSection;
-            }
-
-            public void setIsMergePreviewSection(Boolean isMergePreviewSection) {
-                this.isMergePreviewSection = isMergePreviewSection;
-            }
-
-            public Boolean getIsOgvFavExp() {
-                return isOgvFavExp;
-            }
-
-            public void setIsOgvFavExp(Boolean isOgvFavExp) {
-                this.isOgvFavExp = isOgvFavExp;
-            }
-
-            public Long getMovieMarkAction() {
-                return movieMarkAction;
-            }
-
-            public void setMovieMarkAction(Long movieMarkAction) {
-                this.movieMarkAction = movieMarkAction;
-            }
-
-            public Boolean getWasPugvStyleOptimize() {
-                return wasPugvStyleOptimize;
-            }
-
-            public void setWasPugvStyleOptimize(Boolean wasPugvStyleOptimize) {
-                this.wasPugvStyleOptimize = wasPugvStyleOptimize;
             }
         }
 
         public static class UpInfo {
             @SerializedName("avatar")
             private String avatar;
+            @SerializedName("avatar_subscript_url")
+            private String avatarSubscriptUrl;
             @SerializedName("follower")
-            private Long follower;
+            private long follower;
             @SerializedName("is_follow")
-            private Long isFollow;
+            private long isFollow;
             @SerializedName("mid")
-            private Long mid;
+            private long mid;
+            @SerializedName("nickname_color")
+            private String nicknameColor;
             @SerializedName("pendant")
             private Pendant pendant;
             @SerializedName("theme_type")
-            private Long themeType;
+            private long themeType;
             @SerializedName("uname")
             private String uname;
             @SerializedName("verify_type")
-            private Long verifyType;
+            private long verifyType;
             @SerializedName("vip_label")
             private VipLabel vipLabel;
             @SerializedName("vip_status")
-            private Long vipStatus;
+            private long vipStatus;
             @SerializedName("vip_type")
-            private Long vipType;
+            private long vipType;
 
             public String getAvatar() {
                 return avatar;
@@ -2039,28 +1141,44 @@ public class BangumiDetailPageBean {
                 this.avatar = avatar;
             }
 
-            public Long getFollower() {
+            public String getAvatarSubscriptUrl() {
+                return avatarSubscriptUrl;
+            }
+
+            public void setAvatarSubscriptUrl(String avatarSubscriptUrl) {
+                this.avatarSubscriptUrl = avatarSubscriptUrl;
+            }
+
+            public long getFollower() {
                 return follower;
             }
 
-            public void setFollower(Long follower) {
+            public void setFollower(long follower) {
                 this.follower = follower;
             }
 
-            public Long getIsFollow() {
+            public long getIsFollow() {
                 return isFollow;
             }
 
-            public void setIsFollow(Long isFollow) {
+            public void setIsFollow(long isFollow) {
                 this.isFollow = isFollow;
             }
 
-            public Long getMid() {
+            public long getMid() {
                 return mid;
             }
 
-            public void setMid(Long mid) {
+            public void setMid(long mid) {
                 this.mid = mid;
+            }
+
+            public String getNicknameColor() {
+                return nicknameColor;
+            }
+
+            public void setNicknameColor(String nicknameColor) {
+                this.nicknameColor = nicknameColor;
             }
 
             public Pendant getPendant() {
@@ -2071,11 +1189,11 @@ public class BangumiDetailPageBean {
                 this.pendant = pendant;
             }
 
-            public Long getThemeType() {
+            public long getThemeType() {
                 return themeType;
             }
 
-            public void setThemeType(Long themeType) {
+            public void setThemeType(long themeType) {
                 this.themeType = themeType;
             }
 
@@ -2087,11 +1205,11 @@ public class BangumiDetailPageBean {
                 this.uname = uname;
             }
 
-            public Long getVerifyType() {
+            public long getVerifyType() {
                 return verifyType;
             }
 
-            public void setVerifyType(Long verifyType) {
+            public void setVerifyType(long verifyType) {
                 this.verifyType = verifyType;
             }
 
@@ -2103,19 +1221,19 @@ public class BangumiDetailPageBean {
                 this.vipLabel = vipLabel;
             }
 
-            public Long getVipStatus() {
+            public long getVipStatus() {
                 return vipStatus;
             }
 
-            public void setVipStatus(Long vipStatus) {
+            public void setVipStatus(long vipStatus) {
                 this.vipStatus = vipStatus;
             }
 
-            public Long getVipType() {
+            public long getVipType() {
                 return vipType;
             }
 
-            public void setVipType(Long vipType) {
+            public void setVipType(long vipType) {
                 this.vipType = vipType;
             }
 
@@ -2125,7 +1243,7 @@ public class BangumiDetailPageBean {
                 @SerializedName("name")
                 private String name;
                 @SerializedName("pid")
-                private Long pid;
+                private long pid;
 
                 public String getImage() {
                     return image;
@@ -2143,37 +1261,49 @@ public class BangumiDetailPageBean {
                     this.name = name;
                 }
 
-                public Long getPid() {
+                public long getPid() {
                     return pid;
                 }
 
-                public void setPid(Long pid) {
+                public void setPid(long pid) {
                     this.pid = pid;
                 }
             }
 
             public static class VipLabel {
-                @SerializedName("label_theme")
-                private String labelTheme;
-                @SerializedName("path")
-                private String path;
+                @SerializedName("bg_color")
+                private String bgColor;
+                @SerializedName("bg_style")
+                private long bgStyle;
+                @SerializedName("border_color")
+                private String borderColor;
                 @SerializedName("text")
                 private String text;
+                @SerializedName("text_color")
+                private String textColor;
 
-                public String getLabelTheme() {
-                    return labelTheme;
+                public String getBgColor() {
+                    return bgColor;
                 }
 
-                public void setLabelTheme(String labelTheme) {
-                    this.labelTheme = labelTheme;
+                public void setBgColor(String bgColor) {
+                    this.bgColor = bgColor;
                 }
 
-                public String getPath() {
-                    return path;
+                public long getBgStyle() {
+                    return bgStyle;
                 }
 
-                public void setPath(String path) {
-                    this.path = path;
+                public void setBgStyle(long bgStyle) {
+                    this.bgStyle = bgStyle;
+                }
+
+                public String getBorderColor() {
+                    return borderColor;
+                }
+
+                public void setBorderColor(String borderColor) {
+                    this.borderColor = borderColor;
                 }
 
                 public String getText() {
@@ -2183,146 +1313,197 @@ public class BangumiDetailPageBean {
                 public void setText(String text) {
                     this.text = text;
                 }
+
+                public String getTextColor() {
+                    return textColor;
+                }
+
+                public void setTextColor(String textColor) {
+                    this.textColor = textColor;
+                }
             }
         }
 
         public static class UserStatus {
+            @SerializedName("area_limit")
+            private long areaLimit;
+            @SerializedName("ban_area_show")
+            private long banAreaShow;
             @SerializedName("follow")
-            private Long follow;
-            @SerializedName("follow_bubble")
-            private Long followBubble;
+            private long follow;
             @SerializedName("follow_status")
-            private Long followStatus;
+            private long followStatus;
+            @SerializedName("login")
+            private long login;
             @SerializedName("pay")
-            private Long pay;
-            @SerializedName("pay_for")
-            private Long payFor;
-            @SerializedName("review")
-            private Review review;
+            private long pay;
+            @SerializedName("pay_pack_paid")
+            private long payPackPaid;
+            @SerializedName("progress")
+            private Progress progress;
             @SerializedName("sponsor")
-            private Long sponsor;
-            @SerializedName("vip")
-            private Long vip;
-            @SerializedName("vip_frozen")
-            private Long vipFrozen;
+            private long sponsor;
+            @SerializedName("vip_info")
+            private VipInfo vipInfo;
 
-            public Long getFollow() {
+            public long getAreaLimit() {
+                return areaLimit;
+            }
+
+            public void setAreaLimit(long areaLimit) {
+                this.areaLimit = areaLimit;
+            }
+
+            public long getBanAreaShow() {
+                return banAreaShow;
+            }
+
+            public void setBanAreaShow(long banAreaShow) {
+                this.banAreaShow = banAreaShow;
+            }
+
+            public long getFollow() {
                 return follow;
             }
 
-            public void setFollow(Long follow) {
+            public void setFollow(long follow) {
                 this.follow = follow;
             }
 
-            public Long getFollowBubble() {
-                return followBubble;
-            }
-
-            public void setFollowBubble(Long followBubble) {
-                this.followBubble = followBubble;
-            }
-
-            public Long getFollowStatus() {
+            public long getFollowStatus() {
                 return followStatus;
             }
 
-            public void setFollowStatus(Long followStatus) {
+            public void setFollowStatus(long followStatus) {
                 this.followStatus = followStatus;
             }
 
-            public Long getPay() {
+            public long getLogin() {
+                return login;
+            }
+
+            public void setLogin(long login) {
+                this.login = login;
+            }
+
+            public long getPay() {
                 return pay;
             }
 
-            public void setPay(Long pay) {
+            public void setPay(long pay) {
                 this.pay = pay;
             }
 
-            public Long getPayFor() {
-                return payFor;
+            public long getPayPackPaid() {
+                return payPackPaid;
             }
 
-            public void setPayFor(Long payFor) {
-                this.payFor = payFor;
+            public void setPayPackPaid(long payPackPaid) {
+                this.payPackPaid = payPackPaid;
             }
 
-            public Review getReview() {
-                return review;
+            public Progress getProgress() {
+                return progress;
             }
 
-            public void setReview(Review review) {
-                this.review = review;
+            public void setProgress(Progress progress) {
+                this.progress = progress;
             }
 
-            public Long getSponsor() {
+            public long getSponsor() {
                 return sponsor;
             }
 
-            public void setSponsor(Long sponsor) {
+            public void setSponsor(long sponsor) {
                 this.sponsor = sponsor;
             }
 
-            public Long getVip() {
-                return vip;
+            public VipInfo getVipInfo() {
+                return vipInfo;
             }
 
-            public void setVip(Long vip) {
-                this.vip = vip;
+            public void setVipInfo(VipInfo vipInfo) {
+                this.vipInfo = vipInfo;
             }
 
-            public Long getVipFrozen() {
-                return vipFrozen;
+            public static class Progress {
+                @SerializedName("last_ep_id")
+                private long lastEpId;
+                @SerializedName("last_ep_index")
+                private String lastEpIndex;
+                @SerializedName("last_time")
+                private long lastTime;
+
+                public long getLastEpId() {
+                    return lastEpId;
+                }
+
+                public void setLastEpId(long lastEpId) {
+                    this.lastEpId = lastEpId;
+                }
+
+                public String getLastEpIndex() {
+                    return lastEpIndex;
+                }
+
+                public void setLastEpIndex(String lastEpIndex) {
+                    this.lastEpIndex = lastEpIndex;
+                }
+
+                public long getLastTime() {
+                    return lastTime;
+                }
+
+                public void setLastTime(long lastTime) {
+                    this.lastTime = lastTime;
+                }
             }
 
-            public void setVipFrozen(Long vipFrozen) {
-                this.vipFrozen = vipFrozen;
-            }
+            public static class VipInfo {
+                @SerializedName("due_date")
+                private long dueDate;
+                @SerializedName("status")
+                private long status;
+                @SerializedName("type")
+                private long type;
 
-            public static class Review {
-                @SerializedName("article_url")
-                private String articleUrl;
-                @SerializedName("is_open")
-                private Long isOpen;
-                @SerializedName("score")
-                private Long score;
-
-                public String getArticleUrl() {
-                    return articleUrl;
+                public long getDueDate() {
+                    return dueDate;
                 }
 
-                public void setArticleUrl(String articleUrl) {
-                    this.articleUrl = articleUrl;
+                public void setDueDate(long dueDate) {
+                    this.dueDate = dueDate;
                 }
 
-                public Long getIsOpen() {
-                    return isOpen;
+                public long getStatus() {
+                    return status;
                 }
 
-                public void setIsOpen(Long isOpen) {
-                    this.isOpen = isOpen;
+                public void setStatus(long status) {
+                    this.status = status;
                 }
 
-                public Long getScore() {
-                    return score;
+                public long getType() {
+                    return type;
                 }
 
-                public void setScore(Long score) {
-                    this.score = score;
+                public void setType(long type) {
+                    this.type = type;
                 }
             }
         }
 
         public static class Areas {
             @SerializedName("id")
-            private Long id;
+            private long id;
             @SerializedName("name")
             private String name;
 
-            public Long getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(Long id) {
+            public void setId(long id) {
                 this.id = id;
             }
 
@@ -2335,131 +1516,260 @@ public class BangumiDetailPageBean {
             }
         }
 
-        public static class Celebrity {
-            @SerializedName("avatar")
-            private String avatar;
-            @SerializedName("character_avatar")
-            private String characterAvatar;
-            @SerializedName("desc")
-            private String desc;
+        public static class Episodes {
+            @SerializedName("aid")
+            private long aid;
+            @SerializedName("badge")
+            private String badge;
+            @SerializedName("badge_info")
+            private BadgeInfo badgeInfo;
+            @SerializedName("badge_type")
+            private long badgeType;
+            @SerializedName("bvid")
+            private String bvid;
+            @SerializedName("cid")
+            private long cid;
+            @SerializedName("cover")
+            private String cover;
+            @SerializedName("dimension")
+            private Dimension dimension;
+            @SerializedName("duration")
+            private long duration;
+            @SerializedName("enable_vt")
+            private boolean enableVt;
+            @SerializedName("from")
+            private String from;
             @SerializedName("id")
-            private Long id;
-            @SerializedName("name")
-            private String name;
-            @SerializedName("short_desc")
-            private String shortDesc;
-
-            public String getAvatar() {
-                return avatar;
-            }
-
-            public void setAvatar(String avatar) {
-                this.avatar = avatar;
-            }
-
-            public String getCharacterAvatar() {
-                return characterAvatar;
-            }
-
-            public void setCharacterAvatar(String characterAvatar) {
-                this.characterAvatar = characterAvatar;
-            }
-
-            public String getDesc() {
-                return desc;
-            }
-
-            public void setDesc(String desc) {
-                this.desc = desc;
-            }
-
-            public Long getId() {
-                return id;
-            }
-
-            public void setId(Long id) {
-                this.id = id;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public String getShortDesc() {
-                return shortDesc;
-            }
-
-            public void setShortDesc(String shortDesc) {
-                this.shortDesc = shortDesc;
-            }
-        }
-
-        public static class Modules {
-            @SerializedName("data")
-            private Data data;
-            @SerializedName("id")
-            private Long id;
-            @SerializedName("module_style")
-            private ModuleStyle moduleStyle;
-            @SerializedName("more")
-            private String more;
-            @SerializedName("report")
-            private Report report;
-            @SerializedName("style")
-            private String style;
+            private long id;
+            @SerializedName("is_view_hide")
+            private boolean isViewHide;
+            @SerializedName("link")
+            private String link;
+            @SerializedName("long_title")
+            private String longTitle;
+            @SerializedName("pub_time")
+            private long pubTime;
+            @SerializedName("pv")
+            private long pv;
+            @SerializedName("release_date")
+            private String releaseDate;
+            @SerializedName("rights")
+            private Rights rights;
+            @SerializedName("share_copy")
+            private String shareCopy;
+            @SerializedName("share_url")
+            private String shareUrl;
+            @SerializedName("short_link")
+            private String shortLink;
+            @SerializedName("skip")
+            private Skip skip;
+            @SerializedName("status")
+            private long status;
+            @SerializedName("subtitle")
+            private String subtitle;
             @SerializedName("title")
             private String title;
+            @SerializedName("vid")
+            private String vid;
 
-            public Data getData() {
-                return data;
+            public long getAid() {
+                return aid;
             }
 
-            public void setData(Data data) {
-                this.data = data;
+            public void setAid(long aid) {
+                this.aid = aid;
             }
 
-            public Long getId() {
+            public String getBadge() {
+                return badge;
+            }
+
+            public void setBadge(String badge) {
+                this.badge = badge;
+            }
+
+            public BadgeInfo getBadgeInfo() {
+                return badgeInfo;
+            }
+
+            public void setBadgeInfo(BadgeInfo badgeInfo) {
+                this.badgeInfo = badgeInfo;
+            }
+
+            public long getBadgeType() {
+                return badgeType;
+            }
+
+            public void setBadgeType(long badgeType) {
+                this.badgeType = badgeType;
+            }
+
+            public String getBvid() {
+                return bvid;
+            }
+
+            public void setBvid(String bvid) {
+                this.bvid = bvid;
+            }
+
+            public long getCid() {
+                return cid;
+            }
+
+            public void setCid(long cid) {
+                this.cid = cid;
+            }
+
+            public String getCover() {
+                return cover;
+            }
+
+            public void setCover(String cover) {
+                this.cover = cover;
+            }
+
+            public Dimension getDimension() {
+                return dimension;
+            }
+
+            public void setDimension(Dimension dimension) {
+                this.dimension = dimension;
+            }
+
+            public long getDuration() {
+                return duration;
+            }
+
+            public void setDuration(long duration) {
+                this.duration = duration;
+            }
+
+            public boolean isEnableVt() {
+                return enableVt;
+            }
+
+            public void setEnableVt(boolean enableVt) {
+                this.enableVt = enableVt;
+            }
+
+            public String getFrom() {
+                return from;
+            }
+
+            public void setFrom(String from) {
+                this.from = from;
+            }
+
+            public long getId() {
                 return id;
             }
 
-            public void setId(Long id) {
+            public void setId(long id) {
                 this.id = id;
             }
 
-            public ModuleStyle getModuleStyle() {
-                return moduleStyle;
+            public boolean isIsViewHide() {
+                return isViewHide;
             }
 
-            public void setModuleStyle(ModuleStyle moduleStyle) {
-                this.moduleStyle = moduleStyle;
+            public void setIsViewHide(boolean isViewHide) {
+                this.isViewHide = isViewHide;
             }
 
-            public String getMore() {
-                return more;
+            public String getLink() {
+                return link;
             }
 
-            public void setMore(String more) {
-                this.more = more;
+            public void setLink(String link) {
+                this.link = link;
             }
 
-            public Report getReport() {
-                return report;
+            public String getLongTitle() {
+                return longTitle;
             }
 
-            public void setReport(Report report) {
-                this.report = report;
+            public void setLongTitle(String longTitle) {
+                this.longTitle = longTitle;
             }
 
-            public String getStyle() {
-                return style;
+            public long getPubTime() {
+                return pubTime;
             }
 
-            public void setStyle(String style) {
-                this.style = style;
+            public void setPubTime(long pubTime) {
+                this.pubTime = pubTime;
+            }
+
+            public long getPv() {
+                return pv;
+            }
+
+            public void setPv(long pv) {
+                this.pv = pv;
+            }
+
+            public String getReleaseDate() {
+                return releaseDate;
+            }
+
+            public void setReleaseDate(String releaseDate) {
+                this.releaseDate = releaseDate;
+            }
+
+            public Rights getRights() {
+                return rights;
+            }
+
+            public void setRights(Rights rights) {
+                this.rights = rights;
+            }
+
+            public String getShareCopy() {
+                return shareCopy;
+            }
+
+            public void setShareCopy(String shareCopy) {
+                this.shareCopy = shareCopy;
+            }
+
+            public String getShareUrl() {
+                return shareUrl;
+            }
+
+            public void setShareUrl(String shareUrl) {
+                this.shareUrl = shareUrl;
+            }
+
+            public String getShortLink() {
+                return shortLink;
+            }
+
+            public void setShortLink(String shortLink) {
+                this.shortLink = shortLink;
+            }
+
+            public Skip getSkip() {
+                return skip;
+            }
+
+            public void setSkip(Skip skip) {
+                this.skip = skip;
+            }
+
+            public long getStatus() {
+                return status;
+            }
+
+            public void setStatus(long status) {
+                this.status = status;
+            }
+
+            public String getSubtitle() {
+                return subtitle;
+            }
+
+            public void setSubtitle(String subtitle) {
+                this.subtitle = subtitle;
             }
 
             public String getTitle() {
@@ -2470,697 +1780,1042 @@ public class BangumiDetailPageBean {
                 this.title = title;
             }
 
-            public static class Data {
-                @SerializedName("episodes")
-                private List<Episodes> episodes;
+            public String getVid() {
+                return vid;
+            }
 
-                public List<Episodes> getEpisodes() {
-                    return episodes;
+            public void setVid(String vid) {
+                this.vid = vid;
+            }
+
+            public static class BadgeInfo {
+                @SerializedName("bg_color")
+                private String bgColor;
+                @SerializedName("bg_color_night")
+                private String bgColorNight;
+                @SerializedName("text")
+                private String text;
+
+                public String getBgColor() {
+                    return bgColor;
                 }
 
-                public void setEpisodes(List<Episodes> episodes) {
-                    this.episodes = episodes;
+                public void setBgColor(String bgColor) {
+                    this.bgColor = bgColor;
                 }
 
-                public static class Episodes {
-                    @SerializedName("aid")
-                    private Long aid;
-                    @SerializedName("badge")
-                    private String badge;
-                    @SerializedName("badge_info")
-                    private BadgeInfo badgeInfo;
-                    @SerializedName("badge_type")
-                    private Long badgeType;
-                    @SerializedName("bvid")
-                    private String bvid;
-                    @SerializedName("cid")
-                    private Long cid;
-                    @SerializedName("cover")
-                    private String cover;
-                    @SerializedName("dimension")
-                    private Dimension dimension;
-                    @SerializedName("duration")
-                    private Long duration;
-                    @SerializedName("ep_index")
-                    private Long epIndex;
-                    @SerializedName("from")
-                    private String from;
-                    @SerializedName("id")
-                    private Long id;
-                    @SerializedName("link")
-                    private String link;
-                    @SerializedName("long_title")
-                    private String longTitle;
-                    @SerializedName("pub_time")
-                    private Long pubTime;
-                    @SerializedName("pv")
-                    private Long pv;
-                    @SerializedName("release_date")
-                    private String releaseDate;
-                    @SerializedName("report")
-                    private Report report;
-                    @SerializedName("rights")
-                    private Rights rights;
-                    @SerializedName("section_index")
-                    private Long sectionIndex;
-                    @SerializedName("share_copy")
-                    private String shareCopy;
-                    @SerializedName("share_url")
-                    private String shareUrl;
-                    @SerializedName("short_link")
-                    private String shortLink;
-                    @SerializedName("stat")
-                    private Stat stat;
-                    @SerializedName("status")
-                    private Long status;
-                    @SerializedName("subtitle")
-                    private String subtitle;
-                    @SerializedName("title")
-                    private String title;
-                    @SerializedName("vid")
-                    private String vid;
-                    @SerializedName("up_infos")
-                    private List<UpInfos> upInfos;
-
-                    public Long getAid() {
-                        return aid;
-                    }
-
-                    public void setAid(Long aid) {
-                        this.aid = aid;
-                    }
-
-                    public String getBadge() {
-                        return badge;
-                    }
-
-                    public void setBadge(String badge) {
-                        this.badge = badge;
-                    }
-
-                    public BadgeInfo getBadgeInfo() {
-                        return badgeInfo;
-                    }
-
-                    public void setBadgeInfo(BadgeInfo badgeInfo) {
-                        this.badgeInfo = badgeInfo;
-                    }
-
-                    public Long getBadgeType() {
-                        return badgeType;
-                    }
-
-                    public void setBadgeType(Long badgeType) {
-                        this.badgeType = badgeType;
-                    }
-
-                    public String getBvid() {
-                        return bvid;
-                    }
-
-                    public void setBvid(String bvid) {
-                        this.bvid = bvid;
-                    }
-
-                    public Long getCid() {
-                        return cid;
-                    }
-
-                    public void setCid(Long cid) {
-                        this.cid = cid;
-                    }
-
-                    public String getCover() {
-                        return cover;
-                    }
-
-                    public void setCover(String cover) {
-                        this.cover = cover;
-                    }
-
-                    public Dimension getDimension() {
-                        return dimension;
-                    }
-
-                    public void setDimension(Dimension dimension) {
-                        this.dimension = dimension;
-                    }
-
-                    public Long getDuration() {
-                        return duration;
-                    }
-
-                    public void setDuration(Long duration) {
-                        this.duration = duration;
-                    }
-
-                    public Long getEpIndex() {
-                        return epIndex;
-                    }
-
-                    public void setEpIndex(Long epIndex) {
-                        this.epIndex = epIndex;
-                    }
-
-                    public String getFrom() {
-                        return from;
-                    }
-
-                    public void setFrom(String from) {
-                        this.from = from;
-                    }
-
-                    public Long getId() {
-                        return id;
-                    }
-
-                    public void setId(Long id) {
-                        this.id = id;
-                    }
-
-                    public String getLink() {
-                        return link;
-                    }
-
-                    public void setLink(String link) {
-                        this.link = link;
-                    }
-
-                    public String getLongTitle() {
-                        return longTitle;
-                    }
-
-                    public void setLongTitle(String longTitle) {
-                        this.longTitle = longTitle;
-                    }
-
-                    public Long getPubTime() {
-                        return pubTime;
-                    }
-
-                    public void setPubTime(Long pubTime) {
-                        this.pubTime = pubTime;
-                    }
-
-                    public Long getPv() {
-                        return pv;
-                    }
-
-                    public void setPv(Long pv) {
-                        this.pv = pv;
-                    }
-
-                    public String getReleaseDate() {
-                        return releaseDate;
-                    }
-
-                    public void setReleaseDate(String releaseDate) {
-                        this.releaseDate = releaseDate;
-                    }
-
-                    public Report getReport() {
-                        return report;
-                    }
-
-                    public void setReport(Report report) {
-                        this.report = report;
-                    }
-
-                    public Rights getRights() {
-                        return rights;
-                    }
-
-                    public void setRights(Rights rights) {
-                        this.rights = rights;
-                    }
-
-                    public Long getSectionIndex() {
-                        return sectionIndex;
-                    }
-
-                    public void setSectionIndex(Long sectionIndex) {
-                        this.sectionIndex = sectionIndex;
-                    }
-
-                    public String getShareCopy() {
-                        return shareCopy;
-                    }
-
-                    public void setShareCopy(String shareCopy) {
-                        this.shareCopy = shareCopy;
-                    }
-
-                    public String getShareUrl() {
-                        return shareUrl;
-                    }
-
-                    public void setShareUrl(String shareUrl) {
-                        this.shareUrl = shareUrl;
-                    }
-
-                    public String getShortLink() {
-                        return shortLink;
-                    }
-
-                    public void setShortLink(String shortLink) {
-                        this.shortLink = shortLink;
-                    }
-
-                    public Stat getStat() {
-                        return stat;
-                    }
-
-                    public void setStat(Stat stat) {
-                        this.stat = stat;
-                    }
-
-                    public Long getStatus() {
-                        return status;
-                    }
-
-                    public void setStatus(Long status) {
-                        this.status = status;
-                    }
-
-                    public String getSubtitle() {
-                        return subtitle;
-                    }
-
-                    public void setSubtitle(String subtitle) {
-                        this.subtitle = subtitle;
-                    }
-
-                    public String getTitle() {
-                        return title;
-                    }
-
-                    public void setTitle(String title) {
-                        this.title = title;
-                    }
-
-                    public String getVid() {
-                        return vid;
-                    }
-
-                    public void setVid(String vid) {
-                        this.vid = vid;
-                    }
-
-                    public List<UpInfos> getUpInfos() {
-                        return upInfos;
-                    }
-
-                    public void setUpInfos(List<UpInfos> upInfos) {
-                        this.upInfos = upInfos;
-                    }
-
-                    public static class BadgeInfo {
-                        @SerializedName("bg_color")
-                        private String bgColor;
-                        @SerializedName("bg_color_night")
-                        private String bgColorNight;
-                        @SerializedName("text")
-                        private String text;
-
-                        public String getBgColor() {
-                            return bgColor;
-                        }
-
-                        public void setBgColor(String bgColor) {
-                            this.bgColor = bgColor;
-                        }
-
-                        public String getBgColorNight() {
-                            return bgColorNight;
-                        }
-
-                        public void setBgColorNight(String bgColorNight) {
-                            this.bgColorNight = bgColorNight;
-                        }
-
-                        public String getText() {
-                            return text;
-                        }
-
-                        public void setText(String text) {
-                            this.text = text;
-                        }
-                    }
-
-                    public static class Dimension {
-                        @SerializedName("height")
-                        private Long height;
-                        @SerializedName("rotate")
-                        private Long rotate;
-                        @SerializedName("width")
-                        private Long width;
-
-                        public Long getHeight() {
-                            return height;
-                        }
-
-                        public void setHeight(Long height) {
-                            this.height = height;
-                        }
-
-                        public Long getRotate() {
-                            return rotate;
-                        }
-
-                        public void setRotate(Long rotate) {
-                            this.rotate = rotate;
-                        }
-
-                        public Long getWidth() {
-                            return width;
-                        }
-
-                        public void setWidth(Long width) {
-                            this.width = width;
-                        }
-                    }
-
-                    public static class Report {
-                        @SerializedName("aid")
-                        private String aid;
-                        @SerializedName("ep_title")
-                        private String epTitle;
-                        @SerializedName("epid")
-                        private String epid;
-                        @SerializedName("season_id")
-                        private String seasonId;
-                        @SerializedName("season_type")
-                        private String seasonType;
-                        @SerializedName("section_id")
-                        private String sectionId;
-                        @SerializedName("section_type")
-                        private String sectionType;
-
-                        public String getAid() {
-                            return aid;
-                        }
-
-                        public void setAid(String aid) {
-                            this.aid = aid;
-                        }
-
-                        public String getEpTitle() {
-                            return epTitle;
-                        }
-
-                        public void setEpTitle(String epTitle) {
-                            this.epTitle = epTitle;
-                        }
-
-                        public String getEpid() {
-                            return epid;
-                        }
-
-                        public void setEpid(String epid) {
-                            this.epid = epid;
-                        }
-
-                        public String getSeasonId() {
-                            return seasonId;
-                        }
-
-                        public void setSeasonId(String seasonId) {
-                            this.seasonId = seasonId;
-                        }
-
-                        public String getSeasonType() {
-                            return seasonType;
-                        }
-
-                        public void setSeasonType(String seasonType) {
-                            this.seasonType = seasonType;
-                        }
-
-                        public String getSectionId() {
-                            return sectionId;
-                        }
-
-                        public void setSectionId(String sectionId) {
-                            this.sectionId = sectionId;
-                        }
-
-                        public String getSectionType() {
-                            return sectionType;
-                        }
-
-                        public void setSectionType(String sectionType) {
-                            this.sectionType = sectionType;
-                        }
-                    }
-
-                    public static class Rights {
-                        @SerializedName("allow_demand")
-                        private Long allowDemand;
-                        @SerializedName("allow_dm")
-                        private Long allowDm;
-                        @SerializedName("allow_download")
-                        private Long allowDownload;
-                        @SerializedName("area_limit")
-                        private Long areaLimit;
-
-                        public Long getAllowDemand() {
-                            return allowDemand;
-                        }
-
-                        public void setAllowDemand(Long allowDemand) {
-                            this.allowDemand = allowDemand;
-                        }
-
-                        public Long getAllowDm() {
-                            return allowDm;
-                        }
-
-                        public void setAllowDm(Long allowDm) {
-                            this.allowDm = allowDm;
-                        }
-
-                        public Long getAllowDownload() {
-                            return allowDownload;
-                        }
-
-                        public void setAllowDownload(Long allowDownload) {
-                            this.allowDownload = allowDownload;
-                        }
-
-                        public Long getAreaLimit() {
-                            return areaLimit;
-                        }
-
-                        public void setAreaLimit(Long areaLimit) {
-                            this.areaLimit = areaLimit;
-                        }
-                    }
-
-                    public static class Stat {
-                        @SerializedName("coin")
-                        private Long coin;
-                        @SerializedName("danmakus")
-                        private Long danmakus;
-                        @SerializedName("likes")
-                        private Long likes;
-                        @SerializedName("play")
-                        private Long play;
-                        @SerializedName("reply")
-                        private Long reply;
-
-                        public Long getCoin() {
-                            return coin;
-                        }
-
-                        public void setCoin(Long coin) {
-                            this.coin = coin;
-                        }
-
-                        public Long getDanmakus() {
-                            return danmakus;
-                        }
-
-                        public void setDanmakus(Long danmakus) {
-                            this.danmakus = danmakus;
-                        }
-
-                        public Long getLikes() {
-                            return likes;
-                        }
-
-                        public void setLikes(Long likes) {
-                            this.likes = likes;
-                        }
-
-                        public Long getPlay() {
-                            return play;
-                        }
-
-                        public void setPlay(Long play) {
-                            this.play = play;
-                        }
-
-                        public Long getReply() {
-                            return reply;
-                        }
-
-                        public void setReply(Long reply) {
-                            this.reply = reply;
-                        }
-                    }
-
-                    public static class UpInfos {
-                        @SerializedName("follower")
-                        private Long follower;
-                        @SerializedName("is_follow")
-                        private Long isFollow;
-                        @SerializedName("mid")
-                        private Long mid;
-                        @SerializedName("title")
-                        private String title;
-
-                        public Long getFollower() {
-                            return follower;
-                        }
-
-                        public void setFollower(Long follower) {
-                            this.follower = follower;
-                        }
-
-                        public Long getIsFollow() {
-                            return isFollow;
-                        }
-
-                        public void setIsFollow(Long isFollow) {
-                            this.isFollow = isFollow;
-                        }
-
-                        public Long getMid() {
-                            return mid;
-                        }
-
-                        public void setMid(Long mid) {
-                            this.mid = mid;
-                        }
-
-                        public String getTitle() {
-                            return title;
-                        }
-
-                        public void setTitle(String title) {
-                            this.title = title;
-                        }
-                    }
+                public String getBgColorNight() {
+                    return bgColorNight;
+                }
+
+                public void setBgColorNight(String bgColorNight) {
+                    this.bgColorNight = bgColorNight;
+                }
+
+                public String getText() {
+                    return text;
+                }
+
+                public void setText(String text) {
+                    this.text = text;
                 }
             }
 
-            public static class ModuleStyle {
-                @SerializedName("hidden")
-                private Long hidden;
-                @SerializedName("line")
-                private Long line;
+            public static class Dimension {
+                @SerializedName("height")
+                private long height;
+                @SerializedName("rotate")
+                private long rotate;
+                @SerializedName("width")
+                private long width;
 
-                public Long getHidden() {
-                    return hidden;
+                public long getHeight() {
+                    return height;
                 }
 
-                public void setHidden(Long hidden) {
-                    this.hidden = hidden;
+                public void setHeight(long height) {
+                    this.height = height;
                 }
 
-                public Long getLine() {
-                    return line;
+                public long getRotate() {
+                    return rotate;
                 }
 
-                public void setLine(Long line) {
-                    this.line = line;
+                public void setRotate(long rotate) {
+                    this.rotate = rotate;
+                }
+
+                public long getWidth() {
+                    return width;
+                }
+
+                public void setWidth(long width) {
+                    this.width = width;
                 }
             }
 
-            public static class Report {
-                @SerializedName("season_id")
-                private String seasonId;
-                @SerializedName("season_type")
-                private String seasonType;
-                @SerializedName("sec_title")
-                private String secTitle;
-                @SerializedName("section_id")
-                private String sectionId;
-                @SerializedName("section_type")
-                private String sectionType;
+            public static class Rights {
+                @SerializedName("allow_demand")
+                private long allowDemand;
+                @SerializedName("allow_dm")
+                private long allowDm;
+                @SerializedName("allow_download")
+                private long allowDownload;
+                @SerializedName("area_limit")
+                private long areaLimit;
 
-                public String getSeasonId() {
-                    return seasonId;
+                public long getAllowDemand() {
+                    return allowDemand;
                 }
 
-                public void setSeasonId(String seasonId) {
-                    this.seasonId = seasonId;
+                public void setAllowDemand(long allowDemand) {
+                    this.allowDemand = allowDemand;
                 }
 
-                public String getSeasonType() {
-                    return seasonType;
+                public long getAllowDm() {
+                    return allowDm;
                 }
 
-                public void setSeasonType(String seasonType) {
-                    this.seasonType = seasonType;
+                public void setAllowDm(long allowDm) {
+                    this.allowDm = allowDm;
                 }
 
-                public String getSecTitle() {
-                    return secTitle;
+                public long getAllowDownload() {
+                    return allowDownload;
                 }
 
-                public void setSecTitle(String secTitle) {
-                    this.secTitle = secTitle;
+                public void setAllowDownload(long allowDownload) {
+                    this.allowDownload = allowDownload;
                 }
 
-                public String getSectionId() {
-                    return sectionId;
+                public long getAreaLimit() {
+                    return areaLimit;
                 }
 
-                public void setSectionId(String sectionId) {
-                    this.sectionId = sectionId;
+                public void setAreaLimit(long areaLimit) {
+                    this.areaLimit = areaLimit;
+                }
+            }
+
+            public static class Skip {
+                @SerializedName("ed")
+                private Ed ed;
+                @SerializedName("op")
+                private Op op;
+
+                public Ed getEd() {
+                    return ed;
                 }
 
-                public String getSectionType() {
-                    return sectionType;
+                public void setEd(Ed ed) {
+                    this.ed = ed;
                 }
 
-                public void setSectionType(String sectionType) {
-                    this.sectionType = sectionType;
+                public Op getOp() {
+                    return op;
+                }
+
+                public void setOp(Op op) {
+                    this.op = op;
+                }
+
+                public static class Ed {
+                    @SerializedName("end")
+                    private long end;
+                    @SerializedName("start")
+                    private long start;
+
+                    public long getEnd() {
+                        return end;
+                    }
+
+                    public void setEnd(long end) {
+                        this.end = end;
+                    }
+
+                    public long getStart() {
+                        return start;
+                    }
+
+                    public void setStart(long start) {
+                        this.start = start;
+                    }
+                }
+
+                public static class Op {
+                    @SerializedName("end")
+                    private long end;
+                    @SerializedName("start")
+                    private long start;
+
+                    public long getEnd() {
+                        return end;
+                    }
+
+                    public void setEnd(long end) {
+                        this.end = end;
+                    }
+
+                    public long getStart() {
+                        return start;
+                    }
+
+                    public void setStart(long start) {
+                        this.start = start;
+                    }
                 }
             }
         }
 
-        public static class Styles {
-            @SerializedName("id")
-            private Long id;
-            @SerializedName("name")
-            private String name;
-            @SerializedName("url")
-            private String url;
+        public static class Seasons {
+            @SerializedName("badge")
+            private String badge;
+            @SerializedName("badge_info")
+            private BadgeInfo badgeInfo;
+            @SerializedName("badge_type")
+            private long badgeType;
+            @SerializedName("cover")
+            private String cover;
+            @SerializedName("horizontal_cover_1610")
+            private String horizontalCover1610;
+            @SerializedName("horizontal_cover_169")
+            private String horizontalCover169;
+            @SerializedName("media_id")
+            private long mediaId;
+            @SerializedName("new_ep")
+            private NewEp newEp;
+            @SerializedName("season_id")
+            private long seasonId;
+            @SerializedName("season_title")
+            private String seasonTitle;
+            @SerializedName("season_type")
+            private long seasonType;
+            @SerializedName("stat")
+            private Stat stat;
 
-            public Long getId() {
+            public String getBadge() {
+                return badge;
+            }
+
+            public void setBadge(String badge) {
+                this.badge = badge;
+            }
+
+            public BadgeInfo getBadgeInfo() {
+                return badgeInfo;
+            }
+
+            public void setBadgeInfo(BadgeInfo badgeInfo) {
+                this.badgeInfo = badgeInfo;
+            }
+
+            public long getBadgeType() {
+                return badgeType;
+            }
+
+            public void setBadgeType(long badgeType) {
+                this.badgeType = badgeType;
+            }
+
+            public String getCover() {
+                return cover;
+            }
+
+            public void setCover(String cover) {
+                this.cover = cover;
+            }
+
+            public String getHorizontalCover1610() {
+                return horizontalCover1610;
+            }
+
+            public void setHorizontalCover1610(String horizontalCover1610) {
+                this.horizontalCover1610 = horizontalCover1610;
+            }
+
+            public String getHorizontalCover169() {
+                return horizontalCover169;
+            }
+
+            public void setHorizontalCover169(String horizontalCover169) {
+                this.horizontalCover169 = horizontalCover169;
+            }
+
+            public long getMediaId() {
+                return mediaId;
+            }
+
+            public void setMediaId(long mediaId) {
+                this.mediaId = mediaId;
+            }
+
+            public NewEp getNewEp() {
+                return newEp;
+            }
+
+            public void setNewEp(NewEp newEp) {
+                this.newEp = newEp;
+            }
+
+            public long getSeasonId() {
+                return seasonId;
+            }
+
+            public void setSeasonId(long seasonId) {
+                this.seasonId = seasonId;
+            }
+
+            public String getSeasonTitle() {
+                return seasonTitle;
+            }
+
+            public void setSeasonTitle(String seasonTitle) {
+                this.seasonTitle = seasonTitle;
+            }
+
+            public long getSeasonType() {
+                return seasonType;
+            }
+
+            public void setSeasonType(long seasonType) {
+                this.seasonType = seasonType;
+            }
+
+            public Stat getStat() {
+                return stat;
+            }
+
+            public void setStat(Stat stat) {
+                this.stat = stat;
+            }
+
+            public static class BadgeInfo {
+                @SerializedName("bg_color")
+                private String bgColor;
+                @SerializedName("bg_color_night")
+                private String bgColorNight;
+                @SerializedName("text")
+                private String text;
+
+                public String getBgColor() {
+                    return bgColor;
+                }
+
+                public void setBgColor(String bgColor) {
+                    this.bgColor = bgColor;
+                }
+
+                public String getBgColorNight() {
+                    return bgColorNight;
+                }
+
+                public void setBgColorNight(String bgColorNight) {
+                    this.bgColorNight = bgColorNight;
+                }
+
+                public String getText() {
+                    return text;
+                }
+
+                public void setText(String text) {
+                    this.text = text;
+                }
+            }
+
+            public static class NewEp {
+                @SerializedName("cover")
+                private String cover;
+                @SerializedName("id")
+                private long id;
+                @SerializedName("index_show")
+                private String indexShow;
+
+                public String getCover() {
+                    return cover;
+                }
+
+                public void setCover(String cover) {
+                    this.cover = cover;
+                }
+
+                public long getId() {
+                    return id;
+                }
+
+                public void setId(long id) {
+                    this.id = id;
+                }
+
+                public String getIndexShow() {
+                    return indexShow;
+                }
+
+                public void setIndexShow(String indexShow) {
+                    this.indexShow = indexShow;
+                }
+            }
+
+            public static class Stat {
+                @SerializedName("favorites")
+                private long favorites;
+                @SerializedName("series_follow")
+                private long seriesFollow;
+                @SerializedName("views")
+                private long views;
+
+                public long getFavorites() {
+                    return favorites;
+                }
+
+                public void setFavorites(long favorites) {
+                    this.favorites = favorites;
+                }
+
+                public long getSeriesFollow() {
+                    return seriesFollow;
+                }
+
+                public void setSeriesFollow(long seriesFollow) {
+                    this.seriesFollow = seriesFollow;
+                }
+
+                public long getViews() {
+                    return views;
+                }
+
+                public void setViews(long views) {
+                    this.views = views;
+                }
+            }
+        }
+
+        public static class Section {
+            @SerializedName("attr")
+            private long attr;
+            @SerializedName("episode_id")
+            private long episodeId;
+            @SerializedName("episode_ids")
+            private List<?> episodeIds;
+            @SerializedName("episodes")
+            private List<Episodes> episodes;
+            @SerializedName("id")
+            private long id;
+            @SerializedName("title")
+            private String title;
+            @SerializedName("type")
+            private long type;
+
+            public long getAttr() {
+                return attr;
+            }
+
+            public void setAttr(long attr) {
+                this.attr = attr;
+            }
+
+            public long getEpisodeId() {
+                return episodeId;
+            }
+
+            public void setEpisodeId(long episodeId) {
+                this.episodeId = episodeId;
+            }
+
+            public List<?> getEpisodeIds() {
+                return episodeIds;
+            }
+
+            public void setEpisodeIds(List<?> episodeIds) {
+                this.episodeIds = episodeIds;
+            }
+
+            public List<Episodes> getEpisodes() {
+                return episodes;
+            }
+
+            public void setEpisodes(List<Episodes> episodes) {
+                this.episodes = episodes;
+            }
+
+            public long getId() {
                 return id;
             }
 
-            public void setId(Long id) {
+            public void setId(long id) {
                 this.id = id;
             }
 
-            public String getName() {
-                return name;
+            public String getTitle() {
+                return title;
             }
 
-            public void setName(String name) {
-                this.name = name;
+            public void setTitle(String title) {
+                this.title = title;
             }
 
-            public String getUrl() {
-                return url;
+            public long getType() {
+                return type;
             }
 
-            public void setUrl(String url) {
-                this.url = url;
+            public void setType(long type) {
+                this.type = type;
+            }
+
+            public static class Episodes {
+                @SerializedName("aid")
+                private long aid;
+                @SerializedName("badge")
+                private String badge;
+                @SerializedName("badge_info")
+                private BadgeInfo badgeInfo;
+                @SerializedName("badge_type")
+                private long badgeType;
+                @SerializedName("bvid")
+                private String bvid;
+                @SerializedName("cid")
+                private long cid;
+                @SerializedName("cover")
+                private String cover;
+                @SerializedName("dimension")
+                private Dimension dimension;
+                @SerializedName("duration")
+                private long duration;
+                @SerializedName("enable_vt")
+                private boolean enableVt;
+                @SerializedName("from")
+                private String from;
+                @SerializedName("icon_font")
+                private IconFont iconFont;
+                @SerializedName("id")
+                private long id;
+                @SerializedName("is_view_hide")
+                private boolean isViewHide;
+                @SerializedName("link")
+                private String link;
+                @SerializedName("long_title")
+                private String longTitle;
+                @SerializedName("pub_time")
+                private long pubTime;
+                @SerializedName("pv")
+                private long pv;
+                @SerializedName("release_date")
+                private String releaseDate;
+                @SerializedName("rights")
+                private Rights rights;
+                @SerializedName("share_copy")
+                private String shareCopy;
+                @SerializedName("share_url")
+                private String shareUrl;
+                @SerializedName("short_link")
+                private String shortLink;
+                @SerializedName("skip")
+                private Skip skip;
+                @SerializedName("stat")
+                private Stat stat;
+                @SerializedName("status")
+                private long status;
+                @SerializedName("subtitle")
+                private String subtitle;
+                @SerializedName("title")
+                private String title;
+                @SerializedName("vid")
+                private String vid;
+
+                public long getAid() {
+                    return aid;
+                }
+
+                public void setAid(long aid) {
+                    this.aid = aid;
+                }
+
+                public String getBadge() {
+                    return badge;
+                }
+
+                public void setBadge(String badge) {
+                    this.badge = badge;
+                }
+
+                public BadgeInfo getBadgeInfo() {
+                    return badgeInfo;
+                }
+
+                public void setBadgeInfo(BadgeInfo badgeInfo) {
+                    this.badgeInfo = badgeInfo;
+                }
+
+                public long getBadgeType() {
+                    return badgeType;
+                }
+
+                public void setBadgeType(long badgeType) {
+                    this.badgeType = badgeType;
+                }
+
+                public String getBvid() {
+                    return bvid;
+                }
+
+                public void setBvid(String bvid) {
+                    this.bvid = bvid;
+                }
+
+                public long getCid() {
+                    return cid;
+                }
+
+                public void setCid(long cid) {
+                    this.cid = cid;
+                }
+
+                public String getCover() {
+                    return cover;
+                }
+
+                public void setCover(String cover) {
+                    this.cover = cover;
+                }
+
+                public Dimension getDimension() {
+                    return dimension;
+                }
+
+                public void setDimension(Dimension dimension) {
+                    this.dimension = dimension;
+                }
+
+                public long getDuration() {
+                    return duration;
+                }
+
+                public void setDuration(long duration) {
+                    this.duration = duration;
+                }
+
+                public boolean isEnableVt() {
+                    return enableVt;
+                }
+
+                public void setEnableVt(boolean enableVt) {
+                    this.enableVt = enableVt;
+                }
+
+                public String getFrom() {
+                    return from;
+                }
+
+                public void setFrom(String from) {
+                    this.from = from;
+                }
+
+                public IconFont getIconFont() {
+                    return iconFont;
+                }
+
+                public void setIconFont(IconFont iconFont) {
+                    this.iconFont = iconFont;
+                }
+
+                public long getId() {
+                    return id;
+                }
+
+                public void setId(long id) {
+                    this.id = id;
+                }
+
+                public boolean isIsViewHide() {
+                    return isViewHide;
+                }
+
+                public void setIsViewHide(boolean isViewHide) {
+                    this.isViewHide = isViewHide;
+                }
+
+                public String getLink() {
+                    return link;
+                }
+
+                public void setLink(String link) {
+                    this.link = link;
+                }
+
+                public String getLongTitle() {
+                    return longTitle;
+                }
+
+                public void setLongTitle(String longTitle) {
+                    this.longTitle = longTitle;
+                }
+
+                public long getPubTime() {
+                    return pubTime;
+                }
+
+                public void setPubTime(long pubTime) {
+                    this.pubTime = pubTime;
+                }
+
+                public long getPv() {
+                    return pv;
+                }
+
+                public void setPv(long pv) {
+                    this.pv = pv;
+                }
+
+                public String getReleaseDate() {
+                    return releaseDate;
+                }
+
+                public void setReleaseDate(String releaseDate) {
+                    this.releaseDate = releaseDate;
+                }
+
+                public Rights getRights() {
+                    return rights;
+                }
+
+                public void setRights(Rights rights) {
+                    this.rights = rights;
+                }
+
+                public String getShareCopy() {
+                    return shareCopy;
+                }
+
+                public void setShareCopy(String shareCopy) {
+                    this.shareCopy = shareCopy;
+                }
+
+                public String getShareUrl() {
+                    return shareUrl;
+                }
+
+                public void setShareUrl(String shareUrl) {
+                    this.shareUrl = shareUrl;
+                }
+
+                public String getShortLink() {
+                    return shortLink;
+                }
+
+                public void setShortLink(String shortLink) {
+                    this.shortLink = shortLink;
+                }
+
+                public Skip getSkip() {
+                    return skip;
+                }
+
+                public void setSkip(Skip skip) {
+                    this.skip = skip;
+                }
+
+                public Stat getStat() {
+                    return stat;
+                }
+
+                public void setStat(Stat stat) {
+                    this.stat = stat;
+                }
+
+                public long getStatus() {
+                    return status;
+                }
+
+                public void setStatus(long status) {
+                    this.status = status;
+                }
+
+                public String getSubtitle() {
+                    return subtitle;
+                }
+
+                public void setSubtitle(String subtitle) {
+                    this.subtitle = subtitle;
+                }
+
+                public String getTitle() {
+                    return title;
+                }
+
+                public void setTitle(String title) {
+                    this.title = title;
+                }
+
+                public String getVid() {
+                    return vid;
+                }
+
+                public void setVid(String vid) {
+                    this.vid = vid;
+                }
+
+                public static class BadgeInfo {
+                    @SerializedName("bg_color")
+                    private String bgColor;
+                    @SerializedName("bg_color_night")
+                    private String bgColorNight;
+                    @SerializedName("text")
+                    private String text;
+
+                    public String getBgColor() {
+                        return bgColor;
+                    }
+
+                    public void setBgColor(String bgColor) {
+                        this.bgColor = bgColor;
+                    }
+
+                    public String getBgColorNight() {
+                        return bgColorNight;
+                    }
+
+                    public void setBgColorNight(String bgColorNight) {
+                        this.bgColorNight = bgColorNight;
+                    }
+
+                    public String getText() {
+                        return text;
+                    }
+
+                    public void setText(String text) {
+                        this.text = text;
+                    }
+                }
+
+                public static class Dimension {
+                    @SerializedName("height")
+                    private long height;
+                    @SerializedName("rotate")
+                    private long rotate;
+                    @SerializedName("width")
+                    private long width;
+
+                    public long getHeight() {
+                        return height;
+                    }
+
+                    public void setHeight(long height) {
+                        this.height = height;
+                    }
+
+                    public long getRotate() {
+                        return rotate;
+                    }
+
+                    public void setRotate(long rotate) {
+                        this.rotate = rotate;
+                    }
+
+                    public long getWidth() {
+                        return width;
+                    }
+
+                    public void setWidth(long width) {
+                        this.width = width;
+                    }
+                }
+
+                public static class IconFont {
+                    @SerializedName("name")
+                    private String name;
+                    @SerializedName("text")
+                    private String text;
+
+                    public String getName() {
+                        return name;
+                    }
+
+                    public void setName(String name) {
+                        this.name = name;
+                    }
+
+                    public String getText() {
+                        return text;
+                    }
+
+                    public void setText(String text) {
+                        this.text = text;
+                    }
+                }
+
+                public static class Rights {
+                    @SerializedName("allow_demand")
+                    private long allowDemand;
+                    @SerializedName("allow_dm")
+                    private long allowDm;
+                    @SerializedName("allow_download")
+                    private long allowDownload;
+                    @SerializedName("area_limit")
+                    private long areaLimit;
+
+                    public long getAllowDemand() {
+                        return allowDemand;
+                    }
+
+                    public void setAllowDemand(long allowDemand) {
+                        this.allowDemand = allowDemand;
+                    }
+
+                    public long getAllowDm() {
+                        return allowDm;
+                    }
+
+                    public void setAllowDm(long allowDm) {
+                        this.allowDm = allowDm;
+                    }
+
+                    public long getAllowDownload() {
+                        return allowDownload;
+                    }
+
+                    public void setAllowDownload(long allowDownload) {
+                        this.allowDownload = allowDownload;
+                    }
+
+                    public long getAreaLimit() {
+                        return areaLimit;
+                    }
+
+                    public void setAreaLimit(long areaLimit) {
+                        this.areaLimit = areaLimit;
+                    }
+                }
+
+                public static class Skip {
+                    @SerializedName("ed")
+                    private Ed ed;
+                    @SerializedName("op")
+                    private Op op;
+
+                    public Ed getEd() {
+                        return ed;
+                    }
+
+                    public void setEd(Ed ed) {
+                        this.ed = ed;
+                    }
+
+                    public Op getOp() {
+                        return op;
+                    }
+
+                    public void setOp(Op op) {
+                        this.op = op;
+                    }
+
+                    public static class Ed {
+                        @SerializedName("end")
+                        private long end;
+                        @SerializedName("start")
+                        private long start;
+
+                        public long getEnd() {
+                            return end;
+                        }
+
+                        public void setEnd(long end) {
+                            this.end = end;
+                        }
+
+                        public long getStart() {
+                            return start;
+                        }
+
+                        public void setStart(long start) {
+                            this.start = start;
+                        }
+                    }
+
+                    public static class Op {
+                        @SerializedName("end")
+                        private long end;
+                        @SerializedName("start")
+                        private long start;
+
+                        public long getEnd() {
+                            return end;
+                        }
+
+                        public void setEnd(long end) {
+                            this.end = end;
+                        }
+
+                        public long getStart() {
+                            return start;
+                        }
+
+                        public void setStart(long start) {
+                            this.start = start;
+                        }
+                    }
+                }
+
+                public static class Stat {
+                    @SerializedName("coin")
+                    private long coin;
+                    @SerializedName("danmakus")
+                    private long danmakus;
+                    @SerializedName("likes")
+                    private long likes;
+                    @SerializedName("play")
+                    private long play;
+                    @SerializedName("reply")
+                    private long reply;
+                    @SerializedName("vt")
+                    private long vt;
+
+                    public long getCoin() {
+                        return coin;
+                    }
+
+                    public void setCoin(long coin) {
+                        this.coin = coin;
+                    }
+
+                    public long getDanmakus() {
+                        return danmakus;
+                    }
+
+                    public void setDanmakus(long danmakus) {
+                        this.danmakus = danmakus;
+                    }
+
+                    public long getLikes() {
+                        return likes;
+                    }
+
+                    public void setLikes(long likes) {
+                        this.likes = likes;
+                    }
+
+                    public long getPlay() {
+                        return play;
+                    }
+
+                    public void setPlay(long play) {
+                        this.play = play;
+                    }
+
+                    public long getReply() {
+                        return reply;
+                    }
+
+                    public void setReply(long reply) {
+                        this.reply = reply;
+                    }
+
+                    public long getVt() {
+                        return vt;
+                    }
+
+                    public void setVt(long vt) {
+                        this.vt = vt;
+                    }
+                }
             }
         }
     }
