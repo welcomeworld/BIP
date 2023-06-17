@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constants;
@@ -25,12 +24,12 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retro
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BangumiDetailPageBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BiliCommentBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BvToAvBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.SearchResultBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoDetailPageBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebHomeRcmdData;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginInfoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginUrlBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebSearchBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
 import com.google.gson.Gson;
@@ -268,69 +267,89 @@ public class BiliParser extends BaseParser {
 
     @Override
     public void search(String searchKey, String pn, SearchCallback searchCallback) {
+        int pageNumber = Integer.parseInt(pn);
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("pn", pn);
+        parameters.put("page", pn);
+        parameters.put("page_size", "42");
+        int offset = (pageNumber - 1) * 24;
+        parameters.put("dynamic_offset", "" + offset);
         parameters.put("keyword", searchKey);
-        SearchNetAPI searchNetAPI = BiliRetrofitManager.getRetrofit(BaseUrl.APPURL).create(SearchNetAPI.class);
-        searchNetAPI.getSearchResult(parameters).enqueue(new Callback<SearchResultBean>() {
-            @Override
-            public void onResponse(@NonNull Call<SearchResultBean> call, @NonNull Response<SearchResultBean> response) {
-                if (response.body() == null || response.body().getData() == null) {
-                    return;
-                }
-                List<SearchResultBean.DataBean.ItemBean> moreData;
-                moreData = response.body().getData().getItem();
-                if (moreData == null || moreData.size() == 0) {
-                    return;
-                }
-                List<VideoListBean> result = new ArrayList<>();
-                for (int i = 0; i < moreData.size(); i++) {
-                    if (!moreData.get(i).getGotoX().equalsIgnoreCase("av") && !moreData.get(i).getGotoX().equalsIgnoreCase("bangumi")) {
-                        moreData.remove(i);
-                        i--;
-                    } else {
-                        boolean isBangumi = moreData.get(i).getGotoX().equalsIgnoreCase("bangumi");
-                        LogUtil.e("DataLog", "SearchData:" + moreData.get(i).toString());
-                        VideoListBean videoListBean = new VideoListBean();
-                        videoListBean.setSourceName(Constants.Source.BILI);
-                        videoListBean.setTitle(moreData.get(i).getTitle());
-                        videoListBean.setTag(isBangumi ? "bili番剧" : moreData.get(i).getAuthor());
-                        videoListBean.setCoverPortrait(isBangumi);
-                        videoListBean.setCover(moreData.get(i).getCover() + (isBangumi ? "@240w_320h_1e_1c.webp" : "@320w_200h_1e_1c.webp"));
-                        ArrayList<VideoBean> videoBeans = new ArrayList<>();
-                        VideoBean videoBean = new VideoBean();
-                        videoBean.setTitle(moreData.get(i).getTitle());
-                        videoBean.setCover(videoListBean.getCover());
-                        HashMap<String, String> extraMap = new HashMap<>();
-                        extraMap.put("videoType", isBangumi ? "bangumi" : "av");
-                        videoBean.setSourceExternalData(new Gson().toJson(extraMap));
-                        String uriString = moreData.get(i).getUri();
-                        if (uriString.endsWith("/")) {
-                            uriString = uriString.substring(0, uriString.length() - 1);
-                        }
-                        Uri currentUri = Uri.parse(uriString);
-                        if (isBangumi) {
-                            videoBean.setVideoKey(currentUri.getPath().substring(currentUri.getPath().lastIndexOf('/') + 3));
-                        } else {
-                            String currentAid = currentUri.getPath().substring(1);
-                            currentAid = currentAid.substring(0, currentAid.contains("/") ? currentAid.indexOf("/") : currentAid.length());
-                            videoBean.setVideoKey(currentAid);
-                        }
-                        videoBean.setUrl(moreData.get(i).getUri());
-                        videoBean.setDuration(parseDuration(moreData.get(i).getDuration()) * 1000L);
-                        videoBeans.add(videoBean);
-                        videoListBean.setVideoBeanList(videoBeans);
-                        result.add(videoListBean);
-                    }
-                }
-                searchCallback.onSearchResult(result);
-            }
+        SearchNetAPI searchNetAPI = BiliRetrofitManager.getWbiRetrofit(BaseUrl.APIURL).create(SearchNetAPI.class);
+        if (pageNumber == 1) {
+            parameters.put("search_type", "media_bangumi");
+            searchNetAPI.getSearchResult(parameters).enqueue(new SearchResultCallback(searchCallback, true));
+            parameters.put("search_type", "media_ft");
+            searchNetAPI.getSearchResult(parameters).enqueue(new SearchResultCallback(searchCallback, true));
+        }
+        parameters.put("search_type", "video");
+        searchNetAPI.getSearchResult(parameters).enqueue(new SearchResultCallback(searchCallback, false));
+    }
 
-            @Override
-            public void onFailure(@NonNull Call<SearchResultBean> call, @NonNull Throwable t) {
+    private static class SearchResultCallback implements Callback<WebSearchBean> {
+        private final SearchCallback searchCallback;
+        boolean isBangumi;
 
+        SearchResultCallback(SearchCallback searchCallback, boolean isBangumi) {
+            this.searchCallback = searchCallback;
+            this.isBangumi = isBangumi;
+        }
+
+        @Override
+        public void onResponse(Call<WebSearchBean> call, Response<WebSearchBean> response) {
+            if (response.body() == null || response.body().getData() == null) {
+                return;
             }
-        });
+            List<WebSearchBean.Data.Result> moreData;
+            moreData = response.body().getData().getResult();
+            if (moreData == null || moreData.size() == 0) {
+                return;
+            }
+            List<VideoListBean> result = new ArrayList<>();
+            for (int i = 0; i < moreData.size(); i++) {
+                WebSearchBean.Data.Result searchData = moreData.get(i);
+                bindSearchData(result, searchData, isBangumi);
+            }
+            searchCallback.onSearchResult(result);
+        }
+
+        @Override
+        public void onFailure(Call<WebSearchBean> call, Throwable t) {
+
+        }
+    }
+
+    private static void bindSearchData(List<VideoListBean> result, WebSearchBean.Data.Result searchData, boolean isBangumi) {
+        LogUtil.e("DataLog", "SearchData:" + searchData.toString());
+        VideoListBean videoListBean = new VideoListBean();
+        videoListBean.setSourceName(Constants.Source.BILI);
+        String searchTitle = searchData.getTitle();
+        searchTitle = searchTitle.replaceAll("<em class=\"keyword\">", "").replaceAll("</em>", "");
+        videoListBean.setTitle(searchTitle);
+        videoListBean.setTag(isBangumi ? "bili番剧" : searchData.getAuthor());
+        videoListBean.setCoverPortrait(isBangumi);
+        String coverUrl = isBangumi ? searchData.getCover() : "https:" + searchData.getPic();
+        videoListBean.setCover(coverUrl + (isBangumi ? "@240w_320h_1e_1c.webp" : "@320w_200h_1e_1c.webp"));
+        ArrayList<VideoBean> videoBeans = new ArrayList<>();
+        VideoBean videoBean = new VideoBean();
+        videoBean.setTitle(searchTitle);
+        videoBean.setCover(videoListBean.getCover());
+        HashMap<String, String> extraMap = new HashMap<>();
+        extraMap.put("videoType", isBangumi ? "bangumi" : "av");
+        extraMap.put("bvid", searchData.getBvid());
+        videoBean.setSourceExternalData(new Gson().toJson(extraMap));
+        String uriString = isBangumi ? searchData.getUrl() : searchData.getArcurl();
+        if (uriString.endsWith("/")) {
+            uriString = uriString.substring(0, uriString.length() - 1);
+        }
+        Uri currentUri = Uri.parse(uriString);
+        if (isBangumi) {
+            videoBean.setVideoKey(currentUri.getPath().substring(currentUri.getPath().lastIndexOf('/') + 3));
+        }
+        videoBean.setUrl(uriString);
+        videoBean.setDuration(parseDuration(searchData.getDuration()) * 1000L);
+        videoBeans.add(videoBean);
+        videoListBean.setVideoBeanList(videoBeans);
+        result.add(videoListBean);
     }
 
     @Override
@@ -338,7 +357,7 @@ public class BiliParser extends BaseParser {
         return Constants.Source.BILI.equals(key);
     }
 
-    private int parseDuration(String duration) {
+    private static int parseDuration(String duration) {
         int result = 0;
         if (duration == null) {
             return result;
