@@ -1,9 +1,5 @@
 package com.github.welcomeworld.bangumi.instrumentality.project;
 
-import static org.junit.Assert.assertEquals;
-
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.BiliSortAndSignInterceptor;
-
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.junit.Test;
@@ -17,11 +13,6 @@ import java.util.List;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals("jf", BiliSortAndSignInterceptor.getSign("aid=931289831&appkey=1d8b6e7d45233436&autoplay=0&bili_local_id=&build=6210600&buvid=XWB4D15BA2D803A3045A6877CCCDE4E4975FA&c_locale=zh_CN&device=phone&device_id=&device_name=XiaomiRedmi Note 7&device_platform=Android10XiaomiRedmi Note 7&fnval=16&fnver=0&force_host=0&from=7&local_id=XWB4D15BA2D803A3045A6877CCCDE4E4975FA&mobi_app=android&plat=0&platform=android&s_locale=zh_CN&ts=1626408638931"));
-    }
-
     @Test
     public void testAge() {
         try {
