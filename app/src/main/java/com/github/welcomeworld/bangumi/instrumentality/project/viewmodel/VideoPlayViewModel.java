@@ -48,8 +48,21 @@ public class VideoPlayViewModel extends ViewModel {
     private final SafeLiveData<Boolean> isFavLive = new SafeLiveData<>();
     private final SafeLiveData<Integer> selectSourceIndexLive = new SafeLiveData<>();
     private final SafeLiveData<VideoBean> currentVideoBeanLive = new SafeLiveData<>();
+
+    private final SafeLiveData<VideoListBean> currentVideoListBeanLive = new SafeLiveData<>();
+
+    public LiveData<VideoListBean> getCurrentVideoListBeanLive() {
+        return currentVideoListBeanLive;
+    }
+
     private final SafeLiveData<Boolean> commentLive = new SafeLiveData<>();
     private final SafeLiveData<CommentBean.CommentDataBean> parentCommentLive = new SafeLiveData<>();
+
+    private final SafeLiveData<List<VideoListBean>> relatedVideoListLive = new SafeLiveData<>();
+
+    public LiveData<List<VideoListBean>> getRelatedVideoLive() {
+        return relatedVideoListLive;
+    }
 
     public LiveData<Boolean> getFavLive() {
         return isFavLive;
@@ -298,6 +311,7 @@ public class VideoPlayViewModel extends ViewModel {
         currentVideoListBean = videoListBean;
         currentVideoListBean.setSelectIndex(selectVideoIndex);
         videoParser = ParserManager.getInstance().getParser(currentVideoListBean.getSourceName());
+        currentVideoListBeanLive.updateValueSafe(videoListBean);
         setCurrentVideoBean(currentVideoListBean.getCurrentVideoBean());
         changeCommentLive(hasComment());
     }
@@ -340,5 +354,11 @@ public class VideoPlayViewModel extends ViewModel {
             sources.add(audioSource);
         }
         return sources;
+    }
+
+    public void updateRelatedVideos(VideoListBean videoListBean) {
+        if (videoParser != null && videoParser.canGetRelated()) {
+            ThreadUtil.defer().when(() -> videoParser.getRelated(videoListBean)).done(relatedVideoListLive::updateValueSafe);
+        }
     }
 }

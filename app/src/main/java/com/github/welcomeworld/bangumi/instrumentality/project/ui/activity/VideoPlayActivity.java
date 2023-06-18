@@ -12,10 +12,12 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.CommentRecyclerViewAdapter;
+import com.github.welcomeworld.bangumi.instrumentality.project.adapter.RelatedRVAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.VideoSourceItemAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityVideoPlayBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.DataActionWrapper;
@@ -27,6 +29,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.VideoPl
 import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
@@ -37,6 +40,8 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     VideoPlayViewModel viewModel = null;
     VideoSourceItemAdapter sourceAdapter = new VideoSourceItemAdapter();
     CommentRecyclerViewAdapter commentAdapter = new CommentRecyclerViewAdapter();
+
+    RelatedRVAdapter relatedRVAdapter = new RelatedRVAdapter();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,8 +86,16 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             }
         });
         sourceAdapter.setItemClickListener((rv, sourcePosition, position) -> viewModel.changeSelectItem(sourcePosition, position));
+        relatedRVAdapter.itemClickListener = videoListBean -> {
+            getViewBinding().videoPlayView.pause();
+            Bundle bundle = new Bundle();
+            ArrayList<VideoListBean> videoListBeans1 = new ArrayList<>();
+            videoListBeans1.add(videoListBean);
+            bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN, videoListBeans1);
+            IntentUtil.intentToVideoPlay(VideoPlayActivity.this, bundle);
+        };
         getViewBinding().videoPlaySourceRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        getViewBinding().videoPlaySourceRv.setAdapter(sourceAdapter);
+        getViewBinding().videoPlaySourceRv.setAdapter(new ConcatAdapter(sourceAdapter, relatedRVAdapter));
         viewModel.getVideoListBeanLive().observe(this, videoListBeanListLiveWrapper -> sourceAdapter.setData(videoListBeanListLiveWrapper.getData()));
         viewModel.getCurrentVideoBeanLive().observe(this, videoBean -> getViewBinding().videoPlayView.setCurrentVideoBean(videoBean));
         viewModel.getCommentDataLive().observe(this, commentDataWrapper -> {
@@ -96,6 +109,8 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         viewModel.getCommentLive().observe(this, hasComment -> getViewBinding().videoCommentButton.setVisibility(hasComment ? View.VISIBLE : View.GONE));
         viewModel.getFavLive().observe(this, isFav -> sourceAdapter.setFav(isFav));
         viewModel.getSelectSourceIndexLive().observe(this, selectSourceIndex -> sourceAdapter.setSelectSourceIndex(selectSourceIndex));
+        viewModel.getRelatedVideoLive().observe(this, relatedVideoList -> relatedRVAdapter.replaceAll(relatedVideoList));
+        viewModel.getCurrentVideoListBeanLive().observe(this, videoListBean -> viewModel.updateRelatedVideos(videoListBean));
         viewModel.initCreate();
     }
 

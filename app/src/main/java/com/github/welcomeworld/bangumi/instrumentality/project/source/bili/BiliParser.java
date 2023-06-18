@@ -17,14 +17,17 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.fragm
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BaseUrl;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.BiliRetrofitManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.IndexNetAPI;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.RelatedWebAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.SearchNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.UserWebAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.VideoDetailNetAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.api.VideoWebAPI;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BangumiDetailPageBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BangumiRelatedBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BiliCommentBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.BvToAvBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoDetailPageBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoRelatedBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebHomeRcmdData;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginInfoBean;
@@ -440,6 +443,7 @@ public class BiliParser extends BaseParser {
             videoListBean.setVideoListDes(detailResult.getEvaluate());
             videoListBean.setSelectIndex(orignal.getSelectIndex());
             List<BangumiDetailPageBean.Result.Episodes> episodes = detailResult.getEpisodes();
+            extraData.put("season_id", "" + detailResult.getSeasonId());
             for (int i = 0; i < episodes.size(); i++) {
                 String title = episodes.get(i).getTitle();
                 if (!TextUtils.isEmpty(episodes.get(i).getLongTitle())) {
@@ -843,5 +847,112 @@ public class BiliParser extends BaseParser {
             e.printStackTrace();
         }
         return super.getSubComment(parent);
+    }
+
+    @Override
+    public boolean canGetRelated() {
+        return true;
+    }
+
+    @Override
+    public List<VideoListBean> getRelated(VideoListBean videoListBean) {
+        HashMap<String, String> extraData = new Gson().fromJson(videoListBean.getCurrentVideoBean().getSourceExternalData(), HashMap.class);
+        if ("bangumi".equals(extraData.get("videoType"))) {
+            return getBangumiRelated(videoListBean);
+        } else {
+            return getVideoRelated(videoListBean);
+        }
+    }
+
+    private List<VideoListBean> getBangumiRelated(VideoListBean videoListBean) {
+        List<VideoListBean> result = new ArrayList<>();
+        VideoBean currentVideoBean = videoListBean.getCurrentVideoBean();
+        HashMap<String, String> extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("season_id", extraData.get("season_id"));
+        RelatedWebAPI relatedWebAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(RelatedWebAPI.class);
+        Call<BangumiRelatedBean> bangumiRelatedBeanCall = relatedWebAPI.getRelatedBangumi(parameters);
+        try {
+            Response<BangumiRelatedBean> response = bangumiRelatedBeanCall.execute();
+            if (response.body() == null || response.body().getData() == null) {
+                LogUtil.e("DataLog", "获取不到数据" +
+                        "");
+                return result;
+            }
+            BangumiRelatedBean.Data rcmdData = response.body().getData();
+            List<BangumiRelatedBean.Data.Season> moreData = rcmdData.getSeason();
+            for (int i = 0; i < moreData.size(); i++) {
+                BangumiRelatedBean.Data.Season item = moreData.get(i);
+                LogUtil.e("DataLog", "getBangumiRelated:" + item);
+                VideoListBean relatedVideoListBean = new VideoListBean();
+                relatedVideoListBean.setSourceName(Constants.Source.BILI);
+                relatedVideoListBean.setTitle(item.getTitle());
+                relatedVideoListBean.setTag("bili番剧");
+                relatedVideoListBean.setCoverPortrait(false);
+                relatedVideoListBean.setCover(item.getCover() + "@320w_200h_1e_1c.webp");
+                ArrayList<VideoBean> videoBeans = new ArrayList<>();
+                VideoBean videoBean = new VideoBean();
+                HashMap<String, String> extraMap = new HashMap<>();
+                extraMap.put("videoType", "bangumi");
+                videoBean.setSourceExternalData(new Gson().toJson(extraMap));
+                videoBean.setTitle(item.getTitle());
+                videoBean.setCover(relatedVideoListBean.getCover());
+                videoBean.setVideoKey("" + item.getSeasonId());
+                videoBean.setUrl(item.getUrl());
+                videoBeans.add(videoBean);
+                relatedVideoListBean.setVideoBeanList(videoBeans);
+                result.add(relatedVideoListBean);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private List<VideoListBean> getVideoRelated(VideoListBean videoListBean) {
+        List<VideoListBean> result = new ArrayList<>();
+        VideoBean currentVideoBean = videoListBean.getCurrentVideoBean();
+        HashMap<String, String> extraData = new Gson().fromJson(currentVideoBean.getSourceExternalData(), HashMap.class);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("aid", extraData.get("aid"));
+        RelatedWebAPI relatedWebAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(RelatedWebAPI.class);
+        Call<VideoRelatedBean> indexBeanCall = relatedWebAPI.getRelatedVideo(parameters);
+        try {
+            Response<VideoRelatedBean> response = indexBeanCall.execute();
+            if (response.body() == null || response.body().getData() == null) {
+                LogUtil.e("DataLog", "获取不到数据" +
+                        "");
+                return result;
+            }
+            List<VideoRelatedBean.Data> moreData = response.body().getData();
+            for (int i = 0; i < moreData.size(); i++) {
+                VideoRelatedBean.Data item = moreData.get(i);
+                LogUtil.e("DataLog", "getVideoRelated:" + item);
+                VideoListBean relatedVideoListBean = new VideoListBean();
+                relatedVideoListBean.setSourceName(Constants.Source.BILI);
+                relatedVideoListBean.setTitle(item.getTitle());
+                String tagName = item.getOwner().getName();
+                relatedVideoListBean.setTag(tagName);
+                relatedVideoListBean.setCoverPortrait(false);
+                relatedVideoListBean.setCover(item.getPic() + "@320w_200h_1e_1c.webp");
+                ArrayList<VideoBean> videoBeans = new ArrayList<>();
+                VideoBean videoBean = new VideoBean();
+                HashMap<String, String> extraMap = new HashMap<>();
+                extraMap.put("videoType", "av");
+                extraMap.put("bvid", item.getBvid());
+                videoBean.setSourceExternalData(new Gson().toJson(extraMap));
+                videoBean.setTitle(item.getTitle());
+                videoBean.setCover(relatedVideoListBean.getCover());
+                videoBean.setDuration(item.getDuration() * 1000L);
+                videoBean.setVideoKey(String.valueOf(item.getCid()));
+                videoBean.setUrl("https://www.bilibili.com/video/" + item.getBvid());
+                videoBeans.add(videoBean);
+                relatedVideoListBean.setVideoBeanList(videoBeans);
+                result.add(relatedVideoListBean);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

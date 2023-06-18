@@ -86,4 +86,12 @@ public abstract class BaseParser {
     public interface SearchCallback {
         void onSearchResult(List<VideoListBean> result);
     }
+
+    public boolean canGetRelated() {
+        return false;
+    }
+
+    public List<VideoListBean> getRelated(VideoListBean videoListBean) {
+        return Collections.emptyList();
+    }
 }

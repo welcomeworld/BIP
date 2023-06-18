@@ -707,6 +707,17 @@ public class BipPlayView extends ConstraintLayout {
         }
     }
 
+    public void pause() {
+        if (bipPlayer != null) {
+            removeCallbacks(progressChangeRunnable);
+            if (bipPlayer.isPlaying()) {
+                bipPlayer.pause();
+                playPauseView.setSelected(false);
+                danmakuView.pause();
+            }
+        }
+    }
+
     ViewGroup qualityView;
 
     public void showQualityWindow() {
