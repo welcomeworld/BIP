@@ -166,7 +166,7 @@ public class BipPlayView extends ConstraintLayout {
                     bipPlayer.seekTo(targetTime);
                     videoBottomProgressView.setProgress(seekBar.getProgress());
                     removeCallbacks(progressChangeRunnable);
-                    post(progressChangeRunnable);
+                    postDelayed(progressChangeRunnable, 150);
                 }
             }
         });
