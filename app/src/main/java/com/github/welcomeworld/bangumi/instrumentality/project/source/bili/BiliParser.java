@@ -883,7 +883,6 @@ public class BiliParser extends BaseParser {
             List<BangumiRelatedBean.Data.Season> moreData = rcmdData.getSeason();
             for (int i = 0; i < moreData.size(); i++) {
                 BangumiRelatedBean.Data.Season item = moreData.get(i);
-                LogUtil.e("DataLog", "getBangumiRelated:" + item);
                 VideoListBean relatedVideoListBean = new VideoListBean();
                 relatedVideoListBean.setSourceName(Constants.Source.BILI);
                 relatedVideoListBean.setTitle(item.getTitle());
