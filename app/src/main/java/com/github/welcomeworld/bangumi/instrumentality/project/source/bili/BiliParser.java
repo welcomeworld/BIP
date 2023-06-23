@@ -229,8 +229,8 @@ public class BiliParser extends BaseParser {
             //update qualityBean's source url
             for (int j = 0; j < dashData.getVideo().size(); j++) {
                 VideoUrlBean.DataBean.DashBean.VideoBean videoBean = dashData.getVideo().get(j);
-                if (videoBean.getCodecid() != 12) {
-                    //ignore codec without hevc
+                if (videoBean.getCodecid() != 7) {
+                    //ignore codec without avc
                     continue;
                 }
                 VideoQualityBean qualityBean = new VideoQualityBean();
