@@ -20,13 +20,14 @@ import org.jsoup.select.Elements;
 
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class AgeFansNetApi {
-    public static final String baseUrl = "https://www.agemys.net";
+    public static final String baseUrl = "https://www.agedm.tv";
 
     public static List<VideoListBean> search(String key, String pn) {
         List<VideoListBean> result = new ArrayList<>();
@@ -222,7 +223,7 @@ public class AgeFansNetApi {
             PlayUrlBean playUrlBean = new Gson().fromJson(responseBody, PlayUrlBean.class);
             String realPlayUrl = URLDecoder.decode(playUrlBean.getVurl(), "UTF-8");
             if (!realPlayUrl.startsWith("http") || playUrlBean.getPurlf().contains("shankuwang.com")) {
-                realPlayUrl = playUrlBean.getPurlf() + realPlayUrl;
+                realPlayUrl = playUrlBean.getPurlf() + URLEncoder.encode(realPlayUrl, "UTF-8");
                 LogUtil.e("AgeParseVideo", "云解析:" + realPlayUrl);
                 realPlayUrl = parseshankuwang(realPlayUrl);
             }
@@ -251,9 +252,15 @@ public class AgeFansNetApi {
                     int start = tempJsString.indexOf("video_url = ");
                     int end = tempJsString.indexOf("var video_key");
                     String tempUrl = tempJsString.substring(start + 13, end - 8);
+                    LogUtil.d("AgeParseVideo:", "云解析-js tempUrl:" + tempUrl);
                     int finalEnd = tempUrl.indexOf("';");
-                    Uri baseUri = Uri.parse(url);
-                    finalResult = baseUri.getScheme() + "://" + baseUri.getAuthority() + tempUrl.substring(0, finalEnd);
+                    String videoUrl = tempUrl.substring(0, finalEnd);
+                    if (videoUrl.startsWith("https")) {
+                        finalResult = videoUrl;
+                    } else {
+                        Uri baseUri = Uri.parse(url);
+                        finalResult = baseUri.getScheme() + "://" + baseUri.getAuthority() + videoUrl;
+                    }
                     break;
                 }
             }
