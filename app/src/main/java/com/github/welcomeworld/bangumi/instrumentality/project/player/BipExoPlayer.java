@@ -18,11 +18,13 @@ import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.util.EventLogger;
 
 import java.io.FileDescriptor;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -326,11 +328,20 @@ public class BipExoPlayer implements BIPPlayer {
 
     @Override
     public void setDataSource(List<BipDataSource> bipDataSources) {
-        setDataSource(bipDataSources.get(0).source);
+        MediaSource[] sources = new MediaSource[bipDataSources.size()];
+        for (int sourceIndex = 0; sourceIndex < bipDataSources.size(); sourceIndex++) {
+            MediaItem mediaItem = MediaItem.fromUri(bipDataSources.get(sourceIndex).source);
+            MediaSource mediaSource = mediaSourceFactory.createMediaSource(mediaItem);
+            sources[sourceIndex] = mediaSource;
+        }
+        MergingMediaSource mergedSource = new MergingMediaSource(sources);
+        exoPlayer.setMediaSource(mergedSource);
     }
 
     @Override
     public void prepareQualityAsync(List<BipDataSource> bipDataSources) {
-        prepareQualityAsync(bipDataSources.get(0).source);
+        tempQualityPosition = getCurrentPosition();
+        setDataSource(bipDataSources);
+        prepareAsync();
     }
 }
