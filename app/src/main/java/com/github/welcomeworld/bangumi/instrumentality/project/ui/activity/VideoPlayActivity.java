@@ -4,11 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,6 +27,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.livedata.DataActi
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.VideoPlayViewModel;
 import com.github.welcomeworld.devbase.utils.ScreenUtil;
@@ -63,7 +67,36 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         getViewBinding().bottomCommentRv.setLayoutManager(new LinearLayoutManager(this));
         getViewBinding().videoCommentButton.setOnClickListener(v -> showBottomComment());
         getViewBinding().videoPlayView.setBipPlayer(viewModel.getPlayer());
-        getViewBinding().videoPlayView.setPlayViewListener(() -> viewModel.parseVideoBeanDetail(true));
+        getViewBinding().videoPlayView.playViewListener = new BipPlayView.PlayViewListener() {
+            private int normalOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+
+            @Override
+            public void onQualityChangeClick() {
+                viewModel.parseVideoBeanDetail(true);
+            }
+
+            @Override
+            public void onFullScreenChange(boolean isFull) {
+                if (isFull) {
+                    getViewBinding().playViewContainer.removeAllViews();
+                    ViewGroup contentView = findViewById(android.R.id.content);
+                    contentView.addView(getViewBinding().videoPlayView);
+                    int targetOrientation = getViewBinding().videoPlayView.videoPreferOrientation();
+                    normalOrientation = getRequestedOrientation();
+                    if (normalOrientation != targetOrientation) {
+                        setRequestedOrientation(targetOrientation);
+                    }
+                } else {
+                    ViewGroup contentView = findViewById(android.R.id.content);
+                    contentView.removeView(getViewBinding().videoPlayView);
+                    getViewBinding().playViewContainer.addView(getViewBinding().videoPlayView);
+                    if (getRequestedOrientation() != normalOrientation) {
+                        setRequestedOrientation(normalOrientation);
+                    }
+                }
+                refreshSystemUIVisibility();
+            }
+        };
         sourceAdapter.setActionClickListener(new VideoSourceItemAdapter.ActionClickListener() {
             @Override
             public void onFavClick() {

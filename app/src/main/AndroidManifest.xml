@@ -3,14 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.github.welcomeworld.bangumi.instrumentality.project">
 
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".BIPApp"
+        android:banner="@drawable/ic_tv_banner"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
@@ -26,43 +36,32 @@
 
         <activity
             android:name=".ui.activity.MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout" />
         <activity
             android:name=".ui.activity.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/splashTheme"
-            tools:ignore="LockedOrientationActivity">
+            android:theme="@style/splashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.VideoPlayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout" />
         <activity
             android:name=".ui.activity.SearchActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout" />
         <activity
             android:name=".ui.activity.FavOrHistoryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout" />
         <activity
             android:name=".ui.activity.LoginContainerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout" />
         <activity
             android:name=".ui.activity.BrowserActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout" />
@@ -84,9 +83,7 @@
         <activity
             android:name=".ui.activity.SimpleContainerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            android:launchMode="singleTop" />
 
     </application>
 

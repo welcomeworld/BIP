@@ -1,20 +1,21 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.widget;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.os.Build;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -30,7 +31,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BiliDanmukuParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SettingConfig;
-import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.BaseActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.devbase.utils.StringUtil;
@@ -64,7 +64,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class BipPlayView extends ConstraintLayout {
-    ConstraintLayout controllerParent;
     private ImageView playPauseView;
     private SeekBar videoSeekView;
     private TextView videoPositionView;
@@ -74,7 +73,6 @@ public class BipPlayView extends ConstraintLayout {
     private ProgressBar videoBottomProgressView;
     private SurfaceView surfaceView;
     private SurfaceHolder videoSurfaceHolder;
-    private BaseActivity detachActivity;
     private TextView bottomShadowView;
     private TextView topShadowView;
     private TextView titleView;
@@ -110,6 +108,20 @@ public class BipPlayView extends ConstraintLayout {
 
     private static final String TAG = "BipPlayView";
 
+    private final ViewTreeObserver.OnGlobalFocusChangeListener focusChangeListener = new ViewTreeObserver.OnGlobalFocusChangeListener() {
+        @Override
+        public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+            if (!hasFocus()) {
+                hideController();
+                getViewTreeObserver().removeOnGlobalFocusChangeListener(focusChangeListener);
+                if (userSeeking) {
+                    userSeeking = false;
+                    fastForwardView.setVisibility(GONE);
+                }
+            }
+        }
+    };
+
     public BipPlayView(@NonNull Context context) {
         super(context);
         init(context);
@@ -132,12 +144,10 @@ public class BipPlayView extends ConstraintLayout {
 
     @SuppressLint("ClickableViewAccessibility")
     private void init(Context context) {
-        if (context instanceof Activity) {
-            detachActivity = (BaseActivity) context;
-        }
         View itemView = LayoutInflater.from(context).inflate(R.layout.custom_play_view, this);
         playPauseView = itemView.findViewById(R.id.bip_play_view_play_pause);
         videoSeekView = itemView.findViewById(R.id.bip_play_view_seek_bar);
+        videoSeekView.setKeyProgressIncrement(5);
         videoSeekView.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -150,14 +160,14 @@ public class BipPlayView extends ConstraintLayout {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                playPauseView.removeCallbacks(hideControllerRunnable);
+                removeCallbacks(hideControllerRunnable);
                 fastForwardView.setVisibility(VISIBLE);
                 userSeeking = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                playPauseView.postDelayed(hideControllerRunnable, 3500);
+                postDelayed(hideControllerRunnable, 3500);
                 fastForwardView.setVisibility(GONE);
                 userSeeking = false;
                 if (bipPlayer != null && bipPlayer.getDuration() > 0) {
@@ -180,7 +190,6 @@ public class BipPlayView extends ConstraintLayout {
         videoDurationView = itemView.findViewById(R.id.bip_play_view_duration);
         videoBottomProgressView = itemView.findViewById(R.id.bip_play_view_bottom_progress);
         videoBufferingView = itemView.findViewById(R.id.bip_play_view_buffering);
-        controllerParent = itemView.findViewById(R.id.bip_play_view_controller_parent);
         videoQualityView = itemView.findViewById(R.id.bip_play_view_quality);
         videoQualityView.setOnClickListener(playItemClickListener);
         videoFullScreenView = itemView.findViewById(R.id.bip_play_view_fullscreen);
@@ -195,7 +204,7 @@ public class BipPlayView extends ConstraintLayout {
                     if (fastfowarding) {
                         fastForwardView.setVisibility(GONE);
                         bipPlayer.seekTo(fastforward_record);
-                        playPauseView.postDelayed(hideControllerRunnable, 3500);
+                        postDelayed(hideControllerRunnable, 3500);
                         userSeeking = false;
                     }
                     if (longPressSpeedChange) {
@@ -282,9 +291,9 @@ public class BipPlayView extends ConstraintLayout {
             }
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTapUpTime < 400) {
-                onDoubleTapUp(e);
+                onDoubleTapUp();
             } else {
-                ThreadUtil.postDelayed(100, () -> onRealSingleTapUp());
+                ThreadUtil.postDelayed(100, this::onRealSingleTapUp);
             }
             lastTapUpTime = currentTime;
             return false;
@@ -299,7 +308,7 @@ public class BipPlayView extends ConstraintLayout {
             }
         }
 
-        public void onDoubleTapUp(MotionEvent e) {
+        public void onDoubleTapUp() {
             playOrPause();
         }
 
@@ -322,7 +331,7 @@ public class BipPlayView extends ConstraintLayout {
                     fastForwardView.setText(fastfowardText);
                     fastForwardView.setVisibility(VISIBLE);
                     showController();
-                    playPauseView.removeCallbacks(hideControllerRunnable);
+                    removeCallbacks(hideControllerRunnable);
                     userSeeking = true;
                 } else if (ypercentage > 0.1 || ypercentage < -0.1) {
                     LogUtil.e("GestureTest", "scroll set skip");
@@ -406,20 +415,20 @@ public class BipPlayView extends ConstraintLayout {
         bottomShadowView.setVisibility(VISIBLE);
         topShadowView.setVisibility(VISIBLE);
         titleView.setVisibility(VISIBLE);
+        batteryView.setVisibility(VISIBLE);
         if (isFullScreen) {
-            batteryView.setVisibility(VISIBLE);
             timeView.setVisibility(VISIBLE);
         }
         videoBottomProgressView.setVisibility(GONE);
-        if (!isFullScreen && bipPlayer != null && bipPlayer.getVideoWidth() > 0) {
+        if (getVideoWidth() > 0) {
             videoFullScreenView.setVisibility(VISIBLE);
         }
-        if (isFullScreen && bipPlayer != null) {
+        if (bipPlayer != null) {
             videoQualityView.setVisibility(VISIBLE);
         }
-        playPauseView.removeCallbacks(hideControllerRunnable);
-        playPauseView.postDelayed(hideControllerRunnable, 3500);
-        if (bipPlayer != null && bipPlayer.getVideoWidth() > 0) {
+        removeCallbacks(hideControllerRunnable);
+        postDelayed(hideControllerRunnable, 3500);
+        if (getVideoWidth() > 0) {
             danmakuSwitchView.setVisibility(VISIBLE);
         }
     }
@@ -434,8 +443,8 @@ public class BipPlayView extends ConstraintLayout {
     private final OnClickListener playItemClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            playPauseView.removeCallbacks(hideControllerRunnable);
-            playPauseView.postDelayed(hideControllerRunnable, 3500);
+            removeCallbacks(hideControllerRunnable);
+            postDelayed(hideControllerRunnable, 3500);
             int vId = v.getId();
             if (vId == R.id.bip_play_view_play_pause) {
                 playOrPause();
@@ -460,57 +469,34 @@ public class BipPlayView extends ConstraintLayout {
         }
     };
 
-    public void resizeWithVideoSize() {
-        resizeWithVideoSize(bipPlayer.getVideoWidth(), bipPlayer.getVideoHeight());
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (bipPlayer != null) {
+            int videoWidth = getVideoWidth();
+            int videoHeight = getVideoHeight();
+            resizeWithVideoSize(videoWidth, videoHeight);
+        }
     }
 
     private void resizeWithVideoSize(int videoWidth, int videoHeight) {
-        ViewGroup.LayoutParams parentLayoutParams = getLayoutParams();
         ViewGroup.LayoutParams layoutParams = surfaceView.getLayoutParams();
         int screenShort = ScreenUtil.getScreenWidth(getContext());
         int screenLong = ScreenUtil.getScreenHeight(getContext());
+        int parentWidth = getWidth();
+        int parentHeight = getHeight();
+        LogUtil.e("SurfaceTest", "screen " + screenLong + ":" + screenShort + "parent " + parentWidth + ":" + parentHeight + "  video" + videoWidth + ":" + videoHeight);
         if (videoWidth <= 0 || videoHeight <= 0) {
-            videoWidth = screenShort;
-            videoHeight = screenShort * 9 / 16;
+            return;
         }
-        LogUtil.e("SurfaceTest", "screen " + screenShort + ":" + screenLong + "  video" + videoWidth + ":" + videoHeight);
-        if (videoWidth > videoHeight) {
-            // normal video
-            if (isFullScreen) {
-                parentLayoutParams.height = screenShort;
-                parentLayoutParams.width = screenLong;
-                if (videoHeight / videoWidth > screenShort / screenLong) {
-                    layoutParams.width = screenLong;
-                    layoutParams.height = (layoutParams.width * videoHeight) / videoWidth;
-                } else {
-                    layoutParams.height = screenShort;
-                    layoutParams.width = (layoutParams.height * videoWidth) / videoHeight;
-                }
-            } else {
-                layoutParams.width = screenShort;
-                layoutParams.height = (layoutParams.width * videoHeight) / videoWidth;
-                parentLayoutParams.height = layoutParams.height;
-                parentLayoutParams.width = screenShort;
-            }
+        if (videoWidth * 1.0 / videoHeight > parentWidth * 1.0 / parentHeight) {
+            layoutParams.width = parentWidth;
+            layoutParams.height = (layoutParams.width * videoHeight) / videoWidth;
         } else {
-            // vertical video
-            if (isFullScreen) {
-                parentLayoutParams.height = screenLong;
-                parentLayoutParams.width = screenShort;
-                if (videoWidth / videoHeight > screenShort / screenLong) {
-                    layoutParams.height = screenLong;
-                    layoutParams.width = (layoutParams.height * videoWidth) / videoHeight;
-                } else {
-                    layoutParams.width = screenShort;
-                    layoutParams.height = (layoutParams.width * videoHeight) / videoWidth;
-                }
-            } else {
-                layoutParams.width = screenShort * 3 / 4;
-                layoutParams.height = (layoutParams.width * videoHeight) / videoWidth;
-                parentLayoutParams.height = layoutParams.height;
-                parentLayoutParams.width = screenShort;
-            }
+            layoutParams.height = parentHeight;
+            layoutParams.width = (layoutParams.height * videoWidth) / videoHeight;
         }
+        LogUtil.e("SurfaceTest", "final screen " + screenLong + ":" + screenShort + " parent " + parentWidth + ":" + parentHeight + "  video" + layoutParams.width + ":" + layoutParams.height);
         surfaceView.requestLayout();
     }
 
@@ -612,44 +598,31 @@ public class BipPlayView extends ConstraintLayout {
     }
 
     public void setFullScreen(boolean fullScreen) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            if (fullScreen && detachActivity.isInMultiWindowMode()) {
-                ToastUtil.showToast(R.string.multiWindow_not_allow);
-                return;
-            }
+        if (isFullScreen == fullScreen) {
+            return;
         }
         isFullScreen = fullScreen;
         if (isFullScreen) {
             videoFullScreenView.setVisibility(GONE);
             if (isControllerShowing()) {
-                videoQualityView.setVisibility(VISIBLE);
-                batteryView.setVisibility(VISIBLE);
                 timeView.setVisibility(VISIBLE);
             }
         } else {
-            videoQualityView.setVisibility(GONE);
-            batteryView.setVisibility(GONE);
             timeView.setVisibility(GONE);
-            if (isControllerShowing() && bipPlayer.getVideoWidth() > 0) {
+            if (isControllerShowing() && getVideoWidth() > 0) {
                 videoFullScreenView.setVisibility(VISIBLE);
             }
         }
-        int videoWidth = bipPlayer.getVideoWidth();
-        int videoHeight = bipPlayer.getVideoHeight();
-        if (isFullScreen) {
-            int targetOrientation = videoWidth > videoHeight ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-            if (detachActivity != null && detachActivity.getRequestedOrientation() != targetOrientation) {
-                detachActivity.setRequestedOrientation(targetOrientation);
-            }
-        } else {
-            if (detachActivity != null && detachActivity.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                detachActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            }
+        playViewListener.onFullScreenChange(isFullScreen);
+    }
+
+    public int videoPreferOrientation() {
+        if (bipPlayer != null) {
+            int videoWidth = getVideoWidth();
+            int videoHeight = getVideoHeight();
+            return videoWidth > videoHeight ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         }
-        if (detachActivity != null) {
-            detachActivity.refreshSystemUIVisibility();
-        }
-        resizeWithVideoSize(videoWidth, videoHeight);
+        return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     }
 
     private final Runnable progressChangeRunnable = new Runnable() {
@@ -721,8 +694,8 @@ public class BipPlayView extends ConstraintLayout {
     ViewGroup qualityView;
 
     public void showQualityWindow() {
-        int videoWidth = bipPlayer.getVideoWidth();
-        int videoHeight = bipPlayer.getVideoHeight();
+        int videoWidth = getVideoWidth();
+        int videoHeight = getVideoHeight();
         boolean isLandscape;
         int qualityLayout;
         int qualityItemLayout;
@@ -739,10 +712,10 @@ public class BipPlayView extends ConstraintLayout {
         if (currentVideoBean.getQualityBeans().size() <= 1) {
             return;
         }
-        qualityView = (ViewGroup) LayoutInflater.from(detachActivity).inflate(qualityLayout, this, false);
+        qualityView = (ViewGroup) LayoutInflater.from(getContext()).inflate(qualityLayout, this, false);
         for (int i = currentVideoBean.getQualityBeans().size() - 1; i >= 0; i--) {
             VideoQualityBean videoQualityBean = currentVideoBean.getQualityBeans().get(i);
-            TextView itemView = (TextView) LayoutInflater.from(detachActivity).inflate(qualityItemLayout, qualityView, false);
+            TextView itemView = (TextView) LayoutInflater.from(getContext()).inflate(qualityItemLayout, qualityView, false);
             itemView.setText(videoQualityBean.getQuality());
             if (i == currentVideoBean.getCurrentQualityIndex()) {
                 itemView.setSelected(true);
@@ -768,18 +741,12 @@ public class BipPlayView extends ConstraintLayout {
         }
     }
 
-    PlayViewListener playViewListener;
+    public PlayViewListener playViewListener;
 
     public interface PlayViewListener {
         void onQualityChangeClick();
-    }
 
-    public PlayViewListener getPlayViewListener() {
-        return playViewListener;
-    }
-
-    public void setPlayViewListener(PlayViewListener playViewListener) {
-        this.playViewListener = playViewListener;
+        void onFullScreenChange(boolean isFull);
     }
 
     private void initDanmaku() {
@@ -909,5 +876,52 @@ public class BipPlayView extends ConstraintLayout {
         super.onDetachedFromWindow();
         danmakuView.release();
         okHttpClient.dispatcher().cancelAll();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (!userSeeking && videoSeekView.isFocused() && (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT)) {
+                fastForwardView.setVisibility(VISIBLE);
+                userSeeking = true;
+            }
+        } else if (event.getAction() == KeyEvent.ACTION_UP) {
+            if (userSeeking && videoSeekView.isFocused() && (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT)) {
+                fastForwardView.setVisibility(GONE);
+                userSeeking = false;
+                if (bipPlayer != null && bipPlayer.getDuration() > 0) {
+                    long targetTime = videoSeekView.getProgress() * bipPlayer.getDuration() / SEEKBAR_MAX;
+                    videoPositionView.setText(StringUtil.formatTime(targetTime));
+                    bipPlayer.seekTo(targetTime);
+                    videoBottomProgressView.setProgress(videoSeekView.getProgress());
+                    removeCallbacks(progressChangeRunnable);
+                    postDelayed(progressChangeRunnable, 150);
+                }
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    protected void onFocusChanged(boolean gainFocus, int direction, @Nullable Rect previouslyFocusedRect) {
+        super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
+        if (gainFocus) {
+            showController();
+            removeCallbacks(hideControllerRunnable);
+            getViewTreeObserver().addOnGlobalFocusChangeListener(focusChangeListener);
+        }
+    }
+
+    public int getVideoWidth() {
+        return bipPlayer == null ? 0 : bipPlayer.getVideoWidth();
+    }
+
+    public int getVideoHeight() {
+        return bipPlayer == null ? 0 : bipPlayer.getVideoHeight();
     }
 }
