@@ -1,6 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.source.bili;
 
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
 
@@ -754,7 +755,11 @@ public class BiliParser extends BaseParser {
 
     public static void clearLoginStatus() {
         //todo 只清除bilibili的cookie
-        CookieManager.getInstance().removeAllCookies(null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().removeAllCookies(null);
+        } else {
+            CookieManager.getInstance().removeAllCookie();
+        }
     }
 
     @Override

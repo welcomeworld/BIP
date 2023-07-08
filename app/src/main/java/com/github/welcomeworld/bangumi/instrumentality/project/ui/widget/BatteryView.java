@@ -9,10 +9,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 
@@ -34,19 +36,25 @@ public class BatteryView extends View {
 
 
     public BatteryView(Context context) {
-        this(context, null, 0, 0);
+        this(context, null, 0);
     }
 
     public BatteryView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0, 0);
+        this(context, attrs, 0);
     }
 
     public BatteryView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+        super(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr, 0);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public BatteryView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    private void init(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BatteryView, defStyleAttr, defStyleRes);
         int start = typedArray.getDimensionPixelSize(R.styleable.BatteryView_batteryWrapperPaddingStart, 0);
         int end = typedArray.getDimensionPixelSize(R.styleable.BatteryView_batteryWrapperPaddingEnd, 0);

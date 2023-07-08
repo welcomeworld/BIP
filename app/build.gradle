@@ -39,8 +39,9 @@ android {
 
     defaultConfig {
         applicationId "com.github.welcomeworld.bangumi.instrumentality.project"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 33
+        multiDexEnabled true
         versionCode getVersionCode()
         versionName getVersionName()
 
@@ -112,12 +113,10 @@ dependencies {
 
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-
+    def retrofitVersion = '2.6.3'
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
     implementation 'org.jsoup:jsoup:1.13.1'
 
@@ -132,8 +131,8 @@ dependencies {
     implementation 'com.github.welcomeworld:DanmakuFlameMaster-Jitpack:v0.9.25'
 
     //custom library
-    implementation 'com.github.welcomeworld:BIPPlayer:1.0.30'
-    implementation 'com.github.welcomeworld:DevTool:1.0.03'
+    implementation 'com.github.welcomeworld:BIPPlayer:1.0.33_api19'
+    implementation 'com.github.welcomeworld:DevTool:1.0.04'
     implementation project(path: ':app_update')
     implementation project(path: ':zxing')
 
@@ -152,4 +151,5 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
 
+    implementation "androidx.multidex:multidex:2.0.1"
 }

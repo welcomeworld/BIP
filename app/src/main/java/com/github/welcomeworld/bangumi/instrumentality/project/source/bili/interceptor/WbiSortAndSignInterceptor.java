@@ -63,7 +63,7 @@ public class WbiSortAndSignInterceptor implements Interceptor {
                             .url(url.newBuilder()
                                     .encodedQuery(null)
                                     .build())
-                            .post(RequestBody.create(queryString, MediaType.parse("application/x-www-form-urlencoded;charset=UTF-8")))
+                            .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded;charset=UTF-8"), queryString))
                             .build()
             );
         }

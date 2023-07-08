@@ -140,7 +140,6 @@
         android:max="1000"
         android:thumb="@drawable/ic_seek_thumb"
         android:maxHeight="2dp"
-        android:splitTrack="false"
         android:paddingTop="8dp"
         android:progress="400"
         android:progressDrawable="@drawable/progress_video_seek"

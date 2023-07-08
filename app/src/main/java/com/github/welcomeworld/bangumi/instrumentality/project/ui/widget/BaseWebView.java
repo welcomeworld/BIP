@@ -1,6 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.widget;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 
+import androidx.annotation.RequiresApi;
 import androidx.viewpager.widget.ViewPager;
 
 public class BaseWebView extends WebView {
@@ -25,6 +27,7 @@ public class BaseWebView extends WebView {
         super(context, attrs, defStyleAttr);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public BaseWebView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }

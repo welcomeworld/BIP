@@ -2,6 +2,7 @@ package com.github.welcomeworld.bangumi.instrumentality.project.utils;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
@@ -18,7 +19,9 @@ public class WebUtil {
     public static void initNormalWebView(WebView webView, ViewGroup fullParentView) {
         //解决在5.0以上cookie无法记住问题
         CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.setAcceptThirdPartyCookies(webView, true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.setAcceptThirdPartyCookies(webView, true);
+        }
 
         //设置scrollBar隐藏
         webView.setHorizontalScrollBarEnabled(false);
