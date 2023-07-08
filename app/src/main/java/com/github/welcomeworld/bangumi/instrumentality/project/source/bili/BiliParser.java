@@ -3,8 +3,10 @@ package com.github.welcomeworld.bangumi.instrumentality.project.source.bili;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.CookieManager;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constants;
@@ -48,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,6 +65,10 @@ public class BiliParser extends BaseParser {
             instance = new BiliParser();
         }
         return instance;
+    }
+
+    private BiliParser() {
+        initCookie();
     }
 
     @Override
@@ -115,8 +122,7 @@ public class BiliParser extends BaseParser {
         try {
             Response<WebHomeRcmdData> response = indexBeanCall.execute();
             if (response.body() == null || response.body().getData() == null) {
-                LogUtil.e("DataLog", "获取不到数据" +
-                        "");
+                LogUtil.e("DataLog", "获取不到数据:" + response.code());
                 return result;
             }
             WebHomeRcmdData.Data rcmdData = response.body().getData();
@@ -958,5 +964,18 @@ public class BiliParser extends BaseParser {
             e.printStackTrace();
         }
         return result;
+    }
+
+    private void initCookie() {
+        Request.Builder requestBuilder = new Request.Builder().url("https://www.bilibili.com/");
+        BiliOkHttpClientManager.getInstance().getNormalOkHttpClient().newCall(requestBuilder.build()).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+            }
+
+            @Override
+            public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
+            }
+        });
     }
 }
