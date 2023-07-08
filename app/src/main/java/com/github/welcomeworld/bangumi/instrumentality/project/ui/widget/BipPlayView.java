@@ -94,6 +94,7 @@ public class BipPlayView extends ConstraintLayout {
     private boolean skipAction = false;
     private long fastforward_record = 0;
     private boolean userSeeking = false;
+    private boolean fullScreenChanging = false;
     private float playSpeed = 1.0f;
     private boolean longPressSpeedChange = false;
 
@@ -111,7 +112,7 @@ public class BipPlayView extends ConstraintLayout {
     private final ViewTreeObserver.OnGlobalFocusChangeListener focusChangeListener = new ViewTreeObserver.OnGlobalFocusChangeListener() {
         @Override
         public void onGlobalFocusChanged(View oldFocus, View newFocus) {
-            if (!hasFocus()) {
+            if (!hasFocus() && !fullScreenChanging) {
                 hideController();
                 getViewTreeObserver().removeOnGlobalFocusChangeListener(focusChangeListener);
                 if (userSeeking) {
@@ -599,9 +600,12 @@ public class BipPlayView extends ConstraintLayout {
         if (isFullScreen == fullScreen) {
             return;
         }
+        fullScreenChanging = true;
         isFullScreen = fullScreen;
         videoFullScreenView.setSelected(fullScreen);
         playViewListener.onFullScreenChange(isFullScreen);
+        videoFullScreenView.requestFocus();
+        fullScreenChanging = false;
     }
 
     public int videoPreferOrientation() {
