@@ -416,9 +416,7 @@ public class BipPlayView extends ConstraintLayout {
         topShadowView.setVisibility(VISIBLE);
         titleView.setVisibility(VISIBLE);
         batteryView.setVisibility(VISIBLE);
-        if (isFullScreen) {
-            timeView.setVisibility(VISIBLE);
-        }
+        timeView.setVisibility(VISIBLE);
         videoBottomProgressView.setVisibility(GONE);
         if (getVideoWidth() > 0) {
             videoFullScreenView.setVisibility(VISIBLE);
@@ -602,17 +600,7 @@ public class BipPlayView extends ConstraintLayout {
             return;
         }
         isFullScreen = fullScreen;
-        if (isFullScreen) {
-            videoFullScreenView.setVisibility(GONE);
-            if (isControllerShowing()) {
-                timeView.setVisibility(VISIBLE);
-            }
-        } else {
-            timeView.setVisibility(GONE);
-            if (isControllerShowing() && getVideoWidth() > 0) {
-                videoFullScreenView.setVisibility(VISIBLE);
-            }
-        }
+        videoFullScreenView.setSelected(fullScreen);
         playViewListener.onFullScreenChange(isFullScreen);
     }
 

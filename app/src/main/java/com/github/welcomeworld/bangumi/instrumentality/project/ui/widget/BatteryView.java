@@ -66,6 +66,9 @@ public class BatteryView extends View {
         updateGradient();
         setBatteryVertical(typedArray.getBoolean(R.styleable.BatteryView_batteryVertical, batteryVertical));
         typedArray.recycle();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            typedArray.close();
+        }
     }
 
     @Override
@@ -97,7 +100,6 @@ public class BatteryView extends View {
         switch (specMode) {
             case MeasureSpec.UNSPECIFIED:
             case MeasureSpec.AT_MOST:
-                result = size;
                 break;
             case MeasureSpec.EXACTLY:
                 result = specSize;
