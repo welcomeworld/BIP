@@ -5,7 +5,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.inter
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.interceptor.WbiSortAndSignInterceptor;
 
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 public class BiliOkHttpClientManager {
     static BiliOkHttpClientManager mInstance;
@@ -25,7 +24,6 @@ public class BiliOkHttpClientManager {
             normalClient = new OkHttpClient.Builder()
                     .addInterceptor(new UserAgentInterceptor())
                     .addInterceptor(new CookieInterceptor())
-                    .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                     .build();
         }
         return normalClient;
@@ -37,7 +35,6 @@ public class BiliOkHttpClientManager {
                     .addInterceptor(new UserAgentInterceptor())
                     .addInterceptor(new CookieInterceptor())
                     .addInterceptor(new WbiSortAndSignInterceptor())
-                    .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                     .build();
         }
         return wbiClient;
