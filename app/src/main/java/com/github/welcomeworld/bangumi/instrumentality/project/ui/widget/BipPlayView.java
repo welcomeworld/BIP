@@ -920,10 +920,23 @@ public class BipPlayView extends ConstraintLayout {
     }
 
     public boolean handleExternalKeyEvent(KeyEvent event) {
-        if (isFullScreen() && !hasFocus() && event.getKeyCode() != KeyEvent.KEYCODE_BACK) {
+        if (isFullScreen() && !hasFocus() && needHandleKey(event.getKeyCode())) {
             requestFocus();
             return true;
         }
         return false;
+    }
+
+    private boolean needHandleKey(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+            case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+                return true;
+            default:
+                return false;
+        }
     }
 }
