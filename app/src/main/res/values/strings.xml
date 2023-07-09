@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BangumiInstrumentalityProject</string>
+    <string name="app_name">BIP</string>
     <string name="home">首页</string>
     <string name="bangumi">番剧</string>
     <string name="collection">收藏</string>
