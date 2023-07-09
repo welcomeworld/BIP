@@ -1,0 +1,13 @@
+ext {
+    compile_version = 33
+    lifecycle_version = "2.6.1"
+    exo_version = "2.19.0"
+    room_version = "2.5.2"
+    devtool_version = "1.0.04"
+    bipplayer_version = "1.0.33_api19"
+    retrofit_version = "2.6.3"
+    appcompat_version = "1.6.1"
+    material_version = "1.9.0"
+    glide_version = "4.15.1"
+    gson_version = "2.10.1"
+}
