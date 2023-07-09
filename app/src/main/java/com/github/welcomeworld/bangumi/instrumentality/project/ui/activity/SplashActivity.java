@@ -20,11 +20,18 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
                 //do nothing to keep splash screen
             });
         }
-        ThreadUtil.postDelayed(500, () -> {
-            if (isTaskRoot()) {
-                IntentUtil.intentToMain(SplashActivity.this, null);
-            }
-            finish();
-        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            ThreadUtil.postDelayed(500, this::goMain);
+        } else {
+            //API below 24 maybe with low CPU performance, start main directly.
+            goMain();
+        }
+    }
+
+    private void goMain() {
+        if (isTaskRoot()) {
+            IntentUtil.intentToMain(SplashActivity.this, null);
+        }
+        finish();
     }
 }
