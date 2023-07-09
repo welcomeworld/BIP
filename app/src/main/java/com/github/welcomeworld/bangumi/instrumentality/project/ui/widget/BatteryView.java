@@ -73,9 +73,10 @@ public class BatteryView extends View {
         setBatteryWrapper(wrapper, wrapper.getIntrinsicWidth(), wrapper.getIntrinsicHeight());
         updateGradient();
         setBatteryVertical(typedArray.getBoolean(R.styleable.BatteryView_batteryVertical, batteryVertical));
-        typedArray.recycle();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             typedArray.close();
+        } else {
+            typedArray.recycle();
         }
     }
 
