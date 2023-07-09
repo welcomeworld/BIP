@@ -28,6 +28,16 @@ public class MainBangumiFragment extends BaseFragment<FragmentMainBangumiBinding
         getVB().bangumiWebview.setWebViewClient(new WebUtil.NormalWebViewClient() {
 
             @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Uri requestUri = Uri.parse(url);
+                if (requestUri.getPath().contains("/detail/") || requestUri.getPath().contains("/play/")) {
+                    interceptVideoDetail(url);
+                    return true;
+                }
+                return super.shouldOverrideUrlLoading(view, url);
+            }
+
+            @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 if (request.getUrl().getPath().contains("/detail/") || request.getUrl().getPath().contains("/play/")) {
                     interceptVideoDetail(request.getUrl().toString());
