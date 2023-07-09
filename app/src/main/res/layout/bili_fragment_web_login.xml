@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="16dp"
+        android:focusable="true"
         android:background="@drawable/button_solid_accent"
         android:text="@string/refresh_qr"
         android:textColor="@color/color_white" />
@@ -27,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="16dp"
+        android:focusable="true"
         android:background="@drawable/button_solid_accent"
         android:text="@string/scan_confirm"
         android:textColor="@color/color_white" />
@@ -36,6 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="16dp"
+        android:focusable="true"
         android:background="@drawable/button_solid_accent"
         android:text="@string/password_login"
         android:textColor="@color/color_white" />

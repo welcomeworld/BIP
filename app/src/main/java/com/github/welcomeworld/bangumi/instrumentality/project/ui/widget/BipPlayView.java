@@ -905,7 +905,9 @@ public class BipPlayView extends ConstraintLayout {
         if (gainFocus) {
             showController();
             removeCallbacks(hideControllerRunnable);
+            getViewTreeObserver().removeOnGlobalFocusChangeListener(focusChangeListener);
             getViewTreeObserver().addOnGlobalFocusChangeListener(focusChangeListener);
+            playPauseView.requestFocus();
         }
     }
 
@@ -915,5 +917,13 @@ public class BipPlayView extends ConstraintLayout {
 
     public int getVideoHeight() {
         return bipPlayer == null ? 0 : bipPlayer.getVideoHeight();
+    }
+
+    public boolean handleExternalKeyEvent(KeyEvent event) {
+        if (isFullScreen() && !hasFocus() && event.getKeyCode() != KeyEvent.KEYCODE_BACK) {
+            requestFocus();
+            return true;
+        }
+        return false;
     }
 }

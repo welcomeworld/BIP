@@ -103,7 +103,7 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             holder.durationView.setVisibility(View.VISIBLE);
             holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(), StringUtil.MILLISECOND));
         }
-        holder.itemView.setOnClickListener(v -> {
+        holder.itemView.findViewById(R.id.item_content).setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             ArrayList<VideoListBean> videoListBeans = new ArrayList<>();
             videoListBeans.add(currentData);

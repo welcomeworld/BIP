@@ -107,7 +107,7 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             holder.durationView.setVisibility(View.VISIBLE);
             holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(), StringUtil.MILLISECOND));
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.findViewById(R.id.item_content).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
