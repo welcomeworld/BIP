@@ -28,6 +28,7 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/ic_home_search"
             android:gravity="center_vertical"
+            android:focusable="true"
             android:nextFocusLeft="@id/main_bottom_home"
             android:nextFocusRight="@id/main_bottom_mine"
             android:paddingStart="12dp"

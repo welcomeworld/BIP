@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -237,5 +238,13 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             }
         }
         return videoListBeans;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (getViewBinding().videoPlayView.handleExternalKeyEvent(event)) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

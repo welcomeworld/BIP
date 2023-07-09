@@ -43,6 +43,7 @@
         <TextView
             android:id="@+id/video_play_collection"
             android:layout_width="72dp"
+            android:focusable="true"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_play_detail_action"
             android:drawablePadding="6dp"
@@ -59,6 +60,7 @@
             android:id="@+id/video_play_download"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
+            android:focusable="true"
             android:background="@drawable/bg_play_detail_action"
             android:drawablePadding="6dp"
             android:gravity="center"
@@ -73,6 +75,7 @@
         <TextView
             android:id="@+id/video_play_browser"
             android:layout_width="72dp"
+            android:focusable="true"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_play_detail_action"
             android:drawablePadding="6dp"
@@ -88,6 +91,7 @@
         <TextView
             android:id="@+id/video_play_refresh"
             android:layout_width="72dp"
+            android:focusable="true"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_play_detail_action"
             android:drawablePadding="6dp"

@@ -93,7 +93,6 @@
             android:id="@+id/video_play_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color_black"
-            android:elevation="8dp" />
+            android:background="@color/color_black" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
