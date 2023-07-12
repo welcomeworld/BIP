@@ -612,7 +612,7 @@ public class BipPlayView extends ConstraintLayout {
         if (bipPlayer != null) {
             int videoWidth = getVideoWidth();
             int videoHeight = getVideoHeight();
-            return videoWidth > videoHeight ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            return videoWidth > videoHeight ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
         }
         return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     }
