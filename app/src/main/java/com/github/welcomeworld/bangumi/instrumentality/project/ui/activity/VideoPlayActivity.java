@@ -1,14 +1,15 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
+import android.app.UiModeManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.BatteryManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -84,7 +85,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                     contentView.addView(getViewBinding().videoPlayView);
                     int targetOrientation = getViewBinding().videoPlayView.videoPreferOrientation();
                     normalOrientation = getRequestedOrientation();
-                    if (normalOrientation != targetOrientation) {
+                    if (normalOrientation != targetOrientation && !isTV()) {
                         setRequestedOrientation(targetOrientation);
                     }
                 } else {
@@ -242,5 +243,10 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean isTV() {
+        UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+        return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;
     }
 }
