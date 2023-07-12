@@ -122,7 +122,7 @@ public class BiliParser extends BaseParser {
         try {
             Response<WebHomeRcmdData> response = indexBeanCall.execute();
             if (response.body() == null || response.body().getData() == null) {
-                LogUtil.e("DataLog", "获取不到数据:" + response.code());
+                LogUtil.w("DataLog", "获取不到数据:" + response.code());
                 return result;
             }
             WebHomeRcmdData.Data rcmdData = response.body().getData();
@@ -136,11 +136,10 @@ public class BiliParser extends BaseParser {
                     lastShowList.add(item.getGotoX() + "_n_" + item.getId());
                 }
                 if (!typeWhiteList.contains(item.getGotoX())) {
-                    LogUtil.e("DataLog", "跳过非av:" + moreData.get(i).getGotoX());
+                    LogUtil.w("DataLog", "跳过非av:" + moreData.get(i).getGotoX());
                     moreData.remove(i);
                     i--;
                 } else {
-                    LogUtil.e("DataLog", "RecommendData:" + item);
                     VideoListBean videoListBean = new VideoListBean();
                     videoListBean.setSourceName(Constants.Source.BILI);
                     videoListBean.setTitle(item.getTitle());
@@ -254,7 +253,7 @@ public class BiliParser extends BaseParser {
                 qualityBean.setRealVideoUrl(videoBean.getBase_url());
                 qualityBean.setQuality(description);
                 qualityBean.setRealAudioUrl(bestAudioBean.getBase_url());
-                LogUtil.e("DataLog", qualityBean.getRealVideoUrl());
+                LogUtil.d("DataLog", qualityBean.getRealVideoUrl());
                 //加入没有匹配到即原列表没有的分辨率
                 if (!qualityMatch) {
                     currentVideoBean.getQualityBeans().add(qualityBean);
@@ -329,7 +328,7 @@ public class BiliParser extends BaseParser {
     }
 
     private static void bindSearchData(List<VideoListBean> result, WebSearchBean.Data.Result searchData, boolean isBangumi) {
-        LogUtil.e("DataLog", "SearchData:" + searchData.toString());
+        LogUtil.d("DataLog", "SearchData:" + searchData.toString());
         VideoListBean videoListBean = new VideoListBean();
         videoListBean.setSourceName(Constants.Source.BILI);
         String searchTitle = searchData.getTitle();
@@ -421,20 +420,20 @@ public class BiliParser extends BaseParser {
             cacheVideoBeans.put(cacheBean.getVideoKey(), cacheBean);
         }
         Uri currentUri = Uri.parse(currentVideoBean.getUrl());
-        LogUtil.e("BiliParser", "uri:" + currentUri);
+        LogUtil.d("BiliParser", "uri:" + currentUri);
         Map<String, String> parameters = new HashMap<>();
         if (currentUri.getPath() != null && currentUri.getPath().contains("ss")) {
-            LogUtil.e("BiliParser", "sid:" + currentVideoBean.getVideoKey());
+            LogUtil.d("BiliParser", "sid:" + currentVideoBean.getVideoKey());
             parameters.put("season_id", currentVideoBean.getVideoKey());
         } else if (currentUri.getPath() != null && currentUri.getPath().contains("ep")) {
-            LogUtil.e("BiliParser", "epid:" + currentVideoBean.getVideoKey());
+            LogUtil.d("BiliParser", "epid:" + currentVideoBean.getVideoKey());
             parameters.put("ep_id", currentVideoBean.getVideoKey());
         }
         VideoDetailNetAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoDetailNetAPI.class);
         try {
             Response<BangumiDetailPageBean> response = videoDetailNetAPI.getBangumiDetailPageInfo(parameters).execute();
             if (response.body() == null || response.body().getCode() != 0) {
-                LogUtil.e("BiliParser", "response error:" + response.body().getCode());
+                LogUtil.w("BiliParser", "response error:" + response.body().getCode());
                 return videoListBeans;
             }
             BangumiDetailPageBean.Result detailResult = response.body().getResult();
@@ -456,7 +455,7 @@ public class BiliParser extends BaseParser {
                 if (!TextUtils.isEmpty(episodes.get(i).getLongTitle())) {
                     title = title + " " + episodes.get(i).getLongTitle();
                 }
-                LogUtil.e("BiliParser", "parse Data:" + title);
+                LogUtil.d("BiliParser", "parse Data:" + title);
                 long cid = episodes.get(i).getCid();
                 long aid = episodes.get(i).getAid();
                 if (currentCid == null || !currentCid.equals("" + cid) || cid == 0) {
@@ -546,7 +545,7 @@ public class BiliParser extends BaseParser {
             }
         } else {
             Uri currentUri = Uri.parse(currentVideoBean.getUrl());
-            LogUtil.e("BiliParser", "uri:" + currentUri);
+            LogUtil.d("BiliParser", "uri:" + currentUri);
             currentAid = currentUri.getPath().substring(1);
         }
         try {
@@ -554,16 +553,16 @@ public class BiliParser extends BaseParser {
         } catch (Exception e) {
             //ignore
         }
-        LogUtil.e("BiliParser", "cid:" + currentCid);
+        LogUtil.d("BiliParser", "cid:" + currentCid);
         currentAid = currentAid.substring(0, currentAid.contains("/") ? currentAid.indexOf("/") : currentAid.length());
-        LogUtil.e("BiliParser", "final aid:" + currentAid);
+        LogUtil.d("BiliParser", "final aid:" + currentAid);
         Map<String, String> parameters = new HashMap<>();
         parameters.put("aid", currentAid);
         VideoWebAPI videoDetailNetAPI = BiliRetrofitManager.getNormalRetrofit(BaseUrl.APIURL).create(VideoWebAPI.class);
         try {
             Response<VideoDetailPageBean> response = videoDetailNetAPI.getAvDetailPageInfo(parameters).execute();
             if (response.body() == null || response.body().getCode() != 0) {
-                LogUtil.e("BiliParser", "response error:" + response.body().getCode());
+                LogUtil.w("BiliParser", "response error:" + response.body().getCode());
                 return videoListBeans;
             }
             boolean matchCid = false;
@@ -579,7 +578,6 @@ public class BiliParser extends BaseParser {
             videoListBean.getVideoBeanList().clear();
             boolean useListTitle = response.body().getData().getPages().size() <= 1;
             for (int i = 0; i < response.body().getData().getPages().size(); i++) {
-                LogUtil.e("BiliParser", "parse Data:" + response.body().getData().getPages().get(i));
                 long cid = response.body().getData().getPages().get(i).getCid();
                 if (currentCid == null || !currentCid.equals("" + cid)) {
                     VideoBean videoBean = new VideoBean();
@@ -629,7 +627,7 @@ public class BiliParser extends BaseParser {
             if (!matchCid && videoListBean.getVideoBeanList().size() > 0) {
                 currentVideoBean = videoListBean.getCurrentVideoBean();
                 currentCid = currentVideoBean.getVideoKey();
-                LogUtil.e("BiliParser", "not here error");
+                LogUtil.d("BiliParser", "not here error");
                 queryAVItemDetail(currentVideoBean, currentAid, currentCid);
             }
             videoListBeans.clear();
@@ -722,7 +720,7 @@ public class BiliParser extends BaseParser {
         try {
             Response<WebLoginUrlBean> response = userWebAPI.getLoginUrl().execute();
             if (response.body() == null || response.body().getData() == null) {
-                LogUtil.e("jsTest", "key response is null");
+                LogUtil.w("jsTest", "key response is null");
                 return null;
             }
             return response.body().getData();
@@ -886,7 +884,7 @@ public class BiliParser extends BaseParser {
         try {
             Response<BangumiRelatedBean> response = bangumiRelatedBeanCall.execute();
             if (response.body() == null || response.body().getData() == null) {
-                LogUtil.e("DataLog", "获取不到数据" +
+                LogUtil.w("DataLog", "获取不到数据" +
                         "");
                 return result;
             }
@@ -930,14 +928,13 @@ public class BiliParser extends BaseParser {
         try {
             Response<VideoRelatedBean> response = indexBeanCall.execute();
             if (response.body() == null || response.body().getData() == null) {
-                LogUtil.e("DataLog", "获取不到数据" +
+                LogUtil.w("DataLog", "获取不到数据" +
                         "");
                 return result;
             }
             List<VideoRelatedBean.Data> moreData = response.body().getData();
             for (int i = 0; i < moreData.size(); i++) {
                 VideoRelatedBean.Data item = moreData.get(i);
-                LogUtil.e("DataLog", "getVideoRelated:" + item);
                 VideoListBean relatedVideoListBean = new VideoListBean();
                 relatedVideoListBean.setSourceName(Constants.Source.BILI);
                 relatedVideoListBean.setTitle(item.getTitle());
