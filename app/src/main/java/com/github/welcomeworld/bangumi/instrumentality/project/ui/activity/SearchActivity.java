@@ -4,8 +4,10 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.SearchResultRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivitySearchBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.ListActionWrapper;
@@ -41,7 +43,12 @@ public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
             return true;
         });
         getViewBinding().searchResultRecyclerview.setAdapter(adapter);
-        getViewBinding().searchResultRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        int listColumn = getResources().getInteger(R.integer.list_column);
+        if (listColumn == 1) {
+            getViewBinding().searchResultRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        } else {
+            getViewBinding().searchResultRecyclerview.setLayoutManager(new GridLayoutManager(this, listColumn));
+        }
         getViewBinding().searchResultSwipecontainer.setOnRefreshListener(() -> viewModel.refresh());
         getViewBinding().searchResultSwipecontainer.setOnLoadListener(() -> viewModel.loadMore());
         getViewBinding().cancelButton.setOnClickListener(v -> finish());
