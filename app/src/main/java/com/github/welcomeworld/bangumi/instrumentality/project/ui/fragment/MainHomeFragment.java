@@ -7,8 +7,10 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.MainHomeRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentMainHomeBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.ListActionWrapper;
@@ -34,8 +36,13 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         adapter = new MainHomeRecyclerViewAdapter(getActivity());
+        int listColumn = getResources().getInteger(R.integer.list_column);
+        if (listColumn == 1) {
+            getVB().mainHomeRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        } else {
+            getVB().mainHomeRv.setLayoutManager(new GridLayoutManager(getActivity(), listColumn));
+        }
         getVB().mainHomeRv.setAdapter(adapter);
-        getVB().mainHomeRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         getVB().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));
         getVB().mainHomeSwipeRefresh.setOnLoadListener(this::loadMore);
         viewModel.getHomeDataLive().observe(getViewLifecycleOwner(), homeLiveWrapper -> {

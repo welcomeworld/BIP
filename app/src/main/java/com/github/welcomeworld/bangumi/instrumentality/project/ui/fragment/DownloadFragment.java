@@ -8,6 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +35,12 @@ public class DownloadFragment extends BaseFragment<FragmentDownloadBinding> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         getVB().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(view.getContext());
         getVB().downloadRv.setAdapter(adapter);
-        getVB().downloadRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        int listColumn = getResources().getInteger(R.integer.list_column);
+        if (listColumn == 1) {
+            getVB().downloadRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        } else {
+            getVB().downloadRv.setLayoutManager(new GridLayoutManager(getActivity(), listColumn));
+        }
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(downloadItemTouchHelpCallback);
         itemTouchHelper.attachToRecyclerView(getVB().downloadRv);
     }

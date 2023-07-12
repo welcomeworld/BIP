@@ -5,8 +5,10 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.FavOrHistoryRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentMainCollectionBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.HistoryBean;
@@ -26,7 +28,12 @@ public class MainCollectionFragment extends BaseFragment<FragmentMainCollectionB
         super.onViewCreated(view, savedInstanceState);
         adapter = new FavOrHistoryRecyclerViewAdapter(getActivity());
         getVB().mainHomeRv.setAdapter(adapter);
-        getVB().mainHomeRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        int listColumn = getResources().getInteger(R.integer.list_column);
+        if (listColumn == 1) {
+            getVB().mainHomeRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        } else {
+            getVB().mainHomeRv.setLayoutManager(new GridLayoutManager(getActivity(), listColumn));
+        }
         getVB().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));
         getVB().mainHomeSwipeRefresh.setOnLoadListener(this::loadMore);
         refresh(false);
