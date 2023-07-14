@@ -79,9 +79,14 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
 
             @Override
             public void onFullScreenChange(boolean isFull) {
+                int parentWidth;
+                int parentHeight;
                 if (isFull) {
-                    getViewBinding().playViewContainer.removeAllViews();
                     ViewGroup contentView = findViewById(android.R.id.content);
+                    parentWidth = contentView.getWidth();
+                    parentHeight = contentView.getHeight();
+                    getViewBinding().videoPlayView.presetSurfaceSize(parentWidth, parentHeight);
+                    getViewBinding().playViewContainer.removeAllViews();
                     contentView.addView(getViewBinding().videoPlayView);
                     int targetOrientation = getViewBinding().videoPlayView.videoPreferOrientation();
                     normalOrientation = getRequestedOrientation();
@@ -89,6 +94,9 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                         setRequestedOrientation(targetOrientation);
                     }
                 } else {
+                    parentWidth = getViewBinding().playViewContainer.getWidth();
+                    parentHeight = getViewBinding().playViewContainer.getHeight();
+                    getViewBinding().videoPlayView.presetSurfaceSize(parentWidth, parentHeight);
                     ViewGroup contentView = findViewById(android.R.id.content);
                     contentView.removeView(getViewBinding().videoPlayView);
                     getViewBinding().playViewContainer.addView(getViewBinding().videoPlayView);

@@ -235,7 +235,7 @@ public class BipPlayView extends ConstraintLayout {
     SurfaceHolder.Callback surfaceHolderCallback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-            LogUtil.e("SurfaceTest", "Created");
+            LogUtil.d("SurfaceTest", "Created");
             videoSurfaceHolder = holder;
             if (bipPlayer != null) {
                 bipPlayer.setDisplay(videoSurfaceHolder);
@@ -248,13 +248,12 @@ public class BipPlayView extends ConstraintLayout {
             if (bipPlayer != null) {
                 bipPlayer.setDisplay(videoSurfaceHolder);
             }
-            LogUtil.e("SurfaceTest", "Change");
+            LogUtil.d("SurfaceTest", "Change:" + width + ":" + height);
         }
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-            LogUtil.e("SurfaceTest", "Destroy");
-//            bipPlayer.pause();
+            LogUtil.d("SurfaceTest", "Destroy");
         }
     };
 
@@ -270,9 +269,7 @@ public class BipPlayView extends ConstraintLayout {
         public boolean onDown(MotionEvent e) {
             screen_height = getResources().getDisplayMetrics().heightPixels;
             screen_width = getResources().getDisplayMetrics().widthPixels;
-            LogUtil.e("GestureTest", "Down x:" + e.getX() + " y:" + e.getY() + " width:" + getWidth() + " height:" + getHeight());
             if (e.getX() < getWidth() / 4D || e.getX() > getWidth() * 3 / 4d || e.getY() < getHeight() / 4D || e.getY() > getHeight() * 3 / 4d) {
-                LogUtil.e("GestureTest", "down skip");
                 skipAction = true;
             }
             return true;
@@ -320,12 +317,10 @@ public class BipPlayView extends ConstraintLayout {
             double xpercentage = -distanceX / screen_width * 2 + lastXpercentage;
             double ypercentage = distanceY / screen_height * 2 + lastYpercentage;
             if (e2.getX() < getWidth() / 4D || e2.getX() > getWidth() * 3 / 4d || e2.getY() < getHeight() / 4D || e2.getY() > getHeight() * 3 / 4d || bipPlayer == null) {
-                LogUtil.e("GestureTest", "scroll skip");
                 return false;
             }
             if (!fastfowarding && !skipAction) {
                 if (xpercentage > 0.1 || xpercentage < -0.1) {
-                    LogUtil.e("GestureTest", "set fastfoward");
                     fastfowarding = true;
                     fastforward_record = bipPlayer.getCurrentPosition();
                     fastfowardText = StringUtil.formatTime(fastforward_record) + "/" + StringUtil.formatTime(duration);
@@ -335,7 +330,6 @@ public class BipPlayView extends ConstraintLayout {
                     removeCallbacks(hideControllerRunnable);
                     userSeeking = true;
                 } else if (ypercentage > 0.1 || ypercentage < -0.1) {
-                    LogUtil.e("GestureTest", "scroll set skip");
                     skipAction = true;
                 } else {
                     lastYpercentage = ypercentage;
@@ -344,7 +338,6 @@ public class BipPlayView extends ConstraintLayout {
                 return false;
             }
             if (fastfowarding) {
-                LogUtil.e("GestureTest", "scroll fastfoward");
                 change = xpercentage * FASTFORWARD_MAX + fastforward_record > duration ? duration : xpercentage * FASTFORWARD_MAX + fastforward_record;
                 fastforward_record = (long) change;
                 fastfowardText = StringUtil.formatTime(fastforward_record) + "/" + StringUtil.formatTime(duration);
@@ -472,43 +465,39 @@ public class BipPlayView extends ConstraintLayout {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         if (bipPlayer != null) {
-            int videoWidth = getVideoWidth();
-            int videoHeight = getVideoHeight();
-            resizeWithVideoSize(videoWidth, videoHeight);
+            resizeSurfaceSize();
         }
     }
 
-    private void resizeWithVideoSize(int videoWidth, int videoHeight) {
+    private void resizeSurfaceSize() {
+        resizeSurfaceSize(getVideoWidth(), getVideoHeight(), getWidth(), getHeight(), true);
+    }
+
+    public void presetSurfaceSize(int parentWidth, int parentHeight) {
+        resizeSurfaceSize(getVideoWidth(), getVideoHeight(), parentWidth, parentHeight, false);
+    }
+
+    private void resizeSurfaceSize(int videoWidth, int videoHeight, int parentWidth, int parentHeight, boolean reLayout) {
         ViewGroup.LayoutParams layoutParams = surfaceView.getLayoutParams();
-        int screenShort = ScreenUtil.getScreenWidth(getContext());
-        int screenLong = ScreenUtil.getScreenHeight(getContext());
-        int parentWidth = getWidth();
-        int parentHeight = getHeight();
-        LogUtil.e("SurfaceTest", "screen " + screenLong + ":" + screenShort + "parent " + parentWidth + ":" + parentHeight + "  video" + videoWidth + ":" + videoHeight);
         if (videoWidth <= 0 || videoHeight <= 0) {
             return;
         }
+        int targetWidth;
+        int targetHeight;
         if (videoWidth * 1.0 / videoHeight > parentWidth * 1.0 / parentHeight) {
-            layoutParams.width = parentWidth;
-            layoutParams.height = (layoutParams.width * videoHeight) / videoWidth;
+            targetWidth = parentWidth;
+            targetHeight = (targetWidth * videoHeight) / videoWidth;
         } else {
-            layoutParams.height = parentHeight;
-            layoutParams.width = (layoutParams.height * videoWidth) / videoHeight;
+            targetHeight = parentHeight;
+            targetWidth = (targetHeight * videoWidth) / videoHeight;
         }
-        LogUtil.e("SurfaceTest", "final screen " + screenLong + ":" + screenShort + " parent " + parentWidth + ":" + parentHeight + "  video" + layoutParams.width + ":" + layoutParams.height);
-        surfaceView.requestLayout();
-    }
-
-    public SurfaceView getSurfaceView() {
-        return surfaceView;
-    }
-
-    public void setSurfaceView(SurfaceView surfaceView) {
-        this.surfaceView = surfaceView;
-    }
-
-    public BIPPlayer getBipPlayer() {
-        return bipPlayer;
+        if (targetWidth != layoutParams.width || targetHeight != layoutParams.height) {
+            layoutParams.width = targetWidth;
+            layoutParams.height = targetHeight;
+            if (reLayout) {
+                surfaceView.requestLayout();
+            }
+        }
     }
 
     public void setBipPlayer(BIPPlayer bipPlayer) {
@@ -518,7 +507,7 @@ public class BipPlayView extends ConstraintLayout {
         }
         bipPlayer.setOnPreparedListener(mediaPlayer -> {
             duration = mediaPlayer.getDuration();
-            resizeWithVideoSize(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
+            resizeSurfaceSize();
             videoDurationView.setText(StringUtil.formatTime(duration));
             if (duration > 0 && currentVideoBean != null) {
                 currentVideoBean.setDuration(duration);
@@ -688,17 +677,14 @@ public class BipPlayView extends ConstraintLayout {
     public void showQualityWindow() {
         int videoWidth = getVideoWidth();
         int videoHeight = getVideoHeight();
-        boolean isLandscape;
         int qualityLayout;
         int qualityItemLayout;
         if (videoHeight > videoWidth) {
-            isLandscape = false;
             qualityLayout = R.layout.dlg_quality_select_portrait;
             qualityItemLayout = R.layout.dlg_quality_portrait_item;
         } else {
             qualityLayout = R.layout.dlg_quality_select_landscape;
             qualityItemLayout = R.layout.dlg_quality_landscape_item;
-            isLandscape = true;
         }
         hideQualityWindow();
         if (currentVideoBean.getQualityBeans().size() <= 1) {
