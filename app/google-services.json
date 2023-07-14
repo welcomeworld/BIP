@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "709175731403",
+    "project_id": "bangumiproject",
+    "storage_bucket": "bangumiproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709175731403:android:248ec1312bff06b85de74e",
+        "android_client_info": {
+          "package_name": "com.github.welcomeworld.bangumi.instrumentality.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "709175731403-jc8g1e61ph3eertvkijh3s9sftser13j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQnrjrmPKusAaT7yxPv0gyne-_J44hlfQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709175731403-jc8g1e61ph3eertvkijh3s9sftser13j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
