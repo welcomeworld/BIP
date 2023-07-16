@@ -4,7 +4,7 @@ ext {
     exo_version = "2.19.0"
     room_version = "2.5.2"
     devtool_version = "1.0.04"
-    bipplayer_version = "1.0.33"
+    bipplayer_version = "1.0.35"
     retrofit_version = "2.9.0"
     appcompat_version = "1.6.1"
     material_version = "1.9.0"
