@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.adapter.decoration.SpaceItemDecoration;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.devbase.utils.StringUtil;
@@ -112,6 +113,8 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             videoItemRecyclerView = itemView.findViewById(R.id.video_play_item_rv);
             videoItemRecyclerView.setLayoutManager(new LinearLayoutManager(videoItemRecyclerView.getContext(), RecyclerView.HORIZONTAL, false));
             videoItemRecyclerView.setAdapter(itemAdapter);
+            RecyclerView.ItemDecoration itemDecoration = new SpaceItemDecoration(8);
+            videoItemRecyclerView.addItemDecoration(itemDecoration);
         }
     }
 
