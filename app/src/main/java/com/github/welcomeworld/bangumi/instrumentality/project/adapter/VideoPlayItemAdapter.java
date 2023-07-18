@@ -2,14 +2,12 @@ package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.databinding.RvVideoPlayItemBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 
 public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -20,15 +18,15 @@ public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.View
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_video_play_item, parent, false));
+        return new ItemHolder(RvVideoPlayItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ItemHolder itemHolder = (ItemHolder) holder;
-        itemHolder.videoItemNameView.setText(data.getVideoBeanList().get(position).getTitle());
-        itemHolder.videoItemNameView.setSelected(position == selectItemIndex);
-        itemHolder.videoItemNameView.setOnClickListener(v -> {
+        itemHolder.binding.videoItemName.setText(data.getVideoBeanList().get(position).getTitle());
+        itemHolder.binding.videoItemName.setSelected(position == selectItemIndex);
+        itemHolder.binding.videoItemName.setOnClickListener(v -> {
             v.setSelected(true);
             int itemPosition = holder.getBindingAdapterPosition();
             selectItemIndex = itemPosition;
@@ -39,11 +37,11 @@ public class VideoPlayItemAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     static class ItemHolder extends RecyclerView.ViewHolder {
-        TextView videoItemNameView;
+        RvVideoPlayItemBinding binding;
 
-        public ItemHolder(@NonNull View itemView) {
-            super(itemView);
-            videoItemNameView = itemView.findViewById(R.id.video_item_name);
+        public ItemHolder(RvVideoPlayItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
