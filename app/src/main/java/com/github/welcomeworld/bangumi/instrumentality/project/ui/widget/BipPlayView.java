@@ -25,17 +25,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GestureDetectorCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.adapter.QualityRvAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BiliDanmukuParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SettingConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
-import com.github.welcomeworld.devbase.utils.ScreenUtil;
+import com.github.welcomeworld.bipplayer.BIPPlayer;
 import com.github.welcomeworld.devbase.utils.StringUtil;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
-import com.github.welcomeworld.bipplayer.BIPPlayer;
 import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 import java.io.ByteArrayInputStream;
@@ -107,6 +108,9 @@ public class BipPlayView extends ConstraintLayout {
 
     private OkHttpClient okHttpClient;
 
+    private RecyclerView qualityRv;
+    private final QualityRvAdapter qualityRvAdapter = new QualityRvAdapter();
+
     private static final String TAG = "BipPlayView";
 
     private final ViewTreeObserver.OnGlobalFocusChangeListener focusChangeListener = new ViewTreeObserver.OnGlobalFocusChangeListener() {
@@ -138,11 +142,6 @@ public class BipPlayView extends ConstraintLayout {
         init(context);
     }
 
-    public BipPlayView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     private void init(Context context) {
         View itemView = LayoutInflater.from(context).inflate(R.layout.custom_play_view, this);
@@ -161,14 +160,14 @@ public class BipPlayView extends ConstraintLayout {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                removeCallbacks(hideControllerRunnable);
+                cancelHideController();
                 fastForwardView.setVisibility(VISIBLE);
                 userSeeking = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                postDelayed(hideControllerRunnable, 3500);
+                scheduleHideController();
                 fastForwardView.setVisibility(GONE);
                 userSeeking = false;
                 if (bipPlayer != null && bipPlayer.getDuration() > 0) {
@@ -205,7 +204,7 @@ public class BipPlayView extends ConstraintLayout {
                     if (fastfowarding) {
                         fastForwardView.setVisibility(GONE);
                         bipPlayer.seekTo(fastforward_record);
-                        postDelayed(hideControllerRunnable, 3500);
+                        scheduleHideController();
                         userSeeking = false;
                     }
                     if (longPressSpeedChange) {
@@ -230,6 +229,9 @@ public class BipPlayView extends ConstraintLayout {
         danmakuSwitchView.setOnClickListener(playItemClickListener);
         danmakuSwitchView.setSelected(SettingConfig.isDanmakuOpen());
         initDanmaku();
+        qualityRv = itemView.findViewById(R.id.bip_play_view_quality_rv);
+        qualityRv.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true));
+        qualityRv.setAdapter(qualityRvAdapter);
     }
 
     SurfaceHolder.Callback surfaceHolderCallback = new SurfaceHolder.Callback() {
@@ -282,8 +284,8 @@ public class BipPlayView extends ConstraintLayout {
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            LogUtil.e("GestureTest", "SingleTap");
-            if (qualityView != null) {
+            LogUtil.d("GestureTest", "SingleTap");
+            if (isShowingQualityWindow()) {
                 hideQualityWindow();
                 return true;
             }
@@ -327,7 +329,7 @@ public class BipPlayView extends ConstraintLayout {
                     fastForwardView.setText(fastfowardText);
                     fastForwardView.setVisibility(VISIBLE);
                     showController();
-                    removeCallbacks(hideControllerRunnable);
+                    cancelHideController();
                     userSeeking = true;
                 } else if (ypercentage > 0.1 || ypercentage < -0.1) {
                     skipAction = true;
@@ -399,6 +401,7 @@ public class BipPlayView extends ConstraintLayout {
         videoFullScreenView.setVisibility(GONE);
         videoQualityView.setVisibility(GONE);
         danmakuSwitchView.setVisibility(GONE);
+        hideQualityWindow();
     }
 
     private void showController() {
@@ -418,8 +421,8 @@ public class BipPlayView extends ConstraintLayout {
         if (bipPlayer != null) {
             videoQualityView.setVisibility(VISIBLE);
         }
-        removeCallbacks(hideControllerRunnable);
-        postDelayed(hideControllerRunnable, 3500);
+        cancelHideController();
+        scheduleHideController();
         if (getVideoWidth() > 0) {
             danmakuSwitchView.setVisibility(VISIBLE);
         }
@@ -435,8 +438,8 @@ public class BipPlayView extends ConstraintLayout {
     private final OnClickListener playItemClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            removeCallbacks(hideControllerRunnable);
-            postDelayed(hideControllerRunnable, 3500);
+            cancelHideController();
+            boolean scheduleHide = true;
             int vId = v.getId();
             if (vId == R.id.bip_play_view_play_pause) {
                 playOrPause();
@@ -444,8 +447,12 @@ public class BipPlayView extends ConstraintLayout {
                 setFullScreen(!isFullScreen);
             } else if (vId == R.id.bip_play_view_quality) {
                 if (currentVideoBean != null && currentVideoBean.getQualityBeans() != null && currentVideoBean.getQualityBeans().size() > 1) {
-                    hideController();
-                    showQualityWindow();
+                    if (isShowingQualityWindow()) {
+                        hideQualityWindow();
+                    } else {
+                        showQualityWindow();
+                        scheduleHide = false;
+                    }
                 } else {
                     LogUtil.e("BipPlayView", "Data not valid");
                 }
@@ -457,6 +464,9 @@ public class BipPlayView extends ConstraintLayout {
                 } else {
                     danmakuView.hide();
                 }
+            }
+            if (scheduleHide) {
+                scheduleHideController();
             }
         }
     };
@@ -672,51 +682,25 @@ public class BipPlayView extends ConstraintLayout {
         }
     }
 
-    ViewGroup qualityView;
-
     public void showQualityWindow() {
-        int videoWidth = getVideoWidth();
-        int videoHeight = getVideoHeight();
-        int qualityLayout;
-        int qualityItemLayout;
-        if (videoHeight > videoWidth) {
-            qualityLayout = R.layout.dlg_quality_select_portrait;
-            qualityItemLayout = R.layout.dlg_quality_portrait_item;
-        } else {
-            qualityLayout = R.layout.dlg_quality_select_landscape;
-            qualityItemLayout = R.layout.dlg_quality_landscape_item;
-        }
-        hideQualityWindow();
         if (currentVideoBean.getQualityBeans().size() <= 1) {
             return;
         }
-        qualityView = (ViewGroup) LayoutInflater.from(getContext()).inflate(qualityLayout, this, false);
-        for (int i = currentVideoBean.getQualityBeans().size() - 1; i >= 0; i--) {
-            VideoQualityBean videoQualityBean = currentVideoBean.getQualityBeans().get(i);
-            TextView itemView = (TextView) LayoutInflater.from(getContext()).inflate(qualityItemLayout, qualityView, false);
-            itemView.setText(videoQualityBean.getQuality());
-            if (i == currentVideoBean.getCurrentQualityIndex()) {
-                itemView.setSelected(true);
+        qualityRvAdapter.replaceAll(currentVideoBean.getQualityBeans());
+        qualityRvAdapter.itemClickListener = (position, qualityBean) -> {
+            currentVideoBean.setCurrentQualityIndex(position);
+            SettingConfig.setCurrentQuality(qualityBean.getQuality());
+            if (playViewListener != null) {
+                playViewListener.onQualityChangeClick();
             }
-            int finalI = i;
-            itemView.setOnClickListener(v -> {
-                hideQualityWindow();
-                currentVideoBean.setCurrentQualityIndex(finalI);
-                SettingConfig.setCurrentQuality(videoQualityBean.getQuality());
-                if (playViewListener != null) {
-                    playViewListener.onQualityChangeClick();
-                }
-            });
-            qualityView.addView(itemView);
-        }
-        addView(qualityView);
+            hideQualityWindow();
+        };
+        qualityRv.setVisibility(View.VISIBLE);
     }
 
     public void hideQualityWindow() {
-        if (qualityView != null) {
-            removeView(qualityView);
-            qualityView = null;
-        }
+        qualityRv.setVisibility(View.GONE);
+        scheduleHideController();
     }
 
     public PlayViewListener playViewListener;
@@ -890,7 +874,7 @@ public class BipPlayView extends ConstraintLayout {
         super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
         if (gainFocus) {
             showController();
-            removeCallbacks(hideControllerRunnable);
+            cancelHideController();
             getViewTreeObserver().removeOnGlobalFocusChangeListener(focusChangeListener);
             getViewTreeObserver().addOnGlobalFocusChangeListener(focusChangeListener);
             playPauseView.requestFocus();
@@ -924,5 +908,17 @@ public class BipPlayView extends ConstraintLayout {
             default:
                 return false;
         }
+    }
+
+    private void cancelHideController() {
+        removeCallbacks(hideControllerRunnable);
+    }
+
+    private void scheduleHideController() {
+        postDelayed(hideControllerRunnable, 4000);
+    }
+
+    private boolean isShowingQualityWindow() {
+        return qualityRv.getVisibility() == View.VISIBLE;
     }
 }
