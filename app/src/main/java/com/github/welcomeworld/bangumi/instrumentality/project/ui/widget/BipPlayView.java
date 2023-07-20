@@ -123,6 +123,8 @@ public class BipPlayView extends ConstraintLayout {
                     userSeeking = false;
                     fastForwardView.setVisibility(GONE);
                 }
+            } else if (isShowingQualityWindow() && qualityRv.indexOfChild(oldFocus) >= 0 && qualityRv.indexOfChild(newFocus) < 0) {
+                hideQualityWindow();
             }
         }
     };
@@ -893,6 +895,33 @@ public class BipPlayView extends ConstraintLayout {
         if (isFullScreen() && !hasFocus() && needHandleKey(event.getKeyCode())) {
             requestFocus();
             return true;
+        }
+        return false;
+    }
+
+    @Override
+    public View focusSearch(View focused, int direction) {
+        View next = super.focusSearch(focused, direction);
+        if (isFullScreen()) {
+            if (next == null || !recursiveLoopChildren(this, next)) {
+                return focused;
+            }
+        }
+        return next;
+    }
+
+    public boolean recursiveLoopChildren(ViewGroup parent, View target) {
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            final View child = parent.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                if (recursiveLoopChildren((ViewGroup) child, target)) {
+                    return true;
+                }
+            } else {
+                if (child == target) {
+                    return true;
+                }
+            }
         }
         return false;
     }
