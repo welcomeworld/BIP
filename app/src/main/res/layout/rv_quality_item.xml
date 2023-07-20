@@ -8,6 +8,7 @@
     android:letterSpacing="0.1"
     android:maxLines="1"
     android:padding="12dp"
+    android:focusable="true"
     android:textColor="@color/white_29b6f6"
     android:textSize="14sp"
     android:textStyle="bold"
