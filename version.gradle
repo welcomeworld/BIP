@@ -1,7 +1,7 @@
 ext {
     compile_version = 33
     lifecycle_version = "2.6.1"
-    exo_version = "2.19.0"
+    media3_version = "1.1.0"
     room_version = "2.5.2"
     devtool_version = "1.0.04"
     bipplayer_version = "1.0.35"

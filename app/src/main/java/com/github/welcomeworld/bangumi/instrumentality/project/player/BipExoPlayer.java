@@ -7,28 +7,30 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.Player;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.source.MergingMediaSource;
+import androidx.media3.exoplayer.util.EventLogger;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.BIPApp;
 import com.github.welcomeworld.bipplayer.BIPPlayer;
 import com.github.welcomeworld.bipplayer.BipDataSource;
 import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.MergingMediaSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.util.EventLogger;
 
 import java.io.FileDescriptor;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@OptIn(markerClass = UnstableApi.class)
 public class BipExoPlayer implements BIPPlayer {
     private final ExoPlayer exoPlayer;
     DefaultHttpDataSource.Factory httpFactory;

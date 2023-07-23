@@ -135,10 +135,10 @@ dependencies {
     //leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
     //exoplayer
-    implementation "com.google.android.exoplayer:exoplayer-core:$exo_version"
-    implementation "com.google.android.exoplayer:exoplayer-dash:$exo_version"
-    implementation "com.google.android.exoplayer:exoplayer-hls:$exo_version"
-    implementation "com.google.android.exoplayer:exoplayer-rtsp:$exo_version"
+    implementation "androidx.media3:media3-exoplayer:$media3_version"
+    implementation "androidx.media3:media3-exoplayer-dash:$media3_version"
+    implementation "androidx.media3:media3-exoplayer-hls:$media3_version"
+    implementation "androidx.media3:media3-exoplayer-rtsp:$media3_version"
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
