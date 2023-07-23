@@ -12,7 +12,8 @@ public class OpenSourceConstant {
             "okhttp",
             "ffmpeg 4.2.4",
             "leakcanary 2.9.1",
-            "soundTouch 2.3.1"
+            "soundTouch 2.3.1",
+            "bilibili-API-collect"
     };
     public static final String[] openSourceDesc = {
             "https://github.com/bumptech/glide",
@@ -25,6 +26,7 @@ public class OpenSourceConstant {
             "https://github.com/square/okhttp",
             "https://git.ffmpeg.org/ffmpeg.git",
             "https://github.com/square/leakcanary",
-            "https://codeberg.org/soundtouch/soundtouch"
+            "https://codeberg.org/soundtouch/soundtouch",
+            "https://github.com/SocialSisterYi/bilibili-API-collect"
     };
 }
