@@ -2,7 +2,6 @@ package com.github.welcomeworld.bangumi.instrumentality.project.source.bili;
 
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.CookieManager;
 
 import androidx.annotation.NonNull;
@@ -226,8 +225,10 @@ public class BiliParser extends BaseParser {
             VideoUrlBean.DataBean.DashBean dashData = urlResponse.body().getData().getDash();
             //select the best audio
             VideoUrlBean.DataBean.DashBean.AudioBean bestAudioBean = dashData.getAudio().get(0);
+            boolean useLowAudio = Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
             for (VideoUrlBean.DataBean.DashBean.AudioBean audioBean : dashData.getAudio()) {
-                if (audioBean.getId() > bestAudioBean.getId()) {
+                if ((useLowAudio && audioBean.getId() < bestAudioBean.getId() ||
+                        (!useLowAudio) && audioBean.getId() > bestAudioBean.getId())) {
                     bestAudioBean = audioBean;
                 }
             }
