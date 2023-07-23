@@ -12,7 +12,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentSettingsBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SimpleContainerActivity;
-import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.devbase.utils.KVUtil;
 
 public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> implements View.OnClickListener {
@@ -20,6 +19,8 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
     private static final String SETTING_BACKUP_UPDATE = "setting_backup_update";
     private static final String SETTING_MEDIACODEC = "setting_mediacodec";
     private static final String SETTING_EXOPLAYER = "setting_exoplayer";
+
+    private static final String SETTING_FULL_DEFAULT = "setting_full_default";
 
 
     @Override
@@ -29,12 +30,14 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
         getVB().settingVersionName.setText(BuildConfig.VERSION_NAME);
         getVB().settingVersion.setOnClickListener(this);
         getVB().settingOpensource.setOnClickListener(this);
-        getVB().settingBackupCheck.setChecked(KVUtil.getBoolean(SETTING_BACKUP_UPDATE));
-        getVB().settingBackupCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_BACKUP_UPDATE, isChecked));
-        getVB().settingMediaCodecCheck.setChecked(KVUtil.getBoolean(SETTING_MEDIACODEC));
-        getVB().settingMediaCodecCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_MEDIACODEC, isChecked));
-        getVB().settingExoPlayerCheck.setChecked(KVUtil.getBoolean(SETTING_EXOPLAYER));
-        getVB().settingExoPlayerCheck.setOnCheckedChangeListener((buttonView, isChecked) -> KVUtil.putBoolean(SETTING_EXOPLAYER, isChecked));
+        getVB().settingBackup.setSelected(KVUtil.getBoolean(SETTING_BACKUP_UPDATE));
+        getVB().settingBackup.setOnClickListener(this);
+        getVB().settingMediaCodec.setSelected(KVUtil.getBoolean(SETTING_MEDIACODEC));
+        getVB().settingMediaCodec.setOnClickListener(this);
+        getVB().settingExoPlayer.setSelected(KVUtil.getBoolean(SETTING_EXOPLAYER));
+        getVB().settingExoPlayer.setOnClickListener(this);
+        getVB().settingFullDefault.setSelected(KVUtil.getBoolean(SETTING_FULL_DEFAULT));
+        getVB().settingFullDefault.setOnClickListener(this);
         getVB().settingLogout.setVisibility(BiliParser.checkLogin() ? View.VISIBLE : View.GONE);
         getVB().settingLogout.setOnClickListener(this);
     }
@@ -52,6 +55,18 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
         } else if (id == R.id.setting_logout) {
             BiliParser.clearLoginStatus();
             getVB().settingLogout.setVisibility(View.GONE);
+        } else if (id == R.id.setting_exoPlayer) {
+            view.setSelected(!view.isSelected());
+            KVUtil.putBoolean(SETTING_EXOPLAYER, view.isSelected());
+        } else if (id == R.id.setting_backup) {
+            view.setSelected(!view.isSelected());
+            KVUtil.putBoolean(SETTING_BACKUP_UPDATE, view.isSelected());
+        } else if (id == R.id.setting_mediaCodec) {
+            view.setSelected(!view.isSelected());
+            KVUtil.putBoolean(SETTING_MEDIACODEC, view.isSelected());
+        } else if (id == R.id.setting_full_default) {
+            view.setSelected(!view.isSelected());
+            KVUtil.putBoolean(SETTING_FULL_DEFAULT, view.isSelected());
         }
     }
 
@@ -61,5 +76,9 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
 
     public static boolean useExoPlayer() {
         return KVUtil.getBoolean(SETTING_EXOPLAYER);
+    }
+
+    public static boolean fullDefault() {
+        return KVUtil.getBoolean(SETTING_FULL_DEFAULT);
     }
 }
