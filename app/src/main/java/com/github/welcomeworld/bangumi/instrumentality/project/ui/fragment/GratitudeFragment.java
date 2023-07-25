@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.GratitudeRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentGratitudeBinding;
-import com.github.welcomeworld.devbase.utils.ScreenUtil;
 
 public class GratitudeFragment extends BaseFragment<FragmentGratitudeBinding> {
     GratitudeRecyclerViewAdapter recyclerViewAdapter;
@@ -17,7 +16,6 @@ public class GratitudeFragment extends BaseFragment<FragmentGratitudeBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getVB().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(view.getContext());
         recyclerViewAdapter = new GratitudeRecyclerViewAdapter();
         getVB().gratitudeRecyclerView.setAdapter(recyclerViewAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getVB().gratitudeRecyclerView.getContext());

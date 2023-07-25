@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
@@ -16,6 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +35,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.Setti
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.VideoPlayViewModel;
-import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
@@ -55,7 +56,6 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(VideoPlayViewModel.class);
         registerSomething();
-        getViewBinding().videoPlayTopSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(this);
         viewModel.setSelectSourceIndex(getIntent().getIntExtra(EXTRA_SOURCE_SELECT_INDEX, 0));
         viewModel.setSelectVideoIndex(getIntent().getIntExtra(EXTRA_VIDEO_TARGET_INDEX, 0));
         List<VideoListBean> videoListBeans = parseVideoListFromIntent();
@@ -192,16 +192,15 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         }
     }
 
-    @Override
     public void refreshSystemUIVisibility() {
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         if (getViewBinding().videoPlayView.isFullScreen()) {
-            getViewBinding().videoPlayTopSpace.setVisibility(View.GONE);
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+            controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            controller.hide(WindowInsetsCompat.Type.systemBars());
         } else {
-            getViewBinding().videoPlayTopSpace.setVisibility(View.VISIBLE);
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-            getWindow().setStatusBarColor(Color.BLACK);
+            WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
+            controller.show(WindowInsetsCompat.Type.systemBars());
         }
     }
 

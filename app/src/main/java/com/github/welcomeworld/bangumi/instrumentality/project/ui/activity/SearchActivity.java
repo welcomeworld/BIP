@@ -13,7 +13,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.databinding.Activ
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.ListActionWrapper;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.SearchViewModel;
-import com.github.welcomeworld.devbase.utils.ScreenUtil;
 
 import java.util.List;
 
@@ -36,7 +35,6 @@ public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
                 getViewBinding().searchResultSwipecontainer.setLoading(false);
             }
         });
-        getViewBinding().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(this);
         getViewBinding().searchInput.setOnEditorActionListener((v, actionId, event) -> {
             getViewBinding().searchResultSwipecontainer.setRefreshing(true);
             viewModel.setSearchText(getViewBinding().searchInput.getText().toString(), true);

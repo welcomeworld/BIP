@@ -18,7 +18,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.adapter.DownloadR
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentDownloadBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadInfoConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.NormalCustomDialog;
-import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 public class DownloadFragment extends BaseFragment<FragmentDownloadBinding> {
@@ -33,7 +32,6 @@ public class DownloadFragment extends BaseFragment<FragmentDownloadBinding> {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        getVB().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(view.getContext());
         getVB().downloadRv.setAdapter(adapter);
         int listColumn = getResources().getInteger(R.integer.list_column);
         if (listColumn == 1) {
