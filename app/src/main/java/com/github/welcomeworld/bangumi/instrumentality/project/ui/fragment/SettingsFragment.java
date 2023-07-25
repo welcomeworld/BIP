@@ -26,7 +26,6 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        getVB().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(view.getContext());
         getVB().settingVersionName.setText(BuildConfig.VERSION_NAME);
         getVB().settingVersion.setOnClickListener(this);
         getVB().settingOpensource.setOnClickListener(this);

@@ -9,18 +9,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.BatteryManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityLocalPlayBinding;
@@ -63,6 +63,10 @@ public class LocalPlayActivity extends BaseActivity<ActivityLocalPlayBinding> {
             bipPlayer.setDataSource(this, uri);
             bipPlayer.prepareAsync();
             getViewBinding().bipPlayerView.setOnPreparedListener(bp -> getViewBinding().bipPlayerView.setFullScreen(true));
+            WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+            controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            controller.hide(WindowInsetsCompat.Type.systemBars());
         } else {
             ToastUtil.showToast(R.string.uri_null_tip);
             finish();
@@ -84,9 +88,9 @@ public class LocalPlayActivity extends BaseActivity<ActivityLocalPlayBinding> {
             String[] filePathColumn = new String[]{"_display_name"};
             Cursor cursor = contentResolver.query(uri, filePathColumn, (String) null, (String[]) null, (String) null);
             if (cursor != null && cursor.moveToFirst()) {
-                String tempDisplayName = cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
-                if (!TextUtils.isEmpty(tempDisplayName)) {
-                    name = tempDisplayName;
+                int pathIndex = cursor.getColumnIndex(filePathColumn[0]);
+                if (pathIndex > 0 && !TextUtils.isEmpty(cursor.getString(pathIndex))) {
+                    name = cursor.getString(pathIndex);
                 }
             }
             if (cursor != null) {
@@ -109,26 +113,6 @@ public class LocalPlayActivity extends BaseActivity<ActivityLocalPlayBinding> {
         super.onDestroy();
         unregisterSomething();
         bipPlayer.release();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
-    public void refreshSystemUIVisibility() {
-        if (getViewBinding().bipPlayerView.isFullScreen()) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(Color.TRANSPARENT);
-            }
-        } else {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(Color.BLACK);
-            }
-        }
     }
 
     private void registerSomething() {

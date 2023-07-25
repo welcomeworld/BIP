@@ -68,7 +68,6 @@ public class WebUtil {
             }
             parentView.addView(view, COVER_SCREEN_PARAMS);
             parentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-            parentView.setVisibility(View.VISIBLE);
             customView = view;
             customCallback = callback;
         }
@@ -83,7 +82,6 @@ public class WebUtil {
                 return;
             }
             parentView.removeView(customView);
-            parentView.setVisibility(View.GONE);
             customView = null;
             customCallback.onCustomViewHidden();
         }
@@ -97,14 +95,14 @@ public class WebUtil {
             if (uri.getHost().equalsIgnoreCase("feedback") || uri.getHost().equalsIgnoreCase("assistant")) {
                 view.loadUrl("https://github.com/welcomeworld/SimpleBili/issues");
                 return true;
-            }else if(!uri.getHost().equalsIgnoreCase("http") && uri.getHost().equalsIgnoreCase("https")){
+            } else if (!uri.getHost().equalsIgnoreCase("http") && uri.getHost().equalsIgnoreCase("https")) {
                 handleAppLink();
                 return true;
             }
             return false;
         }
-        
-        private void handleAppLink(){
+
+        private void handleAppLink() {
             //ignore
         }
     }

@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityBrowserBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.WebUtil;
-import com.github.welcomeworld.devbase.utils.ScreenUtil;
 
 public class BrowserActivity extends BaseActivity<ActivityBrowserBinding> {
     public static final String EXTRA_URL = "extra_url";
@@ -15,9 +14,8 @@ public class BrowserActivity extends BaseActivity<ActivityBrowserBinding> {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getViewBinding().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(this);
         String mUrl = getIntent().getStringExtra(EXTRA_URL);
-        WebUtil.initNormalWebView(getViewBinding().browserWebview, getViewBinding().browserWebFull);
+        WebUtil.initNormalWebView(getViewBinding().browserWebview, findViewById(android.R.id.content));
         getViewBinding().browserWebview.loadUrl(mUrl);
     }
 

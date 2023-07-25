@@ -12,7 +12,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.MainViewPagerAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityMainBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
-import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
@@ -35,7 +34,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getViewBinding().topSpace.getLayoutParams().height = ScreenUtil.getStatusBarHeight(this);
         getViewBinding().mainSearch.setOnClickListener(clickListener);
         getViewBinding().mainBottomHome.setOnClickListener(clickListener);
         getViewBinding().mainBottomBangumi.setOnClickListener(clickListener);
