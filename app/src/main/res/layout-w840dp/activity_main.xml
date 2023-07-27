@@ -38,7 +38,6 @@
         android:id="@+id/main_view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/color_E4EAF8"
         android:nextFocusLeft="@id/main_search"
         android:nextFocusDown="@id/main_bottom_home"
         app:layout_constraintBottom_toTopOf="@id/main_bottom_home"
