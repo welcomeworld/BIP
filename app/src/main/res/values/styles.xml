@@ -10,6 +10,7 @@
         </item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/color_white</item>
+        <item name="android:windowBackground">@color/color_E4EAF8</item>
     </style>
 
     <style name="videoSeekTheme">
