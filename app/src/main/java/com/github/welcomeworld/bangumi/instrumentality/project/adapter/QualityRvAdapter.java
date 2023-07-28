@@ -41,9 +41,24 @@ public class QualityRvAdapter extends RecyclerView.Adapter<QualityRvAdapter.Qual
 
     @SuppressLint("NotifyDataSetChanged")
     public void replaceAll(List<VideoQualityBean> data) {
-        this.data.clear();
-        this.data.addAll(data);
-        notifyDataSetChanged();
+        if (isDataDiff(data)) {
+            this.data.clear();
+            this.data.addAll(data);
+            notifyDataSetChanged();
+        }
+    }
+
+    private boolean isDataDiff(List<VideoQualityBean> data) {
+        if (data.size() == this.data.size()) {
+            for (int qualityIndex = 0; qualityIndex < data.size(); qualityIndex++) {
+                if (!data.get(qualityIndex).getQuality().equals(this.data.get(qualityIndex).getQuality())) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
 
     static class QualityHolder extends RecyclerView.ViewHolder {
