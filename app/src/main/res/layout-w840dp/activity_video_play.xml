@@ -5,6 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:id="@+id/play_view_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintWidth_percent="0.4">
+
+        <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView
+            android:id="@+id/video_play_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_black"
+            android:focusable="true" />
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/video_play_des_rv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/play_view_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/play_view_container"
+        app:layout_constraintTop_toTopOf="@id/play_view_container"
+        app:layout_constraintVertical_bias="1" />
+
     <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.HideEndRecyclerView
         android:id="@+id/video_play_source_rv"
         android:layout_width="match_parent"
@@ -12,90 +43,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/play_view_container" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/video_comment_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="56dp"
-        android:backgroundTint="@color/color_white"
-        android:src="@drawable/ic_video_comment"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ContentDescription"
-        tools:visibility="visible" />
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/video_bottom_comment"
+    <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.HideEndRecyclerView
+        android:id="@+id/bottom_comment_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:elevation="12dp"
+        android:background="@color/color_white"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/play_view_container"
-        tools:visibility="visible">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/video_bottom_comment_behavior_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_bottom_sheet"
-            android:elevation="12dp"
-            android:orientation="vertical"
-            app:behavior_hideable="true"
-            app:layout_behavior="@string/bottom_sheet_behavior"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/play_view_container">
-
-            <ImageButton
-                android:id="@+id/bottom_comment_header"
-                android:layout_width="40dp"
-                android:layout_height="4dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:contentDescription="@string/comment_header"
-                android:src="@drawable/ic_bottom_comment_header"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.HideEndRecyclerView
-                android:id="@+id/bottom_comment_rv"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="40dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/rv_comment_item" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <FrameLayout
-        android:id="@+id/play_view_container"
-        android:layout_width="360dp"
-        android:layout_height="203dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0">
-
-        <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView
-            android:id="@+id/video_play_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/color_black"
-            android:elevation="8dp"
-            android:focusable="true"
-            android:foreground="@drawable/fg_normal_focusable"
-            android:nextFocusDown="@id/bip_play_view_play_pause"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0" />
-    </FrameLayout>
+        tools:listitem="@layout/rv_comment_item" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

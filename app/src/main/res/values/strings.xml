@@ -52,4 +52,6 @@
     <string name="logout">退出登录</string>
     <string name="play_item_index">第%d话</string>
     <string name="full_default">详情页默认全屏</string>
+    <string name="no_comment">没有评论啊</string>
+    <string name="comment">评论</string>
 </resources>
