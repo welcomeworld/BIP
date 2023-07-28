@@ -234,6 +234,14 @@ public class BipPlayView extends ConstraintLayout {
         qualityRv = itemView.findViewById(R.id.bip_play_view_quality_rv);
         qualityRv.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true));
         qualityRv.setAdapter(qualityRvAdapter);
+        qualityRvAdapter.itemClickListener = (position, qualityBean) -> {
+            currentVideoBean.setCurrentQualityIndex(position);
+            SettingConfig.setCurrentQuality(qualityBean.getQuality());
+            if (playViewListener != null) {
+                playViewListener.onQualityChangeClick();
+            }
+            hideQualityWindow();
+        };
     }
 
     SurfaceHolder.Callback surfaceHolderCallback = new SurfaceHolder.Callback() {
@@ -689,14 +697,6 @@ public class BipPlayView extends ConstraintLayout {
             return;
         }
         qualityRvAdapter.replaceAll(currentVideoBean.getQualityBeans());
-        qualityRvAdapter.itemClickListener = (position, qualityBean) -> {
-            currentVideoBean.setCurrentQualityIndex(position);
-            SettingConfig.setCurrentQuality(qualityBean.getQuality());
-            if (playViewListener != null) {
-                playViewListener.onQualityChangeClick();
-            }
-            hideQualityWindow();
-        };
         qualityRv.setVisibility(View.VISIBLE);
     }
 
