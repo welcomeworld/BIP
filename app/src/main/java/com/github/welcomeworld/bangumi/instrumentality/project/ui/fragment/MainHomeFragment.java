@@ -40,7 +40,17 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
         if (listColumn == 1) {
             getVB().mainHomeRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         } else {
-            getVB().mainHomeRv.setLayoutManager(new GridLayoutManager(getActivity(), listColumn));
+            GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), listColumn);
+            layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (position == adapter.getItemCount() - 1) {
+                        return listColumn;
+                    }
+                    return 1;
+                }
+            });
+            getVB().mainHomeRv.setLayoutManager(layoutManager);
         }
         getVB().mainHomeRv.setAdapter(adapter);
         getVB().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));

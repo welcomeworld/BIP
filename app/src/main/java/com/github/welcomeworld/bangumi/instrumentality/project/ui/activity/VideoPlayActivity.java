@@ -20,11 +20,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ConcatAdapter;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.CommentRecyclerViewAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.RelatedRVAdapter;
+import com.github.welcomeworld.bangumi.instrumentality.project.adapter.VideoDescRVAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.VideoSourceItemAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityVideoPlayBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.DataActionWrapper;
@@ -35,7 +38,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.Setti
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.VideoPlayViewModel;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.github.welcomeworld.devbase.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,8 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
 
     VideoPlayViewModel viewModel = null;
     VideoSourceItemAdapter sourceAdapter = new VideoSourceItemAdapter();
+
+    VideoDescRVAdapter descRVAdapter = new VideoDescRVAdapter();
     CommentRecyclerViewAdapter commentAdapter = new CommentRecyclerViewAdapter();
 
     RelatedRVAdapter relatedRVAdapter = new RelatedRVAdapter();
@@ -68,7 +73,6 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         getViewBinding().bottomCommentRv.setEndSize(76);
         getViewBinding().bottomCommentRv.setAdapter(commentAdapter);
         getViewBinding().bottomCommentRv.setLayoutManager(new LinearLayoutManager(this));
-        getViewBinding().videoCommentButton.setOnClickListener(v -> showBottomComment());
         getViewBinding().videoPlayView.setBipPlayer(viewModel.getPlayer());
         getViewBinding().videoPlayView.playViewListener = new BipPlayView.PlayViewListener() {
             private int normalOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
@@ -108,7 +112,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                 refreshSystemUIVisibility();
             }
         };
-        sourceAdapter.setActionClickListener(new VideoSourceItemAdapter.ActionClickListener() {
+        descRVAdapter.setActionClickListener(new VideoDescRVAdapter.ActionClickListener() {
             @Override
             public void onFavClick() {
                 viewModel.changeFavStatus();
@@ -128,6 +132,19 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             public void onRefreshClick() {
                 viewModel.refreshVideo();
             }
+
+            @Override
+            public void onCommentClick() {
+                if (viewModel.hasComment()) {
+                    if (isCommentShowing()) {
+                        hideComment();
+                    } else {
+                        showComment();
+                    }
+                } else {
+                    ToastUtil.showToast(R.string.no_comment);
+                }
+            }
         });
         sourceAdapter.setItemClickListener((rv, sourcePosition, position) -> viewModel.changeSelectItem(sourcePosition, position));
         relatedRVAdapter.itemClickListener = videoListBean -> {
@@ -138,8 +155,27 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN, videoListBeans1);
             IntentUtil.intentToVideoPlay(VideoPlayActivity.this, bundle);
         };
-        getViewBinding().videoPlaySourceRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        getViewBinding().videoPlaySourceRv.setAdapter(new ConcatAdapter(sourceAdapter, relatedRVAdapter));
+        boolean desSplit = getViewBinding().videoPlayDesRv != null;
+        if (desSplit) {
+            getViewBinding().videoPlayDesRv.setLayoutManager(new LinearLayoutManager(this));
+            getViewBinding().videoPlayDesRv.setAdapter(descRVAdapter);
+            int listColumn = getResources().getInteger(R.integer.list_column);
+            GridLayoutManager layoutManager = new GridLayoutManager(this,listColumn);
+            layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if(position < sourceAdapter.getItemCount()||position == (sourceAdapter.getItemCount()+relatedRVAdapter.getItemCount()-1)){
+                        return listColumn;
+                    }
+                    return 1;
+                }
+            });
+            getViewBinding().videoPlaySourceRv.setLayoutManager(layoutManager);
+            getViewBinding().videoPlaySourceRv.setAdapter(new ConcatAdapter(sourceAdapter, relatedRVAdapter));
+        } else {
+            getViewBinding().videoPlaySourceRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+            getViewBinding().videoPlaySourceRv.setAdapter(new ConcatAdapter(descRVAdapter, sourceAdapter, relatedRVAdapter));
+        }
         viewModel.getVideoListBeanLive().observe(this, videoListBeanListLiveWrapper -> sourceAdapter.setData(videoListBeanListLiveWrapper.getData()));
         viewModel.getCurrentVideoBeanLive().observe(this, videoBean -> getViewBinding().videoPlayView.setCurrentVideoBean(videoBean));
         viewModel.getCommentDataLive().observe(this, commentDataWrapper -> {
@@ -150,11 +186,13 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             }
         });
         viewModel.getParentCommentLive().observe(this, parentComment -> commentAdapter.onLoadSubCommentSuccess(parentComment));
-        viewModel.getCommentLive().observe(this, hasComment -> getViewBinding().videoCommentButton.setVisibility(hasComment ? View.VISIBLE : View.GONE));
-        viewModel.getFavLive().observe(this, isFav -> sourceAdapter.setFav(isFav));
+        viewModel.getFavLive().observe(this, isFav -> descRVAdapter.setFav(isFav));
         viewModel.getSelectSourceIndexLive().observe(this, selectSourceIndex -> sourceAdapter.setSelectSourceIndex(selectSourceIndex));
         viewModel.getRelatedVideoLive().observe(this, relatedVideoList -> relatedRVAdapter.replaceAll(relatedVideoList));
-        viewModel.getCurrentVideoListBeanLive().observe(this, videoListBean -> viewModel.updateRelatedVideos(videoListBean));
+        viewModel.getCurrentVideoListBeanLive().observe(this, videoListBean -> {
+            descRVAdapter.setData(videoListBean);
+            viewModel.updateRelatedVideos(videoListBean);
+        });
         viewModel.initCreate();
         getViewBinding().videoPlayView.setFullScreen(SettingsFragment.fullDefault());
     }
@@ -187,6 +225,8 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     public void onBackPressed() {
         if (getViewBinding().videoPlayView.isFullScreen()) {
             getViewBinding().videoPlayView.setFullScreen(false);
+        } else if (isCommentShowing()) {
+            hideComment();
         } else {
             super.onBackPressed();
         }
@@ -228,12 +268,6 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         }
     };
 
-    private void showBottomComment() {
-        getViewBinding().videoBottomComment.setVisibility(View.VISIBLE);
-        BottomSheetBehavior.from(getViewBinding().videoBottomCommentBehaviorView).setState(BottomSheetBehavior.STATE_EXPANDED);
-        viewModel.loadComment();
-    }
-
     private List<VideoListBean> parseVideoListFromIntent() {
         List<VideoListBean> videoListBeans = getIntent().getParcelableArrayListExtra(EXTRA_VIDEO_LIST_BEAN);
         Uri videoUri = getIntent().getData();
@@ -257,5 +291,18 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     private boolean isTV() {
         UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
         return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;
+    }
+
+    private boolean isCommentShowing() {
+        return getViewBinding().bottomCommentRv.getVisibility() == View.VISIBLE;
+    }
+
+    private void showComment() {
+        getViewBinding().bottomCommentRv.setVisibility(View.VISIBLE);
+        viewModel.loadComment();
+    }
+
+    private void hideComment() {
+        getViewBinding().bottomCommentRv.setVisibility(View.GONE);
     }
 }
