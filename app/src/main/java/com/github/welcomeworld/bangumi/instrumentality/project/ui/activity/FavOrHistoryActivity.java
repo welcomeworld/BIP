@@ -18,10 +18,10 @@ public class FavOrHistoryActivity extends BaseActivity<ActivityFavHistoryBinding
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewPagerAdapter = new FavHistoryPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        getViewBinding().mainViewPager.setAdapter(viewPagerAdapter);
-        getViewBinding().mainViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(getViewBinding().topTab));
-        getViewBinding().topTab.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(getViewBinding().mainViewPager));
+        getVB().mainViewPager.setAdapter(viewPagerAdapter);
+        getVB().mainViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(getVB().topTab));
+        getVB().topTab.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(getVB().mainViewPager));
         int pageIndex = getIntent().getIntExtra(EXTRA_PAGE_INDEX, 0);
-        getViewBinding().mainViewPager.setCurrentItem(pageIndex);
+        getVB().mainViewPager.setCurrentItem(pageIndex);
     }
 }

@@ -29,26 +29,26 @@ public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
             List<VideoListBean> result = homeLiveWrapper.getData();
             if (homeLiveWrapper.getAction() == ListActionWrapper.REFRESH) {
                 adapter.replaceAll(result);
-                getViewBinding().searchResultSwipecontainer.setRefreshing(false);
+                getVB().searchResultSwipecontainer.setRefreshing(false);
             } else if (homeLiveWrapper.getAction() == ListActionWrapper.MORE) {
                 adapter.addAll(result);
-                getViewBinding().searchResultSwipecontainer.setLoading(false);
+                getVB().searchResultSwipecontainer.setLoading(false);
             }
         });
-        getViewBinding().searchInput.setOnEditorActionListener((v, actionId, event) -> {
-            getViewBinding().searchResultSwipecontainer.setRefreshing(true);
-            viewModel.setSearchText(getViewBinding().searchInput.getText().toString(), true);
+        getVB().searchInput.setOnEditorActionListener((v, actionId, event) -> {
+            getVB().searchResultSwipecontainer.setRefreshing(true);
+            viewModel.setSearchText(getVB().searchInput.getText().toString(), true);
             return true;
         });
-        getViewBinding().searchResultRecyclerview.setAdapter(adapter);
+        getVB().searchResultRecyclerview.setAdapter(adapter);
         int listColumn = getResources().getInteger(R.integer.list_column);
         if (listColumn == 1) {
-            getViewBinding().searchResultRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+            getVB().searchResultRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         } else {
-            getViewBinding().searchResultRecyclerview.setLayoutManager(new GridLayoutManager(this, listColumn));
+            getVB().searchResultRecyclerview.setLayoutManager(new GridLayoutManager(this, listColumn));
         }
-        getViewBinding().searchResultSwipecontainer.setOnRefreshListener(() -> viewModel.refresh());
-        getViewBinding().searchResultSwipecontainer.setOnLoadListener(() -> viewModel.loadMore());
-        getViewBinding().cancelButton.setOnClickListener(v -> finish());
+        getVB().searchResultSwipecontainer.setOnRefreshListener(() -> viewModel.refresh());
+        getVB().searchResultSwipecontainer.setOnLoadListener(() -> viewModel.loadMore());
+        getVB().cancelButton.setOnClickListener(v -> finish());
     }
 }

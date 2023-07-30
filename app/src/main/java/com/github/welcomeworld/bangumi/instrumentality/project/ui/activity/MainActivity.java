@@ -21,11 +21,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private final View.OnClickListener clickListener = view -> {
         int id = view.getId();
         if (id == R.id.main_bottom_home) {
-            getViewBinding().mainViewPager.setCurrentItem(0);
+            getVB().mainViewPager.setCurrentItem(0);
         } else if (id == R.id.main_bottom_bangumi) {
-            getViewBinding().mainViewPager.setCurrentItem(1);
+            getVB().mainViewPager.setCurrentItem(1);
         } else if (id == R.id.main_bottom_mine) {
-            getViewBinding().mainViewPager.setCurrentItem(2);
+            getVB().mainViewPager.setCurrentItem(2);
         } else if (id == R.id.main_search) {
             IntentUtil.intentToSearch(MainActivity.this, null);
         }
@@ -34,13 +34,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getViewBinding().mainSearch.setOnClickListener(clickListener);
-        getViewBinding().mainBottomHome.setOnClickListener(clickListener);
-        getViewBinding().mainBottomBangumi.setOnClickListener(clickListener);
-        getViewBinding().mainBottomMine.setOnClickListener(clickListener);
-        getViewBinding().mainViewPager.setAdapter(viewPagerAdapter);
-        getViewBinding().mainViewPager.setOffscreenPageLimit(2);
-        getViewBinding().mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        getVB().mainSearch.setOnClickListener(clickListener);
+        getVB().mainBottomHome.setOnClickListener(clickListener);
+        getVB().mainBottomBangumi.setOnClickListener(clickListener);
+        getVB().mainBottomMine.setOnClickListener(clickListener);
+        getVB().mainViewPager.setAdapter(viewPagerAdapter);
+        getVB().mainViewPager.setOffscreenPageLimit(2);
+        getVB().mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -48,9 +48,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
             @Override
             public void onPageSelected(int position) {
-                getViewBinding().mainBottomHome.setSelected(position == 0);
-                getViewBinding().mainBottomBangumi.setSelected(position == 1);
-                getViewBinding().mainBottomMine.setSelected(position == 2);
+                getVB().mainBottomHome.setSelected(position == 0);
+                getVB().mainBottomBangumi.setSelected(position == 1);
+                getVB().mainBottomMine.setSelected(position == 2);
             }
 
             @Override
@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
             }
         });
-        getViewBinding().mainBottomHome.setSelected(true);
+        getVB().mainBottomHome.setSelected(true);
     }
 
     @Override

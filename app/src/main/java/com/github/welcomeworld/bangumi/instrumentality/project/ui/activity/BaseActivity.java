@@ -59,7 +59,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         return false;
     }
 
-    public VB getViewBinding() {
+    public VB getVB() {
         return viewBinding;
     }
 }
