@@ -55,14 +55,14 @@ public class LocalPlayActivity extends BaseActivity<ActivityLocalPlayBinding> {
         Uri uri = getIntent().getData();
         if (uri != null) {
             initPlayer();
-            getViewBinding().bipPlayerView.setBipPlayer(bipPlayer);
+            getVB().bipPlayerView.setBipPlayer(bipPlayer);
             VideoBean currentVideoBean = new VideoBean();
             currentVideoBean.setTitle(guessName(this, uri));
-            getViewBinding().bipPlayerView.setCurrentVideoBean(currentVideoBean);
+            getVB().bipPlayerView.setCurrentVideoBean(currentVideoBean);
             LogUtil.e("BIPPlayer", "local play" + uri);
             bipPlayer.setDataSource(this, uri);
             bipPlayer.prepareAsync();
-            getViewBinding().bipPlayerView.setOnPreparedListener(bp -> getViewBinding().bipPlayerView.setFullScreen(true));
+            getVB().bipPlayerView.setOnPreparedListener(bp -> getVB().bipPlayerView.setFullScreen(true));
             WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
             WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
             controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
@@ -133,10 +133,10 @@ public class LocalPlayActivity extends BaseActivity<ActivityLocalPlayBinding> {
                 case Intent.ACTION_BATTERY_CHANGED:
                     int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
                     int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
-                    getViewBinding().bipPlayerView.setBattery(level * 100 / scale);
+                    getVB().bipPlayerView.setBattery(level * 100 / scale);
                     break;
                 case Intent.ACTION_TIME_TICK:
-                    getViewBinding().bipPlayerView.setTime();
+                    getVB().bipPlayerView.setTime();
                     break;
             }
         }
@@ -146,8 +146,8 @@ public class LocalPlayActivity extends BaseActivity<ActivityLocalPlayBinding> {
     public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
         super.onMultiWindowModeChanged(isInMultiWindowMode);
         if (isInMultiWindowMode) {
-            if (getViewBinding().bipPlayerView.isFullScreen()) {
-                getViewBinding().bipPlayerView.setFullScreen(false);
+            if (getVB().bipPlayerView.isFullScreen()) {
+                getVB().bipPlayerView.setFullScreen(false);
             }
         }
     }

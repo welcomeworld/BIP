@@ -15,14 +15,14 @@ public class BrowserActivity extends BaseActivity<ActivityBrowserBinding> {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String mUrl = getIntent().getStringExtra(EXTRA_URL);
-        WebUtil.initNormalWebView(getViewBinding().browserWebview, findViewById(android.R.id.content));
-        getViewBinding().browserWebview.loadUrl(mUrl);
+        WebUtil.initNormalWebView(getVB().browserWebview, findViewById(android.R.id.content));
+        getVB().browserWebview.loadUrl(mUrl);
     }
 
     @Override
     public void onBackPressed() {
-        if (getViewBinding().browserWebview.canGoBack()) {
-            getViewBinding().browserWebview.goBack();
+        if (getVB().browserWebview.canGoBack()) {
+            getVB().browserWebview.goBack();
         } else {
             super.onBackPressed();
         }

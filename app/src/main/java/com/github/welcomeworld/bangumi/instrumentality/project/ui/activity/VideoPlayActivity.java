@@ -70,11 +70,11 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         }
         viewModel.changeVideoListBeans(videoListBeans);
         commentAdapter.setLoadSubCommentCallback(parentComment -> viewModel.loadSubComment(parentComment));
-        getViewBinding().bottomCommentRv.setEndSize(76);
-        getViewBinding().bottomCommentRv.setAdapter(commentAdapter);
-        getViewBinding().bottomCommentRv.setLayoutManager(new LinearLayoutManager(this));
-        getViewBinding().videoPlayView.setBipPlayer(viewModel.getPlayer());
-        getViewBinding().videoPlayView.playViewListener = new BipPlayView.PlayViewListener() {
+        getVB().bottomCommentRv.setEndSize(76);
+        getVB().bottomCommentRv.setAdapter(commentAdapter);
+        getVB().bottomCommentRv.setLayoutManager(new LinearLayoutManager(this));
+        getVB().videoPlayView.setBipPlayer(viewModel.getPlayer());
+        getVB().videoPlayView.playViewListener = new BipPlayView.PlayViewListener() {
             private int normalOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 
             @Override
@@ -90,21 +90,21 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                     ViewGroup contentView = findViewById(android.R.id.content);
                     parentWidth = contentView.getWidth();
                     parentHeight = contentView.getHeight();
-                    getViewBinding().videoPlayView.presetSurfaceSize(parentWidth, parentHeight);
-                    getViewBinding().playViewContainer.removeAllViews();
-                    contentView.addView(getViewBinding().videoPlayView);
-                    int targetOrientation = getViewBinding().videoPlayView.videoPreferOrientation();
+                    getVB().videoPlayView.presetSurfaceSize(parentWidth, parentHeight);
+                    getVB().playViewContainer.removeAllViews();
+                    contentView.addView(getVB().videoPlayView);
+                    int targetOrientation = getVB().videoPlayView.videoPreferOrientation();
                     normalOrientation = getRequestedOrientation();
                     if (normalOrientation != targetOrientation && !isTV()) {
                         setRequestedOrientation(targetOrientation);
                     }
                 } else {
-                    parentWidth = getViewBinding().playViewContainer.getWidth();
-                    parentHeight = getViewBinding().playViewContainer.getHeight();
-                    getViewBinding().videoPlayView.presetSurfaceSize(parentWidth, parentHeight);
+                    parentWidth = getVB().playViewContainer.getWidth();
+                    parentHeight = getVB().playViewContainer.getHeight();
+                    getVB().videoPlayView.presetSurfaceSize(parentWidth, parentHeight);
                     ViewGroup contentView = findViewById(android.R.id.content);
-                    contentView.removeView(getViewBinding().videoPlayView);
-                    getViewBinding().playViewContainer.addView(getViewBinding().videoPlayView);
+                    contentView.removeView(getVB().videoPlayView);
+                    getVB().playViewContainer.addView(getVB().videoPlayView);
                     if (getRequestedOrientation() != normalOrientation) {
                         setRequestedOrientation(normalOrientation);
                     }
@@ -148,17 +148,17 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         });
         sourceAdapter.setItemClickListener((rv, sourcePosition, position) -> viewModel.changeSelectItem(sourcePosition, position));
         relatedRVAdapter.itemClickListener = videoListBean -> {
-            getViewBinding().videoPlayView.pause();
+            getVB().videoPlayView.pause();
             Bundle bundle = new Bundle();
             ArrayList<VideoListBean> videoListBeans1 = new ArrayList<>();
             videoListBeans1.add(videoListBean);
             bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN, videoListBeans1);
             IntentUtil.intentToVideoPlay(VideoPlayActivity.this, bundle);
         };
-        boolean desSplit = getViewBinding().videoPlayDesRv != null;
+        boolean desSplit = getVB().videoPlayDesRv != null;
         if (desSplit) {
-            getViewBinding().videoPlayDesRv.setLayoutManager(new LinearLayoutManager(this));
-            getViewBinding().videoPlayDesRv.setAdapter(descRVAdapter);
+            getVB().videoPlayDesRv.setLayoutManager(new LinearLayoutManager(this));
+            getVB().videoPlayDesRv.setAdapter(descRVAdapter);
             int listColumn = getResources().getInteger(R.integer.list_column);
             GridLayoutManager layoutManager = new GridLayoutManager(this,listColumn);
             layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -170,14 +170,14 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                     return 1;
                 }
             });
-            getViewBinding().videoPlaySourceRv.setLayoutManager(layoutManager);
-            getViewBinding().videoPlaySourceRv.setAdapter(new ConcatAdapter(sourceAdapter, relatedRVAdapter));
+            getVB().videoPlaySourceRv.setLayoutManager(layoutManager);
+            getVB().videoPlaySourceRv.setAdapter(new ConcatAdapter(sourceAdapter, relatedRVAdapter));
         } else {
-            getViewBinding().videoPlaySourceRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-            getViewBinding().videoPlaySourceRv.setAdapter(new ConcatAdapter(descRVAdapter, sourceAdapter, relatedRVAdapter));
+            getVB().videoPlaySourceRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+            getVB().videoPlaySourceRv.setAdapter(new ConcatAdapter(descRVAdapter, sourceAdapter, relatedRVAdapter));
         }
         viewModel.getVideoListBeanLive().observe(this, videoListBeanListLiveWrapper -> sourceAdapter.setData(videoListBeanListLiveWrapper.getData()));
-        viewModel.getCurrentVideoBeanLive().observe(this, videoBean -> getViewBinding().videoPlayView.setCurrentVideoBean(videoBean));
+        viewModel.getCurrentVideoBeanLive().observe(this, videoBean -> getVB().videoPlayView.setCurrentVideoBean(videoBean));
         viewModel.getCommentDataLive().observe(this, commentDataWrapper -> {
             if (commentDataWrapper.getAction() == DataActionWrapper.REFRESH) {
                 commentAdapter.setData(commentDataWrapper.getData());
@@ -194,7 +194,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             viewModel.updateRelatedVideos(videoListBean);
         });
         viewModel.initCreate();
-        getViewBinding().videoPlayView.setFullScreen(SettingsFragment.fullDefault());
+        getVB().videoPlayView.setFullScreen(SettingsFragment.fullDefault());
     }
 
     private void registerSomething() {
@@ -223,8 +223,8 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
 
     @Override
     public void onBackPressed() {
-        if (getViewBinding().videoPlayView.isFullScreen()) {
-            getViewBinding().videoPlayView.setFullScreen(false);
+        if (getVB().videoPlayView.isFullScreen()) {
+            getVB().videoPlayView.setFullScreen(false);
         } else if (isCommentShowing()) {
             hideComment();
         } else {
@@ -234,7 +234,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
 
     public void refreshSystemUIVisibility() {
         WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        if (getViewBinding().videoPlayView.isFullScreen()) {
+        if (getVB().videoPlayView.isFullScreen()) {
             WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
             controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
             controller.hide(WindowInsetsCompat.Type.systemBars());
@@ -247,8 +247,8 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     @Override
     public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
         super.onMultiWindowModeChanged(isInMultiWindowMode);
-        if (isInMultiWindowMode && getViewBinding().videoPlayView.isFullScreen()) {
-            getViewBinding().videoPlayView.setFullScreen(false);
+        if (isInMultiWindowMode && getVB().videoPlayView.isFullScreen()) {
+            getVB().videoPlayView.setFullScreen(false);
         }
     }
 
@@ -259,10 +259,10 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
                 case Intent.ACTION_BATTERY_CHANGED:
                     int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
                     int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
-                    getViewBinding().videoPlayView.setBattery(level * 100 / scale);
+                    getVB().videoPlayView.setBattery(level * 100 / scale);
                     break;
                 case Intent.ACTION_TIME_TICK:
-                    getViewBinding().videoPlayView.setTime();
+                    getVB().videoPlayView.setTime();
                     break;
             }
         }
@@ -282,7 +282,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (getViewBinding().videoPlayView.handleExternalKeyEvent(event)) {
+        if (getVB().videoPlayView.handleExternalKeyEvent(event)) {
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -294,15 +294,15 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     }
 
     private boolean isCommentShowing() {
-        return getViewBinding().bottomCommentRv.getVisibility() == View.VISIBLE;
+        return getVB().bottomCommentRv.getVisibility() == View.VISIBLE;
     }
 
     private void showComment() {
-        getViewBinding().bottomCommentRv.setVisibility(View.VISIBLE);
+        getVB().bottomCommentRv.setVisibility(View.VISIBLE);
         viewModel.loadComment();
     }
 
     private void hideComment() {
-        getViewBinding().bottomCommentRv.setVisibility(View.GONE);
+        getVB().bottomCommentRv.setVisibility(View.GONE);
     }
 }
