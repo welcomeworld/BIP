@@ -8,6 +8,10 @@ public class VideoQualityBean implements Parcelable {
     private String realAudioUrl;
     private String quality;
 
+    public int videoWidth;
+
+    public int videoHeight;
+
     public VideoQualityBean() {
 
     }
@@ -17,6 +21,8 @@ public class VideoQualityBean implements Parcelable {
         realVideoUrl = in.readString();
         realAudioUrl = in.readString();
         quality = in.readString();
+        videoWidth = in.readInt();
+        videoHeight = in.readInt();
     }
 
     public static final Creator<VideoQualityBean> CREATOR = new Creator<VideoQualityBean>() {
@@ -65,6 +71,8 @@ public class VideoQualityBean implements Parcelable {
         parcel.writeString(realVideoUrl);
         parcel.writeString(realAudioUrl);
         parcel.writeString(quality);
+        parcel.writeInt(videoWidth);
+        parcel.writeInt(videoHeight);
     }
 
     public boolean isAvailable() {

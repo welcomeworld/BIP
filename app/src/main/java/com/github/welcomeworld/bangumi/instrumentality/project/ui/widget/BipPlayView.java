@@ -197,7 +197,8 @@ public class BipPlayView extends ConstraintLayout {
         videoFullScreenView = itemView.findViewById(R.id.bip_play_view_fullscreen);
         videoFullScreenView.setOnClickListener(playItemClickListener);
         surfaceView = itemView.findViewById(R.id.bip_play_view_surface);
-        surfaceView.getHolder().addCallback(surfaceHolderCallback);
+        videoSurfaceHolder = surfaceView.getHolder();
+        videoSurfaceHolder.addCallback(surfaceHolderCallback);
         gestureDetectorCompat = new GestureDetectorCompat(context, gestureListener);
         setOnTouchListener((v, event) -> {
             LogUtil.e("GestureTest", "Touch");
@@ -248,7 +249,6 @@ public class BipPlayView extends ConstraintLayout {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             LogUtil.d("SurfaceTest", "Created");
-            videoSurfaceHolder = holder;
             if (bipPlayer != null) {
                 bipPlayer.setDisplay(videoSurfaceHolder);
             }
@@ -256,7 +256,6 @@ public class BipPlayView extends ConstraintLayout {
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            videoSurfaceHolder = holder;
             if (bipPlayer != null) {
                 bipPlayer.setDisplay(videoSurfaceHolder);
             }
@@ -484,9 +483,7 @@ public class BipPlayView extends ConstraintLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (bipPlayer != null) {
-            resizeSurfaceSize();
-        }
+        resizeSurfaceSize();
     }
 
     private void resizeSurfaceSize() {
@@ -499,7 +496,7 @@ public class BipPlayView extends ConstraintLayout {
 
     private void resizeSurfaceSize(int videoWidth, int videoHeight, int parentWidth, int parentHeight, boolean reLayout) {
         ViewGroup.LayoutParams layoutParams = surfaceView.getLayoutParams();
-        if (videoWidth <= 0 || videoHeight <= 0) {
+        if (videoWidth <= 0 || videoHeight <= 0 || parentHeight <= 0) {
             return;
         }
         int targetWidth;
@@ -511,13 +508,17 @@ public class BipPlayView extends ConstraintLayout {
             targetHeight = parentHeight;
             targetWidth = (targetHeight * videoWidth) / videoHeight;
         }
-        if (targetWidth != layoutParams.width || targetHeight != layoutParams.height) {
+        if (sizeDiff(surfaceView.getMeasuredWidth(), targetWidth) || sizeDiff(surfaceView.getMeasuredHeight(), targetHeight)) {
             layoutParams.width = targetWidth;
             layoutParams.height = targetHeight;
             if (reLayout) {
                 surfaceView.requestLayout();
             }
         }
+    }
+
+    private boolean sizeDiff(int original, int target) {
+        return Math.abs(target - original) > 5;
     }
 
     public void setBipPlayer(BIPPlayer bipPlayer) {
@@ -596,9 +597,7 @@ public class BipPlayView extends ConstraintLayout {
                 mOnSeekCompleteListener.onSeekComplete(bp);
             }
         });
-        if (videoSurfaceHolder != null) {
-            bipPlayer.setDisplay(videoSurfaceHolder);
-        }
+        bipPlayer.setDisplay(videoSurfaceHolder);
     }
 
     public boolean isFullScreen() {
@@ -618,12 +617,9 @@ public class BipPlayView extends ConstraintLayout {
     }
 
     public int videoPreferOrientation() {
-        if (bipPlayer != null) {
-            int videoWidth = getVideoWidth();
-            int videoHeight = getVideoHeight();
-            return videoWidth > videoHeight ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
-        }
-        return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+        int videoWidth = getVideoWidth();
+        int videoHeight = getVideoHeight();
+        return videoWidth > videoHeight ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
     }
 
     private final Runnable progressChangeRunnable = new Runnable() {
@@ -884,11 +880,21 @@ public class BipPlayView extends ConstraintLayout {
     }
 
     public int getVideoWidth() {
-        return bipPlayer == null ? 0 : bipPlayer.getVideoWidth();
+        int videoWidth = bipPlayer == null ? 0 : bipPlayer.getVideoWidth();
+        int qualityWidth = 0;
+        if (getCurrentVideoBean() != null && getCurrentVideoBean().getCurrentQualityBean() != null) {
+            qualityWidth = getCurrentVideoBean().getCurrentQualityBean().videoWidth;
+        }
+        return videoWidth == 0 ? qualityWidth : videoWidth;
     }
 
     public int getVideoHeight() {
-        return bipPlayer == null ? 0 : bipPlayer.getVideoHeight();
+        int videoHeight = bipPlayer == null ? 0 : bipPlayer.getVideoHeight();
+        int qualityHeight = 0;
+        if (getCurrentVideoBean() != null && getCurrentVideoBean().getCurrentQualityBean() != null) {
+            qualityHeight = getCurrentVideoBean().getCurrentQualityBean().videoHeight;
+        }
+        return videoHeight == 0 ? qualityHeight : videoHeight;
     }
 
     public boolean handleExternalKeyEvent(KeyEvent event) {
