@@ -95,8 +95,10 @@ public class VideoSourceItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public void setSelectSourceIndex(int selectSourceIndex) {
-        int oldIndex = this.selectSourceIndex;
-        this.selectSourceIndex = selectSourceIndex;
-        notifyItemChanged(oldIndex);
+        if (this.selectSourceIndex != selectSourceIndex) {
+            int oldIndex = this.selectSourceIndex;
+            this.selectSourceIndex = selectSourceIndex;
+            notifyItemChanged(oldIndex);
+        }
     }
 }

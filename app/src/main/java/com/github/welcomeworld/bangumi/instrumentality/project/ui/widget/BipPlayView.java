@@ -424,17 +424,13 @@ public class BipPlayView extends ConstraintLayout {
         batteryView.setVisibility(VISIBLE);
         timeView.setVisibility(VISIBLE);
         videoBottomProgressView.setVisibility(GONE);
-        if (getVideoWidth() > 0) {
-            videoFullScreenView.setVisibility(VISIBLE);
-        }
+        videoFullScreenView.setVisibility(VISIBLE);
         if (bipPlayer != null) {
             videoQualityView.setVisibility(VISIBLE);
         }
         cancelHideController();
         scheduleHideController();
-        if (getVideoWidth() > 0) {
-            danmakuSwitchView.setVisibility(VISIBLE);
-        }
+        danmakuSwitchView.setVisibility(VISIBLE);
     }
 
     private boolean isControllerShowing() {
