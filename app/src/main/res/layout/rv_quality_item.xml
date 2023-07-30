@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:letterSpacing="0.1"
     android:maxLines="1"
     android:padding="12dp"
     android:focusable="true"
