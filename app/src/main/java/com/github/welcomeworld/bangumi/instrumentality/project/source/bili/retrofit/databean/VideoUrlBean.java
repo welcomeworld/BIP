@@ -296,6 +296,10 @@ public class VideoUrlBean {
                 private long codecid;
                 private List<String> backup_url;
 
+                public int width;
+
+                public int height;
+
                 public int getId() {
                     return id;
                 }

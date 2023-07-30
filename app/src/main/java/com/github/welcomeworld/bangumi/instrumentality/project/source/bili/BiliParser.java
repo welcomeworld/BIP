@@ -254,6 +254,8 @@ public class BiliParser extends BaseParser {
                 qualityBean.setRealVideoUrl(videoBean.getBase_url());
                 qualityBean.setQuality(description);
                 qualityBean.setRealAudioUrl(bestAudioBean.getBase_url());
+                qualityBean.videoWidth = videoBean.width;
+                qualityBean.videoHeight = videoBean.height;
                 LogUtil.d("DataLog", qualityBean.getRealVideoUrl());
                 //加入没有匹配到即原列表没有的分辨率
                 if (!qualityMatch) {
