@@ -35,8 +35,19 @@ public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
                 getVB().searchResultSwipecontainer.setLoading(false);
             }
         });
+        viewModel.getHideHintLive().observe(this, hideHint -> {
+            if (hideHint) {
+                getVB().getRoot().removeView(getVB().fragmentContainer);
+                getVB().searchResultSwipecontainer.setRefreshing(true);
+            }
+        });
+        viewModel.getSearchTextLive().observe(this, searchText -> {
+            String currentText = getVB().searchInput.getText().toString();
+            if (!currentText.equals(searchText)) {
+                getVB().searchInput.setText(searchText);
+            }
+        });
         getVB().searchInput.setOnEditorActionListener((v, actionId, event) -> {
-            getVB().searchResultSwipecontainer.setRefreshing(true);
             viewModel.setSearchText(getVB().searchInput.getText().toString(), true);
             return true;
         });

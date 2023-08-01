@@ -32,6 +32,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retro
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoRelatedBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.VideoUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebHomeRcmdData;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebHotSearchBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginInfoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebLoginUrlBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.retrofit.databean.WebSearchBean;
@@ -977,5 +978,30 @@ public class BiliParser extends BaseParser {
             public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
             }
         });
+    }
+
+    @Override
+    public boolean canGetHotSearch() {
+        return true;
+    }
+
+    @Override
+    public List<String> getHotSearch() {
+        List<String> result = new ArrayList<>();
+        SearchNetAPI searchNetAPI = BiliRetrofitManager.getWbiRetrofit(BaseUrl.APIURL).create(SearchNetAPI.class);
+        Call<WebHotSearchBean> hotSearchBeanCall = searchNetAPI.getHotSearch();
+        try {
+            Response<WebHotSearchBean> response = hotSearchBeanCall.execute();
+            if (response.body() == null || response.body().data == null) {
+                LogUtil.w("DataLog", "获取不到数据");
+                return result;
+            }
+            for (WebHotSearchBean.Data.Trending.HotSearch hotSearch : response.body().data.trending.hotSearch) {
+                result.add(hotSearch.keyword);
+            }
+        } catch (Exception e) {
+
+        }
+        return result;
     }
 }

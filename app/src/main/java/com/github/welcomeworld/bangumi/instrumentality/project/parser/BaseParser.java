@@ -94,4 +94,12 @@ public abstract class BaseParser {
     public List<VideoListBean> getRelated(VideoListBean videoListBean) {
         return Collections.emptyList();
     }
+
+    public boolean canGetHotSearch() {
+        return false;
+    }
+
+    public List<String> getHotSearch() {
+        return Collections.emptyList();
+    }
 }

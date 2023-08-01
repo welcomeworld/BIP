@@ -54,4 +54,6 @@
     <string name="full_default">详情页默认全屏</string>
     <string name="no_comment">没有评论啊</string>
     <string name="comment">评论</string>
+    <string name="hot_search">热门搜索</string>
+    <string name="hot_search_placeholder">%1$d、%2$s</string>
 </resources>
