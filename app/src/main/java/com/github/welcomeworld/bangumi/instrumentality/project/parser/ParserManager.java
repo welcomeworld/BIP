@@ -6,6 +6,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBe
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,5 +97,14 @@ public class ParserManager {
             }
         }
         return null;
+    }
+
+    public List<String> getHotSearch() {
+        for (BaseParser parser : mParsers.values()) {
+            if (parser.canGetHotSearch()) {
+                return parser.getHotSearch();
+            }
+        }
+        return Collections.emptyList();
     }
 }
