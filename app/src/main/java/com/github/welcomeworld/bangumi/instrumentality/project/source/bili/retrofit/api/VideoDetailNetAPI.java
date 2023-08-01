@@ -15,7 +15,7 @@ public interface VideoDetailNetAPI {
     @GET("pgc/view/web/season")
     Call<BangumiDetailPageBean> getBangumiDetailPageInfo(@QueryMap Map<String, String> parameters);
 
-    @GET("x/v2/reply?type=1&ps=30&sort=1")
+    @GET("x/v2/reply?type=1&ps=20&sort=1")
     Call<BiliCommentBean> getComment(@Query("oid") long Avid, @Query("pn") int pageNumber);
 
     @GET("x/v2/reply/reply?&ps=20&type=1")
