@@ -92,6 +92,10 @@ public class VideoPlayViewModel extends ViewModel {
             if (isFinishing) {
                 return;
             }
+            if (result.size() == 0) {
+                ToastUtil.showToast(R.string.video_url_parse_error);
+                return;
+            }
             changeVideoListBeans(result);
             parseVideoBeanDetail(false);
             initPlayer();

@@ -332,7 +332,6 @@ public class BiliParser extends BaseParser {
     }
 
     private static void bindSearchData(List<VideoListBean> result, WebSearchBean.Data.Result searchData, boolean isBangumi) {
-        LogUtil.d("DataLog", "SearchData:" + searchData.toString());
         VideoListBean videoListBean = new VideoListBean();
         videoListBean.setSourceName(Constants.Source.BILI);
         String searchTitle = searchData.getTitle();

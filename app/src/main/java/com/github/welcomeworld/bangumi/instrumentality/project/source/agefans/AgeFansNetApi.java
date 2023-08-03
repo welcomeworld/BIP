@@ -7,42 +7,41 @@ import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constan
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoQualityBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliOkHttpClientManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.LogUtil;
 import com.github.welcomeworld.devbase.utils.StringUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class AgeFansNetApi {
-    public static final String baseUrl = "https://www.agedm.tv";
+    public static final String baseUrl = "https://www.agemys.org";
 
     public static List<VideoListBean> search(String key, String pn) {
         List<VideoListBean> result = new ArrayList<>();
         String searchUrl = baseUrl + "/search?query=" + key + "&page=" + pn;
         LogUtil.i("AgeParserSearch:", "get:" + searchUrl);
-        Connection searchConn = Jsoup.connect(searchUrl);
         Document searchDocument;
         try {
-            searchDocument = searchConn.get();
+            searchDocument = Jsoup.parse(httpGet(searchUrl));
         } catch (Exception e) {
             LogUtil.e("AgeParserSearch:", "connectEror" + e.getMessage());
             return result;
         }
         try {
-            Elements searchItemElements = searchDocument.select("div.blockcontent1 div.cell a.cell_poster");
+            Elements searchItemElements = searchDocument.select("div.video_cover div.video_cover_wrapper a");
             if (searchItemElements.size() == 0) {
                 LogUtil.i("AgeParserSearch:", "search item empty");
                 return null;
@@ -58,7 +57,7 @@ public class AgeFansNetApi {
                     videoListBean.setCoverPortrait(true);
                     String tagName = "age番剧";
                     videoListBean.setTag(tagName);
-                    String cover = searchItem.selectFirst("img").attr("src");
+                    String cover = searchItem.selectFirst("img").attr("data-original");
                     if (cover != null && cover.startsWith("//")) {
                         cover = "https:" + cover;
                     }
@@ -68,10 +67,13 @@ public class AgeFansNetApi {
                     videoBean.setTitle(title);
                     videoBean.setCover(videoListBean.getCover());
                     String path = searchItem.attr("href");
-                    String videoKey = path.replace("/detail/", "");
+                    if (!path.startsWith("http")) {
+                        path = baseUrl + path;
+                    }
+                    String videoKey = path.substring(path.lastIndexOf("detail/") + 7);
                     LogUtil.e("AgeParserSearch getVideoKey:", videoKey);
-                    videoBean.setVideoKey(videoKey + "_1_1");
-                    videoBean.setUrl(baseUrl + path);
+                    videoBean.setVideoKey(videoKey + "/2/1");
+                    videoBean.setUrl(path);
                     videoBeans.add(videoBean);
                     videoListBean.setVideoBeanList(videoBeans);
                     result.add(videoListBean);
@@ -90,8 +92,8 @@ public class AgeFansNetApi {
         VideoBean currentVideoBean = orignal.getCurrentVideoBean();
         String wrapVideoKey = currentVideoBean.getVideoKey();
         String originalVideoKey;
-        if (wrapVideoKey.contains("_")) {
-            originalVideoKey = wrapVideoKey.substring(0, wrapVideoKey.indexOf("_"));
+        if (wrapVideoKey.contains("/")) {
+            originalVideoKey = wrapVideoKey.substring(0, wrapVideoKey.indexOf("/"));
         } else {
             originalVideoKey = wrapVideoKey;
         }
@@ -109,10 +111,9 @@ public class AgeFansNetApi {
         LogUtil.e("AgeParseVideo", "getVideoListId:" + videoListId);
         try {
             if (TextUtils.isEmpty(videoListId)) {
-                Connection pageConn = Jsoup.connect(baseUrl + "/detail/" + originalVideoKey);
-                pageDocument = pageConn.get();
-                Elements sourceElements = pageDocument.select("div#main0 div.movurl ul");
-                Elements sourceTitleElements = pageDocument.select("ul#menu0 li");
+                pageDocument = Jsoup.parse(httpGet(baseUrl + "/detail/" + originalVideoKey));
+                Elements sourceElements = pageDocument.select("div.tab-content div.tab-pane ul");
+                Elements sourceTitleElements = pageDocument.select("ul.nav li.nav-item");
                 if (sourceElements.size() == 0) {
                     return videoListBeans;
                 }
@@ -123,16 +124,16 @@ public class AgeFansNetApi {
                 videoListBeans.clear();
                 String title = orignal.getTitle();
                 if (StringUtil.isEmpty(title)) {
-                    title = pageDocument.selectFirst("div.baseblock div.blockcontent h4.detail_imform_name").text();
+                    title = pageDocument.selectFirst("div.video_detail_right h2.video_detail_title").text();
                 }
                 String cover = orignal.getCover();
                 if (StringUtil.isEmpty(cover)) {
-                    cover = pageDocument.selectFirst("div.baseblock div.blockcontent img.poster").attr("src");
+                    cover = pageDocument.selectFirst("div.video_detail_cover img.lazyload").attr("data-original");
                     if (cover != null && cover.startsWith("//")) {
                         cover = "https:" + cover;
                     }
                 }
-                String listDesc = pageDocument.selectFirst("div.baseblock div.blockcontent div.detail_imform_desc_pre p").text();
+                String listDesc = pageDocument.selectFirst("div.video_detail_right div.video_detail_desc").text();
                 int skipSource = 0;
                 for (int i = 0; i < sourceElements.size(); i++) {
                     Elements itemElements = sourceElements.get(i).select("li a");
@@ -158,7 +159,7 @@ public class AgeFansNetApi {
                         VideoBean videoBean = new VideoBean();
                         videoBean.setTitle(item.text());
                         videoBean.setCover(videoListBean.getCover());
-                        videoBean.setVideoKey(originalVideoKey + "_" + (i + 1) + "_" + keyPosition++);
+                        videoBean.setVideoKey(originalVideoKey + "/" + (i + 1) + "/" + keyPosition++);
                         if (positionIndex < positionList.size()) {
                             videoBean.setPlayPosition(positionList.get(positionIndex++));
                         }
@@ -173,57 +174,16 @@ public class AgeFansNetApi {
                     }
                 }
             }
-            String referrerUrl = baseUrl + "/play/" + originalVideoKey + "?playid=" + videoListId + "_" + selectVideoIndex;
-            Connection cookieConn = Jsoup.connect(referrerUrl);
-            Connection.Response cookieResponse = cookieConn.execute();
-            List<String> cookies = cookieResponse.headers("set-cookie");
-            HashMap<String, String> requestCookie = new HashMap<>();
-            for (String cookie : cookies) {
-                requestCookie.put(cookie.substring(0, cookie.indexOf("=")), cookie.substring(cookie.indexOf("=") + 1, cookie.indexOf(";")));
-            }
-            String playUrl = baseUrl + "/_getplay?aid=" + originalVideoKey + "&playindex=" + videoListId + "&epindex=" + selectVideoIndex + "&r=" + Math.random();
-            LogUtil.e("AgeParseVideo", " playUrl:" + playUrl);
-            Connection playConn = Jsoup.connect(playUrl);
-            playConn.cookie("username", "admin");
-            playConn.referrer(referrerUrl);
-            long cookieT1 = Long.parseLong(Objects.requireNonNull(requestCookie.get("t1")));
-            String k1 = requestCookie.get("k1");
-            long t1 = Math.round(cookieT1 / 1000.0) >> 5;
-            long k2 = ((t1 * (t1 % 4096) * 0x3 + 83215) * (t1 % 4096) + t1);
-            long t2 = System.currentTimeMillis();
-            LogUtil.e("AgeParseVideo", ":cookie:start t2=" + t2);
-            long k2End = k2 % 10;
-            long t2End = t2 % 1000;
-            if (!String.valueOf(t2End).contains("" + k2End)) {
-                t2End = t2End % 10;
-                if (t2End > k2End) {
-                    t2 = t2 - (t2End - k2End);
-                } else {
-                    t2 = t2 + (k2End - t2End);
+            String playUrl = baseUrl + "/play/" + originalVideoKey + "/" + videoListId + "/" + selectVideoIndex;
+            Map<String, String> headers = new HashMap<>();
+            headers.put("referer", baseUrl + "/");
+            Document playDocument = Jsoup.parse(httpGet(playUrl, headers));
+            String realPlayUrl = playDocument.selectFirst("div.video_play_wrapper iframe").attr("src");
+            if (!realPlayUrl.startsWith("http") || realPlayUrl.contains("sp-flv.com")) {
+                if (realPlayUrl.contains("vip.sp-flv.com")) {
+                    LogUtil.e("AgeParseVideo:", "Vip加密了，懒得解析");
+                    return videoListBeans;
                 }
-            }
-            LogUtil.e("AgeParseVideo", ":cookie:k1=" + k1);
-            LogUtil.e("AgeParseVideo", ":cookie:t1=" + cookieT1);
-            LogUtil.e("AgeParseVideo", ":cookie:k2=" + k2);
-            LogUtil.e("AgeParseVideo", ":cookie:t2=" + t2);
-            playConn.cookie("t1", "" + cookieT1);
-            playConn.cookie("k1", k1);
-            playConn.cookie("k2", "" + k2);
-            playConn.cookie("t2", "" + t2);
-            long fa_t = System.currentTimeMillis();
-            playConn.cookie("fa_t", "" + fa_t);
-            playConn.cookie("fa_c", "1");
-            Connection.Response playResponse = playConn.execute();
-            if (playResponse.statusCode() != 200) {
-                LogUtil.e("AgeParseVideo:", "play response code:" + playResponse.statusCode());
-                return videoListBeans;
-            }
-            String responseBody = playResponse.body();
-            LogUtil.e("AgeParseVideo:", "play response:" + responseBody);
-            PlayUrlBean playUrlBean = new Gson().fromJson(responseBody, PlayUrlBean.class);
-            String realPlayUrl = URLDecoder.decode(playUrlBean.getVurl(), "UTF-8");
-            if (!realPlayUrl.startsWith("http") || playUrlBean.getPurlf().contains("shankuwang.com")) {
-                realPlayUrl = playUrlBean.getPurlf() + URLEncoder.encode(realPlayUrl, "UTF-8");
                 LogUtil.e("AgeParseVideo", "云解析:" + realPlayUrl);
                 realPlayUrl = parseshankuwang(realPlayUrl);
             }
@@ -244,7 +204,7 @@ public class AgeFansNetApi {
     private static String parseshankuwang(String url) {
         String finalResult = "";
         try {
-            Document document = Jsoup.parse(new URL(url), 3000);
+            Document document = Jsoup.parse(httpGet(url));
             Elements jsElements = document.select("script");
             for (Element jsElement : jsElements) {
                 String tempJsString = jsElement.html();
@@ -269,6 +229,28 @@ public class AgeFansNetApi {
             e.printStackTrace();
         }
         return finalResult;
+    }
+
+    private static String httpGet(String url) {
+        return httpGet(url, null);
+    }
+
+    private static String httpGet(String url, Map<String, String> headers) {
+        Request.Builder requestBuilder = new Request.Builder().url(url);
+        if (headers != null && !headers.isEmpty()) {
+            for (String key : headers.keySet()) {
+                requestBuilder.addHeader(key, headers.get(key));
+            }
+        }
+        try {
+            Response response = BiliOkHttpClientManager.getInstance().getNormalOkHttpClient().newCall(requestBuilder.build()).execute();
+            if (response.isSuccessful() && response.body() != null) {
+                return response.body().string();
+            }
+        } catch (Exception e) {
+            return "";
+        }
+        return "";
     }
 
 }
