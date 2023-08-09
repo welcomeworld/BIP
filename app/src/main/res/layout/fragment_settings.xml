@@ -57,25 +57,6 @@
             tools:text="1.0.00" />
 
         <TextView
-            android:id="@+id/setting_backup"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/bg_white_radius8"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/update_backup"
-            android:textAppearance="?android:attr/textAppearanceListItem"
-            android:textColor="@color/color_black"
-            android:textSize="16sp"
-            app:drawableEndCompat="@drawable/ic_check_selector"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/setting_version" />
-
-        <TextView
             android:id="@+id/setting_mediaCodec"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -92,7 +73,7 @@
             app:drawableEndCompat="@drawable/ic_check_selector"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/setting_backup" />
+            app:layout_constraintTop_toBottomOf="@id/setting_version" />
 
         <TextView
             android:id="@+id/setting_exoPlayer"

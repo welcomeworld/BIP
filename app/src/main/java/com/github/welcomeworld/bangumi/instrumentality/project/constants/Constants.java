@@ -1,6 +1,8 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.constants;
 
 public class Constants {
+    public static final String UPDATE_URL = "https://cdn.jsdelivr.net/gh/welcomeworld/BIP@master/versionInfo.json";
+
     public static class Source {
         public static final String BILI = "bili";
         public static final String BIMI = "bimi";
