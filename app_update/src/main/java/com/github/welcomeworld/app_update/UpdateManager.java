@@ -2,6 +2,7 @@ package com.github.welcomeworld.app_update;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
@@ -53,7 +54,7 @@ public class UpdateManager {
                     ToastUtil.showToast(R.string.app_update_update_fail);
                     return;
                 }
-                if (versionCode >= response.body().getVersionCode()) {
+                if (versionCode >= response.body().versionCode) {
                     ToastUtil.showToast(R.string.app_update_lastest_version);
                 } else {
                     AppUpdateDlgUpdateBinding binding = AppUpdateDlgUpdateBinding.inflate(LayoutInflater.from(context));
@@ -68,7 +69,7 @@ public class UpdateManager {
                         downloadUpdate(response.body());
                         ToastUtil.showToast(R.string.app_update_update_start);
                     });
-                    binding.dialogUpdateContent.setText(response.body().getDesc());
+                    binding.dialogUpdateContent.setText(response.body().versionInfo);
                 }
             }
 
@@ -82,7 +83,7 @@ public class UpdateManager {
     public static void downloadUpdate(UpdateBean updateBean) {
         Request request = new Request.Builder()
                 .addHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
-                .url(updateBean.getUrl())
+                .url(updateBean.url)
                 .build();
         okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
@@ -96,7 +97,7 @@ public class UpdateManager {
                 if (context == null) {
                     return;
                 }
-                File file = new File(context.getExternalFilesDir(null), updateBean.getVersionName() + ".apk");
+                File file = new File(context.getExternalFilesDir(null), updateBean.versionName + ".apk");
                 InputStream is = null;
                 FileOutputStream fileOutputStream = null;
                 try {
