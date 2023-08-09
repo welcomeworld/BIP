@@ -1,40 +1,14 @@
 package com.github.welcomeworld.app_update;
 
+import com.google.gson.annotations.SerializedName;
+
 public class UpdateBean {
-    private long versionCode;
-    private String versionName;
-    private String url;
-    private String desc;
-
-    public long getVersionCode() {
-        return versionCode;
-    }
-
-    public void setVersionCode(Integer versionCode) {
-        this.versionCode = versionCode;
-    }
-
-    public String getVersionName() {
-        return versionName;
-    }
-
-    public void setVersionName(String versionName) {
-        this.versionName = versionName;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
+    @SerializedName("versionCode")
+    public long versionCode;
+    @SerializedName("versionName")
+    public String versionName;
+    @SerializedName("url")
+    public String url;
+    @SerializedName("versionInfo")
+    public String versionInfo;
 }
