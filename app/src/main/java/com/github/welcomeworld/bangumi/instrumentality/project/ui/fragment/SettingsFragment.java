@@ -9,14 +9,13 @@ import androidx.annotation.Nullable;
 import com.github.welcomeworld.app_update.UpdateManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.BuildConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constants;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentSettingsBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SimpleContainerActivity;
 import com.github.welcomeworld.devbase.utils.KVUtil;
 
 public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> implements View.OnClickListener {
-    public static String TAG = "setting_fragment";
-    private static final String SETTING_BACKUP_UPDATE = "setting_backup_update";
     private static final String SETTING_MEDIACODEC = "setting_mediacodec";
     private static final String SETTING_EXOPLAYER = "setting_exoplayer";
 
@@ -29,8 +28,6 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
         getVB().settingVersionName.setText(BuildConfig.VERSION_NAME);
         getVB().settingVersion.setOnClickListener(this);
         getVB().settingOpensource.setOnClickListener(this);
-        getVB().settingBackup.setSelected(KVUtil.getBoolean(SETTING_BACKUP_UPDATE));
-        getVB().settingBackup.setOnClickListener(this);
         getVB().settingMediaCodec.setSelected(KVUtil.getBoolean(SETTING_MEDIACODEC));
         getVB().settingMediaCodec.setOnClickListener(this);
         getVB().settingExoPlayer.setSelected(KVUtil.getBoolean(SETTING_EXOPLAYER));
@@ -44,11 +41,7 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.setting_version) {
-            if (KVUtil.getBoolean(SETTING_BACKUP_UPDATE)) {
-                UpdateManager.checkUpdate(view.getContext(), "https://gitee.com/nisigada/software-update/raw/master/bip/version_bak.json", BuildConfig.VERSION_NAME);
-            } else {
-                UpdateManager.checkUpdate(view.getContext(), "https://gitee.com/nisigada/software-update/raw/master/bip/version.json", BuildConfig.VERSION_NAME);
-            }
+            UpdateManager.checkUpdate(view.getContext(), Constants.UPDATE_URL, BuildConfig.VERSION_CODE);
         } else if (id == R.id.setting_opensource) {
             SimpleContainerActivity.addFragment(getActivity(), GratitudeFragment.class, null);
         } else if (id == R.id.setting_logout) {
@@ -57,9 +50,6 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
         } else if (id == R.id.setting_exoPlayer) {
             view.setSelected(!view.isSelected());
             KVUtil.putBoolean(SETTING_EXOPLAYER, view.isSelected());
-        } else if (id == R.id.setting_backup) {
-            view.setSelected(!view.isSelected());
-            KVUtil.putBoolean(SETTING_BACKUP_UPDATE, view.isSelected());
         } else if (id == R.id.setting_mediaCodec) {
             view.setSelected(!view.isSelected());
             KVUtil.putBoolean(SETTING_MEDIACODEC, view.isSelected());

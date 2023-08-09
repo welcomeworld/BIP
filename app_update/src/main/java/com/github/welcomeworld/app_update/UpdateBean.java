@@ -1,12 +1,12 @@
 package com.github.welcomeworld.app_update;
 
 public class UpdateBean {
-    private Integer versionCode;
+    private long versionCode;
     private String versionName;
     private String url;
     private String desc;
 
-    public Integer getVersionCode() {
+    public long getVersionCode() {
         return versionCode;
     }
 
