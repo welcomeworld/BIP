@@ -273,6 +273,7 @@ public class VideoPlayViewModel extends ViewModel {
             historyBean.setSelectSourceIndex(selectSourceIndex);
             changeVideoListBeans(historyBean.getVideoData());
         }
+        isFavLive.updateValueSafe(historyBean.isFav());
         ParserManager.getInstance().clearCache(videoListBeans.get(selectSourceIndex));
     }
 

@@ -94,7 +94,9 @@ public class VideoDescRVAdapter extends RecyclerView.Adapter<VideoDescRVAdapter.
         this.actionClickListener = actionClickListener;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setFav(boolean fav) {
         isFav = fav;
+        notifyDataSetChanged();
     }
 }
