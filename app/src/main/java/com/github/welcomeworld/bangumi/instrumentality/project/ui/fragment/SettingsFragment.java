@@ -5,69 +5,53 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.github.welcomeworld.app_update.UpdateManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.BuildConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
-import com.github.welcomeworld.bangumi.instrumentality.project.constants.Constants;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentSettingsBinding;
-import com.github.welcomeworld.bangumi.instrumentality.project.source.bili.BiliParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.SimpleContainerActivity;
-import com.github.welcomeworld.devbase.utils.KVUtil;
+import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.SettingsViewModel;
 
 public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> implements View.OnClickListener {
-    private static final String SETTING_MEDIACODEC = "setting_mediacodec";
-    private static final String SETTING_EXOPLAYER = "setting_exoplayer";
-
-    private static final String SETTING_FULL_DEFAULT = "setting_full_default";
+    private SettingsViewModel viewModel = null;
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+        viewModel.getUseExoLive().observe(getViewLifecycleOwner(), useExo -> getVB().settingExoPlayer.setSelected(useExo));
+        viewModel.getUseMediaCodecLive().observe(getViewLifecycleOwner(), useMediaCodec -> getVB().settingMediaCodec.setSelected(useMediaCodec));
+        viewModel.getFullDefaultLive().observe(getViewLifecycleOwner(), fullDefault -> getVB().settingFullDefault.setSelected(fullDefault));
+        viewModel.getBiliLoginLive().observe(getViewLifecycleOwner(), isLogin -> getVB().settingLogout.setVisibility(isLogin ? View.VISIBLE : View.GONE));
         getVB().settingVersionName.setText(BuildConfig.VERSION_NAME);
         getVB().settingVersion.setOnClickListener(this);
         getVB().settingOpensource.setOnClickListener(this);
-        getVB().settingMediaCodec.setSelected(KVUtil.getBoolean(SETTING_MEDIACODEC));
         getVB().settingMediaCodec.setOnClickListener(this);
-        getVB().settingExoPlayer.setSelected(KVUtil.getBoolean(SETTING_EXOPLAYER));
         getVB().settingExoPlayer.setOnClickListener(this);
-        getVB().settingFullDefault.setSelected(KVUtil.getBoolean(SETTING_FULL_DEFAULT));
         getVB().settingFullDefault.setOnClickListener(this);
-        getVB().settingLogout.setVisibility(BiliParser.checkLogin() ? View.VISIBLE : View.GONE);
         getVB().settingLogout.setOnClickListener(this);
     }
 
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.setting_version) {
-            UpdateManager.checkUpdate(view.getContext(), Constants.UPDATE_URL, BuildConfig.VERSION_CODE);
+            viewModel.checkUpdate();
         } else if (id == R.id.setting_opensource) {
-            SimpleContainerActivity.addFragment(getActivity(), GratitudeFragment.class, null);
+            goGratitude();
         } else if (id == R.id.setting_logout) {
-            BiliParser.clearLoginStatus();
-            getVB().settingLogout.setVisibility(View.GONE);
+            viewModel.logout();
         } else if (id == R.id.setting_exoPlayer) {
-            view.setSelected(!view.isSelected());
-            KVUtil.putBoolean(SETTING_EXOPLAYER, view.isSelected());
+            viewModel.setUseExoPlayer(view.isSelected());
         } else if (id == R.id.setting_mediaCodec) {
-            view.setSelected(!view.isSelected());
-            KVUtil.putBoolean(SETTING_MEDIACODEC, view.isSelected());
+            viewModel.setUseMediaCodec(view.isSelected());
         } else if (id == R.id.setting_full_default) {
-            view.setSelected(!view.isSelected());
-            KVUtil.putBoolean(SETTING_FULL_DEFAULT, view.isSelected());
+            viewModel.setFullDefault(view.isSelected());
         }
     }
 
-    public static boolean useMediaCodec() {
-        return KVUtil.getBoolean(SETTING_MEDIACODEC);
-    }
-
-    public static boolean useExoPlayer() {
-        return KVUtil.getBoolean(SETTING_EXOPLAYER);
-    }
-
-    public static boolean fullDefault() {
-        return KVUtil.getBoolean(SETTING_FULL_DEFAULT);
+    private void goGratitude() {
+        SimpleContainerActivity.addFragment(getActivity(), GratitudeFragment.class, null);
     }
 }

@@ -19,8 +19,8 @@ import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserMana
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadInfoConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadManager;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.HistoryConfig;
+import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SettingConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.player.BipExoPlayer;
-import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.SettingsFragment;
 import com.github.welcomeworld.bipplayer.BIPPlayer;
 import com.github.welcomeworld.bipplayer.BipDataSource;
 import com.github.welcomeworld.bipplayer.DefaultBIPPlayer;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 public class VideoPlayViewModel extends ViewModel {
-    BIPPlayer bipPlayer = SettingsFragment.useExoPlayer() ? new BipExoPlayer() : new DefaultBIPPlayer();
+    BIPPlayer bipPlayer = SettingConfig.isUseExoPlayer() ? new BipExoPlayer() : new DefaultBIPPlayer();
     private boolean isFinishing = false;
     BaseParser videoParser = null;
     boolean loadingComment;
@@ -55,7 +55,6 @@ public class VideoPlayViewModel extends ViewModel {
         return currentVideoListBeanLive;
     }
 
-    private final SafeLiveData<Boolean> commentLive = new SafeLiveData<>();
     private final SafeLiveData<CommentBean.CommentDataBean> parentCommentLive = new SafeLiveData<>();
 
     private final SafeLiveData<List<VideoListBean>> relatedVideoListLive = new SafeLiveData<>();
@@ -74,10 +73,6 @@ public class VideoPlayViewModel extends ViewModel {
 
     public LiveData<VideoBean> getCurrentVideoBeanLive() {
         return currentVideoBeanLive;
-    }
-
-    public LiveData<Boolean> getCommentLive() {
-        return commentLive;
     }
 
     public LiveData<CommentBean.CommentDataBean> getParentCommentLive() {
@@ -145,7 +140,7 @@ public class VideoPlayViewModel extends ViewModel {
                     }
                 }
             }
-            if (SettingsFragment.useMediaCodec()) {
+            if (SettingConfig.isUseMediaCodec()) {
                 bipPlayer.setOption(DefaultBIPPlayer.OPT_CATEGORY_PLAYER, "mediacodec", "1");
             }
         }
@@ -318,16 +313,11 @@ public class VideoPlayViewModel extends ViewModel {
         videoParser = ParserManager.getInstance().getParser(currentVideoListBean.getSourceName());
         currentVideoListBeanLive.updateValueSafe(videoListBean);
         setCurrentVideoBean(currentVideoListBean.getCurrentVideoBean());
-        changeCommentLive(hasComment());
     }
 
     public void setCurrentVideoBean(VideoBean videoBean) {
         currentVideoBean = videoBean;
         currentVideoBeanLive.updateValueSafe(currentVideoBean);
-    }
-
-    public void changeCommentLive(Boolean hasComment) {
-        commentLive.updateValueSafe(hasComment);
     }
 
     public void refreshVideo() {
