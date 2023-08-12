@@ -34,7 +34,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.livedata.DataActi
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
-import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.SettingsFragment;
+import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SettingConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BipPlayView;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.VideoPlayViewModel;
@@ -194,7 +194,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             viewModel.updateRelatedVideos(videoListBean);
         });
         viewModel.initCreate();
-        getVB().videoPlayView.setFullScreen(SettingsFragment.fullDefault());
+        getVB().videoPlayView.setFullScreen(SettingConfig.isFullDefault());
     }
 
     private void registerSomething() {
