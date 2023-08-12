@@ -129,6 +129,8 @@ public class BipPlayView extends ConstraintLayout {
         }
     };
 
+    private boolean isRelease = false;
+
     public BipPlayView(@NonNull Context context) {
         super(context);
         init(context);
@@ -827,11 +829,12 @@ public class BipPlayView extends ConstraintLayout {
         this.mOnInfoListener = mOnInfoListener;
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        danmakuView.release();
-        okHttpClient.dispatcher().cancelAll();
+    public void release() {
+        if (!isRelease) {
+            isRelease = true;
+            danmakuView.release();
+            okHttpClient.dispatcher().cancelAll();
+        }
     }
 
     @Override

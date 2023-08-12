@@ -160,11 +160,11 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             getVB().videoPlayDesRv.setLayoutManager(new LinearLayoutManager(this));
             getVB().videoPlayDesRv.setAdapter(descRVAdapter);
             int listColumn = getResources().getInteger(R.integer.list_column);
-            GridLayoutManager layoutManager = new GridLayoutManager(this,listColumn);
+            GridLayoutManager layoutManager = new GridLayoutManager(this, listColumn);
             layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if(position < sourceAdapter.getItemCount()||position == (sourceAdapter.getItemCount()+relatedRVAdapter.getItemCount()-1)){
+                    if (position < sourceAdapter.getItemCount() || position == (sourceAdapter.getItemCount() + relatedRVAdapter.getItemCount() - 1)) {
                         return listColumn;
                     }
                     return 1;
@@ -218,6 +218,7 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
     protected void onDestroy() {
         super.onDestroy();
         viewModel.onViewDestroy();
+        getVB().videoPlayView.release();
         unregisterSomething();
     }
 
