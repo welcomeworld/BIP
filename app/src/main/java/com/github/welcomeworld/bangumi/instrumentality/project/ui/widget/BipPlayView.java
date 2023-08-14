@@ -12,14 +12,10 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.QualityRvAdapter;
+import com.github.welcomeworld.bangumi.instrumentality.project.databinding.CustomPlayViewBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BiliDanmukuParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SettingConfig;
@@ -46,7 +43,6 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 import master.flame.danmaku.controller.DrawHandler;
-import master.flame.danmaku.controller.IDanmakuView;
 import master.flame.danmaku.danmaku.loader.ILoader;
 import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
@@ -61,24 +57,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class BipPlayView extends ConstraintLayout {
-    private ImageView playPauseView;
-    private SeekBar videoSeekView;
-    private TextView videoPositionView;
-    private TextView videoDurationView;
-    private TextView videoQualityView;
-    private ImageView videoFullScreenView;
-    private ProgressBar videoBottomProgressView;
-    private SurfaceView surfaceView;
+    private CustomPlayViewBinding binding = null;
     private SurfaceHolder videoSurfaceHolder;
-    private TextView bottomShadowView;
-    private TextView topShadowView;
-    private TextView titleView;
-    private IDanmakuView danmakuView;
-    private BatteryView batteryView;
-    private TextView timeView;
-    private TextView fastForwardView;
-    private ProgressBar videoBufferingView;
-    private ImageView danmakuSwitchView;
     BIPPlayer bipPlayer;
     boolean isFullScreen;
     VideoBean currentVideoBean;
@@ -104,7 +84,6 @@ public class BipPlayView extends ConstraintLayout {
 
     private OkHttpClient okHttpClient;
 
-    private RecyclerView qualityRv;
     private final QualityRvAdapter qualityRvAdapter = new QualityRvAdapter();
 
     private static final String TAG = "BipPlayView";
@@ -117,9 +96,9 @@ public class BipPlayView extends ConstraintLayout {
                 getViewTreeObserver().removeOnGlobalFocusChangeListener(focusChangeListener);
                 if (userSeeking) {
                     userSeeking = false;
-                    fastForwardView.setVisibility(GONE);
+                    binding.fastForward.setVisibility(GONE);
                 }
-            } else if (isShowingQualityWindow() && qualityRv.indexOfChild(oldFocus) >= 0 && qualityRv.indexOfChild(newFocus) < 0) {
+            } else if (isShowingQualityWindow() && binding.qualityRv.indexOfChild(oldFocus) >= 0 && binding.qualityRv.indexOfChild(newFocus) < 0) {
                 hideQualityWindow();
             }
         }
@@ -144,58 +123,43 @@ public class BipPlayView extends ConstraintLayout {
 
     @SuppressLint("ClickableViewAccessibility")
     private void init(Context context) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.custom_play_view, this);
-        playPauseView = itemView.findViewById(R.id.bip_play_view_play_pause);
-        videoSeekView = itemView.findViewById(R.id.bip_play_view_seek_bar);
-        videoSeekView.setKeyProgressIncrement(5);
-        videoSeekView.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        binding = CustomPlayViewBinding.inflate(LayoutInflater.from(context), this);
+        binding.seekBar.setKeyProgressIncrement(5);
+        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     long targetTime = progress * bipPlayer.getDuration() / SEEKBAR_MAX;
                     String seekText = StringUtil.formatTime(targetTime) + "/" + StringUtil.formatTime(duration);
-                    fastForwardView.setText(seekText);
+                    binding.fastForward.setText(seekText);
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 cancelHideController();
-                fastForwardView.setVisibility(VISIBLE);
+                binding.fastForward.setVisibility(VISIBLE);
                 userSeeking = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 scheduleHideController();
-                fastForwardView.setVisibility(GONE);
+                binding.fastForward.setVisibility(GONE);
                 userSeeking = false;
                 if (bipPlayer != null && bipPlayer.getDuration() > 0) {
                     long targetTime = seekBar.getProgress() * bipPlayer.getDuration() / SEEKBAR_MAX;
-                    videoPositionView.setText(StringUtil.formatTime(targetTime));
+                    binding.currentPosition.setText(StringUtil.formatTime(targetTime));
                     bipPlayer.seekTo(targetTime);
-                    videoBottomProgressView.setProgress(seekBar.getProgress());
+                    binding.bottomProgress.setProgress(seekBar.getProgress());
                     removeCallbacks(progressChangeRunnable);
                     postDelayed(progressChangeRunnable, 150);
                 }
             }
         });
-        bottomShadowView = itemView.findViewById(R.id.bip_play_view_bottom_shadow);
-        topShadowView = itemView.findViewById(R.id.bip_play_view_top_shadow);
-        titleView = itemView.findViewById(R.id.bip_play_view_title);
-        batteryView = itemView.findViewById(R.id.bip_play_view_battery);
-        timeView = itemView.findViewById(R.id.bip_play_view_time);
-        fastForwardView = itemView.findViewById(R.id.bip_play_view_fast_forward);
-        videoPositionView = itemView.findViewById(R.id.bip_play_view_current_position);
-        videoDurationView = itemView.findViewById(R.id.bip_play_view_duration);
-        videoBottomProgressView = itemView.findViewById(R.id.bip_play_view_bottom_progress);
-        videoBufferingView = itemView.findViewById(R.id.bip_play_view_buffering);
-        videoQualityView = itemView.findViewById(R.id.bip_play_view_quality);
-        videoQualityView.setOnClickListener(playItemClickListener);
-        videoFullScreenView = itemView.findViewById(R.id.bip_play_view_fullscreen);
-        videoFullScreenView.setOnClickListener(playItemClickListener);
-        surfaceView = itemView.findViewById(R.id.bip_play_view_surface);
-        videoSurfaceHolder = surfaceView.getHolder();
+        binding.quality.setOnClickListener(playItemClickListener);
+        binding.fullscreen.setOnClickListener(playItemClickListener);
+        videoSurfaceHolder = binding.surface.getHolder();
         videoSurfaceHolder.addCallback(surfaceHolderCallback);
         gestureDetectorCompat = new GestureDetectorCompat(context, gestureListener);
         setOnTouchListener((v, event) -> {
@@ -203,7 +167,7 @@ public class BipPlayView extends ConstraintLayout {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (bipPlayer != null) {
                     if (fastfowarding) {
-                        fastForwardView.setVisibility(GONE);
+                        binding.fastForward.setVisibility(GONE);
                         bipPlayer.seekTo(fastforward_record);
                         scheduleHideController();
                         userSeeking = false;
@@ -223,16 +187,13 @@ public class BipPlayView extends ConstraintLayout {
             gestureDetectorCompat.onTouchEvent(event);
             return true;
         });
-        playPauseView.setOnClickListener(playItemClickListener);
-        danmakuView = itemView.findViewById(R.id.bip_play_danmaku_view);
+        binding.playPause.setOnClickListener(playItemClickListener);
         setTime();
-        danmakuSwitchView = itemView.findViewById(R.id.bip_play_view_danmaku_switch);
-        danmakuSwitchView.setOnClickListener(playItemClickListener);
-        danmakuSwitchView.setSelected(SettingConfig.isDanmakuOpen());
+        binding.danmakuSwitch.setOnClickListener(playItemClickListener);
+        binding.danmakuSwitch.setSelected(SettingConfig.isDanmakuOpen());
         initDanmaku();
-        qualityRv = itemView.findViewById(R.id.bip_play_view_quality_rv);
-        qualityRv.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true));
-        qualityRv.setAdapter(qualityRvAdapter);
+        binding.qualityRv.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true));
+        binding.qualityRv.setAdapter(qualityRvAdapter);
         qualityRvAdapter.itemClickListener = (position, qualityBean) -> {
             currentVideoBean.setCurrentQualityIndex(position);
             SettingConfig.setCurrentQuality(qualityBean.getQuality());
@@ -311,7 +272,7 @@ public class BipPlayView extends ConstraintLayout {
                 hideController();
             } else {
                 showController();
-                playPauseView.setSelected(bipPlayer != null && bipPlayer.isPlaying());
+                binding.playPause.setSelected(bipPlayer != null && bipPlayer.isPlaying());
             }
         }
 
@@ -333,8 +294,8 @@ public class BipPlayView extends ConstraintLayout {
                     fastfowarding = true;
                     fastforward_record = bipPlayer.getCurrentPosition();
                     fastfowardText = StringUtil.formatTime(fastforward_record) + "/" + StringUtil.formatTime(duration);
-                    fastForwardView.setText(fastfowardText);
-                    fastForwardView.setVisibility(VISIBLE);
+                    binding.fastForward.setText(fastfowardText);
+                    binding.fastForward.setVisibility(VISIBLE);
                     showController();
                     cancelHideController();
                     userSeeking = true;
@@ -350,8 +311,8 @@ public class BipPlayView extends ConstraintLayout {
                 change = xpercentage * FASTFORWARD_MAX + fastforward_record > duration ? duration : xpercentage * FASTFORWARD_MAX + fastforward_record;
                 fastforward_record = (long) change;
                 fastfowardText = StringUtil.formatTime(fastforward_record) + "/" + StringUtil.formatTime(duration);
-                fastForwardView.setText(fastfowardText);
-                videoSeekView.setProgress((int) (change * SEEKBAR_MAX / duration));
+                binding.fastForward.setText(fastfowardText);
+                binding.seekBar.setProgress((int) (change * SEEKBAR_MAX / duration));
                 lastXpercentage = 0;
             }
             return false;
@@ -393,46 +354,46 @@ public class BipPlayView extends ConstraintLayout {
     };
 
     private void hideController() {
-        playPauseView.setVisibility(GONE);
-        videoSeekView.setVisibility(GONE);
-        bottomShadowView.setVisibility(GONE);
-        topShadowView.setVisibility(GONE);
-        titleView.setVisibility(GONE);
-        batteryView.setVisibility(GONE);
-        timeView.setVisibility(GONE);
-        videoPositionView.setVisibility(GONE);
-        videoDurationView.setVisibility(GONE);
+        binding.playPause.setVisibility(GONE);
+        binding.seekBar.setVisibility(GONE);
+        binding.bottomShadow.setVisibility(GONE);
+        binding.topShadow.setVisibility(GONE);
+        binding.title.setVisibility(GONE);
+        binding.battery.setVisibility(GONE);
+        binding.time.setVisibility(GONE);
+        binding.currentPosition.setVisibility(GONE);
+        binding.duration.setVisibility(GONE);
         if (!isFullScreen) {
-            videoBottomProgressView.setVisibility(VISIBLE);
+            binding.bottomProgress.setVisibility(VISIBLE);
         }
-        videoFullScreenView.setVisibility(GONE);
-        videoQualityView.setVisibility(GONE);
-        danmakuSwitchView.setVisibility(GONE);
+        binding.fullscreen.setVisibility(GONE);
+        binding.quality.setVisibility(GONE);
+        binding.danmakuSwitch.setVisibility(GONE);
         hideQualityWindow();
     }
 
     private void showController() {
-        playPauseView.setVisibility(VISIBLE);
-        videoSeekView.setVisibility(VISIBLE);
-        videoPositionView.setVisibility(VISIBLE);
-        videoDurationView.setVisibility(VISIBLE);
-        bottomShadowView.setVisibility(VISIBLE);
-        topShadowView.setVisibility(VISIBLE);
-        titleView.setVisibility(VISIBLE);
-        batteryView.setVisibility(VISIBLE);
-        timeView.setVisibility(VISIBLE);
-        videoBottomProgressView.setVisibility(GONE);
-        videoFullScreenView.setVisibility(VISIBLE);
+        binding.playPause.setVisibility(VISIBLE);
+        binding.seekBar.setVisibility(VISIBLE);
+        binding.currentPosition.setVisibility(VISIBLE);
+        binding.duration.setVisibility(VISIBLE);
+        binding.bottomShadow.setVisibility(VISIBLE);
+        binding.topShadow.setVisibility(VISIBLE);
+        binding.title.setVisibility(VISIBLE);
+        binding.battery.setVisibility(VISIBLE);
+        binding.time.setVisibility(VISIBLE);
+        binding.bottomProgress.setVisibility(GONE);
+        binding.fullscreen.setVisibility(VISIBLE);
         if (bipPlayer != null) {
-            videoQualityView.setVisibility(VISIBLE);
+            binding.quality.setVisibility(VISIBLE);
         }
         cancelHideController();
         scheduleHideController();
-        danmakuSwitchView.setVisibility(VISIBLE);
+        binding.danmakuSwitch.setVisibility(VISIBLE);
     }
 
     private boolean isControllerShowing() {
-        return playPauseView.getVisibility() == VISIBLE;
+        return binding.playPause.getVisibility() == VISIBLE;
     }
 
     private final Runnable hideControllerRunnable = this::hideController;
@@ -444,11 +405,11 @@ public class BipPlayView extends ConstraintLayout {
             cancelHideController();
             boolean scheduleHide = true;
             int vId = v.getId();
-            if (vId == R.id.bip_play_view_play_pause) {
+            if (vId == R.id.play_pause) {
                 playOrPause();
-            } else if (vId == R.id.bip_play_view_fullscreen) {
+            } else if (vId == R.id.fullscreen) {
                 setFullScreen(!isFullScreen);
-            } else if (vId == R.id.bip_play_view_quality) {
+            } else if (vId == R.id.quality) {
                 if (currentVideoBean != null && currentVideoBean.getQualityBeans() != null && currentVideoBean.getQualityBeans().size() > 1) {
                     if (isShowingQualityWindow()) {
                         hideQualityWindow();
@@ -459,13 +420,13 @@ public class BipPlayView extends ConstraintLayout {
                 } else {
                     LogUtil.e("BipPlayView", "Data not valid");
                 }
-            } else if (vId == R.id.bip_play_view_danmaku_switch) {
+            } else if (vId == R.id.danmaku_switch) {
                 v.setSelected(!v.isSelected());
                 SettingConfig.setDanmakuOpen(v.isSelected());
                 if (v.isSelected()) {
-                    danmakuView.show();
+                    binding.danmakuView.show();
                 } else {
-                    danmakuView.hide();
+                    binding.danmakuView.hide();
                 }
             }
             if (scheduleHide) {
@@ -489,7 +450,7 @@ public class BipPlayView extends ConstraintLayout {
     }
 
     private void resizeSurfaceSize(int videoWidth, int videoHeight, int parentWidth, int parentHeight, boolean reLayout) {
-        ViewGroup.LayoutParams layoutParams = surfaceView.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = binding.surface.getLayoutParams();
         if (videoWidth <= 0 || videoHeight <= 0 || parentHeight <= 0) {
             return;
         }
@@ -502,11 +463,11 @@ public class BipPlayView extends ConstraintLayout {
             targetHeight = parentHeight;
             targetWidth = (targetHeight * videoWidth) / videoHeight;
         }
-        if (sizeDiff(surfaceView.getMeasuredWidth(), targetWidth) || sizeDiff(surfaceView.getMeasuredHeight(), targetHeight)) {
+        if (sizeDiff(binding.surface.getMeasuredWidth(), targetWidth) || sizeDiff(binding.surface.getMeasuredHeight(), targetHeight)) {
             layoutParams.width = targetWidth;
             layoutParams.height = targetHeight;
             if (reLayout) {
-                surfaceView.requestLayout();
+                binding.surface.requestLayout();
             }
         }
     }
@@ -523,15 +484,15 @@ public class BipPlayView extends ConstraintLayout {
         bipPlayer.setOnPreparedListener(mediaPlayer -> {
             duration = mediaPlayer.getDuration();
             resizeSurfaceSize();
-            videoDurationView.setText(StringUtil.formatTime(duration));
+            binding.duration.setText(StringUtil.formatTime(duration));
             if (duration > 0 && currentVideoBean != null) {
                 currentVideoBean.setDuration(duration);
             }
             if (isControllerShowing() && !isFullScreen) {
-                videoFullScreenView.setVisibility(VISIBLE);
+                binding.fullscreen.setVisibility(VISIBLE);
             }
-            if (danmakuView.isPrepared()) {
-                danmakuView.start(bipPlayer.getCurrentPosition());
+            if (binding.danmakuView.isPrepared()) {
+                binding.danmakuView.start(bipPlayer.getCurrentPosition());
             }
             LogUtil.e("BIPPlayer", "prepared");
             post(progressChangeRunnable);
@@ -550,19 +511,19 @@ public class BipPlayView extends ConstraintLayout {
         bipPlayer.setOnCompletionListener(bp -> {
             removeCallbacks(progressChangeRunnable);
             if (bp.getDuration() > 0) {
-                videoPositionView.setText(StringUtil.formatTime(bipPlayer.getDuration()));
+                binding.currentPosition.setText(StringUtil.formatTime(bipPlayer.getDuration()));
                 if (!userSeeking) {
-                    videoSeekView.setProgress(1000);
+                    binding.seekBar.setProgress(1000);
                 }
-                videoBottomProgressView.setProgress(1000);
-                playPauseView.setSelected(false);
+                binding.bottomProgress.setProgress(1000);
+                binding.playPause.setSelected(false);
             }
             if (mOnCompletionListener != null) {
                 mOnCompletionListener.onCompletion(bp);
             }
         });
         bipPlayer.setOnBufferingUpdateListener((bp, percent) -> {
-            videoSeekView.setSecondaryProgress(percent * 10);
+            binding.seekBar.setSecondaryProgress(percent * 10);
             if (mOnBufferingUpdateListener != null) {
                 mOnBufferingUpdateListener.onBufferingUpdate(bp, percent);
             }
@@ -570,10 +531,10 @@ public class BipPlayView extends ConstraintLayout {
         bipPlayer.setOnInfoListener((bp, what, extra) -> {
             switch (what) {
                 case 0:
-                    videoBufferingView.setVisibility(View.VISIBLE);
+                    binding.buffering.setVisibility(View.VISIBLE);
                     break;
                 case 1:
-                    videoBufferingView.setVisibility(View.GONE);
+                    binding.buffering.setVisibility(View.GONE);
                     break;
             }
             if (mOnInfoListener != null) {
@@ -583,8 +544,8 @@ public class BipPlayView extends ConstraintLayout {
         bipPlayer.setOnSeekCompleteListener(bp -> {
             removeCallbacks(progressChangeRunnable);
             post(progressChangeRunnable);
-            if (danmakuView.isPrepared()) {
-                danmakuView.start(bipPlayer.getCurrentPosition());
+            if (binding.danmakuView.isPrepared()) {
+                binding.danmakuView.start(bipPlayer.getCurrentPosition());
             }
             LogUtil.e(TAG, "seek completed" + bipPlayer.getCurrentPosition());
             if (mOnSeekCompleteListener != null) {
@@ -604,9 +565,9 @@ public class BipPlayView extends ConstraintLayout {
         }
         fullScreenChanging = true;
         isFullScreen = fullScreen;
-        videoFullScreenView.setSelected(fullScreen);
+        binding.fullscreen.setSelected(fullScreen);
         playViewListener.onFullScreenChange(isFullScreen);
-        videoFullScreenView.requestFocus();
+        binding.fullscreen.requestFocus();
         fullScreenChanging = false;
     }
 
@@ -620,12 +581,12 @@ public class BipPlayView extends ConstraintLayout {
         @Override
         public void run() {
             if (bipPlayer != null && bipPlayer.getDuration() > 0) {
-                videoPositionView.setText(StringUtil.formatTime(bipPlayer.getCurrentPosition()));
+                binding.currentPosition.setText(StringUtil.formatTime(bipPlayer.getCurrentPosition()));
                 if (!userSeeking) {
-                    videoSeekView.setProgress((int) (bipPlayer.getCurrentPosition() * 1000 / bipPlayer.getDuration()));
+                    binding.seekBar.setProgress((int) (bipPlayer.getCurrentPosition() * 1000 / bipPlayer.getDuration()));
                 }
-                videoBottomProgressView.setProgress((int) (bipPlayer.getCurrentPosition() * 1000 / bipPlayer.getDuration()));
-                playPauseView.setSelected(bipPlayer.isPlaying());
+                binding.bottomProgress.setProgress((int) (bipPlayer.getCurrentPosition() * 1000 / bipPlayer.getDuration()));
+                binding.playPause.setSelected(bipPlayer.isPlaying());
                 if (bipPlayer.isPlaying()) {
                     currentVideoBean.setPlayPosition(bipPlayer.getCurrentPosition());
                 }
@@ -642,10 +603,10 @@ public class BipPlayView extends ConstraintLayout {
         this.currentVideoBean = currentVideoBean;
         if (currentVideoBean != null) {
             if (currentVideoBean.getCurrentQualityBean() != null) {
-                videoQualityView.setText(currentVideoBean.getCurrentQualityBean().getQuality());
+                binding.quality.setText(currentVideoBean.getCurrentQualityBean().getQuality());
             }
             if (!StringUtil.isEmpty(currentVideoBean.getTitle())) {
-                titleView.setText(currentVideoBean.getTitle());
+                binding.title.setText(currentVideoBean.getTitle());
             }
             if (!StringUtil.isEmpty(currentVideoBean.getDanmakuUrl())) {
                 createDanmakuParser(currentVideoBean.getDanmakuUrl());
@@ -658,14 +619,14 @@ public class BipPlayView extends ConstraintLayout {
             removeCallbacks(progressChangeRunnable);
             if (bipPlayer.isPlaying()) {
                 bipPlayer.pause();
-                playPauseView.setSelected(false);
-                danmakuView.pause();
+                binding.playPause.setSelected(false);
+                binding.danmakuView.pause();
             } else {
                 bipPlayer.start();
-                playPauseView.setSelected(true);
+                binding.playPause.setSelected(true);
                 post(progressChangeRunnable);
-                if (danmakuView.isPrepared()) {
-                    danmakuView.start(bipPlayer.getCurrentPosition());
+                if (binding.danmakuView.isPrepared()) {
+                    binding.danmakuView.start(bipPlayer.getCurrentPosition());
                 }
             }
         }
@@ -676,8 +637,8 @@ public class BipPlayView extends ConstraintLayout {
             removeCallbacks(progressChangeRunnable);
             if (bipPlayer.isPlaying()) {
                 bipPlayer.pause();
-                playPauseView.setSelected(false);
-                danmakuView.pause();
+                binding.playPause.setSelected(false);
+                binding.danmakuView.pause();
             }
         }
     }
@@ -687,11 +648,11 @@ public class BipPlayView extends ConstraintLayout {
             return;
         }
         qualityRvAdapter.replaceAll(currentVideoBean.getQualityBeans());
-        qualityRv.setVisibility(View.VISIBLE);
+        binding.qualityRv.setVisibility(View.VISIBLE);
     }
 
     public void hideQualityWindow() {
-        qualityRv.setVisibility(View.GONE);
+        binding.qualityRv.setVisibility(View.GONE);
         scheduleHideController();
     }
 
@@ -716,13 +677,13 @@ public class BipPlayView extends ConstraintLayout {
         danmakuContext.setScaleTextSize(1);
         danmakuContext.setScrollSpeedFactor(1);
         danmakuContext.preventOverlapping(overlappingEnable);
-        danmakuView.setCallback(new DrawHandler.Callback() {
+        binding.danmakuView.setCallback(new DrawHandler.Callback() {
             @Override
             public void prepared() {
                 Log.d(TAG, "danmakuView prepared");
                 post(() -> {
                     if (bipPlayer != null && bipPlayer.isPlaying()) {
-                        danmakuView.start(bipPlayer.getCurrentPosition());
+                        binding.danmakuView.start(bipPlayer.getCurrentPosition());
                     }
                 });
             }
@@ -739,7 +700,7 @@ public class BipPlayView extends ConstraintLayout {
             public void drawingFinished() {
             }
         });
-        danmakuView.enableDanmakuDrawingCache(true);
+        binding.danmakuView.enableDanmakuDrawingCache(true);
         okHttpClient = new OkHttpClient().newBuilder().build();
     }
 
@@ -769,23 +730,23 @@ public class BipPlayView extends ConstraintLayout {
                 }
                 BaseDanmakuParser parser = new BiliDanmukuParser();
                 parser.load(iLoader.getDataSource());
-                danmakuView.prepare(parser, danmakuContext);
+                binding.danmakuView.prepare(parser, danmakuContext);
             }
         });
     }
 
     public void setBattery(int battery) {
         if (battery < 50) {
-            batteryView.setBatteryColor(Color.RED);
+            binding.battery.setBatteryColor(Color.RED);
         } else {
-            batteryView.setBatteryColor(Color.GREEN);
+            binding.battery.setBatteryColor(Color.GREEN);
         }
-        batteryView.setBattery(battery);
+        binding.battery.setBattery(battery);
     }
 
     public void setTime() {
         String time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE);
-        timeView.setText(time);
+        binding.time.setText(time);
     }
 
     public void setOnPreparedListener(BIPPlayer.OnPreparedListener mOnPreparedListener) {
@@ -820,7 +781,7 @@ public class BipPlayView extends ConstraintLayout {
     public void release() {
         if (!isRelease) {
             isRelease = true;
-            danmakuView.release();
+            binding.danmakuView.release();
             okHttpClient.dispatcher().cancelAll();
         }
     }
@@ -833,19 +794,19 @@ public class BipPlayView extends ConstraintLayout {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (!userSeeking && videoSeekView.isFocused() && (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT)) {
-                fastForwardView.setVisibility(VISIBLE);
+            if (!userSeeking && binding.seekBar.isFocused() && (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT)) {
+                binding.fastForward.setVisibility(VISIBLE);
                 userSeeking = true;
             }
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
-            if (userSeeking && videoSeekView.isFocused() && (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT)) {
-                fastForwardView.setVisibility(GONE);
+            if (userSeeking && binding.seekBar.isFocused() && (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT)) {
+                binding.fastForward.setVisibility(GONE);
                 userSeeking = false;
                 if (bipPlayer != null && bipPlayer.getDuration() > 0) {
-                    long targetTime = videoSeekView.getProgress() * bipPlayer.getDuration() / SEEKBAR_MAX;
-                    videoPositionView.setText(StringUtil.formatTime(targetTime));
+                    long targetTime = binding.seekBar.getProgress() * bipPlayer.getDuration() / SEEKBAR_MAX;
+                    binding.currentPosition.setText(StringUtil.formatTime(targetTime));
                     bipPlayer.seekTo(targetTime);
-                    videoBottomProgressView.setProgress(videoSeekView.getProgress());
+                    binding.bottomProgress.setProgress(binding.seekBar.getProgress());
                     removeCallbacks(progressChangeRunnable);
                     postDelayed(progressChangeRunnable, 150);
                 }
@@ -862,7 +823,7 @@ public class BipPlayView extends ConstraintLayout {
             cancelHideController();
             getViewTreeObserver().removeOnGlobalFocusChangeListener(focusChangeListener);
             getViewTreeObserver().addOnGlobalFocusChangeListener(focusChangeListener);
-            playPauseView.requestFocus();
+            binding.playPause.requestFocus();
         }
     }
 
@@ -941,6 +902,6 @@ public class BipPlayView extends ConstraintLayout {
     }
 
     private boolean isShowingQualityWindow() {
-        return qualityRv.getVisibility() == View.VISIBLE;
+        return binding.qualityRv.getVisibility() == View.VISIBLE;
     }
 }
