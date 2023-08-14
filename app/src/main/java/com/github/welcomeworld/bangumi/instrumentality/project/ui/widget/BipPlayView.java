@@ -39,10 +39,7 @@ import com.github.welcomeworld.devbase.utils.StringUtil;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 import com.github.welcomeworld.devbase.utils.ToastUtil;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.zip.Inflater;
@@ -51,7 +48,6 @@ import java.util.zip.InflaterInputStream;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.controller.IDanmakuView;
 import master.flame.danmaku.danmaku.loader.ILoader;
-import master.flame.danmaku.danmaku.loader.IllegalDataException;
 import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
@@ -723,7 +719,7 @@ public class BipPlayView extends ConstraintLayout {
         danmakuView.setCallback(new DrawHandler.Callback() {
             @Override
             public void prepared() {
-                Log.e(TAG, "danmakuView prepared");
+                Log.d(TAG, "danmakuView prepared");
                 post(() -> {
                     if (bipPlayer != null && bipPlayer.isPlaying()) {
                         danmakuView.start(bipPlayer.getCurrentPosition());
@@ -733,17 +729,14 @@ public class BipPlayView extends ConstraintLayout {
 
             @Override
             public void updateTimer(DanmakuTimer timer) {
-
             }
 
             @Override
             public void danmakuShown(BaseDanmaku danmaku) {
-
             }
 
             @Override
             public void drawingFinished() {
-                Log.e(TAG, "finished");
             }
         });
         danmakuView.enableDanmakuDrawingCache(true);
@@ -764,23 +757,13 @@ public class BipPlayView extends ConstraintLayout {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                try {
-                    InflaterInputStream deflaterInputStream = new InflaterInputStream(response.body().byteStream(), new Inflater(true));
-                    int a;
-                    while ((a = deflaterInputStream.read()) != -1) {
-                        outputStream.write(a);
-                    }
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Malformedmessage" + e.getMessage());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "message" + e.getMessage());
+                if (response.body() == null) {
+                    return;
                 }
                 try {
-                    iLoader.load(new ByteArrayInputStream(outputStream.toByteArray()));
-                } catch (IllegalDataException e) {
+                    InflaterInputStream inflaterInputStream = new InflaterInputStream(response.body().byteStream(), new Inflater(true));
+                    iLoader.load(inflaterInputStream);
+                } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, "error Uri:" + uri + "message" + e.getMessage());
                 }
@@ -809,22 +792,27 @@ public class BipPlayView extends ConstraintLayout {
         this.mOnPreparedListener = mOnPreparedListener;
     }
 
+    @SuppressWarnings("unused")
     public void setOnCompletionListener(BIPPlayer.OnCompletionListener mOnCompletionListener) {
         this.mOnCompletionListener = mOnCompletionListener;
     }
 
+    @SuppressWarnings("unused")
     public void setOnBufferingUpdateListener(BIPPlayer.OnBufferingUpdateListener mOnBufferingUpdateListener) {
         this.mOnBufferingUpdateListener = mOnBufferingUpdateListener;
     }
 
+    @SuppressWarnings("unused")
     public void setOnSeekCompleteListener(BIPPlayer.OnSeekCompleteListener mOnSeekCompleteListener) {
         this.mOnSeekCompleteListener = mOnSeekCompleteListener;
     }
 
+    @SuppressWarnings("unused")
     public void setOnErrorListener(BIPPlayer.OnErrorListener mOnErrorListener) {
         this.mOnErrorListener = mOnErrorListener;
     }
 
+    @SuppressWarnings("unused")
     public void setOnInfoListener(BIPPlayer.OnInfoListener mOnInfoListener) {
         this.mOnInfoListener = mOnInfoListener;
     }
