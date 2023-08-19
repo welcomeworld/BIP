@@ -6,90 +6,78 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main_top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/color_white"
-        app:layout_constraintTop_toTopOf="parent">
+    <TextView
+        android:id="@+id/main_search"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_home_search"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:nextFocusUp="@id/main_bottom_mine"
+        android:nextFocusDown="@id/main_bottom_home"
+        android:paddingStart="12dp"
+        android:paddingEnd="8dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck"
+        tools:layout_editor_absoluteX="18dp" />
 
-        <TextView
-            android:id="@+id/main_search"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
-            android:background="@drawable/ic_home_search"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:nextFocusLeft="@id/main_bottom_home"
-            android:nextFocusRight="@id/main_bottom_mine"
-            android:paddingStart="12dp"
-            android:paddingEnd="8dp"
-            android:text="@string/search_hint"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TextContrastCheck"
-            tools:layout_editor_absoluteX="18dp" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/main_bottom_home"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_main_bottom_home"
+        android:focusable="true"
+        android:gravity="center"
+        android:nextFocusUp="@id/main_search"
+        android:nextFocusDown="@id/main_bottom_bangumi"
+        android:textColor="@color/black_29b6f6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_search" />
+
+    <TextView
+        android:id="@+id/main_bottom_bangumi"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_main_bottom_bangumi"
+        android:focusable="true"
+        android:gravity="center"
+        android:nextFocusUp="@id/main_bottom_home"
+        android:nextFocusDown="@id/main_bottom_mine"
+        android:textAlignment="center"
+        android:textColor="@color/black_29b6f6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_bottom_home" />
+
+    <TextView
+        android:id="@+id/main_bottom_mine"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_main_bottom_more"
+        android:focusable="true"
+        android:gravity="center"
+        android:nextFocusUp="@id/main_bottom_bangumi"
+        android:nextFocusDown="@id/main_search"
+        android:textColor="@color/black_29b6f6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_bottom_bangumi" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/main_view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:nextFocusLeft="@id/main_search"
-        android:nextFocusDown="@id/main_bottom_home"
-        app:layout_constraintBottom_toTopOf="@id/main_bottom_home"
-        app:layout_constraintTop_toBottomOf="@id/main_top"
+        android:layout_marginStart="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
-
-
-    <TextView
-        android:id="@+id/main_bottom_home"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:background="@drawable/bg_main_bottom"
-        android:focusable="true"
-        android:gravity="center"
-        android:nextFocusLeft="@id/main_search"
-        android:nextFocusRight="@id/main_bottom_bangumi"
-        android:text="@string/home"
-        android:textColor="@color/black_29b6f6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/main_bottom_bangumi"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/main_bottom_bangumi"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:background="@drawable/bg_main_bottom"
-        android:focusable="true"
-        android:gravity="center"
-        android:nextFocusLeft="@id/main_bottom_home"
-        android:nextFocusRight="@id/main_bottom_mine"
-        android:text="@string/bangumi"
-        android:textAlignment="center"
-        android:textColor="@color/black_29b6f6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/main_bottom_mine"
-        app:layout_constraintStart_toEndOf="@id/main_bottom_home" />
-
-    <TextView
-        android:id="@+id/main_bottom_mine"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:background="@drawable/bg_main_bottom"
-        android:focusable="true"
-        android:gravity="center"
-        android:nextFocusLeft="@id/main_bottom_bangumi"
-        android:nextFocusRight="@id/main_search"
-        android:text="@string/mine"
-        android:textColor="@color/black_29b6f6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/main_bottom_bangumi" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

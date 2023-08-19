@@ -5,6 +5,7 @@
 
     <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.BaseWebView
         android:id="@+id/bangumi_webview"
+        android:focusable="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
