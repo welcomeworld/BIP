@@ -19,7 +19,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:autofillHints="none"
-            android:background="@drawable/ic_home_search"
+            android:background="@drawable/bg_search_input"
             android:gravity="center_vertical"
             android:hint="@string/search_hint"
             android:imeOptions="actionSearch"
