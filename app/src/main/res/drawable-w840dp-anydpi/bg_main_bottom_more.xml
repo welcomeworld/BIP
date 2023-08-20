@@ -4,11 +4,11 @@
         <layer-list>
             <item>
                 <shape android:shape="oval">
-                    <solid android:color="@color/color_white"/>
+                    <solid android:color="@color/color_white" />
                 </shape>
             </item>
             <item>
-                <inset android:drawable="@drawable/ic_menu" android:insetLeft="8dp" android:insetTop="8dp" android:insetRight="8dp" android:insetBottom="8dp" />
+                <inset android:drawable="@drawable/ic_menu_focused" android:insetLeft="8dp" android:insetTop="8dp" android:insetRight="8dp" android:insetBottom="8dp" />
             </item>
         </layer-list>
     </item>
@@ -16,7 +16,7 @@
         <layer-list>
             <item>
                 <shape android:shape="oval">
-                    <solid android:color="@color/color_white_60"/>
+                    <solid android:color="@color/color_white_60" />
                 </shape>
             </item>
             <item>

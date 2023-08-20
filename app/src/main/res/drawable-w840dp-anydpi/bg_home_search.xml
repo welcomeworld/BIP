@@ -8,7 +8,7 @@
                 </shape>
             </item>
             <item>
-                <inset android:drawable="@drawable/ic_search" android:insetLeft="8dp" android:insetTop="8dp" android:insetRight="8dp" android:insetBottom="8dp" />
+                <inset android:drawable="@drawable/ic_search_focused" android:insetLeft="8dp" android:insetTop="8dp" android:insetRight="8dp" android:insetBottom="8dp" />
             </item>
         </layer-list>
     </item>
