@@ -2,19 +2,23 @@ package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.github.welcomeworld.bangumi.instrumentality.project.BIPApp;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.databinding.RvVideoLandscapeItemBinding;
+import com.github.welcomeworld.bangumi.instrumentality.project.databinding.RvVideoPortraitItemBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.DownloadInfoBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadInfoConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadManager;
@@ -28,8 +32,6 @@ import java.util.List;
 
 public class DownloadRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<DownloadInfoBean> data = new ArrayList<>();
-    Context context;
-
     private static final int ITEM_PORTRAIT_TYPE = 0;
     private static final int ITEM_LANDSCAPE_TYPE = 2;
     Activity activity;
@@ -58,14 +60,12 @@ public class DownloadRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == ITEM_PORTRAIT_TYPE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_search_portrait_item, parent, false);
+            return new PortraitHolder(RvVideoPortraitItemBinding.inflate(inflater, parent, false));
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_search_landscape_item, parent, false);
+            return new LandscapeHolder(RvVideoLandscapeItemBinding.inflate(inflater, parent, false));
         }
-        context = parent.getContext();
-        return new SearchResultRecyclerViewAdapter.MyInnerViewHolder(view);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class DownloadRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         DownloadInfoBean downloadInfo = data.get(position);
-        SearchResultRecyclerViewAdapter.MyInnerViewHolder holder = (SearchResultRecyclerViewAdapter.MyInnerViewHolder) viewHolder;
+        MyInnerViewHolder holder = (MyInnerViewHolder) viewHolder;
         holder.titleView.setText(downloadInfo.getTitle());
         if (downloadInfo.getDownloadState() == DownloadInfoBean.DOWNLOADING) {
             holder.tagView.setText(R.string.downloading);
@@ -90,7 +90,10 @@ public class DownloadRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         } else if (downloadInfo.getDownloadState() == DownloadInfoBean.PAUSE) {
             holder.tagView.setText(R.string.paused);
         }
-        Glide.with(context).load(downloadInfo.getCover()).transform(new RoundedCorners(ScreenUtil.dp2px(context, 4))).into(holder.coverView);
+        Glide.with(holder.coverView)
+                .load(downloadInfo.getCover())
+                .transform(new RoundedCorners(ScreenUtil.dp2px(BIPApp.getInstance(), 4)))
+                .into(holder.coverView);
         if (downloadInfo.getDuration() == 0) {
             holder.durationView.setVisibility(View.INVISIBLE);
         } else {
@@ -115,5 +118,42 @@ public class DownloadRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public static class MyInnerViewHolder extends RecyclerView.ViewHolder {
+        TextView titleView;
+        TextView tagView;
+        ImageView coverView;
+        TextView durationView;
+
+        public MyInnerViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+    }
+
+    public static class LandscapeHolder extends MyInnerViewHolder {
+        RvVideoLandscapeItemBinding binding;
+
+        public LandscapeHolder(RvVideoLandscapeItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            titleView = binding.cardVideoTitle;
+            tagView = binding.cardVideoLabel;
+            coverView = binding.cardVideoCover;
+            durationView = binding.cardVideoDuration;
+        }
+    }
+
+    public static class PortraitHolder extends MyInnerViewHolder {
+        RvVideoPortraitItemBinding binding;
+
+        public PortraitHolder(RvVideoPortraitItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            titleView = binding.cardVideoTitle;
+            tagView = binding.cardVideoLabel;
+            coverView = binding.cardVideoCover;
+            durationView = binding.cardVideoDuration;
+        }
     }
 }

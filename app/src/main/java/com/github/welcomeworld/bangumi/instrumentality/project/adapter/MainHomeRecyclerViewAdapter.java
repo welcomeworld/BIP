@@ -2,21 +2,20 @@ package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.github.welcomeworld.bangumi.instrumentality.project.BIPApp;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.databinding.RvVideoLandscapeItemBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.VideoPlayActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
@@ -29,7 +28,6 @@ import java.util.List;
 public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<VideoListBean> data = new ArrayList<>();
-    Context context;
 
     private static final int ITEM_TYPE = 0;
     private static final int FOOTER_TYPE = 1;
@@ -63,9 +61,7 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_home_footer, parent, false);
             return new FooterViewHolder(view);
         }
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_home_item, parent, false);
-        context = parent.getContext();
-        return new MyInnerViewHolder(view);
+        return new MyInnerViewHolder(RvVideoLandscapeItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -89,19 +85,19 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
         MyInnerViewHolder holder = (MyInnerViewHolder) viewHolder;
         VideoListBean currentData = data.get(position);
-        holder.titleView.setText(currentData.getTitle());
+        holder.binding.cardVideoTitle.setText(currentData.getTitle());
         if (StringUtil.isEmpty(currentData.getTag())) {
-            holder.tagView.setVisibility(View.INVISIBLE);
+            holder.binding.cardVideoLabel.setVisibility(View.INVISIBLE);
         } else {
-            holder.tagView.setVisibility(View.VISIBLE);
-            holder.tagView.setText(currentData.getTag());
+            holder.binding.cardVideoLabel.setVisibility(View.VISIBLE);
+            holder.binding.cardVideoLabel.setText(currentData.getTag());
         }
-        Glide.with(context).load(currentData.getCover()).transform(new RoundedCorners(ScreenUtil.dp2px(context, 4))).into(holder.coverView);
+        Glide.with(holder.binding.cardVideoCover).load(currentData.getCover()).transform(new RoundedCorners(ScreenUtil.dp2px(BIPApp.getInstance(), 4))).into(holder.binding.cardVideoCover);
         if (currentData.getCurrentVideoBean() == null || currentData.getCurrentVideoBean().getDuration() == 0) {
-            holder.durationView.setVisibility(View.INVISIBLE);
+            holder.binding.cardVideoDuration.setVisibility(View.INVISIBLE);
         } else {
-            holder.durationView.setVisibility(View.VISIBLE);
-            holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(), StringUtil.MILLISECOND));
+            holder.binding.cardVideoDuration.setVisibility(View.VISIBLE);
+            holder.binding.cardVideoDuration.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(), StringUtil.MILLISECOND));
         }
         holder.itemView.findViewById(R.id.item_content).setOnClickListener(v -> {
             Bundle bundle = new Bundle();
@@ -118,17 +114,11 @@ public class MainHomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public static class MyInnerViewHolder extends RecyclerView.ViewHolder {
-        TextView titleView;
-        TextView tagView;
-        ImageView coverView;
-        TextView durationView;
+        RvVideoLandscapeItemBinding binding;
 
-        public MyInnerViewHolder(View itemView) {
-            super(itemView);
-            titleView = itemView.findViewById(R.id.card_video_title);
-            tagView = itemView.findViewById(R.id.card_video_label);
-            coverView = itemView.findViewById(R.id.card_video_cover);
-            durationView = itemView.findViewById(R.id.card_video_duration);
+        public MyInnerViewHolder(RvVideoLandscapeItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 

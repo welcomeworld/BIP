@@ -1,7 +1,6 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.github.welcomeworld.bangumi.instrumentality.project.BIPApp;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.databinding.RvVideoLandscapeItemBinding;
+import com.github.welcomeworld.bangumi.instrumentality.project.databinding.RvVideoPortraitItemBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.devbase.utils.StringUtil;
@@ -25,7 +27,6 @@ import java.util.List;
 public class RelatedRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<VideoListBean> data = new ArrayList<>();
-    Context context;
 
     private static final int ITEM_PORTRAIT_TYPE = 0;
     private static final int FOOTER_TYPE = 1;
@@ -53,17 +54,14 @@ public class RelatedRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == FOOTER_TYPE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_comment_footer, parent, false);
-            return new FooterViewHolder(view);
+            return new FooterViewHolder(inflater.inflate(R.layout.rv_comment_footer, parent, false));
         } else if (viewType == ITEM_PORTRAIT_TYPE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_search_portrait_item, parent, false);
+            return new PortraitHolder(RvVideoPortraitItemBinding.inflate(inflater, parent, false));
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_search_landscape_item, parent, false);
+            return new LandscapeHolder(RvVideoLandscapeItemBinding.inflate(inflater, parent, false));
         }
-        context = parent.getContext();
-        return new MyInnerViewHolder(view);
     }
 
     @Override
@@ -101,7 +99,10 @@ public class RelatedRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.tagView.setVisibility(View.VISIBLE);
             holder.tagView.setText(currentData.getTag());
         }
-        Glide.with(context).load(currentData.getCover()).transform(new RoundedCorners(ScreenUtil.dp2px(context, 4))).into(holder.coverView);
+        Glide.with(holder.coverView)
+                .load(currentData.getCover())
+                .transform(new RoundedCorners(ScreenUtil.dp2px(BIPApp.getInstance(), 4)))
+                .into(holder.coverView);
         if (currentData.getCurrentVideoBean() == null || currentData.getCurrentVideoBean().getDuration() == 0) {
             holder.durationView.setVisibility(View.INVISIBLE);
         } else {
@@ -126,12 +127,34 @@ public class RelatedRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ImageView coverView;
         TextView durationView;
 
-        public MyInnerViewHolder(View itemView) {
+        public MyInnerViewHolder(@NonNull View itemView) {
             super(itemView);
-            titleView = itemView.findViewById(R.id.card_video_title);
-            tagView = itemView.findViewById(R.id.card_video_label);
-            coverView = itemView.findViewById(R.id.card_video_cover);
-            durationView = itemView.findViewById(R.id.card_video_duration);
+        }
+    }
+
+    public static class LandscapeHolder extends MyInnerViewHolder {
+        RvVideoLandscapeItemBinding binding;
+
+        public LandscapeHolder(RvVideoLandscapeItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            titleView = binding.cardVideoTitle;
+            tagView = binding.cardVideoLabel;
+            coverView = binding.cardVideoCover;
+            durationView = binding.cardVideoDuration;
+        }
+    }
+
+    public static class PortraitHolder extends MyInnerViewHolder {
+        RvVideoPortraitItemBinding binding;
+
+        public PortraitHolder(RvVideoPortraitItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            titleView = binding.cardVideoTitle;
+            tagView = binding.cardVideoLabel;
+            coverView = binding.cardVideoCover;
+            durationView = binding.cardVideoDuration;
         }
     }
 

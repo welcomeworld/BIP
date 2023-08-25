@@ -5,11 +5,7 @@
     android:id="@+id/recommend_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="4dp"
-    android:focusable="true"
-    android:layout_marginEnd="16dp"
-    android:layout_marginBottom="4dp">
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -61,7 +57,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="4dp"
             android:ellipsize="end"
-            android:maxLines="4"
+            android:maxLines="3"
             android:textColor="@color/color_black"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@id/card_video_item"
