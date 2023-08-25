@@ -9,9 +9,11 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.MainHomeRecyclerViewAdapter;
+import com.github.welcomeworld.bangumi.instrumentality.project.adapter.decoration.GridSpaceItemDecoration;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentMainHomeBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.ListActionWrapper;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
@@ -52,6 +54,8 @@ public class MainHomeFragment extends BaseFragment<FragmentMainHomeBinding> {
             });
             getVB().mainHomeRv.setLayoutManager(layoutManager);
         }
+        RecyclerView.ItemDecoration itemDecoration = new GridSpaceItemDecoration(8);
+        getVB().mainHomeRv.addItemDecoration(itemDecoration);
         getVB().mainHomeRv.setAdapter(adapter);
         getVB().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));
         getVB().mainHomeSwipeRefresh.setOnLoadListener(this::loadMore);

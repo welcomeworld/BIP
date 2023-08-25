@@ -1,7 +1,7 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +11,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.github.welcomeworld.bangumi.instrumentality.project.BIPApp;
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
+import com.github.welcomeworld.bangumi.instrumentality.project.databinding.RvVideoLandscapeItemBinding;
+import com.github.welcomeworld.bangumi.instrumentality.project.databinding.RvVideoPortraitItemBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.VideoPlayActivity;
 import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
@@ -29,17 +31,17 @@ import java.util.List;
 public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<VideoListBean> data = new ArrayList<>();
-    Context context;
 
-    private static int ITEM_PORTRAIT_TYPE = 0;
-    private static int FOOTER_TYPE = 1;
-    private static int ITEM_LANDSCAPE_TYPE = 2;
+    private static final int ITEM_PORTRAIT_TYPE = 0;
+    private static final int FOOTER_TYPE = 1;
+    private static final int ITEM_LANDSCAPE_TYPE = 2;
     Activity activity;
 
     public SearchResultRecyclerViewAdapter(Activity activity) {
         this.activity = activity;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void replaceAll(List<VideoListBean> data) {
         this.data.clear();
         if (data != null) {
@@ -59,17 +61,14 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == FOOTER_TYPE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_home_footer, parent, false);
-            return new FooterViewHolder(view);
+            return new FooterViewHolder(inflater.inflate(R.layout.rv_home_footer, parent, false));
         } else if (viewType == ITEM_PORTRAIT_TYPE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_search_portrait_item, parent, false);
+            return new PortraitHolder(RvVideoPortraitItemBinding.inflate(inflater, parent, false));
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_search_landscape_item, parent, false);
+            return new LandscapeHolder(RvVideoLandscapeItemBinding.inflate(inflater, parent, false));
         }
-        context = parent.getContext();
-        return new MyInnerViewHolder(view);
     }
 
     @Override
@@ -91,6 +90,7 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             }
             return;
         }
+
         MyInnerViewHolder holder = (MyInnerViewHolder) viewHolder;
         VideoListBean currentData = data.get(position);
         holder.titleView.setText(currentData.getTitle());
@@ -100,22 +100,19 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             holder.tagView.setVisibility(View.VISIBLE);
             holder.tagView.setText(currentData.getTag());
         }
-        Glide.with(context).load(currentData.getCover()).transform(new RoundedCorners(ScreenUtil.dp2px(context, 4))).into(holder.coverView);
+        Glide.with(holder.coverView).load(currentData.getCover()).transform(new RoundedCorners(ScreenUtil.dp2px(BIPApp.getInstance(), 4))).into(holder.coverView);
         if (currentData.getCurrentVideoBean() == null || currentData.getCurrentVideoBean().getDuration() == 0) {
             holder.durationView.setVisibility(View.INVISIBLE);
         } else {
             holder.durationView.setVisibility(View.VISIBLE);
             holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(), StringUtil.MILLISECOND));
         }
-        holder.itemView.findViewById(R.id.item_content).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                ArrayList<VideoListBean> videoListBeans = new ArrayList<>();
-                videoListBeans.add(currentData);
-                bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN, videoListBeans);
-                IntentUtil.intentToVideoPlay(activity, bundle);
-            }
+        holder.itemView.findViewById(R.id.item_content).setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            ArrayList<VideoListBean> videoListBeans = new ArrayList<>();
+            videoListBeans.add(currentData);
+            bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN, videoListBeans);
+            IntentUtil.intentToVideoPlay(activity, bundle);
         });
     }
 
@@ -130,12 +127,34 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         ImageView coverView;
         TextView durationView;
 
-        public MyInnerViewHolder(View itemView) {
+        public MyInnerViewHolder(@NonNull View itemView) {
             super(itemView);
-            titleView = itemView.findViewById(R.id.card_video_title);
-            tagView = itemView.findViewById(R.id.card_video_label);
-            coverView = itemView.findViewById(R.id.card_video_cover);
-            durationView = itemView.findViewById(R.id.card_video_duration);
+        }
+    }
+
+    public static class LandscapeHolder extends MyInnerViewHolder {
+        RvVideoLandscapeItemBinding binding;
+
+        public LandscapeHolder(RvVideoLandscapeItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            titleView = binding.cardVideoTitle;
+            tagView = binding.cardVideoLabel;
+            coverView = binding.cardVideoCover;
+            durationView = binding.cardVideoDuration;
+        }
+    }
+
+    public static class PortraitHolder extends MyInnerViewHolder {
+        RvVideoPortraitItemBinding binding;
+
+        public PortraitHolder(RvVideoPortraitItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            titleView = binding.cardVideoTitle;
+            tagView = binding.cardVideoLabel;
+            coverView = binding.cardVideoCover;
+            durationView = binding.cardVideoDuration;
         }
     }
 
@@ -146,17 +165,5 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             super(itemView);
             progressBar = itemView.findViewById(R.id.footer_progress);
         }
-    }
-
-
-    private GridLayoutManager.SpanSizeLookup spanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
-        @Override
-        public int getSpanSize(int position) {
-            return position == data.size() ? 2 : 1;
-        }
-    };
-
-    public GridLayoutManager.SpanSizeLookup getSizeLookup() {
-        return spanSizeLookup;
     }
 }

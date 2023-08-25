@@ -7,9 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.FavOrHistoryRecyclerViewAdapter;
+import com.github.welcomeworld.bangumi.instrumentality.project.adapter.decoration.GridSpaceItemDecoration;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentHistoryBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.HistoryBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.HistoryConfig;
@@ -31,8 +33,20 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
         if (listColumn == 1) {
             getVB().mainHomeRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         } else {
-            getVB().mainHomeRv.setLayoutManager(new GridLayoutManager(getActivity(), listColumn));
+            GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), listColumn);
+            layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (position == adapter.getItemCount() - 1) {
+                        return listColumn;
+                    }
+                    return 1;
+                }
+            });
+            getVB().mainHomeRv.setLayoutManager(layoutManager);
         }
+        RecyclerView.ItemDecoration itemDecoration = new GridSpaceItemDecoration(8);
+        getVB().mainHomeRv.addItemDecoration(itemDecoration);
         getVB().mainHomeSwipeRefresh.setOnRefreshListener(() -> refresh(true));
         getVB().mainHomeSwipeRefresh.setOnLoadListener(this::loadMore);
         refresh(false);

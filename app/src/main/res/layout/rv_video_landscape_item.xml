@@ -11,13 +11,8 @@
         android:id="@+id/item_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/bg_white_radius8"
-        android:elevation="4dp"
         android:focusable="true"
+        android:background="@drawable/bg_white_radius8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,6 +23,7 @@
             android:id="@+id/card_video_cover"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:importantForAccessibility="no"
             android:scaleType="fitXY"
             android:src="@drawable/testcover"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -63,7 +59,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="4dp"
             android:ellipsize="end"
-            android:maxLines="4"
+            android:maxLines="3"
             android:textColor="@color/color_black"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@id/card_video_label"
@@ -86,6 +82,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/card_video_cover"
             tools:text="影视剪辑 还珠格格" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

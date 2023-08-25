@@ -6,9 +6,11 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.SearchResultRecyclerViewAdapter;
+import com.github.welcomeworld.bangumi.instrumentality.project.adapter.decoration.GridSpaceItemDecoration;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivitySearchBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.ListActionWrapper;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
@@ -58,6 +60,8 @@ public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
         } else {
             getVB().searchResultRecyclerview.setLayoutManager(new GridLayoutManager(this, listColumn));
         }
+        RecyclerView.ItemDecoration itemDecoration = new GridSpaceItemDecoration(8);
+        getVB().searchResultRecyclerview.addItemDecoration(itemDecoration);
         getVB().searchResultSwipecontainer.setOnRefreshListener(() -> viewModel.refresh());
         getVB().searchResultSwipecontainer.setOnLoadListener(() -> viewModel.loadMore());
         getVB().cancelButton.setOnClickListener(v -> finish());

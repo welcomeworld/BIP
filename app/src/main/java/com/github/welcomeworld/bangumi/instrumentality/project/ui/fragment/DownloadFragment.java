@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.DownloadRecyclerViewAdapter;
+import com.github.welcomeworld.bangumi.instrumentality.project.adapter.decoration.GridSpaceItemDecoration;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentDownloadBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadInfoConfig;
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.NormalCustomDialog;
@@ -39,6 +40,8 @@ public class DownloadFragment extends BaseFragment<FragmentDownloadBinding> {
         } else {
             getVB().downloadRv.setLayoutManager(new GridLayoutManager(getActivity(), listColumn));
         }
+        RecyclerView.ItemDecoration itemDecoration = new GridSpaceItemDecoration(8);
+        getVB().downloadRv.addItemDecoration(itemDecoration);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(downloadItemTouchHelpCallback);
         itemTouchHelper.attachToRecyclerView(getVB().downloadRv);
     }

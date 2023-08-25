@@ -29,6 +29,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.adapter.CommentRe
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.RelatedRVAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.VideoDescRVAdapter;
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.VideoSourceItemAdapter;
+import com.github.welcomeworld.bangumi.instrumentality.project.adapter.decoration.GridSpaceItemDecoration;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivityVideoPlayBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.DataActionWrapper;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
@@ -159,6 +160,8 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
         if (desSplit) {
             getVB().videoPlayDesRv.setLayoutManager(new LinearLayoutManager(this));
             getVB().videoPlayDesRv.setAdapter(descRVAdapter);
+            RecyclerView.ItemDecoration itemDecoration = new GridSpaceItemDecoration(8);
+            getVB().videoPlayDesRv.addItemDecoration(itemDecoration);
             int listColumn = getResources().getInteger(R.integer.list_column);
             GridLayoutManager layoutManager = new GridLayoutManager(this, listColumn);
             layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -176,6 +179,8 @@ public class VideoPlayActivity extends BaseActivity<ActivityVideoPlayBinding> {
             getVB().videoPlaySourceRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
             getVB().videoPlaySourceRv.setAdapter(new ConcatAdapter(descRVAdapter, sourceAdapter, relatedRVAdapter));
         }
+        RecyclerView.ItemDecoration itemDecoration = new GridSpaceItemDecoration(8);
+        getVB().videoPlaySourceRv.addItemDecoration(itemDecoration);
         viewModel.getVideoListBeanLive().observe(this, videoListBeanListLiveWrapper -> sourceAdapter.setData(videoListBeanListLiveWrapper.getData()));
         viewModel.getCurrentVideoBeanLive().observe(this, videoBean -> getVB().videoPlayView.setCurrentVideoBean(videoBean));
         viewModel.getCommentDataLive().observe(this, commentDataWrapper -> {
