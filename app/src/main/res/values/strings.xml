@@ -56,4 +56,6 @@
     <string name="comment">评论</string>
     <string name="hot_search">热门搜索</string>
     <string name="hot_search_placeholder">%1$d、%2$s</string>
+    <string name="search_history">搜索历史</string>
+    <string name="clear_history">清空历史</string>
 </resources>

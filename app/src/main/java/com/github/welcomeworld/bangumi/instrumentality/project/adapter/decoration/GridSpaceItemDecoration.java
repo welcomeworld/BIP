@@ -15,6 +15,10 @@ public class GridSpaceItemDecoration extends RecyclerView.ItemDecoration {
         this(space, space, space, space);
     }
 
+    public GridSpaceItemDecoration(int spaceWidth, int spaceHeight) {
+        this(spaceWidth, spaceHeight, spaceWidth, spaceHeight);
+    }
+
     public GridSpaceItemDecoration(int start, int top, int end, int bottom) {
         startSpace = UIUtil.dp2px(start);
         topSpace = UIUtil.dp2px(top);

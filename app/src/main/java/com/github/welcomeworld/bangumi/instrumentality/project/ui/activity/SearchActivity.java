@@ -2,68 +2,85 @@ package com.github.welcomeworld.bangumi.instrumentality.project.ui.activity;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.R;
-import com.github.welcomeworld.bangumi.instrumentality.project.adapter.SearchResultRecyclerViewAdapter;
-import com.github.welcomeworld.bangumi.instrumentality.project.adapter.decoration.GridSpaceItemDecoration;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.ActivitySearchBinding;
-import com.github.welcomeworld.bangumi.instrumentality.project.livedata.ListActionWrapper;
-import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.SearchHintFragment;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.SearchResultFragment;
 import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.SearchViewModel;
 
-import java.util.List;
-
 public class SearchActivity extends BaseActivity<ActivitySearchBinding> {
+    private final static String TAG_RESULT = "result";
+    private final static String TAG_HINT = "hint";
 
-    SearchResultRecyclerViewAdapter adapter = new SearchResultRecyclerViewAdapter(this);
     SearchViewModel viewModel = null;
+    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+
+        @Override
+        public void handleOnBackPressed() {
+            if (!viewModel.onBackPressed()) {
+                finish();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            addHintFragment();
+        }
         viewModel = new ViewModelProvider(this).get(SearchViewModel.class);
-        viewModel.getSearchDataLive().observe(this, homeLiveWrapper -> {
-            List<VideoListBean> result = homeLiveWrapper.getData();
-            if (homeLiveWrapper.getAction() == ListActionWrapper.REFRESH) {
-                adapter.replaceAll(result);
-                getVB().searchResultSwipecontainer.setRefreshing(false);
-            } else if (homeLiveWrapper.getAction() == ListActionWrapper.MORE) {
-                adapter.addAll(result);
-                getVB().searchResultSwipecontainer.setLoading(false);
-            }
-        });
-        viewModel.getHideHintLive().observe(this, hideHint -> {
-            if (hideHint) {
-                getVB().getRoot().removeView(getVB().fragmentContainer);
-                getVB().searchResultSwipecontainer.setRefreshing(true);
-            }
-        });
         viewModel.getSearchTextLive().observe(this, searchText -> {
             String currentText = getVB().searchInput.getText().toString();
             if (!currentText.equals(searchText)) {
                 getVB().searchInput.setText(searchText);
             }
+            if (searchText.isEmpty()) {
+                hideResult();
+            } else {
+                showResult();
+            }
         });
         getVB().searchInput.setOnEditorActionListener((v, actionId, event) -> {
-            viewModel.setSearchText(getVB().searchInput.getText().toString(), true);
+            viewModel.setSearchText(getVB().searchInput.getText().toString());
             return true;
         });
-        getVB().searchResultRecyclerview.setAdapter(adapter);
-        int listColumn = getResources().getInteger(R.integer.list_column);
-        if (listColumn == 1) {
-            getVB().searchResultRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        } else {
-            getVB().searchResultRecyclerview.setLayoutManager(new GridLayoutManager(this, listColumn));
+        getVB().cancelButton.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
+    }
+
+    private void hideResult() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment resultFragment = fragmentManager.findFragmentByTag(TAG_RESULT);
+        Fragment hintFragment = fragmentManager.findFragmentByTag(TAG_HINT);
+        if (resultFragment != null && hintFragment != null) {
+            fragmentManager.beginTransaction()
+                    .remove(resultFragment)
+                    .show(hintFragment)
+                    .commit();
         }
-        RecyclerView.ItemDecoration itemDecoration = new GridSpaceItemDecoration(8);
-        getVB().searchResultRecyclerview.addItemDecoration(itemDecoration);
-        getVB().searchResultSwipecontainer.setOnRefreshListener(() -> viewModel.refresh());
-        getVB().searchResultSwipecontainer.setOnLoadListener(() -> viewModel.loadMore());
-        getVB().cancelButton.setOnClickListener(v -> finish());
+    }
+
+    private void showResult() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment hintFragment = fragmentManager.findFragmentByTag(TAG_HINT);
+        if (hintFragment != null) {
+            fragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, new SearchResultFragment(), TAG_RESULT)
+                    .hide(hintFragment)
+                    .commit();
+        }
+    }
+
+    private void addHintFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, new SearchHintFragment(), TAG_HINT)
+                .commit();
     }
 }

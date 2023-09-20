@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.ListActionWrapper;
 import com.github.welcomeworld.bangumi.instrumentality.project.livedata.SafeLiveData;
+import com.github.welcomeworld.bangumi.instrumentality.project.model.SearchHistory;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.BaseParser;
 import com.github.welcomeworld.bangumi.instrumentality.project.parser.ParserManager;
+import com.github.welcomeworld.bangumi.instrumentality.project.persistence.SearchHistoryRepo;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -18,23 +21,20 @@ import java.util.UUID;
 public class SearchViewModel extends ViewModel {
     private String searchText = "";
 
-    private final SafeLiveData<String> searchTextLive = new SafeLiveData<>();
+    private final SafeLiveData<String> searchTextLive = new SafeLiveData<>("");
     MutableLiveData<ListActionWrapper<VideoListBean>> searchResult = new MutableLiveData<>();
     private int searchPage = 1;
     private String searchRandomKey = "";
 
-    private final SafeLiveData<Boolean> hideHint = new SafeLiveData<>();
+    private final SafeLiveData<List<String>> hotSearchLive = new SafeLiveData<>(Collections.emptyList());
 
-    private final SafeLiveData<List<String>> hotSearchLive = new SafeLiveData<>();
-
-
-    public void setSearchText(String searchText, boolean refresh) {
+    public void setSearchText(String searchText) {
         this.searchText = searchText;
         searchTextLive.updateValueSafe(searchText);
-        hideHint.updateValueSafe(true);
-        if (refresh) {
-            refresh();
+        if (!isSearchTextEmpty()) {
+            SearchHistoryRepo.updateOrSaveHistory(new SearchHistory(searchText, System.currentTimeMillis()));
         }
+        refresh();
     }
 
     public LiveData<ListActionWrapper<VideoListBean>> getSearchDataLive() {
@@ -42,7 +42,7 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void loadMore() {
-        if (searchText == null || searchText.isEmpty()) {
+        if (isSearchTextEmpty()) {
             return;
         }
         ParserManager.getInstance().search(searchText, "" + searchPage++, new SearchCallback(searchRandomKey) {
@@ -56,11 +56,12 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void refresh() {
-        if (searchText == null || searchText.isEmpty()) {
-            return;
-        }
         searchRandomKey = UUID.randomUUID().toString();
         searchPage = 1;
+        if (isSearchTextEmpty()) {
+            searchResult.setValue(new ListActionWrapper<>(ListActionWrapper.REFRESH, Collections.emptyList()));
+            return;
+        }
         ParserManager.getInstance().search(searchText, "" + searchPage++, new SearchCallback(searchRandomKey) {
             boolean hasRefresh = false;
 
@@ -78,12 +79,16 @@ public class SearchViewModel extends ViewModel {
         return searchTextLive;
     }
 
-    public LiveData<Boolean> getHideHintLive() {
-        return hideHint;
-    }
-
     public LiveData<List<String>> getHotSearchLive() {
         return hotSearchLive;
+    }
+
+    public LiveData<List<String>> getSearchHistoryLive() {
+        return SearchHistoryRepo.getHistory();
+    }
+
+    public void deleteAllSearchHistory() {
+        SearchHistoryRepo.deleteAllHistory();
     }
 
     public void updateHotSearch() {
@@ -96,5 +101,18 @@ public class SearchViewModel extends ViewModel {
         SearchCallback(String searchRandomKey) {
             this.searchValidateKey = searchRandomKey;
         }
+    }
+
+    public boolean onBackPressed() {
+        if (isSearchTextEmpty()) {
+            return false;
+        } else {
+            setSearchText("");
+            return true;
+        }
+    }
+
+    public boolean isSearchTextEmpty() {
+        return searchText == null || searchText.isEmpty();
     }
 }

@@ -146,4 +146,6 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
 
     implementation "androidx.multidex:multidex:2.0.1"
+
+    implementation "com.github.welcomeworld:flexbox-layout:3.0.0"
 }
