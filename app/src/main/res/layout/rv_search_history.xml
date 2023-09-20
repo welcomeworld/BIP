@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:background="@drawable/bg_search_history"
+    android:ellipsize="end"
+    android:focusable="true"
+    android:gravity="center"
+    android:maxWidth="160dp"
+    android:maxLines="1"
+    android:minWidth="60dp"
+    android:paddingHorizontal="8dp"
+    android:textColor="@color/black_29b6f6"
+    android:textSize="15sp"
+    tools:text="大雨还在下" />

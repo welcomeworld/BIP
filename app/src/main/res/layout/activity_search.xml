@@ -48,24 +48,10 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.SwiperefreshContainer
-        android:id="@+id/search_result_swipecontainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_top">
-
-        <com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.HideEndRecyclerView
-            android:id="@+id/search_result_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.SwiperefreshContainer>
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:name="com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.SearchHintFragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_top" />
 </androidx.constraintlayout.widget.ConstraintLayout>

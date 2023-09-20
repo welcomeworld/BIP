@@ -1,8 +1,6 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +18,6 @@ import com.github.welcomeworld.bangumi.instrumentality.project.R;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.RvVideoLandscapeItemBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.RvVideoPortraitItemBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.VideoListBean;
-import com.github.welcomeworld.bangumi.instrumentality.project.ui.activity.VideoPlayActivity;
-import com.github.welcomeworld.bangumi.instrumentality.project.utils.IntentUtil;
 import com.github.welcomeworld.devbase.utils.ScreenUtil;
 import com.github.welcomeworld.devbase.utils.StringUtil;
 
@@ -35,11 +31,7 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     private static final int ITEM_PORTRAIT_TYPE = 0;
     private static final int FOOTER_TYPE = 1;
     private static final int ITEM_LANDSCAPE_TYPE = 2;
-    Activity activity;
-
-    public SearchResultRecyclerViewAdapter(Activity activity) {
-        this.activity = activity;
-    }
+    public SearchResultListener searchResultListener = null;
 
     @SuppressLint("NotifyDataSetChanged")
     public void replaceAll(List<VideoListBean> data) {
@@ -108,11 +100,9 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             holder.durationView.setText(StringUtil.formatTime(currentData.getCurrentVideoBean().getDuration(), StringUtil.MILLISECOND));
         }
         holder.itemView.findViewById(R.id.item_content).setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            ArrayList<VideoListBean> videoListBeans = new ArrayList<>();
-            videoListBeans.add(currentData);
-            bundle.putParcelableArrayList(VideoPlayActivity.EXTRA_VIDEO_LIST_BEAN, videoListBeans);
-            IntentUtil.intentToVideoPlay(activity, bundle);
+            if (searchResultListener != null) {
+                searchResultListener.onSearchResultClick(currentData);
+            }
         });
     }
 
@@ -165,5 +155,9 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             super(itemView);
             progressBar = itemView.findViewById(R.id.footer_progress);
         }
+    }
+
+    public interface SearchResultListener {
+        void onSearchResultClick(VideoListBean clickResult);
     }
 }
