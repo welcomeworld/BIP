@@ -43,11 +43,11 @@ public class SettingsFragment extends BaseFragment<FragmentSettingsBinding> impl
         } else if (id == R.id.setting_logout) {
             viewModel.logout();
         } else if (id == R.id.setting_exoPlayer) {
-            viewModel.setUseExoPlayer(view.isSelected());
+            viewModel.setUseExoPlayer(!view.isSelected());
         } else if (id == R.id.setting_mediaCodec) {
-            viewModel.setUseMediaCodec(view.isSelected());
+            viewModel.setUseMediaCodec(!view.isSelected());
         } else if (id == R.id.setting_full_default) {
-            viewModel.setFullDefault(view.isSelected());
+            viewModel.setFullDefault(!view.isSelected());
         }
     }
 
