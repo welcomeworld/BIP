@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.HistoryFragment;
-import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.MainCollectionFragment;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment.FavFragment;
 
 public class FavHistoryPagerAdapter extends FragmentStatePagerAdapter {
     public FavHistoryPagerAdapter(@NonNull FragmentManager fm, int behavior) {
@@ -16,12 +16,10 @@ public class FavHistoryPagerAdapter extends FragmentStatePagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        switch (position){
-            case 1:
-                return new MainCollectionFragment();
-            default:
-                return new HistoryFragment();
+        if (position == 1) {
+            return new FavFragment();
         }
+        return new HistoryFragment();
     }
 
     @Override

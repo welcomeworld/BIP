@@ -37,7 +37,8 @@
     <string name="paused">暂停</string>
     <string name="error">错误</string>
     <string name="download_task">%d下载任务</string>
-    <string name="delete_download_confirm">确认删除下载?</string>
+    <string name="delete_record">删除记录</string>
+    <string name="delete_record_confirm">确认要删除这个记录吗?</string>
     <string name="delete">删除</string>
     <string name="password_login">账号密码登录</string>
     <string name="use_mediaCodec">使用MediaCodec硬解</string>
