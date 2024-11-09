@@ -9,6 +9,8 @@
         android:background="@color/color_white"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        app:tabTextColor="@color/color_black_50"
+        app:tabSelectedTextAppearance="@color/color_black_70"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.tabs.TabItem

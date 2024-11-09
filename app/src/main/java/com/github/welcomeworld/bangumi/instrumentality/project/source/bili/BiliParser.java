@@ -178,7 +178,9 @@ public class BiliParser extends BaseParser {
                 lastShowListBuilder.append(",");
             }
         }
-        lastShowListBuilder.deleteCharAt(lastShowListBuilder.length() - 1);
+        if (lastShowListBuilder.length() > 1) {
+            lastShowListBuilder.deleteCharAt(lastShowListBuilder.length() - 1);
+        }
         return lastShowListBuilder.toString();
     }
 

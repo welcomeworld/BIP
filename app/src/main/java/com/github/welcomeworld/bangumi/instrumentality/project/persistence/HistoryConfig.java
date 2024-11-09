@@ -50,4 +50,13 @@ public class HistoryConfig {
     public static HistoryBean findHistory(int uid, String vid) {
         return AppBaseDatabase.getInstance().getHistoryDao().findHistory(uid, vid);
     }
+
+    public static void deleteHistory(HistoryBean historyBean) {
+        AppBaseDatabase.getInstance().getHistoryDao().deleteHistory(historyBean);
+    }
+
+    public static void removeFav(HistoryBean historyBean) {
+        historyBean.setFav(false);
+        AppBaseDatabase.getInstance().getHistoryDao().updateHistory(historyBean);
+    }
 }

@@ -5,6 +5,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,20 +16,30 @@ import com.github.welcomeworld.bangumi.instrumentality.project.adapter.decoratio
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentMainCollectionBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.model.HistoryBean;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.HistoryConfig;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.MaterialDialogBuilder;
+import com.github.welcomeworld.bangumi.instrumentality.project.viewmodel.FavViewModel;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainCollectionFragment extends BaseFragment<FragmentMainCollectionBinding> {
+public class FavFragment extends BaseFragment<FragmentMainCollectionBinding> {
 
     FavOrHistoryRecyclerViewAdapter adapter;
     List<HistoryBean> data = new ArrayList<>();
+    private FavViewModel viewModel = null;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(FavViewModel.class);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         adapter = new FavOrHistoryRecyclerViewAdapter(getActivity());
+        adapter.itemListener = this::showDeleteConfirmDialog;
         getVB().mainHomeRv.setAdapter(adapter);
         int listColumn = getResources().getInteger(R.integer.list_column);
         if (listColumn == 1) {
@@ -87,5 +98,14 @@ public class MainCollectionFragment extends BaseFragment<FragmentMainCollectionB
             return;
         }
         moreTime++;
+    }
+
+    private void showDeleteConfirmDialog(HistoryBean historyBean) {
+        MaterialDialogBuilder dialogBuilder = new MaterialDialogBuilder(requireActivity());
+        dialogBuilder.setTitle(R.string.delete_record)
+                .setMessage(R.string.delete_record_confirm)
+                .setPositiveButton(R.string.delete, (dialog, which) -> viewModel.removeFav(historyBean))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 }

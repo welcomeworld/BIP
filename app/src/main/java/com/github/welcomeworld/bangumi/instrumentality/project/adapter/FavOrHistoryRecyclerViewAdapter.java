@@ -1,5 +1,6 @@
 package com.github.welcomeworld.bangumi.instrumentality.project.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ public class FavOrHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     Activity activity;
     boolean showHistory;
 
+    public ItemListener itemListener = null;
+
     public FavOrHistoryRecyclerViewAdapter(Activity activity) {
         this(activity, false);
     }
@@ -47,6 +50,7 @@ public class FavOrHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         this.showHistory = showHistory;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void replaceAll(List<HistoryBean> data) {
         this.data.clear();
         if (data != null) {
@@ -122,6 +126,13 @@ public class FavOrHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             bundle.putInt(VideoPlayActivity.EXTRA_VIDEO_TARGET_INDEX, currentData.getSelectIndex());
             IntentUtil.intentToVideoPlay(activity, bundle);
         });
+        holder.itemView.setOnLongClickListener(v -> {
+            if (itemListener != null) {
+                itemListener.onLongClick(historyData);
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override
@@ -153,5 +164,9 @@ public class FavOrHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             super(itemView);
             progressBar = itemView.findViewById(R.id.footer_progress);
         }
+    }
+
+    public interface ItemListener {
+        void onLongClick(HistoryBean history);
     }
 }

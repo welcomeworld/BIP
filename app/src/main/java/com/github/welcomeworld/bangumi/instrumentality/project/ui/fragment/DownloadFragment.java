@@ -3,7 +3,6 @@ package com.github.welcomeworld.bangumi.instrumentality.project.ui.fragment;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -18,7 +17,7 @@ import com.github.welcomeworld.bangumi.instrumentality.project.adapter.DownloadR
 import com.github.welcomeworld.bangumi.instrumentality.project.adapter.decoration.GridSpaceItemDecoration;
 import com.github.welcomeworld.bangumi.instrumentality.project.databinding.FragmentDownloadBinding;
 import com.github.welcomeworld.bangumi.instrumentality.project.persistence.DownloadInfoConfig;
-import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.NormalCustomDialog;
+import com.github.welcomeworld.bangumi.instrumentality.project.ui.widget.MaterialDialogBuilder;
 import com.github.welcomeworld.devbase.utils.ThreadUtil;
 
 public class DownloadFragment extends BaseFragment<FragmentDownloadBinding> {
@@ -84,21 +83,11 @@ public class DownloadFragment extends BaseFragment<FragmentDownloadBinding> {
     };
 
     private void showDeleteConfirmDialog(int position) {
-        int uiFlag = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            uiFlag = uiFlag | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        }
-        NormalCustomDialog moreDialog = new NormalCustomDialog(requireActivity(), R.style.normalDialogTheme);
-        moreDialog.setCancelAble(false)
-                .setGravity(Gravity.CENTER)
-                .setUiVisibility(uiFlag)
-                .setDlg_layout(R.layout.dlg_delete_confirm)
-                .setPositiveClickListener((dialog, view) -> {
-                    adapter.removeItem(position);
-                    dialog.dismiss();
-                })
-                .setNegativeClickListener((dialog, view, keyBack) -> adapter.notifyItemChanged(position))
-                .createDialog();
-        moreDialog.show();
+        MaterialDialogBuilder dialogBuilder = new MaterialDialogBuilder(requireActivity());
+        dialogBuilder.setTitle(R.string.delete_record)
+                .setMessage(R.string.delete_record_confirm)
+                .setPositiveButton(R.string.delete, (dialog, which) -> adapter.removeItem(position))
+                .setNegativeButton(R.string.cancel, (dialog, which) -> adapter.notifyItemChanged(position))
+                .show();
     }
 }

@@ -14,27 +14,29 @@
         android:importantForAccessibility="no"
         tools:src="@mipmap/ic_launcher" />
 
-    <Button
+    <TextView
         android:id="@+id/login_refresh_qr"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="16dp"
+        android:gravity="center"
         android:background="@drawable/button_solid_accent"
         android:focusable="true"
         android:text="@string/refresh_qr"
         android:textColor="@color/color_white" />
 
-    <Button
+    <TextView
         android:id="@+id/login_login_qr"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="16dp"
+        android:gravity="center"
         android:background="@drawable/button_solid_accent"
         android:focusable="true"
         android:text="@string/scan_confirm"
         android:textColor="@color/color_white" />
 
-    <Button
+    <TextView
         android:id="@+id/login_login_pw"
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -42,6 +44,7 @@
         android:background="@drawable/button_solid_accent"
         android:focusable="true"
         android:text="@string/password_login"
+        android:gravity="center"
         android:textColor="@color/color_white" />
 
 </LinearLayout>
