@@ -1,0 +1,3 @@
+[submodule "android/keystore"]
+	path = android/keystore
+	url = git@github.com:welcomeworld/keystore.git
