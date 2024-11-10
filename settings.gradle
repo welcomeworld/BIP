@@ -1,4 +1,0 @@
-include ':app'
-rootProject.name = "BangumiInstrumentalityProject"
-include ':app_update'
-include ':zxing'
