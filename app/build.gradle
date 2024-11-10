@@ -39,6 +39,7 @@ def getVersionName = { ->
 android {
     compileSdkVersion compile_version
     buildToolsVersion "30.0.3"
+    namespace "com.github.welcomeworld.bangumi.instrumentality.project"
 
     defaultConfig {
         applicationId "com.github.welcomeworld.bangumi.instrumentality.project"

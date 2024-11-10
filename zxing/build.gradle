@@ -3,6 +3,7 @@ plugins {
 }
 
 android {
+    namespace "com.github.welcomeworld.zxing"
     compileSdkVersion compile_version
 
     defaultConfig {

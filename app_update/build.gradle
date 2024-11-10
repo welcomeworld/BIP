@@ -3,6 +3,7 @@ plugins {
 }
 
 android {
+    namespace "com.github.welcomeworld.app_update"
     compileSdkVersion compile_version
 
     defaultConfig {
