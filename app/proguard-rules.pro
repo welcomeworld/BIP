@@ -66,3 +66,6 @@
 
 #keep viewbinding
 -keep class * extends androidx.viewbinding.ViewBinding
+
+#R8 missing rules
+-dontwarn org.slf4j.impl.StaticLoggerBinder
