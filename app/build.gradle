@@ -37,8 +37,7 @@ def getVersionName = { ->
 }
 
 android {
-    compileSdkVersion compile_version
-    buildToolsVersion "30.0.3"
+    compileSdk compile_version
     namespace "com.github.welcomeworld.bangumi.instrumentality.project"
 
     defaultConfig {
@@ -58,6 +57,10 @@ android {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
+        }
+
+        buildFeatures {
+            buildConfig true
         }
     }
 
