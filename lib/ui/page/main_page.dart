@@ -1,4 +1,5 @@
 import 'package:bip/bloc/main_bloc.dart';
+import 'package:bip/gen_auto_import.dart';
 import 'package:flutter/material.dart';
 
 import '../../bloc/bloc_state.dart';
@@ -15,8 +16,11 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SizedBox.shrink(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocale.of(context)!.appName),
+      ),
+      body: const SizedBox.shrink(),
     );
   }
 }

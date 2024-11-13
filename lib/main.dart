@@ -1,3 +1,4 @@
+import 'package:bip/gen_auto_import.dart';
 import 'package:bip/ui/theme/theme_colors.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:dynamic_color/dynamic_color.dart';
@@ -44,6 +45,8 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData(
           colorScheme: darkColorScheme,
         ),
+        localizationsDelegates: AppLocale.localizationsDelegates,
+        supportedLocales: AppLocale.supportedLocales,
         routerDelegate: BipRouter(),
       );
     });
