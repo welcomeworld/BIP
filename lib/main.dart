@@ -1,5 +1,5 @@
-import 'package:bip/ui/page/main_page.dart';
 import 'package:bip/ui/theme/theme_colors.dart';
+import 'package:bip/utils/bip_router.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
         );
       }
-      return MaterialApp(
+      return MaterialApp.router(
         title: 'BIP',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData(
           colorScheme: darkColorScheme,
         ),
-        home: const MainPage(),
+        routerDelegate: BipRouter(),
       );
     });
   }
