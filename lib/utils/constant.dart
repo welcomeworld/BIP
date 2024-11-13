@@ -1,0 +1,3 @@
+class Constant {
+  Constant._();
+}
