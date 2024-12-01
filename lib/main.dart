@@ -1,14 +1,25 @@
+import 'package:bip/data/media_manager.dart';
+import 'package:bip/data/persistence/kv_store.dart';
 import 'package:bip/gen_auto_import.dart';
 import 'package:bip/ui/theme/theme_colors.dart';
 import 'package:bip/utils/bip_router.dart';
+import 'package:bip/utils/constant.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
+  await preInitApp();
   runApp(const MyApp());
+}
+
+Future<void> preInitApp() async {
+  Constant.cookiePath = (await getApplicationCacheDirectory()).path;
+  await KvStore.init();
+  MediaManager().refreshExplore();
 }
 
 class MyApp extends StatelessWidget {
