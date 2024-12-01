@@ -1,3 +1,6 @@
 {
- "appName": "BIP"
+ "appName": "BIP",
+ "home": "首页",
+ "bangumi": "番剧",
+ "mine": "我的"
 }

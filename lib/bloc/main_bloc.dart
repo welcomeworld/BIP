@@ -9,6 +9,7 @@ import '../data/model/media_page_preview.dart';
 class MainBloc extends Bloc {
   Stream<List<MediaPagePreview>> get homeExploreList =>
       MediaManager().homeExploreList;
+  int tabIndex = 0;
 
   @override
   void dispose() {}

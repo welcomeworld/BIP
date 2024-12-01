@@ -6,6 +6,7 @@ import 'package:bip/utils/bip_router.dart';
 import 'package:bip/utils/constant.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -14,6 +15,13 @@ void main() async {
   MediaKit.ensureInitialized();
   await preInitApp();
   runApp(const MyApp());
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    systemNavigationBarColor: Colors.transparent,
+    statusBarColor: Colors.transparent,
+    systemStatusBarContrastEnforced: false,
+    statusBarIconBrightness: Brightness.dark,
+  ));
 }
 
 Future<void> preInitApp() async {
@@ -30,32 +38,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-      ColorScheme lightColorScheme;
-      ColorScheme darkColorScheme;
-      if (lightDynamic != null && darkDynamic != null) {
-        lightColorScheme = lightDynamic.harmonized();
-
-        // Repeat for the dark color scheme.
-        darkColorScheme = darkDynamic.harmonized();
-      } else {
-        // Otherwise, use fallback schemes.
-        lightColorScheme = ColorScheme.fromSeed(
-          seedColor: ThemeColors.brandColor,
-        );
-        darkColorScheme = ColorScheme.fromSeed(
-          seedColor: ThemeColors.brandColor,
-          brightness: Brightness.dark,
-        );
-      }
+      ColorScheme lightColorScheme = ColorScheme.fromSeed(
+        brightness: Brightness.light,
+        seedColor: lightDynamic?.primary ?? ThemeColors.brandColor,
+      ).harmonized();
+      ColorScheme darkColorScheme = ColorScheme.fromSeed(
+        brightness: Brightness.dark,
+        seedColor: darkDynamic?.primary ?? ThemeColors.brandColor,
+      ).harmonized();
       return MaterialApp.router(
         title: 'BIP',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: lightColorScheme,
-        ),
-        darkTheme: ThemeData(
-          colorScheme: darkColorScheme,
-        ),
+        theme: ThemeData(colorScheme: lightColorScheme, useMaterial3: true),
+        darkTheme: ThemeData(colorScheme: darkColorScheme, useMaterial3: true),
         localizationsDelegates: AppLocale.localizationsDelegates,
         supportedLocales: AppLocale.supportedLocales,
         routerDelegate: BipRouter(),
