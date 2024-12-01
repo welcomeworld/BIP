@@ -40,7 +40,7 @@ class BipRouter extends RouterDelegate<String>
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
-    if (_stack.length > 1) {
+    if (_stack.isNotEmpty) {
       var top = getTopPageInfo();
       if (top?.pageName == route.settings.name) {
         _stack.removeLast();
@@ -51,7 +51,7 @@ class BipRouter extends RouterDelegate<String>
   }
 
   bool pop() {
-    if (_stack.length > 1) {
+    if (_stack.isNotEmpty) {
       _stack.removeLast();
       notifyListeners();
       return true;
@@ -67,7 +67,7 @@ class BipRouter extends RouterDelegate<String>
           child: MainPage(),
         );
     }
-    return const MaterialPage(child: SizedBox.shrink());
+    return MaterialPage(name: page.pageName, child: const SizedBox.shrink());
   }
 
   void push(String newRoute) {
