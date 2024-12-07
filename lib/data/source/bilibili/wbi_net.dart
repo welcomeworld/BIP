@@ -22,7 +22,8 @@ class WbiNet {
 
   final _dio = Dio();
 
-  Future<Response<T>> get<T>(Uri uri) async {
-    return await _dio.getUri(uri);
+  Future<Response<T>> get<T>(String path,
+      {Map<String, dynamic>? queryParameters}) async {
+    return await _dio.get(path, queryParameters: queryParameters);
   }
 }

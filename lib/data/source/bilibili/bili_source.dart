@@ -14,7 +14,15 @@ class BiliSource extends Source {
   static const List<String> _typeWhiteList = ["av", "ogv", "bangumi"];
 
   static const String _explorePath =
-      "x/web-interface/wbi/index/top/feed/rcmd?fresh_type=4&feed_version=V8&homepage_ver=1&y_num=4&ps=16&web_location=1430650&";
+      "${_apiUrl}x/web-interface/wbi/index/top/feed/rcmd";
+  static final Map<String, dynamic> _exploreConstQueries = {
+    "fresh_type": 4,
+    "feed_version": "V8",
+    "homepage_ver": "1",
+    "y_num": "4",
+    "ps": "16",
+    "web_location": "1430650",
+  };
   final List<String> _exploreLastShow = [];
 
   @override
@@ -27,10 +35,17 @@ class BiliSource extends Source {
       } else {
         lastShow = _getLastShowQuery();
       }
-      String extraParameters =
-          "${lastShow}fresh_idx_1h=$pageNumber&fetch_row=${pageNumber * 3 + 1}&fresh_idx=$pageNumber&brush=$pageNumber";
-      var response = await WbiNet()
-          .get(Uri.parse(_apiUrl + _explorePath + extraParameters));
+      Map<String, dynamic> extraParameters = {};
+      extraParameters.addAll(_exploreConstQueries);
+      if (lastShow.isNotEmpty) {
+        extraParameters["last_showlist"] = lastShow;
+      }
+      extraParameters["fresh_idx_1h"] = pageNumber;
+      extraParameters["fetch_row"] = pageNumber * 3 + 1;
+      extraParameters["fresh_idx"] = pageNumber;
+      extraParameters["brush"] = pageNumber;
+      var response =
+          await WbiNet().get(_explorePath, queryParameters: extraParameters);
       BiliExploreResponse exploreResponse =
           BiliExploreResponse.fromJson(response.data);
       exploreResponse.data?.item.where((avItem) {
@@ -70,18 +85,13 @@ class BiliSource extends Source {
   }
 
   String _getLastShowQuery() {
-    StringBuffer result = StringBuffer("last_showlist=");
+    StringBuffer result = StringBuffer("");
     var index = 0;
     for (var av in _exploreLastShow) {
       if (index++ != 0) {
         result.write(",");
       }
       result.write(av);
-    }
-    if (_exploreLastShow.isNotEmpty) {
-      result.write("&");
-    } else {
-      result.clear();
     }
     return result.toString();
   }
