@@ -10,6 +10,7 @@ class MainBloc extends Bloc {
   Stream<List<MediaPagePreview>> get homeExploreList =>
       MediaManager().homeExploreList;
   int tabIndex = 0;
+  bool isLoading = false;
 
   @override
   void dispose() {}
@@ -21,7 +22,10 @@ class MainBloc extends Bloc {
     MediaManager().explore();
   }
 
-  void refresh() {
-    MediaManager().refreshExplore();
+  Future<void> refresh() async {
+    if (isLoading) return;
+    isLoading = true;
+    await MediaManager().refreshExplore();
+    isLoading = false;
   }
 }

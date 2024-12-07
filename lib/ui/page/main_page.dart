@@ -119,75 +119,79 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
   }
 
   Widget _previewList() {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          surfaceTintColor: Colors.transparent,
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          elevation: 0,
-          title: FilledButton.tonal(
-            style: FilledButton.styleFrom(
-              padding: const EdgeInsets.all(16),
-              backgroundColor:
-                  Theme.of(context).colorScheme.surfaceContainerHigh,
-              fixedSize: const Size(double.maxFinite, 56),
-            ),
-            onPressed: () => BipRouter.of(context).push(PageNames.search),
-            child: Row(
-              children: [
-                SvgPicture.asset(
-                  "assets/img/ic_search.svg",
-                  width: 24,
-                  height: 24,
-                  colorFilter: ColorFilter.mode(
-                      Theme.of(context).colorScheme.onSurface, BlendMode.srcIn),
-                ),
-                const SizedBox(width: 16),
-                Text(
-                  AppLocale.of(context)!.searchHint,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+    return RefreshIndicator(
+      onRefresh: bloc.refresh,
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            elevation: 0,
+            title: FilledButton.tonal(
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.all(16),
+                backgroundColor:
+                    Theme.of(context).colorScheme.surfaceContainerHigh,
+                fixedSize: const Size(double.maxFinite, 56),
+              ),
+              onPressed: () => BipRouter.of(context).push(PageNames.search),
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    "assets/img/ic_search.svg",
+                    width: 24,
+                    height: 24,
+                    colorFilter: ColorFilter.mode(
+                        Theme.of(context).colorScheme.onSurface,
+                        BlendMode.srcIn),
                   ),
-                )
-              ],
+                  const SizedBox(width: 16),
+                  Text(
+                    AppLocale.of(context)!.searchHint,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  )
+                ],
+              ),
             ),
+            floating: true,
+            snap: true,
           ),
-          floating: true,
-          snap: true,
-        ),
-        SliverToBoxAdapter(
-          child: StreamBuilder(
-              stream: bloc.homeExploreList,
-              builder: (context, snap) {
-                var exploreList = snap.data;
-                if (exploreList?.isNotEmpty == true) {
-                  return ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: exploreList!.length,
-                    itemBuilder: (context, index) {
-                      var previewDetail = exploreList[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          left: 16,
-                          right: 16,
-                          top: 8,
-                          bottom: 8,
-                        ),
-                        child: _previewCard(previewDetail),
-                      );
-                    },
+          SliverToBoxAdapter(
+            child: StreamBuilder(
+                stream: bloc.homeExploreList,
+                builder: (context, snap) {
+                  var exploreList = snap.data;
+                  if (exploreList?.isNotEmpty == true) {
+                    return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: exploreList!.length,
+                      itemBuilder: (context, index) {
+                        var previewDetail = exploreList[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                            top: 8,
+                            bottom: 8,
+                          ),
+                          child: _previewCard(previewDetail),
+                        );
+                      },
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    ),
                   );
-                }
-                return const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                  ),
-                );
-              }),
-        ),
-      ],
+                }),
+          ),
+        ],
+      ),
     );
   }
 
