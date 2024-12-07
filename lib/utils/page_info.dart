@@ -5,7 +5,10 @@ class PageInfo {
   PageInfo(this.pageName, {this.extras = const {}});
 }
 
-class PageNames{
+class PageNames {
   PageNames._();
+
   static const String home = "/";
+  static const String search = "/search";
+  static const String mediaPageDetail = "/media/page/detail";
 }

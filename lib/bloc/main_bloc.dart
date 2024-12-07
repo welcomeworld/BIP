@@ -20,4 +20,8 @@ class MainBloc extends Bloc {
   void explore() {
     MediaManager().explore();
   }
+
+  void refresh() {
+    MediaManager().refreshExplore();
+  }
 }
