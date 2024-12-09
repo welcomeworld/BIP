@@ -19,6 +19,24 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends BlocState<MainPage, MainBloc> {
   _MainPageState() : super(MainBloc());
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 256) {
+        bloc.explore();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +138,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
     return RefreshIndicator(
       onRefresh: bloc.refresh,
       child: CustomScrollView(
+        controller: _scrollController,
         slivers: [
           SliverAppBar(
             surfaceTintColor: Colors.transparent,
@@ -181,13 +200,10 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
                       },
                     );
                   }
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                    ),
-                  );
+                  return const SizedBox.shrink();
                 }),
           ),
+          SliverPersistentHeader(delegate: LoadingIndicatorDelegate())
         ],
       ),
     );
@@ -395,5 +411,27 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
 
   Widget _expandBody() {
     return Row();
+  }
+}
+
+class LoadingIndicatorDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  double get minExtent => 56; // 进度条的最小高度
+  @override
+  double get maxExtent => 56; // 进度条的最大高度
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return const Center(
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

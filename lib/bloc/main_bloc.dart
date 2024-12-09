@@ -10,7 +10,8 @@ class MainBloc extends Bloc {
   Stream<List<MediaPagePreview>> get homeExploreList =>
       MediaManager().homeExploreList;
   int tabIndex = 0;
-  bool isLoading = false;
+  bool _isRefreshing = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {}
@@ -18,14 +19,17 @@ class MainBloc extends Bloc {
   @override
   void initState(BuildContext context) {}
 
-  void explore() {
-    MediaManager().explore();
+  void explore() async {
+    if (_isLoading) return;
+    _isLoading = true;
+    await MediaManager().explore();
+    _isLoading = false;
   }
 
   Future<void> refresh() async {
-    if (isLoading) return;
-    isLoading = true;
+    if (_isRefreshing) return;
+    _isRefreshing = true;
     await MediaManager().refreshExplore();
-    isLoading = false;
+    _isRefreshing = false;
   }
 }
