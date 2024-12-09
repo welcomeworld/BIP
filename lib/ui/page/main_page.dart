@@ -28,15 +28,13 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
   Widget _compactBody() {
     return Scaffold(
       body: SafeArea(
-        child: Expanded(
-          child: IndexedStack(
-            index: bloc.tabIndex,
-            children: [
-              _previewList(),
-              _bangumiList(),
-              _mineContent(),
-            ],
-          ),
+        child: IndexedStack(
+          index: bloc.tabIndex,
+          children: [
+            _previewList(),
+            _bangumiList(),
+            _mineContent(),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
