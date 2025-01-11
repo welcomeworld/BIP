@@ -75,9 +75,9 @@ class BipRouter extends RouterDelegate<String>
           child: SearchPage(),
         );
       case PageNames.mediaPageDetail:
-        return const MaterialPage(
+        return MaterialPage(
           name: PageNames.mediaPageDetail,
-          child: MediaPageDetailPage(),
+          child: MediaPageDetailPage(page.extras["data"]!),
         );
     }
     return MaterialPage(name: page.pageName, child: const SizedBox.shrink());

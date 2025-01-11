@@ -1,17 +1,30 @@
+import 'package:bip/data/model/media_page_detail.dart';
 import 'package:bip/data/model/user_info.dart';
+import 'package:bip/data/net/web_net.dart';
 import 'package:bip/data/source/bilibili/bili_explore_response.dart';
 import 'package:bip/data/source/bilibili/wbi_net.dart';
 import 'package:bip/data/source/source.dart';
 import 'package:bip/utils/logger.dart';
+import 'package:dio/dio.dart';
 
+import '../../model/media_info.dart';
 import '../../model/media_page_preview.dart';
+import 'model/bili_av_detail_response.dart';
 
 class BiliSource extends Source {
   @override
   String get sourceName => "哔哩哔哩";
   static const String _apiUrl = "https://api.bilibili.com/";
-  static const String _passportUrl = "https://passport.bilibili.com/";
+  static const String _homeUrl = "https://www.bilibili.com/";
   static const List<String> _typeWhiteList = ["av", "ogv", "bangumi"];
+  static final Map<String, dynamic> _dmQueries = {
+    "dm_img_str": "V2ViR0wgMS4wIChPcGVuR0wgRVMgMi4wIENocm9taXVtKQ",
+    "dm_cover_img_str":
+        "QU5HTEUgKEludGVsLCBNZXNhIEludGVsKFIpIEdyYXBoaWNzIChBREwgR1QyKSwgT3BlbkdMIDQuNilHb29nbGUgSW5jLiAoSW50ZW",
+    "dm_img_inter":
+        """{"ds":[{"t":2,"c":"YnB4LXBsYXllci12aWRlby1pbnB1dGJhci13cm","p":[1896,50,1927],"s":[135,1085,1330]},{"t":2,"c":"YnB4LXBsYXllci1kbS1idG4tc2VuZCBidWkgYnVpLWJ1dHRvbiBidWktZGlzYWJsZW","p":[2349,3,1583],"s":[86,331,292]}],"wh":[2217,914,3],"of":[374,748,374]}""",
+    "dm_img_list": "[]",
+  };
 
   static const String _explorePath =
       "${_apiUrl}x/web-interface/wbi/index/top/feed/rcmd";
@@ -23,7 +36,14 @@ class BiliSource extends Source {
     "ps": "16",
     "web_location": "1430650",
   };
+
+  static const _avDetailPagePrefix = "${_homeUrl}video/";
+  static const _avDetailPath = "${_apiUrl}x/web-interface/wbi/view/detail";
   final List<String> _exploreLastShow = [];
+
+  Future<void> _initHome() async {
+    await WebNet().get(Uri.parse(_homeUrl));
+  }
 
   @override
   Future<List<MediaPagePreview>> explore(int pageNumber) async {
@@ -32,6 +52,7 @@ class BiliSource extends Source {
       String lastShow = "";
       if (pageNumber == 1) {
         _exploreLastShow.clear();
+        _initHome();
       } else {
         lastShow = _getLastShowQuery();
       }
@@ -101,5 +122,119 @@ class BiliSource extends Source {
     if (_exploreLastShow.length > 64) {
       _exploreLastShow.removeAt(0);
     }
+  }
+
+  @override
+  Future<SourceApiResult<MediaPageDetail>> requestDetail(
+      MediaPagePreview preview) async {
+    if (preview.extras["videoType"] == "bangumi") {
+      return await _requestBangumiDetail(preview);
+    } else {
+      return await _requestAvDetail(preview);
+    }
+  }
+
+  Future<SourceApiResult<MediaPageDetail>> _requestAvDetail(
+      MediaPagePreview preview) async {
+    MediaPageDetail result = MediaPageDetail.fromPreview(preview);
+
+    final extraData = preview.extras;
+    int? aid = extraData['aid'];
+    String? bvid = extraData['bvid'];
+    final pageUrl = "$_avDetailPagePrefix${bvid ?? "av$aid"}";
+    // await WebNet().get(Uri.parse(pageUrl)); //maybe need when api denied by risk management.
+    Map<String, dynamic> extraParameters = {
+      "web_location": 1315873,
+      "isGaiaAvoided": false,
+      "need_view": 1,
+    };
+    if (aid != null) {
+      extraParameters["aid"] = aid;
+    } else {
+      extraParameters["bvid"] = bvid;
+    }
+    extraParameters.addAll(_dmQueries);
+    Options options = Options(headers: {
+      "Referer": pageUrl,
+      "Origin": "https://www.bilibili.com/",
+    });
+    try {
+      var response = await WbiNet().get(_avDetailPath,
+          queryParameters: extraParameters, options: options);
+      if (response.data == null || response.statusCode != 200) {
+        return SourceApiResult(
+          result,
+          resultCode: SourceApiResult.resultNetworkFailed,
+        );
+      }
+      BiliAvDetailResponse detailResponse =
+          BiliAvDetailResponse.fromJson(response.data);
+      if (detailResponse.code != 0) {
+        return SourceApiResult(result, resultCode: detailResponse.code);
+      }
+      var tagData = detailResponse.data.tags;
+      var relatedData = detailResponse.data.related;
+      var pageData = detailResponse.data.view;
+      // map pageData to MediaPageDetail
+      result.owner.name = pageData.owner.name;
+      result.owner.avatar = pageData.owner.face;
+      result.title = pageData.title;
+      result.desc = pageData.descV2.map((v2Desc) {
+        if (v2Desc.type == 1) {
+          return v2Desc.rawText;
+        } else {
+          return "@${v2Desc.rawText}";
+        }
+      }).join("\n");
+      result.pageTime = pageData.pubdate * 1000;
+      result.cover = pageData.pic;
+      result.coverPortrait = false;
+      result.tags = tagData.map((tag) => tag.tagName).toList();
+      result.playCount = pageData.stat.view;
+      // map relatedData to MediaPagePreview
+      for (var related in relatedData) {
+        MediaPagePreview relatedPreview = MediaPagePreview();
+        relatedPreview.extras['aid'] = related.aid;
+        relatedPreview.extras['bvid'] = related.bvid;
+        relatedPreview.extras["videoType"] = "av";
+        relatedPreview.sourceName = sourceName;
+        relatedPreview.title = related.title;
+        UserInfo owner = UserInfo();
+        owner.name = related.owner.name;
+        owner.avatar = related.owner.face;
+        relatedPreview.owner = owner;
+        relatedPreview.coverPortrait = false;
+        relatedPreview.cover = "${related.pic}@640w_400h_1e_1c.webp";
+        relatedPreview.pageTime = related.pubdate * 1000;
+        relatedPreview.duration = related.duration;
+        relatedPreview.topDec = related.isUpowerExclusive ? "充电专属" : "";
+        relatedPreview.playCount = related.stat.view;
+        result.relatedMediaList.add(relatedPreview);
+      }
+      // map pages to MediaInfo
+      for (var media in pageData.pages) {
+        MediaInfo mediaInfo = MediaInfo();
+        mediaInfo.extras["bvid"] = bvid;
+        mediaInfo.extras["cid"] = media.cid;
+        mediaInfo.title = media.part;
+        mediaInfo.cover = pageData.pic;
+        mediaInfo.barrageUrl = "http://comment.bilibili.com/${media.cid}.xml";
+        mediaInfo.duration = media.duration;
+        result.playlists.putIfAbsent("default", () => []).add(mediaInfo);
+      }
+    } catch (e, stack) {
+      Logger.logConsole(stack.toString());
+      Logger.logConsole(e.toString());
+      return SourceApiResult(
+        result,
+        resultCode: SourceApiResult.resultInnerFailed,
+      );
+    }
+    return SourceApiResult(result);
+  }
+
+  Future<SourceApiResult<MediaPageDetail>> _requestBangumiDetail(
+      MediaPagePreview preview) async {
+    throw UnimplementedError();
   }
 }

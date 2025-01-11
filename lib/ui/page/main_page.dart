@@ -225,8 +225,12 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
     return AspectRatio(
       aspectRatio: 3,
       child: FilledButton.tonal(
-        onPressed: () => BipRouter.of(context)
-            .pushPageInfo(PageInfo(PageNames.mediaPageDetail)),
+        onPressed: () => BipRouter.of(context).pushPageInfo(
+          PageInfo(
+            PageNames.mediaPageDetail,
+            extras: {"data": previewDetail},
+          ),
+        ),
         style: FilledButton.styleFrom(
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -240,14 +244,16 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
               flex: 8,
               child: Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
-                    ),
-                    child: Image.network(
-                      previewDetail.cover,
-                      fit: BoxFit.fill,
+                  SizedBox.expand(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
+                      ),
+                      child: Image.network(
+                        previewDetail.cover,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                   Positioned.fill(

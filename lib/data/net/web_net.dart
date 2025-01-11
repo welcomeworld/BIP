@@ -1,3 +1,4 @@
+import 'package:bip/data/net/chrome_header_interceptor.dart';
 import 'package:bip/utils/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -16,6 +17,8 @@ class WebNet {
         ),
       ),
     );
+    _dio.interceptors.add(ChromeHeaderInterceptor());
+    _dio.interceptors.add(LogInterceptor());
   }
 
   factory WebNet() => _ins ?? WebNet._();
