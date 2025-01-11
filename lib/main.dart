@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData(colorScheme: darkColorScheme, useMaterial3: true),
         localizationsDelegates: AppLocale.localizationsDelegates,
         supportedLocales: AppLocale.supportedLocales,
-        routerDelegate: BipRouter(),
+        routerDelegate: BipRouter.rootRouter,
       );
     });
   }

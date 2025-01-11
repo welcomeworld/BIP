@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 class BipRouter extends RouterDelegate<String>
     with PopNavigatorRouterDelegateMixin, ChangeNotifier {
+  static final rootRouter = BipRouter();
   final _stack = <PageInfo>[PageInfo("/")];
 
   List<PageInfo> get stack => List.unmodifiable(_stack);
