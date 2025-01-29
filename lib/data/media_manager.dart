@@ -3,6 +3,7 @@ import 'package:bip/data/source/bilibili/bili_source.dart';
 import 'package:bip/data/source/source.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'model/media_info.dart';
 import 'model/media_page_detail.dart';
 
 class MediaManager {
@@ -41,6 +42,15 @@ class MediaManager {
     return await _sources[preview.sourceName]?.requestDetail(preview) ??
         SourceApiResult(
           MediaPageDetail.fromPreview(preview),
+          resultCode: SourceApiResult.resultSourceEmpty,
+        );
+  }
+
+  Future<SourceApiResult<MediaInfo>> requestMediaInfo(
+      MediaInfo mediaInfo) async {
+    return await _sources[mediaInfo.sourceName]?.requestMediaInfo(mediaInfo) ??
+        SourceApiResult(
+          mediaInfo,
           resultCode: SourceApiResult.resultSourceEmpty,
         );
   }

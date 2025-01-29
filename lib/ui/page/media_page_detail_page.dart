@@ -4,6 +4,7 @@ import 'package:bip/data/model/media_page_detail.dart';
 import 'package:bip/data/model/media_page_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
 import '../../utils/bip_router.dart';
 import '../../utils/common_util.dart';
@@ -42,13 +43,7 @@ class _MediaPageDetailPageState
               }
               return Column(
                 children: [
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Image.network(
-                      pageInfo.cover,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  _mediaView(pageInfo.cover),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -64,6 +59,23 @@ class _MediaPageDetailPageState
               );
             }),
       ),
+    );
+  }
+
+  Widget _mediaView(String cover) {
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: StreamBuilder(
+          stream: bloc.mediaInfoSubject.stream,
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return Image.network(
+                cover,
+                fit: BoxFit.cover,
+              );
+            }
+            return Video(controller: bloc.controller);
+          }),
     );
   }
 
@@ -179,6 +191,36 @@ class _MediaPageDetailPageState
               fontWeight: FontWeight.w400,
               color: ThemeColors.onSurfaceLow(context),
             ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 4,
+            left: 16,
+            right: 16,
+          ),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: pageInfo.tags
+                .map(
+                  (tag) => DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondary,
+                      borderRadius: const BorderRadius.all(Radius.circular(2)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Text(
+                        tag,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
           ),
         ),
       ],

@@ -17,7 +17,7 @@ class WbiNet {
     )));
     _dio.interceptors.add(ChromeHeaderInterceptor());
     _dio.interceptors.add(WbiSortAndSignInterceptor());
-    _dio.interceptors.add(LogInterceptor(responseBody: true));
+    _dio.interceptors.add(LogInterceptor(responseBody: false));
   }
 
   factory WbiNet() => _ins ?? WbiNet._();

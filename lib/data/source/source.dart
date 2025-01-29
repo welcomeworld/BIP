@@ -1,3 +1,5 @@
+import 'package:bip/data/model/media_info.dart';
+
 import '../model/media_page_detail.dart';
 import '../model/media_page_preview.dart';
 
@@ -10,6 +12,8 @@ abstract class Source {
 
   Future<SourceApiResult<MediaPageDetail>> requestDetail(
       MediaPagePreview preview);
+
+  Future<SourceApiResult<MediaInfo>> requestMediaInfo(MediaInfo mediaInfo);
 }
 
 class SourceApiResult<T> {

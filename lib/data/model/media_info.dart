@@ -1,10 +1,13 @@
 class MediaInfo {
+  String sourceName = "";
   Map<String, dynamic> extras = {};
+  Map<String, String> headers = {};
   String title = "";
   String cover = "";
   String barrageUrl = "";
   int recordPosition = 0;
   int duration = 0;
+  String topDec = "";
   Map<String, String> mediaQualities = {};
   String qualityKey = "";
   Map<String, String> additionSubtitles = {};

@@ -2,6 +2,7 @@ import 'package:bip/data/model/media_page_detail.dart';
 import 'package:bip/data/model/user_info.dart';
 import 'package:bip/data/net/web_net.dart';
 import 'package:bip/data/source/bilibili/bili_explore_response.dart';
+import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart';
 import 'package:bip/data/source/bilibili/wbi_net.dart';
 import 'package:bip/data/source/source.dart';
 import 'package:bip/utils/logger.dart';
@@ -40,6 +41,17 @@ class BiliSource extends Source {
   static const _avDetailPagePrefix = "${_homeUrl}video/";
   static const _avDetailPath = "${_apiUrl}x/web-interface/wbi/view/detail";
   final List<String> _exploreLastShow = [];
+
+  static const _avMediaInfoPath = "${_apiUrl}x/player/wbi/playurl";
+  static final Map<String, dynamic> _avMediaInfoConstQueries = {
+    "qn": 0,
+    "fnver": 0,
+    "fourk": 1,
+    "fnval": 4048,
+    "from_client": "BROWSER",
+    "is_main_page": true,
+    "web_location": "1315873",
+  };
 
   Future<void> _initHome() async {
     await WebNet().get(Uri.parse(_homeUrl));
@@ -214,8 +226,13 @@ class BiliSource extends Source {
       // map pages to MediaInfo
       for (var media in pageData.pages) {
         MediaInfo mediaInfo = MediaInfo();
+        mediaInfo.sourceName = sourceName;
+        mediaInfo.headers["User-Agent"] =
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
+        mediaInfo.headers["Referer"] = _homeUrl;
         mediaInfo.extras["bvid"] = bvid;
         mediaInfo.extras["cid"] = media.cid;
+        mediaInfo.extras["videoType"] = "av";
         mediaInfo.title = media.part;
         mediaInfo.cover = pageData.pic;
         mediaInfo.barrageUrl = "http://comment.bilibili.com/${media.cid}.xml";
@@ -235,6 +252,125 @@ class BiliSource extends Source {
 
   Future<SourceApiResult<MediaPageDetail>> _requestBangumiDetail(
       MediaPagePreview preview) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<SourceApiResult<MediaInfo>> requestMediaInfo(
+      MediaInfo mediaInfo) async {
+    if (mediaInfo.extras["videoType"] == "bangumi") {
+      return await _requestBangumiMediaInfo(mediaInfo);
+    } else {
+      return await _requestAvMediaInfo(mediaInfo);
+    }
+  }
+
+  String _getResolutionDesc(int resolutionId) {
+    switch (resolutionId) {
+      case 0:
+        return "自动";
+      case 16:
+        return "360P";
+      case 32:
+        return "480P";
+      case 64:
+        return "720P";
+      case 74:
+        return "720P60";
+      case 80:
+        return "1080P";
+      case 112:
+        return "1080P+";
+      case 116:
+        return "1080P60";
+      case 120:
+        return "4K";
+      case 125:
+        return "HDR";
+      case 126:
+        return "杜比视界";
+      case 127:
+        return "8K";
+      default:
+        return "未知";
+    }
+  }
+
+  String _getAudioDesc(int qualityId) {
+    switch (qualityId) {
+      case 30216:
+        return "64K";
+      case 30232:
+        return "132K";
+      case 30280:
+        return "192K";
+      case 30250:
+        return "杜比全景声";
+      case 30251:
+        return "Hi-Res无损";
+      default:
+        return "未知";
+    }
+  }
+
+  Future<SourceApiResult<MediaInfo>> _requestAvMediaInfo(
+      MediaInfo mediaInfo) async {
+    final extraData = mediaInfo.extras;
+    int? aid = extraData['aid'];
+    String? bvid = extraData['bvid'];
+    int cid = extraData['cid'];
+    final pageUrl = "$_avDetailPagePrefix${bvid ?? "av$aid"}";
+    Map<String, dynamic> extraParameters = {
+      "cid": cid,
+    };
+    if (aid != null) {
+      extraParameters["avid"] = aid;
+    } else {
+      extraParameters["bvid"] = bvid;
+    }
+    extraParameters.addAll(_avMediaInfoConstQueries);
+    extraParameters.addAll(_dmQueries);
+    Options options = Options(headers: {
+      "Referer": pageUrl,
+      "Origin": "https://www.bilibili.com/",
+    });
+    try {
+      var response = await WbiNet().get(_avMediaInfoPath,
+          queryParameters: extraParameters, options: options);
+      if (response.data == null || response.statusCode != 200) {
+        return SourceApiResult(
+          mediaInfo,
+          resultCode: SourceApiResult.resultNetworkFailed,
+        );
+      }
+      BiliAvMediaInfoResponse mediaInfoResponse =
+          BiliAvMediaInfoResponse.fromJson(response.data);
+      if (mediaInfoResponse.code != 0) {
+        return SourceApiResult(mediaInfo, resultCode: mediaInfoResponse.code);
+      }
+      // map videoUrl
+      for (var media in mediaInfoResponse.data.dash.video) {
+        Logger.logConsole("parseVideoMedia: ${media.id} ${media.baseUrl}");
+        mediaInfo.mediaQualities[_getResolutionDesc(media.id)] = media.baseUrl;
+      }
+      // map audioUrl
+      for (var media in mediaInfoResponse.data.dash.audio) {
+        Logger.logConsole("parseAudioMedia: ${media.id} ${media.baseUrl}");
+        mediaInfo.additionAudios[_getAudioDesc(media.id)] = media.baseUrl;
+      }
+    } catch (e, stack) {
+      Logger.logConsole(stack.toString());
+      Logger.logConsole(e.toString());
+      return SourceApiResult(
+        mediaInfo,
+        resultCode: SourceApiResult.resultInnerFailed,
+      );
+    }
+    return SourceApiResult(mediaInfo);
+  }
+
+  Future<SourceApiResult<MediaInfo>> _requestBangumiMediaInfo(
+      MediaInfo mediaInfo) async {
     throw UnimplementedError();
   }
 }
