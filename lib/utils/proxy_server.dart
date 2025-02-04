@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:bip/data/net/web_net.dart';
+import 'package:bip/main.dart';
 import 'package:bip/utils/common_util.dart';
 import 'package:bip/utils/logger.dart';
 import 'package:dio/dio.dart' as dio;
@@ -22,6 +23,7 @@ void startProxyIso() {
 }
 
 Future<void> startProxyServer(SendPort sendPort) async {
+  await initAllIsolate();
   HttpServer httpServer = await shelf_io.serve(
       shelf.logRequests().addHandler(_echoRequest),
       InternetAddress.anyIPv4,

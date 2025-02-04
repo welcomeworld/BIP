@@ -14,7 +14,8 @@ import 'package:path_provider/path_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
-  await preInitApp();
+  await initAllIsolate();
+  await _initMainIsolate();
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
@@ -25,9 +26,12 @@ void main() async {
   ));
 }
 
-Future<void> preInitApp() async {
+Future<void> initAllIsolate() async {
   Constant.cookiePath = (await getApplicationCacheDirectory()).path;
   await KvStore.init();
+}
+
+Future<void> _initMainIsolate() async {
   MediaManager().refreshExplore();
   startProxyIso();
 }
