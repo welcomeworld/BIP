@@ -25,7 +25,9 @@ class WebNet {
 
   final _dio = Dio();
 
-  Future<Response<T>> get<T>(Uri uri) async {
-    return await _dio.getUri(uri);
+  Future<Response<T>> get<T>(String path,
+      {Map<String, dynamic>? queryParameters, Options? options}) async {
+    return await _dio.get(path,
+        queryParameters: queryParameters, options: options);
   }
 }

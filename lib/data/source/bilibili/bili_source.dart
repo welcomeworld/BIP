@@ -54,7 +54,7 @@ class BiliSource extends Source {
   };
 
   Future<void> _initHome() async {
-    await WebNet().get(Uri.parse(_homeUrl));
+    await WebNet().get(_homeUrl);
   }
 
   @override

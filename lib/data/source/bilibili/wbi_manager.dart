@@ -104,7 +104,7 @@ class WbiManager {
     if (await _isWbiAvailable()) {
       return;
     }
-    final response = await WebNet().get(Uri.parse(_wbiUrl));
+    final response = await WebNet().get(_wbiUrl);
 
     if (response.statusCode == 200) {
       Map<String, dynamic> json = response.data;
