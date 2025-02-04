@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class CommonUtil {
   CommonUtil._();
 
@@ -33,5 +35,15 @@ class CommonUtil {
       return "${(count / 10000).toStringAsFixed(1).replaceAll(RegExp(r'(\.0+|0+$)'), '')}万";
     }
     return "$count";
+  }
+
+  static String encode64(String source) {
+    List<int> bytes = utf8.encode(source);
+    return base64Encode(bytes);
+  }
+
+  static String decode64(String source) {
+    List<int> decodedBytes = base64Decode(source);
+    return utf8.decode(decodedBytes);
   }
 }

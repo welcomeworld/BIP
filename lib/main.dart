@@ -4,6 +4,7 @@ import 'package:bip/gen_auto_import.dart';
 import 'package:bip/ui/theme/theme_colors.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:bip/utils/constant.dart';
+import 'package:bip/utils/proxy_server.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +29,7 @@ Future<void> preInitApp() async {
   Constant.cookiePath = (await getApplicationCacheDirectory()).path;
   await KvStore.init();
   MediaManager().refreshExplore();
+  startProxyIso();
 }
 
 class MyApp extends StatelessWidget {

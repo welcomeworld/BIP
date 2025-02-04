@@ -5,6 +5,7 @@ import 'package:bip/data/source/bilibili/bili_explore_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart';
 import 'package:bip/data/source/bilibili/wbi_net.dart';
 import 'package:bip/data/source/source.dart';
+import 'package:bip/utils/common_util.dart';
 import 'package:bip/utils/logger.dart';
 import 'package:dio/dio.dart';
 
@@ -351,12 +352,14 @@ class BiliSource extends Source {
       // map videoUrl
       for (var media in mediaInfoResponse.data.dash.video) {
         Logger.logConsole("parseVideoMedia: ${media.id} ${media.baseUrl}");
-        mediaInfo.mediaQualities[_getResolutionDesc(media.id)] = media.baseUrl;
+        mediaInfo.mediaQualities[_getResolutionDesc(media.id)] =
+            _wrapMediaUrl(media.baseUrl);
       }
       // map audioUrl
       for (var media in mediaInfoResponse.data.dash.audio) {
         Logger.logConsole("parseAudioMedia: ${media.id} ${media.baseUrl}");
-        mediaInfo.additionAudios[_getAudioDesc(media.id)] = media.baseUrl;
+        mediaInfo.additionAudios[_getAudioDesc(media.id)] =
+            _wrapMediaUrl(media.baseUrl);
       }
     } catch (e, stack) {
       Logger.logConsole(stack.toString());
@@ -372,5 +375,9 @@ class BiliSource extends Source {
   Future<SourceApiResult<MediaInfo>> _requestBangumiMediaInfo(
       MediaInfo mediaInfo) async {
     throw UnimplementedError();
+  }
+
+  String _wrapMediaUrl(String mediaUrl) {
+    return "http://localhost:8080/?url=${CommonUtil.encode64(mediaUrl)}";
   }
 }
