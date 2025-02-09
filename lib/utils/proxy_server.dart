@@ -17,13 +17,11 @@ void startProxyIso() {
     return;
   }
   _isProxyIsoRunning = true;
-  ReceivePort receivePort = ReceivePort();
-  Isolate.spawn(startProxyServer, receivePort.sendPort);
-  receivePort.close();
+  Isolate.spawn(startProxyServer, defaultIsolateConfig);
 }
 
-Future<void> startProxyServer(SendPort sendPort) async {
-  await initAllIsolate();
+Future<void> startProxyServer(Map<String, dynamic> config) async {
+  await initChildIsolate(config);
   HttpServer httpServer = await shelf_io.serve(
       shelf.logRequests().addHandler(_echoRequest),
       InternetAddress.anyIPv4,

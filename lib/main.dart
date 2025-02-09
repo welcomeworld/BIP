@@ -11,10 +11,11 @@ import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:path_provider/path_provider.dart';
 
+final defaultIsolateConfig = <String, dynamic>{};
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
-  await initAllIsolate();
   await _initMainIsolate();
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -26,12 +27,16 @@ void main() async {
   ));
 }
 
-Future<void> initAllIsolate() async {
+Future<void> initChildIsolate(Map<String, dynamic> config) async {
+  BackgroundIsolateBinaryMessenger.ensureInitialized(config["rootToken"]);
   Constant.cookiePath = (await getApplicationCacheDirectory()).path;
   await KvStore.init();
 }
 
 Future<void> _initMainIsolate() async {
+  defaultIsolateConfig["rootToken"] = ServicesBinding.rootIsolateToken;
+  Constant.cookiePath = (await getApplicationCacheDirectory()).path;
+  await KvStore.init();
   MediaManager().refreshExplore();
   startProxyIso();
 }
