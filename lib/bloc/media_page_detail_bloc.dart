@@ -73,6 +73,8 @@ class MediaPageDetailBloc extends Bloc {
 
   @override
   void dispose() async {
+    detailSubject.close();
+    mediaInfoSubject.close();
     await player.dispose();
     super.dispose();
   }
