@@ -37,6 +37,10 @@ class MediaManager {
     await explore();
   }
 
+  Future<SourceApiResult<List<String>>> requestSearchHot() async {
+    return await _biliSource.requestSearchHot();
+  }
+
   Future<SourceApiResult<MediaPageDetail>> requestDetail(
       MediaPagePreview preview) async {
     return await _sources[preview.sourceName]?.requestDetail(preview) ??

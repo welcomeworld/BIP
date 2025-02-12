@@ -3,5 +3,7 @@
  "home": "首页",
  "bangumi": "番剧",
  "mine": "我的",
- "searchHint": "随便搜点什么吧"
+ "searchHint": "随便搜点什么吧",
+ "searchHistory": "搜索历史",
+ "searchHot": "热门搜索"
 }

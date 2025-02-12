@@ -3,6 +3,7 @@ import 'package:bip/data/model/user_info.dart';
 import 'package:bip/data/net/web_net.dart';
 import 'package:bip/data/source/bilibili/bili_explore_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart';
+import 'package:bip/data/source/bilibili/model/bili_search_hot_response.dart';
 import 'package:bip/data/source/bilibili/wbi_net.dart';
 import 'package:bip/data/source/source.dart';
 import 'package:bip/utils/common_util.dart';
@@ -37,6 +38,13 @@ class BiliSource extends Source {
     "y_num": "4",
     "ps": "16",
     "web_location": "1430650",
+  };
+
+  static const String _searchHotPath =
+      "${_apiUrl}x/web-interface/wbi/search/square";
+  static final Map<String, dynamic> _searchHotConstQueries = {
+    "limit": 10,
+    "platform": "web",
   };
 
   static const _avDetailPagePrefix = "${_homeUrl}video/";
@@ -135,6 +143,37 @@ class BiliSource extends Source {
     if (_exploreLastShow.length > 64) {
       _exploreLastShow.removeAt(0);
     }
+  }
+
+  @override
+  Future<SourceApiResult<List<String>>> requestSearchHot() async {
+    try {
+      var response = await WbiNet()
+          .get(_searchHotPath, queryParameters: _searchHotConstQueries);
+      if (response.data == null || response.statusCode != 200) {
+        return SourceApiResult(
+          List.empty(),
+          resultCode: SourceApiResult.resultNetworkFailed,
+        );
+      }
+      final searchHotData = BiliSearchHotResponse.fromJson(response.data);
+      var searchHot = searchHotData.data?.trending?.hotSearch?.map((hotSearch) {
+        return hotSearch.keyword;
+      }).toList();
+      if (searchHot?.isNotEmpty == true) {
+        return SourceApiResult(searchHot!);
+      }
+    } catch (message) {
+      Logger.logConsole(message.toString());
+      return SourceApiResult(
+        List.empty(),
+        resultCode: SourceApiResult.resultInnerFailed,
+      );
+    }
+    return SourceApiResult(
+      List.empty(),
+      resultCode: SourceApiResult.resultSourceEmpty,
+    );
   }
 
   @override
