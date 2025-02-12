@@ -221,7 +221,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
   }
 
   Widget _expandBody() {
-    return Row();
+    return const Row();
   }
 }
 
