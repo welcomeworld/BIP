@@ -13,6 +13,7 @@ import 'package:dio/dio.dart';
 import '../../model/media_info.dart';
 import '../../model/media_page_preview.dart';
 import 'model/bili_av_detail_response.dart';
+import 'model/bili_type_search_response.dart';
 
 class BiliSource extends Source {
   @override
@@ -46,6 +47,9 @@ class BiliSource extends Source {
     "limit": 10,
     "platform": "web",
   };
+
+  static const String _searchTypePath =
+      "${_apiUrl}x/web-interface/wbi/search/type";
 
   static const _avDetailPagePrefix = "${_homeUrl}video/";
   static const _avDetailPath = "${_apiUrl}x/web-interface/wbi/view/detail";
@@ -143,6 +147,53 @@ class BiliSource extends Source {
     if (_exploreLastShow.length > 64) {
       _exploreLastShow.removeAt(0);
     }
+  }
+
+  @override
+  Future<SourceApiResult<List<MediaPagePreview>>> search(
+      String keyword, int pageNumber) async {
+    List<MediaPagePreview> exploreResult = [];
+    try {
+      Map<String, dynamic> extraParameters = {};
+      extraParameters["search_type"] = "video";
+      extraParameters["keyword"] = keyword;
+      extraParameters["page"] = pageNumber;
+      Options options = Options(headers: {
+        "Referer": "https://www.bilibili.com/",
+        "Origin": "https://www.bilibili.com/",
+      });
+      var response = await WbiNet().get(_searchTypePath,
+          queryParameters: extraParameters, options: options);
+      BiliTypeSearchResponse searchResponse =
+          BiliTypeSearchResponse.fromJson(response.data);
+      searchResponse.data?.result?.forEach((avItem) {
+        MediaPagePreview pagePreview = MediaPagePreview();
+        pagePreview.sourceName = sourceName;
+        pagePreview.title = avItem.title!;
+        UserInfo owner = UserInfo();
+        owner.name = avItem.author ?? "";
+        pagePreview.owner = owner;
+        pagePreview.coverPortrait = false;
+        pagePreview.cover = "${avItem.pic}@640w_400h_1e_1c.webp";
+        pagePreview.extras["videoType"] = "av";
+        pagePreview.extras["bvid"] = avItem.bvid;
+        pagePreview.pageTime = avItem.pubdate! * 1000;
+        pagePreview.topDec = avItem.isChargeVideo == 1 ? "充电专属" : "";
+        pagePreview.duration = _parseDuration(
+            avItem.duration?.isNotEmpty == true ? avItem.duration! : "0");
+        if (avItem.typename?.isNotEmpty == true) {
+          pagePreview.tags.add(avItem.typename ?? "");
+        }
+        if (avItem.type == "ketang") {
+          pagePreview.tags.add("课堂");
+        }
+        pagePreview.playCount = avItem.play ?? 0;
+        exploreResult.add(pagePreview);
+      });
+    } catch (message) {
+      Logger.logConsole("bili search err:$message");
+    }
+    return SourceApiResult(exploreResult);
   }
 
   @override
@@ -418,5 +469,21 @@ class BiliSource extends Source {
 
   String _wrapMediaUrl(String mediaUrl) {
     return "http://localhost:8080/?url=${CommonUtil.encode64(mediaUrl)}";
+  }
+
+  int _parseDuration(String duration) {
+    if (duration.isEmpty) {
+      return 0;
+    }
+    var durationList = duration.split(":");
+    if (durationList.length == 3) {
+      return int.parse(durationList[0]) * 3600 +
+          int.parse(durationList[1]) * 60 +
+          int.parse(durationList[2]);
+    } else if (durationList.length == 2) {
+      return int.parse(durationList[0]) * 60 + int.parse(durationList[1]);
+    } else {
+      return int.parse(durationList[0]);
+    }
   }
 }

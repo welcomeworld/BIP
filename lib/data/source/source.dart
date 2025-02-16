@@ -10,6 +10,9 @@ abstract class Source {
     return List.empty();
   }
 
+  Future<SourceApiResult<List<MediaPagePreview>>> search(
+      String keyword, int pageNumber);
+
   Future<SourceApiResult<List<String>>> requestSearchHot() async {
     return SourceApiResult(
       List.empty(),

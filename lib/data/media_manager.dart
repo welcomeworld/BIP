@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bip/data/model/media_page_preview.dart';
 import 'package:bip/data/source/bilibili/bili_source.dart';
 import 'package:bip/data/source/source.dart';
@@ -35,6 +37,23 @@ class MediaManager {
   Future<void> refreshExplore() async {
     _explorePageNumber = 1;
     await explore();
+  }
+
+  Stream<List<MediaPagePreview>> requestSearch(String keyword, int pageNumber) {
+    final controller = StreamController<List<MediaPagePreview>>();
+    final List<Future<void>> searchFutures = [];
+
+    for (final source in _sources.values) {
+      final searchFuture = source.search(keyword, pageNumber).then((result) {
+        controller.add(result.result);
+      }).catchError((error) {
+        controller.addError(error);
+      });
+      searchFutures.add(searchFuture);
+    }
+
+    Future.wait(searchFutures).then((_) => controller.close());
+    return controller.stream;
   }
 
   Future<SourceApiResult<List<String>>> requestSearchHot() async {

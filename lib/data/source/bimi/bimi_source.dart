@@ -19,4 +19,10 @@ class BimiSource extends Source {
     // TODO: implement requestMediaInfo
     throw UnimplementedError();
   }
+
+  @override
+  Future<SourceApiResult<List<MediaPagePreview>>> search(String keyword, int pageNumber) {
+    // TODO: implement search
+    throw UnimplementedError();
+  }
 }

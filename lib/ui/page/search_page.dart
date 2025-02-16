@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../bloc/bloc_state.dart';
 import '../../gen_auto_import.dart';
+import '../widgets/media_preview_card.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -51,7 +52,13 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
               onSubmitted: bloc.onSearch,
               autofocus: true,
             ),
-            _searchStartPage(),
+            StreamBuilder(
+                stream: bloc.showResultSubject,
+                builder: (context, snap) {
+                  return snap.data == true
+                      ? _searchResultPage()
+                      : _searchStartPage();
+                })
           ],
         ),
       ),
@@ -218,6 +225,56 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
               );
             }),
       ],
+    );
+  }
+
+  Widget _searchResultPage() {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (hasInvoked) {
+        if (hasInvoked) {
+          return;
+        }
+        bloc.showResultSubject.add(false);
+      },
+      child: Expanded(
+        child: StreamBuilder(
+            stream: bloc.searchResultSubject,
+            builder: (context, snap) {
+              var searchResultList = snap.data ?? [];
+              return RefreshIndicator(
+                onRefresh: bloc.onRefresh,
+                child: searchResultList.isNotEmpty
+                    ? ListView.builder(
+                        controller: bloc.scrollController,
+                        itemCount: searchResultList.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index == searchResultList.length) {
+                            return const SizedBox(
+                              height: 56,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            );
+                          }
+                          var previewDetail = searchResultList[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              left: 16,
+                              right: 16,
+                              top: 8,
+                              bottom: 8,
+                            ),
+                            child: mediaPreviewCard(context, previewDetail),
+                          );
+                        },
+                      )
+                    : const SizedBox.expand(),
+              );
+            }),
+      ),
     );
   }
 }
