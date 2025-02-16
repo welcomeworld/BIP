@@ -22,6 +22,7 @@ class SearchBloc extends Bloc {
 
   void onClearSearch() {
     searchTextController.clear();
+    showResultSubject.add(false);
   }
 
   void onClearHistory() {
