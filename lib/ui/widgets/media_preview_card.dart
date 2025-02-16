@@ -1,3 +1,4 @@
+import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -58,14 +59,16 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                     ),
                   ),
                 ),
-                Positioned(
-                  right: 8.0,
-                  bottom: 4,
-                  child: Text(
-                    CommonUtil.formatDurationShow(previewDetail.duration),
-                    style: const TextStyle(fontSize: 12.0, color: Colors.white),
+                if (previewDetail.duration != 0)
+                  Positioned(
+                    right: 8.0,
+                    bottom: 4,
+                    child: Text(
+                      CommonUtil.formatDurationShow(previewDetail.duration),
+                      style:
+                          const TextStyle(fontSize: 12.0, color: Colors.white),
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -77,14 +80,18 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    previewDetail.title,
+                  RichText(
+                    text: buildTextSpans(
+                      previewDetail.title,
+                      context,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant),
+                    ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant),
                   ),
                   Column(
                     children: [
