@@ -26,6 +26,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
           children: [
             TextField(
               controller: bloc.searchTextController,
+              focusNode: bloc.searchFocusNode,
               textInputAction: TextInputAction.search,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,

@@ -14,6 +14,7 @@ class SearchBloc extends Bloc {
   BehaviorSubject<List<SearchHistory>> searchHistorySubject = BehaviorSubject();
   BehaviorSubject<List<MediaPagePreview>> searchResultSubject =
       BehaviorSubject();
+  FocusNode searchFocusNode = FocusNode();
   bool _isRefreshing = false;
   bool _isLoading = false;
   String _searchKey = "";
@@ -38,6 +39,7 @@ class SearchBloc extends Bloc {
   }
 
   Future<void> onSearch(String searchKey) async {
+    searchFocusNode.unfocus();
     _searchPage = 1;
     _searchKey = searchKey;
     searchHistorySubject.add([SearchHistory()..searchKey = searchKey]);
@@ -98,6 +100,7 @@ class SearchBloc extends Bloc {
     scrollController.dispose();
     showResultSubject.close();
     searchResultSubject.close();
+    searchFocusNode.dispose();
     super.dispose();
   }
 }
