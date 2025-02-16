@@ -3,6 +3,7 @@ import 'package:bip/bloc/media_page_detail_bloc.dart';
 import 'package:bip/data/model/media_page_detail.dart';
 import 'package:bip/data/model/media_page_preview.dart';
 import 'package:bip/ui/widgets/media_preview_card.dart';
+import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -123,8 +124,8 @@ class _MediaPageDetailPageState
             top: 8,
             bottom: 8,
           ),
-          child: SelectableText(
-            pageInfo.title,
+          child: SelectableText.rich(
+            buildTextSpans(pageInfo.title, context),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
