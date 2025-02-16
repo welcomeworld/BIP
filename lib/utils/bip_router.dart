@@ -62,6 +62,10 @@ class BipRouter extends RouterDelegate<String>
     return false;
   }
 
+  Future<bool> maybePop() async {
+    return await navigatorKey.currentState?.maybePop() ?? false;
+  }
+
   Page createPage(PageInfo page) {
     switch (page.pageName) {
       case PageNames.home:

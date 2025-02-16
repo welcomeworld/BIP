@@ -36,7 +36,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 prefixIcon: IconButton(
                   onPressed: () {
-                    BipRouter.of(context).pop();
+                    BipRouter.of(context).maybePop();
                   },
                   padding: EdgeInsets.zero,
                   icon: const Icon(Icons.arrow_back),
