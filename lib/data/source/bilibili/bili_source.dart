@@ -6,6 +6,7 @@ import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart'
 import 'package:bip/data/source/bilibili/model/bili_search_hot_response.dart';
 import 'package:bip/data/source/bilibili/wbi_net.dart';
 import 'package:bip/data/source/source.dart';
+import 'package:bip/data/source/source_extra_key.dart';
 import 'package:bip/utils/common_util.dart';
 import 'package:bip/utils/logger.dart';
 import 'package:dio/dio.dart';
@@ -20,7 +21,11 @@ class BiliSource extends Source {
   String get sourceName => "哔哩哔哩";
   static const String _apiUrl = "https://api.bilibili.com/";
   static const String _homeUrl = "https://www.bilibili.com/";
-  static const List<String> _typeWhiteList = ["av", "ogv", "bangumi"];
+  static const String _typeAv = "av";
+  static const String _typeBangumi = "bangumi";
+  static const String _typeOgv = "ogv"; //边栏？
+  static const String _typeKeTang = "ketang";
+  static const List<String> _typeWhiteList = [_typeAv, _typeOgv, _typeBangumi];
   static final Map<String, dynamic> _dmQueries = {
     "dm_img_str": "V2ViR0wgMS4wIChPcGVuR0wgRVMgMi4wIENocm9taXVtKQ",
     "dm_cover_img_str":
@@ -110,9 +115,9 @@ class BiliSource extends Source {
         pagePreview.owner = owner;
         pagePreview.coverPortrait = false;
         pagePreview.cover = "${avItem.pic}@640w_400h_1e_1c.webp";
-        pagePreview.extras["videoType"] = avItem.gotoX;
-        pagePreview.extras["bvid"] = avItem.bvid;
-        pagePreview.extras["cid"] = avItem.cid;
+        pagePreview.extras[SourceExtraKey.videoType] = avItem.gotoX;
+        pagePreview.extras[SourceExtraKey.bvid] = avItem.bvid;
+        pagePreview.extras[SourceExtraKey.cid] = avItem.cid;
         pagePreview.pageTime = avItem.pubDate * 1000;
         pagePreview.duration = avItem.duration;
         if (avItem.rcmdReason?.content.isNotEmpty == true) {
@@ -175,8 +180,8 @@ class BiliSource extends Source {
         pagePreview.owner = owner;
         pagePreview.coverPortrait = false;
         pagePreview.cover = "${avItem.pic}@640w_400h_1e_1c.webp";
-        pagePreview.extras["videoType"] = "av";
-        pagePreview.extras["bvid"] = avItem.bvid;
+        pagePreview.extras[SourceExtraKey.videoType] = _typeAv;
+        pagePreview.extras[SourceExtraKey.bvid] = avItem.bvid;
         pagePreview.pageTime = avItem.pubdate! * 1000;
         pagePreview.topDec = avItem.isChargeVideo == 1 ? "充电专属" : "";
         pagePreview.duration = _parseDuration(
@@ -184,7 +189,7 @@ class BiliSource extends Source {
         if (avItem.typename?.isNotEmpty == true) {
           pagePreview.tags.add(avItem.typename ?? "");
         }
-        if (avItem.type == "ketang") {
+        if (avItem.type == _typeKeTang) {
           pagePreview.tags.add("课堂");
         }
         pagePreview.playCount = avItem.play ?? 0;
@@ -230,7 +235,7 @@ class BiliSource extends Source {
   @override
   Future<SourceApiResult<MediaPageDetail>> requestDetail(
       MediaPagePreview preview) async {
-    if (preview.extras["videoType"] == "bangumi") {
+    if (preview.extras[SourceExtraKey.videoType] == _typeBangumi) {
       return await _requestBangumiDetail(preview);
     } else {
       return await _requestAvDetail(preview);
@@ -242,8 +247,8 @@ class BiliSource extends Source {
     MediaPageDetail result = MediaPageDetail.fromPreview(preview);
 
     final extraData = preview.extras;
-    int? aid = extraData['aid'];
-    String? bvid = extraData['bvid'];
+    int? aid = extraData[SourceExtraKey.aid];
+    String? bvid = extraData[SourceExtraKey.bvid];
     final pageUrl = "$_avDetailPagePrefix${bvid ?? "av$aid"}";
     // await WebNet().get(Uri.parse(pageUrl)); //maybe need when api denied by risk management.
     Map<String, dynamic> extraParameters = {
@@ -297,9 +302,9 @@ class BiliSource extends Source {
       // map relatedData to MediaPagePreview
       for (var related in relatedData) {
         MediaPagePreview relatedPreview = MediaPagePreview();
-        relatedPreview.extras['aid'] = related.aid;
-        relatedPreview.extras['bvid'] = related.bvid;
-        relatedPreview.extras["videoType"] = "av";
+        relatedPreview.extras[SourceExtraKey.aid] = related.aid;
+        relatedPreview.extras[SourceExtraKey.bvid] = related.bvid;
+        relatedPreview.extras[SourceExtraKey.videoType] = _typeAv;
         relatedPreview.sourceName = sourceName;
         relatedPreview.title = related.title;
         UserInfo owner = UserInfo();
@@ -321,9 +326,9 @@ class BiliSource extends Source {
         mediaInfo.headers["User-Agent"] =
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
         mediaInfo.headers["Referer"] = _homeUrl;
-        mediaInfo.extras["bvid"] = bvid;
-        mediaInfo.extras["cid"] = media.cid;
-        mediaInfo.extras["videoType"] = "av";
+        mediaInfo.extras[SourceExtraKey.bvid] = bvid;
+        mediaInfo.extras[SourceExtraKey.cid] = media.cid;
+        mediaInfo.extras[SourceExtraKey.videoType] = _typeAv;
         mediaInfo.title = media.part;
         mediaInfo.cover = pageData.pic;
         mediaInfo.barrageUrl = "http://comment.bilibili.com/${media.cid}.xml";
@@ -349,7 +354,7 @@ class BiliSource extends Source {
   @override
   Future<SourceApiResult<MediaInfo>> requestMediaInfo(
       MediaInfo mediaInfo) async {
-    if (mediaInfo.extras["videoType"] == "bangumi") {
+    if (mediaInfo.extras[SourceExtraKey.videoType] == _typeBangumi) {
       return await _requestBangumiMediaInfo(mediaInfo);
     } else {
       return await _requestAvMediaInfo(mediaInfo);
@@ -407,9 +412,9 @@ class BiliSource extends Source {
   Future<SourceApiResult<MediaInfo>> _requestAvMediaInfo(
       MediaInfo mediaInfo) async {
     final extraData = mediaInfo.extras;
-    int? aid = extraData['aid'];
-    String? bvid = extraData['bvid'];
-    int cid = extraData['cid'];
+    int? aid = extraData[SourceExtraKey.aid];
+    String? bvid = extraData[SourceExtraKey.bvid];
+    int cid = extraData[SourceExtraKey.cid];
     final pageUrl = "$_avDetailPagePrefix${bvid ?? "av$aid"}";
     Map<String, dynamic> extraParameters = {
       "cid": cid,
