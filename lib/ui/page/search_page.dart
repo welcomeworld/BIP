@@ -72,7 +72,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
       mainAxisSize: MainAxisSize.min,
       children: [
         StreamBuilder(
-            stream: bloc.searchHistorySubject.stream,
+            stream: bloc.searchHistorySubject,
             builder: (context, snapshot) {
               var historyData = snapshot.data ?? [];
               if (historyData.isEmpty) {

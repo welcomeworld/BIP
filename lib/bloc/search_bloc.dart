@@ -3,15 +3,23 @@ import 'package:bip/data/media_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../data/drift_database.dart';
 import '../data/model/media_page_preview.dart';
 import '../data/model/search_history.dart';
 
 class SearchBloc extends Bloc {
+  SearchBloc({BipDatabase? database}) {
+    this.database = database ?? BipDatabase();
+  }
+
+  late final BipDatabase database;
   BehaviorSubject<bool> showResultSubject = BehaviorSubject();
   TextEditingController searchTextController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   BehaviorSubject<List<String>> searchHotSubject = BehaviorSubject();
-  BehaviorSubject<List<SearchHistory>> searchHistorySubject = BehaviorSubject();
+
+  Stream<List<SearchHistory>> get searchHistorySubject =>
+      database.searchHistoryStream;
   BehaviorSubject<List<MediaPagePreview>> searchResultSubject =
       BehaviorSubject();
   FocusNode searchFocusNode = FocusNode();
@@ -26,7 +34,7 @@ class SearchBloc extends Bloc {
   }
 
   void onClearHistory() {
-    searchHistorySubject.add([]);
+    database.clearSearchHistories();
   }
 
   void onSearchHot(String searchKey) {
@@ -43,7 +51,9 @@ class SearchBloc extends Bloc {
     searchFocusNode.unfocus();
     _searchPage = 1;
     _searchKey = searchKey;
-    searchHistorySubject.add([SearchHistory()..searchKey = searchKey]);
+    database.saveSearchHistory(
+      SearchHistory(searchKey: searchKey, searchTime: DateTime.now()),
+    );
     showResultSubject.add(true);
     searchResultSubject.add([]);
     final resultStream = MediaManager().requestSearch(searchKey, _searchPage++);
@@ -97,7 +107,6 @@ class SearchBloc extends Bloc {
   @override
   void dispose() {
     searchHotSubject.close();
-    searchHistorySubject.close();
     scrollController.dispose();
     showResultSubject.close();
     searchResultSubject.close();
