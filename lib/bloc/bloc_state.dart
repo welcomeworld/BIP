@@ -7,6 +7,13 @@ abstract class BlocState<T extends StatefulWidget, B extends Bloc>
   BlocState(this.bloc);
 
   final B bloc;
+  late ColorScheme colorScheme;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    colorScheme = Theme.of(context).colorScheme;
+  }
 
   @override
   void initState() {

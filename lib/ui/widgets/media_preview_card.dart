@@ -8,6 +8,7 @@ import '../../utils/common_util.dart';
 import '../../utils/page_info.dart';
 
 Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
+  final colorScheme = Theme.of(context).colorScheme;
   return AspectRatio(
     aspectRatio: 3,
     child: FilledButton.tonal(
@@ -21,7 +22,7 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
         padding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+        backgroundColor: colorScheme.surfaceContainerHighest,
       ),
       child: Row(
         children: [
@@ -85,10 +86,10 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                       previewDetail.title,
                       context,
                       style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
                     ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -100,8 +101,7 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                           if (previewDetail.tags.isNotEmpty)
                             DecoratedBox(
                               decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                  color: colorScheme.secondary,
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(2))),
                               child: Padding(
@@ -110,9 +110,7 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                                 child: Text(
                                   previewDetail.tags.firstOrNull ?? "",
                                   style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondary,
+                                    color: colorScheme.onSecondary,
                                   ),
                                 ),
                               ),
@@ -123,9 +121,7 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                               height: 18,
                               width: 18,
                               colorFilter: ColorFilter.mode(
-                                  Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
+                                  colorScheme.onSurfaceVariant,
                                   BlendMode.srcIn),
                             ),
                           const SizedBox(width: 2),
@@ -135,9 +131,7 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
+                                color: colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ),
@@ -152,8 +146,7 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                             height: 16,
                             width: 16,
                             colorFilter: ColorFilter.mode(
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                                BlendMode.srcIn),
+                                colorScheme.onSurfaceVariant, BlendMode.srcIn),
                           ),
                           const SizedBox(width: 2),
                           Expanded(
@@ -164,9 +157,7 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 12.0,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
+                                color: colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ),
@@ -183,9 +174,7 @@ Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 12.0,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                              color: colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ],

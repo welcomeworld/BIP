@@ -62,7 +62,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
               width: 24,
               height: 24,
               colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.onSurfaceVariant,
+                colorScheme.onSurfaceVariant,
                 BlendMode.srcIn,
               ),
             ),
@@ -71,7 +71,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
               width: 24,
               height: 24,
               colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.primary,
+                colorScheme.primary,
                 BlendMode.srcIn,
               ),
             ),
@@ -83,7 +83,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
               width: 24,
               height: 24,
               colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.onSurfaceVariant,
+                colorScheme.onSurfaceVariant,
                 BlendMode.srcIn,
               ),
             ),
@@ -92,7 +92,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
               width: 24,
               height: 24,
               colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.primary,
+                colorScheme.primary,
                 BlendMode.srcIn,
               ),
             ),
@@ -104,7 +104,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
               width: 24,
               height: 24,
               colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.onSurfaceVariant,
+                colorScheme.onSurfaceVariant,
                 BlendMode.srcIn,
               ),
             ),
@@ -113,7 +113,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
               width: 24,
               height: 24,
               colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.primary,
+                colorScheme.primary,
                 BlendMode.srcIn,
               ),
             ),
@@ -141,13 +141,12 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
         slivers: [
           SliverAppBar(
             surfaceTintColor: Colors.transparent,
-            backgroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: colorScheme.surface,
             elevation: 0,
             title: FilledButton.tonal(
               style: FilledButton.styleFrom(
                 padding: const EdgeInsets.all(16),
-                backgroundColor:
-                    Theme.of(context).colorScheme.surfaceContainerHigh,
+                backgroundColor: colorScheme.surfaceContainerHigh,
                 fixedSize: const Size(double.maxFinite, 56),
               ),
               onPressed: () => BipRouter.of(context).push(PageNames.search),
@@ -158,15 +157,14 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
                     width: 24,
                     height: 24,
                     colorFilter: ColorFilter.mode(
-                        Theme.of(context).colorScheme.onSurface,
-                        BlendMode.srcIn),
+                        colorScheme.onSurface, BlendMode.srcIn),
                   ),
                   const SizedBox(width: 16),
                   Text(
                     AppLocale.of(context)!.searchHint,
                     style: TextStyle(
                       fontSize: 16,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   )
                 ],

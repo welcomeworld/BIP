@@ -107,7 +107,7 @@ class _MediaPageDetailPageState
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.primary,
+            color: colorScheme.primary,
           ),
         ),
       ],
@@ -131,7 +131,7 @@ class _MediaPageDetailPageState
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onSurface,
+              color: colorScheme.onSurface,
             ),
           ),
         ),
@@ -209,7 +209,7 @@ class _MediaPageDetailPageState
                 .map(
                   (tag) => DecoratedBox(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: colorScheme.secondary,
                       borderRadius: const BorderRadius.all(Radius.circular(2)),
                     ),
                     child: Padding(
@@ -217,7 +217,7 @@ class _MediaPageDetailPageState
                       child: Text(
                         tag,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondary,
+                          color: colorScheme.onSecondary,
                         ),
                       ),
                     ),
@@ -238,7 +238,6 @@ class _MediaPageDetailPageState
     return StreamBuilder(
         stream: bloc.mediaInfoSubject.stream,
         builder: (context, snapshot) {
-          final colorTheme = Theme.of(context).colorScheme;
           final selectedMedia = snapshot.data;
           final playlistWidgets = playlists.entries.map((entry) {
             var MapEntry(key: key, value: value) = entry;
@@ -252,7 +251,7 @@ class _MediaPageDetailPageState
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: colorTheme.onSurface,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -278,8 +277,8 @@ class _MediaPageDetailPageState
                             padding: const EdgeInsets.symmetric(
                               horizontal: 8,
                             ),
-                            backgroundColor: colorTheme.surfaceContainerLow,
-                            overlayColor: colorTheme.onSurfaceVariant,
+                            backgroundColor: colorScheme.surfaceContainerLow,
+                            overlayColor: colorScheme.onSurfaceVariant,
                             fixedSize: const Size(120, 56),
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             shape: RoundedRectangleBorder(
@@ -290,8 +289,8 @@ class _MediaPageDetailPageState
                             mediaInfo.title,
                             style: TextStyle(
                               color: isSelected
-                                  ? colorTheme.primary
-                                  : colorTheme.onSurfaceVariant,
+                                  ? colorScheme.primary
+                                  : colorScheme.onSurfaceVariant,
                               fontSize: 13,
                               fontWeight: isSelected
                                   ? FontWeight.w500

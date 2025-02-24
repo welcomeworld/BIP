@@ -29,7 +29,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
               focusNode: bloc.searchFocusNode,
               textInputAction: TextInputAction.search,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
+                color: colorScheme.onSurface,
                 fontWeight: FontWeight.w500,
                 fontSize: 17,
               ),
@@ -97,7 +97,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: colorScheme.onSurface,
                           ),
                         ),
                       ),
@@ -115,8 +115,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                             width: 24,
                             height: 24,
                             colorFilter: ColorFilter.mode(
-                                Theme.of(context).colorScheme.onSurface,
-                                BlendMode.srcIn),
+                                colorScheme.onSurface, BlendMode.srcIn),
                           ),
                         ),
                       )
@@ -138,11 +137,9 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                             style: FilledButton.styleFrom(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
+                              backgroundColor: colorScheme
                                   .surfaceContainerHigh,
-                              overlayColor: Theme.of(context)
-                                  .colorScheme
+                              overlayColor: colorScheme
                                   .onSurfaceVariant,
                               minimumSize: const Size(0, 36),
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -153,8 +150,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                             child: Text(
                               item.searchKey,
                               style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
+                                color: colorScheme
                                     .onSurfaceVariant,
                                 fontSize: 14,
                                 overflow: TextOverflow.ellipsis,
@@ -190,7 +186,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.onSurface,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -215,7 +211,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: colorScheme.onSurface,
                             fontSize: 16,
                           ),
                         ),
