@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/subjects.dart';
 
 import '../data/model/media_page_detail.dart';
 
@@ -45,6 +46,7 @@ class MediaPageDetailBloc extends Bloc {
   }
 
   Future<void> queryMediaInfo(MediaInfo mediaInfo) async {
+    mediaInfoSubject.add(mediaInfo);
     final mediaResult = await MediaManager().requestMediaInfo(mediaInfo);
     if (mediaResult.resultCode != SourceApiResult.resultSuccess) {
       ScaffoldMessenger.of(BipRouter.rootRouter.navigatorKey.currentContext!)
@@ -69,6 +71,11 @@ class MediaPageDetailBloc extends Bloc {
       );
       player.play();
     }
+  }
+
+  Future<void> onMediaInfoClick(MediaInfo mediaInfo) async {
+    await player.stop();
+    queryMediaInfo(mediaInfo);
   }
 
   @override

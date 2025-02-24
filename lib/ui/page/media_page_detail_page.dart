@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
+import '../../data/model/media_info.dart';
 import '../../utils/common_util.dart';
 import '../theme/theme_colors.dart';
 
@@ -50,6 +51,7 @@ class _MediaPageDetailPageState
                         children: [
                           _ownerCard(pageInfo),
                           _descContent(pageInfo),
+                          _mediaPlayLists(pageInfo.playlists),
                           _relatedList(pageInfo.relatedMediaList),
                         ],
                       ),
@@ -198,6 +200,7 @@ class _MediaPageDetailPageState
             top: 4,
             left: 16,
             right: 16,
+            bottom: 8,
           ),
           child: Wrap(
             spacing: 8,
@@ -225,6 +228,91 @@ class _MediaPageDetailPageState
         ),
       ],
     );
+  }
+
+  Widget _mediaPlayLists(Map<String, List<MediaInfo>> playlists) {
+    if (playlists.isEmpty ||
+        (playlists.length == 1 && playlists.values.first.length == 1)) {
+      return const SizedBox.shrink();
+    }
+    return StreamBuilder(
+        stream: bloc.mediaInfoSubject.stream,
+        builder: (context, snapshot) {
+          final colorTheme = Theme.of(context).colorScheme;
+          final selectedMedia = snapshot.data;
+          final playlistWidgets = playlists.entries.map((entry) {
+            var MapEntry(key: key, value: value) = entry;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 8),
+                  child: Text(
+                    key,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: colorTheme.onSurface,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 72,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      right: 8,
+                      top: 8,
+                      bottom: 8,
+                    ),
+                    itemCount: value.length,
+                    itemBuilder: (context, index) {
+                      var mediaInfo = value[index];
+                      final isSelected = mediaInfo == selectedMedia;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: FilledButton(
+                          onPressed: () => bloc.onMediaInfoClick(mediaInfo),
+                          style: FilledButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                            ),
+                            backgroundColor: colorTheme.surfaceContainerLow,
+                            overlayColor: colorTheme.onSurfaceVariant,
+                            fixedSize: const Size(120, 56),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            mediaInfo.title,
+                            style: TextStyle(
+                              color: isSelected
+                                  ? colorTheme.primary
+                                  : colorTheme.onSurfaceVariant,
+                              fontSize: 13,
+                              fontWeight: isSelected
+                                  ? FontWeight.w500
+                                  : FontWeight.normal,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 2,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          }).toList();
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: playlistWidgets,
+          );
+        });
   }
 
   Widget _relatedList(List<MediaPagePreview> previewList) => ListView.builder(

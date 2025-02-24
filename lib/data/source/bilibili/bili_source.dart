@@ -333,7 +333,7 @@ class BiliSource extends Source {
         mediaInfo.cover = pageData.pic;
         mediaInfo.barrageUrl = "http://comment.bilibili.com/${media.cid}.xml";
         mediaInfo.duration = media.duration;
-        result.playlists.putIfAbsent("default", () => []).add(mediaInfo);
+        result.playlists.putIfAbsent("选集", () => []).add(mediaInfo);
       }
     } catch (e, stack) {
       Logger.logConsole(stack.toString());
