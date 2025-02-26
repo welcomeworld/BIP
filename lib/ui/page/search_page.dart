@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../bloc/bloc_state.dart';
-import '../../gen_auto_import.dart';
 import '../widgets/media_preview_card.dart';
 
 class SearchPage extends StatefulWidget {
@@ -43,7 +42,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                   padding: EdgeInsets.zero,
                   icon: const Icon(Icons.arrow_back),
                 ),
-                hintText: AppLocale.of(context)!.searchHint,
+                hintText: localeString.searchHint,
                 suffixIcon: IconButton(
                   onPressed: bloc.onClearSearch,
                   padding: EdgeInsets.zero,
@@ -93,7 +92,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                           left: 16,
                         ),
                         child: Text(
-                          AppLocale.of(context)!.searchHistory,
+                          localeString.searchHistory,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -137,10 +136,8 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                             style: FilledButton.styleFrom(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
-                              backgroundColor: colorScheme
-                                  .surfaceContainerHigh,
-                              overlayColor: colorScheme
-                                  .onSurfaceVariant,
+                              backgroundColor: colorScheme.surfaceContainerHigh,
+                              overlayColor: colorScheme.onSurfaceVariant,
                               minimumSize: const Size(0, 36),
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               shape: RoundedRectangleBorder(
@@ -150,8 +147,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                             child: Text(
                               item.searchKey,
                               style: TextStyle(
-                                color: colorScheme
-                                    .onSurfaceVariant,
+                                color: colorScheme.onSurfaceVariant,
                                 fontSize: 14,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -182,7 +178,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                       left: 16,
                     ),
                     child: Text(
-                      AppLocale.of(context)!.searchHot,
+                      localeString.searchHot,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

@@ -1,5 +1,4 @@
 import 'package:bip/bloc/main_bloc.dart';
-import 'package:bip/gen_auto_import.dart';
 import 'package:bip/ui/widgets/media_preview_card.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:bip/utils/page_info.dart';
@@ -75,7 +74,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
                 BlendMode.srcIn,
               ),
             ),
-            label: AppLocale.of(context)!.home,
+            label: localeString.home,
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
@@ -96,7 +95,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
                 BlendMode.srcIn,
               ),
             ),
-            label: AppLocale.of(context)!.bangumi,
+            label: localeString.bangumi,
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
@@ -117,7 +116,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
                 BlendMode.srcIn,
               ),
             ),
-            label: AppLocale.of(context)!.mine,
+            label: localeString.mine,
           ),
         ],
         elevation: 0,
@@ -161,7 +160,7 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
                   ),
                   const SizedBox(width: 16),
                   Text(
-                    AppLocale.of(context)!.searchHint,
+                    localeString.searchHint,
                     style: TextStyle(
                       fontSize: 16,
                       color: colorScheme.onSurfaceVariant,

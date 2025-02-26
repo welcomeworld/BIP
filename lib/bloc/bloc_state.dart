@@ -1,3 +1,4 @@
+import 'package:bip/gen_auto_import.dart';
 import 'package:flutter/material.dart';
 
 import 'bloc.dart';
@@ -8,11 +9,13 @@ abstract class BlocState<T extends StatefulWidget, B extends Bloc>
 
   final B bloc;
   late ColorScheme colorScheme;
+  late AppLocale localeString;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     colorScheme = Theme.of(context).colorScheme;
+    localeString = AppLocale.of(context)!;
   }
 
   @override
