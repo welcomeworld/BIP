@@ -14,22 +14,30 @@ import 'package:rxdart/subjects.dart';
 import '../data/model/media_page_detail.dart';
 
 class MediaPageDetailBloc extends Bloc {
+  MediaPageDetailBloc({MediaManager? mediaManager, Player? player}) {
+    _mediaManager = mediaManager ?? MediaManager();
+    _player = player ?? Player();
+    controller = VideoController(_player);
+  }
+
+  late final MediaManager _mediaManager;
+  late final Player _player;
+  late final VideoController controller;
+
   BehaviorSubject<MediaPageDetail> detailSubject = BehaviorSubject();
   BehaviorSubject<MediaInfo> mediaInfoSubject = BehaviorSubject();
-  late final player = Player();
-  late final controller = VideoController(player);
 
   @override
   void initState(BuildContext context) {
     super.initState(context);
-    player.stream.log.listen((log) {
+    _player.stream.log.listen((log) {
       Logger.logConsole("Player log:$log");
     });
   }
 
   Future<void> setPreview(MediaPagePreview preview) async {
     detailSubject.add(MediaPageDetail.fromPreview(preview));
-    final detailResult = await MediaManager().requestDetail(preview);
+    final detailResult = await _mediaManager.requestDetail(preview);
     detailSubject.add(detailResult.result);
     if (detailResult.resultCode != SourceApiResult.resultSuccess) {
       ScaffoldMessenger.of(BipRouter.rootRouter.navigatorKey.currentContext!)
@@ -47,7 +55,7 @@ class MediaPageDetailBloc extends Bloc {
 
   Future<void> queryMediaInfo(MediaInfo mediaInfo) async {
     mediaInfoSubject.add(mediaInfo);
-    final mediaResult = await MediaManager().requestMediaInfo(mediaInfo);
+    final mediaResult = await _mediaManager.requestMediaInfo(mediaInfo);
     if (mediaResult.resultCode != SourceApiResult.resultSuccess) {
       ScaffoldMessenger.of(BipRouter.rootRouter.navigatorKey.currentContext!)
           .showSnackBar(
@@ -59,22 +67,22 @@ class MediaPageDetailBloc extends Bloc {
     } else {
       mediaInfoSubject.add(mediaResult.result);
       //todo select different resolution and audio
-      await player.open(
+      await _player.open(
           Media(
             mediaResult.result.mediaQualities.values.first,
             httpHeaders: mediaResult.result.headers,
           ),
           play: false);
       var audioEntry = mediaResult.result.additionAudios.entries.first;
-      await player.setAudioTrack(
+      await _player.setAudioTrack(
         AudioTrack.uri(audioEntry.value, title: "Dash Audio"),
       );
-      player.play();
+      _player.play();
     }
   }
 
   Future<void> onMediaInfoClick(MediaInfo mediaInfo) async {
-    await player.stop();
+    await _player.stop();
     queryMediaInfo(mediaInfo);
   }
 
@@ -82,7 +90,7 @@ class MediaPageDetailBloc extends Bloc {
   void dispose() async {
     detailSubject.close();
     mediaInfoSubject.close();
-    await player.dispose();
+    await _player.dispose();
     super.dispose();
   }
 }

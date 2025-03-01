@@ -8,18 +8,20 @@ import '../data/model/media_page_preview.dart';
 import '../data/model/search_history.dart';
 
 class SearchBloc extends Bloc {
-  SearchBloc({BipDatabase? database}) {
-    this.database = database ?? BipDatabase();
+  SearchBloc({BipDatabase? database, MediaManager? mediaManager}) {
+    _database = database ?? BipDatabase();
+    _mediaManager = mediaManager ?? MediaManager();
   }
 
-  late final BipDatabase database;
+  late final BipDatabase _database;
+  late final MediaManager _mediaManager;
   BehaviorSubject<bool> showResultSubject = BehaviorSubject();
   TextEditingController searchTextController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   BehaviorSubject<List<String>> searchHotSubject = BehaviorSubject();
 
   Stream<List<SearchHistory>> get searchHistorySubject =>
-      database.searchHistoryStream;
+      _database.searchHistoryStream;
   BehaviorSubject<List<MediaPagePreview>> searchResultSubject =
       BehaviorSubject();
   FocusNode searchFocusNode = FocusNode();
@@ -34,7 +36,7 @@ class SearchBloc extends Bloc {
   }
 
   void onClearHistory() {
-    database.clearSearchHistories();
+    _database.clearSearchHistories();
   }
 
   void onSearchHot(String searchKey) {
@@ -51,12 +53,12 @@ class SearchBloc extends Bloc {
     searchFocusNode.unfocus();
     _searchPage = 1;
     _searchKey = searchKey;
-    database.saveSearchHistory(
+    _database.saveSearchHistory(
       SearchHistory(searchKey: searchKey, searchTime: DateTime.now()),
     );
     showResultSubject.add(true);
     searchResultSubject.add([]);
-    final resultStream = MediaManager().requestSearch(searchKey, _searchPage++);
+    final resultStream = _mediaManager.requestSearch(searchKey, _searchPage++);
     await for (final result in resultStream) {
       if (searchKey == _searchKey) {
         final preResult = searchResultSubject.valueOrNull ?? [];
@@ -76,7 +78,7 @@ class SearchBloc extends Bloc {
     final searchKey = _searchKey;
     if (_isLoading) return;
     _isLoading = true;
-    final resultStream = MediaManager().requestSearch(searchKey, _searchPage++);
+    final resultStream = _mediaManager.requestSearch(searchKey, _searchPage++);
     await for (final result in resultStream) {
       if (searchKey == _searchKey) {
         final preResult = searchResultSubject.valueOrNull ?? [];
@@ -99,7 +101,7 @@ class SearchBloc extends Bloc {
   }
 
   void _requestSearchHot() {
-    MediaManager().requestSearchHot().then((value) {
+    _mediaManager.requestSearchHot().then((value) {
       searchHotSubject.add(value.result);
     });
   }

@@ -7,8 +7,14 @@ import 'package:flutter/material.dart';
 import '../data/model/media_page_preview.dart';
 
 class MainBloc extends Bloc {
+  MainBloc({MediaManager? mediaManager}) {
+    _mediaManager = mediaManager ?? MediaManager();
+  }
+
+  late final MediaManager _mediaManager;
+
   Stream<List<MediaPagePreview>> get homeExploreList =>
-      MediaManager().homeExploreList;
+      _mediaManager.homeExploreList;
   int tabIndex = 0;
   bool _isRefreshing = false;
   bool _isLoading = false;
@@ -22,14 +28,14 @@ class MainBloc extends Bloc {
   void explore() async {
     if (_isLoading) return;
     _isLoading = true;
-    await MediaManager().explore();
+    await _mediaManager.explore();
     _isLoading = false;
   }
 
   Future<void> refresh() async {
     if (_isRefreshing) return;
     _isRefreshing = true;
-    await MediaManager().refreshExplore();
+    await _mediaManager.refreshExplore();
     _isRefreshing = false;
   }
 }

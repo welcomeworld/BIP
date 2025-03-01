@@ -11,22 +11,29 @@ import 'model/media_page_detail.dart';
 class MediaManager {
   static MediaManager? _ins;
 
-  MediaManager._() {
+  MediaManager._({Source? mainSource, Map<String, Source>? sources}) {
     _ins = this;
-    _sources[_biliSource.sourceName] = _biliSource;
+    _mainSource = mainSource ?? BiliSource();
+    _sources = sources ?? {_mainSource.sourceName: _mainSource};
   }
 
-  factory MediaManager() => _ins ?? MediaManager._();
+  factory MediaManager({Source? mainSource, Map<String, Source>? sources}) =>
+      _ins ?? MediaManager._(mainSource: mainSource, sources: sources);
 
-  final BiliSource _biliSource = BiliSource();
-  final Map<String, Source> _sources = {};
+  ///  usually only use for test
+  static void reset() {
+    _ins = null;
+  }
+
+  late final Source _mainSource;
+  late final Map<String, Source> _sources;
   int _explorePageNumber = 1;
 
   final List<MediaPagePreview> _homeExploreList = [];
   BehaviorSubject<List<MediaPagePreview>> homeExploreList = BehaviorSubject();
 
   Future<void> explore() async {
-    var result = await _biliSource.explore(_explorePageNumber++);
+    var result = await _mainSource.explore(_explorePageNumber++);
     if (_explorePageNumber == 2) {
       _homeExploreList.clear();
     }
@@ -57,7 +64,7 @@ class MediaManager {
   }
 
   Future<SourceApiResult<List<String>>> requestSearchHot() async {
-    return await _biliSource.requestSearchHot();
+    return await _mainSource.requestSearchHot();
   }
 
   Future<SourceApiResult<MediaPageDetail>> requestDetail(
