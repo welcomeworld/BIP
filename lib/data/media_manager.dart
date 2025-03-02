@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bip/data/model/media_page_preview.dart';
+import 'package:bip/data/model/user_info.dart';
 import 'package:bip/data/source/bilibili/bili_source.dart';
 import 'package:bip/data/source/source.dart';
 import 'package:rxdart/rxdart.dart';
@@ -15,6 +16,12 @@ class MediaManager {
     _ins = this;
     _mainSource = mainSource ?? BiliSource();
     _sources = sources ?? {_mainSource.sourceName: _mainSource};
+    final accountMap = Map.fromEntries(
+      _sources.entries
+          .where((entry) => entry.value.hasAccount)
+          .map((entry) => MapEntry(entry.key, entry.value.accountInfo)),
+    );
+    accounts.add(accountMap);
   }
 
   factory MediaManager({Source? mainSource, Map<String, Source>? sources}) =>
@@ -31,6 +38,7 @@ class MediaManager {
 
   final List<MediaPagePreview> _homeExploreList = [];
   BehaviorSubject<List<MediaPagePreview>> homeExploreList = BehaviorSubject();
+  BehaviorSubject<Map<String, UserInfo?>> accounts = BehaviorSubject();
 
   Future<void> explore() async {
     var result = await _mainSource.explore(_explorePageNumber++);

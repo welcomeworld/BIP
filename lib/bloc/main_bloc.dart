@@ -5,6 +5,7 @@ import 'package:bip/data/media_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../data/model/media_page_preview.dart';
+import '../data/model/user_info.dart';
 
 class MainBloc extends Bloc {
   MainBloc({MediaManager? mediaManager}) {
@@ -15,6 +16,8 @@ class MainBloc extends Bloc {
 
   Stream<List<MediaPagePreview>> get homeExploreList =>
       _mediaManager.homeExploreList;
+
+  Stream<Map<String, UserInfo?>> get accounts => _mediaManager.accounts.stream;
   int tabIndex = 0;
   bool _isRefreshing = false;
   bool _isLoading = false;

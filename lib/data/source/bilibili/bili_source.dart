@@ -135,6 +135,14 @@ class BiliSource extends Source {
     return exploreResult;
   }
 
+  @override
+  bool get hasAccount => true;
+
+  @override
+  UserInfo? get accountInfo {
+    return null;
+  }
+
   String _getLastShowQuery() {
     StringBuffer result = StringBuffer("");
     var index = 0;

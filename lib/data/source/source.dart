@@ -1,4 +1,5 @@
 import 'package:bip/data/model/media_info.dart';
+import 'package:bip/data/model/user_info.dart';
 
 import '../model/media_page_detail.dart';
 import '../model/media_page_preview.dart';
@@ -24,6 +25,10 @@ abstract class Source {
       MediaPagePreview preview);
 
   Future<SourceApiResult<MediaInfo>> requestMediaInfo(MediaInfo mediaInfo);
+
+  bool get hasAccount => false;
+
+  UserInfo? get accountInfo => null;
 }
 
 class SourceApiResult<T> {
