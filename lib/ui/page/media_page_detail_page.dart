@@ -5,12 +5,12 @@ import 'package:bip/data/model/media_page_preview.dart';
 import 'package:bip/ui/widgets/media_preview_card.dart';
 import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
 import '../../data/model/media_info.dart';
 import '../../utils/common_util.dart';
 import '../theme/theme_colors.dart';
+import '../widgets/simple_svg.dart';
 
 class MediaPageDetailPage extends StatefulWidget {
   const MediaPageDetailPage(this.preview, {super.key});
@@ -144,12 +144,10 @@ class _MediaPageDetailPageState
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SvgPicture.asset(
+              SimpleSvg(
                 "assets/img/ic_play_count.svg",
-                height: 16,
-                width: 16,
-                colorFilter: ColorFilter.mode(
-                    ThemeColors.onSurfaceLow(context), BlendMode.srcIn),
+                size: 16,
+                color: colorScheme.onSurfaceLow,
               ),
               const SizedBox(width: 2),
               Text(
@@ -158,7 +156,7 @@ class _MediaPageDetailPageState
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 12.0,
-                  color: ThemeColors.onSurfaceLow(context),
+                  color: colorScheme.onSurfaceLow,
                 ),
               ),
               const SizedBox(
@@ -174,7 +172,7 @@ class _MediaPageDetailPageState
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 12.0,
-                  color: ThemeColors.onSurfaceLow(context),
+                  color: colorScheme.onSurfaceLow,
                 ),
               ),
             ],
@@ -191,7 +189,7 @@ class _MediaPageDetailPageState
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w400,
-              color: ThemeColors.onSurfaceLow(context),
+              color: colorScheme.onSurfaceLow,
             ),
           ),
         ),

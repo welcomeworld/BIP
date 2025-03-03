@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../bloc/bloc_state.dart';
 import '../../bloc/main_home_sub_bloc.dart';
 import '../../utils/bip_router.dart';
 import '../../utils/page_info.dart';
 import '../widgets/media_preview_card.dart';
+import '../widgets/simple_svg.dart';
 
 class MainHomeSubPage extends StatefulWidget {
   const MainHomeSubPage({super.key});
@@ -38,12 +38,10 @@ class _MainHomeSubPageState
               onPressed: () => BipRouter.of(context).push(PageNames.search),
               child: Row(
                 children: [
-                  SvgPicture.asset(
+                  SimpleSvg(
                     "assets/img/ic_search.svg",
-                    width: 24,
-                    height: 24,
-                    colorFilter: ColorFilter.mode(
-                        colorScheme.onSurface, BlendMode.srcIn),
+                    size: 24,
+                    color: colorScheme.onSurface,
                   ),
                   const SizedBox(width: 16),
                   Text(

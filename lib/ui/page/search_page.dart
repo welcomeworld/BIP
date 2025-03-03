@@ -1,10 +1,10 @@
 import 'package:bip/bloc/search_bloc.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../bloc/bloc_state.dart';
 import '../widgets/media_preview_card.dart';
+import '../widgets/simple_svg.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -109,12 +109,10 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           onPressed: bloc.onClearHistory,
-                          icon: SvgPicture.asset(
+                          icon: SimpleSvg(
                             "assets/img/ic_delete.svg",
-                            width: 24,
-                            height: 24,
-                            colorFilter: ColorFilter.mode(
-                                colorScheme.onSurface, BlendMode.srcIn),
+                            size: 24,
+                            color: colorScheme.onSurface,
                           ),
                         ),
                       )

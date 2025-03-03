@@ -3,9 +3,9 @@ import 'package:bip/ui/page/main_home_sub_page.dart';
 import 'package:bip/ui/page/main_mine_sub_page.dart';
 import 'package:bip/utils/screen_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../bloc/bloc_state.dart';
+import '../widgets/simple_svg.dart';
 import 'main_bangumi_sub_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -38,65 +38,41 @@ class _MainPageState extends BlocState<MainPage, MainBloc> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
+            icon: SimpleSvg(
               "assets/img/ic_home_outline.svg",
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                colorScheme.onSurfaceVariant,
-                BlendMode.srcIn,
-              ),
+              size: 24,
+              color: colorScheme.onSurfaceVariant,
             ),
-            activeIcon: SvgPicture.asset(
+            activeIcon: SimpleSvg(
               "assets/img/ic_home_filled.svg",
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                colorScheme.primary,
-                BlendMode.srcIn,
-              ),
+              size: 24,
+              color: colorScheme.primary,
             ),
             label: localeString.home,
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
+            icon: SimpleSvg(
               "assets/img/ic_bangumi_outline.svg",
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                colorScheme.onSurfaceVariant,
-                BlendMode.srcIn,
-              ),
+              size: 24,
+              color: colorScheme.onSurfaceVariant,
             ),
-            activeIcon: SvgPicture.asset(
+            activeIcon: SimpleSvg(
               "assets/img/ic_bangumi_filled.svg",
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                colorScheme.primary,
-                BlendMode.srcIn,
-              ),
+              size: 24,
+              color: colorScheme.primary,
             ),
             label: localeString.bangumi,
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
+            icon: SimpleSvg(
               "assets/img/ic_mine_outline.svg",
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                colorScheme.onSurfaceVariant,
-                BlendMode.srcIn,
-              ),
+              size: 24,
+              color: colorScheme.onSurfaceVariant,
             ),
-            activeIcon: SvgPicture.asset(
+            activeIcon: SimpleSvg(
               "assets/img/ic_mine_filled.svg",
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                colorScheme.primary,
-                BlendMode.srcIn,
-              ),
+              size: 24,
+              color: colorScheme.primary,
             ),
             label: localeString.mine,
           ),

@@ -1,5 +1,5 @@
+import 'package:bip/ui/widgets/simple_svg.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../bloc/bloc_state.dart';
 import '../../bloc/main_mine_sub_bloc.dart';
@@ -83,8 +83,8 @@ class _MainMineSubPageState
                               backgroundImage: userInfo.avatar.isNotEmpty
                                   ? NetworkImage(userInfo.avatar)
                                   : const AssetImage(
-                                "assets/img/ic_default_avatar.png",
-                              ),
+                                      "assets/img/ic_default_avatar.png",
+                                    ),
                             ),
                           ),
                         ),
@@ -123,14 +123,10 @@ class _MainMineSubPageState
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SvgPicture.asset(
+                      SimpleSvg(
                         "assets/img/ic_download.svg",
-                        width: 30,
-                        height: 30,
-                        colorFilter: ColorFilter.mode(
-                          colorScheme.secondary,
-                          BlendMode.srcIn,
-                        ),
+                        size: 30,
+                        color: colorScheme.secondary,
                       ),
                       const SizedBox(
                         height: 4,
@@ -151,14 +147,10 @@ class _MainMineSubPageState
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SvgPicture.asset(
+                      SimpleSvg(
                         "assets/img/ic_favorite_outline.svg",
-                        width: 30,
-                        height: 30,
-                        colorFilter: ColorFilter.mode(
-                          colorScheme.secondary,
-                          BlendMode.srcIn,
-                        ),
+                        size: 30,
+                        color: colorScheme.secondary,
                       ),
                       const SizedBox(
                         height: 4,
@@ -179,14 +171,10 @@ class _MainMineSubPageState
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SvgPicture.asset(
+                      SimpleSvg(
                         "assets/img/ic_history_outline.svg",
-                        width: 30,
-                        height: 30,
-                        colorFilter: ColorFilter.mode(
-                          colorScheme.secondary,
-                          BlendMode.srcIn,
-                        ),
+                        size: 30,
+                        color: colorScheme.secondary,
                       ),
                       const SizedBox(
                         height: 4,
@@ -207,14 +195,10 @@ class _MainMineSubPageState
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SvgPicture.asset(
+                      SimpleSvg(
                         "assets/img/ic_message.svg",
-                        width: 30,
-                        height: 30,
-                        colorFilter: ColorFilter.mode(
-                          colorScheme.secondary,
-                          BlendMode.srcIn,
-                        ),
+                        size: 30,
+                        color: colorScheme.secondary,
                       ),
                       const SizedBox(
                         height: 4,
@@ -231,23 +215,15 @@ class _MainMineSubPageState
           ),
         ),
         ListTile(
-          leading: SvgPicture.asset(
+          leading: SimpleSvg(
             "assets/img/ic_theme.svg",
-            width: 24,
-            height: 24,
-            colorFilter: ColorFilter.mode(
-              colorScheme.tertiary,
-              BlendMode.srcIn,
-            ),
+            size: 24,
+            color: colorScheme.tertiary,
           ),
-          trailing: SvgPicture.asset(
+          trailing: SimpleSvg(
             "assets/img/ic_right_arrow.svg",
-            width: 16,
-            height: 16,
-            colorFilter: ColorFilter.mode(
-              colorScheme.onSurface.withOpacity(0.6),
-              BlendMode.srcIn,
-            ),
+            size: 16,
+            color: colorScheme.onSurface.withOpacity(0.6),
           ),
           onTap: () {},
           title: Text(
@@ -256,28 +232,20 @@ class _MainMineSubPageState
           ),
         ),
         ListTile(
-          leading: SvgPicture.asset(
+          leading: SimpleSvg(
             "assets/img/ic_settings.svg",
-            width: 24,
-            height: 24,
-            colorFilter: ColorFilter.mode(
-              colorScheme.tertiary,
-              BlendMode.srcIn,
-            ),
+            size: 24,
+            color: colorScheme.tertiary,
           ),
           onTap: () {},
           title: Text(
             localeString.settings,
             style: TextStyle(color: colorScheme.onSurface),
           ),
-          trailing: SvgPicture.asset(
+          trailing: SimpleSvg(
             "assets/img/ic_right_arrow.svg",
-            width: 16,
-            height: 16,
-            colorFilter: ColorFilter.mode(
-              colorScheme.onSurface.withOpacity(0.6),
-              BlendMode.srcIn,
-            ),
+            size: 16,
+            color: colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
         const SizedBox(height: 24),
