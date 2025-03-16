@@ -115,7 +115,11 @@ class _MainMineSubPageState
   Widget _userInfo(String sourceName, UserInfo? userInfo) {
     final isLogin = userInfo != null;
     return IconButton(
-      onPressed: () {},
+      onPressed: () {
+        if (!isLogin) {
+          bloc.login(sourceName);
+        }
+      },
       style: IconButton.styleFrom(
           minimumSize: const Size(0, 80),
           padding: const EdgeInsets.only(left: 16, right: 24)),

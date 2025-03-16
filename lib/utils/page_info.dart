@@ -11,4 +11,5 @@ class PageNames {
   static const String home = "/";
   static const String search = "/search";
   static const String mediaPageDetail = "/media/page/detail";
+  static const String login = "/login";
 }

@@ -1,25 +1,33 @@
+import 'dart:convert';
+
 import 'package:bip/data/model/media_page_detail.dart';
 import 'package:bip/data/model/user_info.dart';
 import 'package:bip/data/net/web_net.dart';
+import 'package:bip/data/persistence/kv_store.dart';
 import 'package:bip/data/source/bilibili/bili_explore_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart';
+import 'package:bip/data/source/bilibili/model/bili_login_qr_request_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_search_hot_response.dart';
+import 'package:bip/data/source/bilibili/model/bili_user_nav_info_response.dart';
 import 'package:bip/data/source/bilibili/wbi_net.dart';
 import 'package:bip/data/source/source.dart';
 import 'package:bip/data/source/source_extra_key.dart';
 import 'package:bip/utils/common_util.dart';
+import 'package:bip/utils/constant.dart';
 import 'package:bip/utils/logger.dart';
 import 'package:dio/dio.dart';
 
 import '../../model/media_info.dart';
 import '../../model/media_page_preview.dart';
 import 'model/bili_av_detail_response.dart';
+import 'model/bili_login_qr_validate_response.dart';
 import 'model/bili_type_search_response.dart';
 
 class BiliSource extends Source {
   @override
   String get sourceName => "哔哩哔哩";
   static const String _apiUrl = "https://api.bilibili.com/";
+  static const String _passportUrl = "https://passport.bilibili.com/";
   static const String _homeUrl = "https://www.bilibili.com/";
   static const String _typeAv = "av";
   static const String _typeBangumi = "bangumi";
@@ -53,6 +61,13 @@ class BiliSource extends Source {
     "platform": "web",
   };
 
+  BiliSource() {
+    final userCache = KvStore.getSp().getString(Constant.kvKeyBiliUser);
+    if (userCache != null) {
+      _userInfo = UserInfo.fromJson(jsonDecode(userCache));
+    }
+  }
+
   static const String _searchTypePath =
       "${_apiUrl}x/web-interface/wbi/search/type";
 
@@ -70,6 +85,15 @@ class BiliSource extends Source {
     "is_main_page": true,
     "web_location": "1315873",
   };
+
+  static const _loginQrRequestPath =
+      "${_passportUrl}x/passport-login/web/qrcode/generate";
+  String _qrLoginTempAuth = "";
+  static const _loginQrValidatePath =
+      "${_passportUrl}x/passport-login/web/qrcode/poll";
+  static const _userNavInfoPath = "${_apiUrl}x/web-interface/nav";
+
+  UserInfo? _userInfo;
 
   Future<void> _initHome() async {
     await WebNet().get(_homeUrl);
@@ -140,7 +164,49 @@ class BiliSource extends Source {
 
   @override
   UserInfo? get accountInfo {
-    return null;
+    return _userInfo;
+  }
+
+  @override
+  Future<String> requestLoginQr() async {
+    var response = await WebNet().get(_loginQrRequestPath);
+    BiliLoginQrRequestResponse loginQrRequestResponse =
+        BiliLoginQrRequestResponse.fromJson(response.data);
+    _qrLoginTempAuth = loginQrRequestResponse.data?.qrcodeKey ?? "";
+    return loginQrRequestResponse.data?.url ?? "";
+  }
+
+  @override
+  Future<SourceLoginResult> validateLoginQr() async {
+    Map<String, dynamic> extraParameters = {};
+    extraParameters["qrcode_key"] = _qrLoginTempAuth;
+    var response = await WebNet()
+        .get(_loginQrValidatePath, queryParameters: extraParameters);
+
+    BiliLoginQrValidateResponse loginQrValidateResponse =
+        BiliLoginQrValidateResponse.fromJson(response.data);
+    final loginCode = loginQrValidateResponse.data?.code ?? -1;
+    final loginResult = switch (loginCode) {
+      0 => SourceLoginResult.success,
+      86101 => SourceLoginResult.continueWait,
+      86090 => SourceLoginResult.continueWait,
+      86038 => SourceLoginResult.timeout,
+      int() => SourceLoginResult.failed,
+    };
+    if (loginResult == SourceLoginResult.success) {
+      var navResponse = await WebNet().get(_userNavInfoPath);
+      BiliUserNavInfoResponse biliUserNavInfoResponse =
+          BiliUserNavInfoResponse.fromJson(navResponse.data);
+      if (biliUserNavInfoResponse.data != null) {
+        final userData = biliUserNavInfoResponse.data!;
+        _userInfo = UserInfo();
+        _userInfo?.name = userData.uname!;
+        _userInfo?.avatar = userData.face!;
+        KvStore.getSp()
+            .setString(Constant.kvKeyBiliUser, jsonEncode(_userInfo));
+      }
+    }
+    return loginResult;
   }
 
   String _getLastShowQuery() {

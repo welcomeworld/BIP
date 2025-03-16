@@ -26,6 +26,14 @@ abstract class Source {
 
   Future<SourceApiResult<MediaInfo>> requestMediaInfo(MediaInfo mediaInfo);
 
+  Future<String> requestLoginQr() async {
+    return "";
+  }
+
+  Future<SourceLoginResult> validateLoginQr() async {
+    return SourceLoginResult.failed;
+  }
+
   bool get hasAccount => false;
 
   UserInfo? get accountInfo => null;
@@ -40,4 +48,11 @@ class SourceApiResult<T> {
   int resultCode;
 
   SourceApiResult(this.result, {this.resultCode = 0});
+}
+
+enum SourceLoginResult {
+  success,
+  continueWait,
+  timeout,
+  failed,
 }

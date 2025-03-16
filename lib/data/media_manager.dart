@@ -16,12 +16,7 @@ class MediaManager {
     _ins = this;
     _mainSource = mainSource ?? BiliSource();
     _sources = sources ?? {_mainSource.sourceName: _mainSource};
-    final accountMap = Map.fromEntries(
-      _sources.entries
-          .where((entry) => entry.value.hasAccount)
-          .map((entry) => MapEntry(entry.key, entry.value.accountInfo)),
-    );
-    accounts.add(accountMap);
+    _refreshAccount();
   }
 
   factory MediaManager({Source? mainSource, Map<String, Source>? sources}) =>
@@ -91,5 +86,27 @@ class MediaManager {
           mediaInfo,
           resultCode: SourceApiResult.resultSourceEmpty,
         );
+  }
+
+  void _refreshAccount() {
+    final accountMap = Map.fromEntries(
+      _sources.entries
+          .where((entry) => entry.value.hasAccount)
+          .map((entry) => MapEntry(entry.key, entry.value.accountInfo)),
+    );
+    accounts.add(accountMap);
+  }
+
+  Future<String> requestLoginQr(String sourceName) async {
+    return await _sources[sourceName]?.requestLoginQr() ?? "";
+  }
+
+  Future<SourceLoginResult> validateLoginQr(String sourceName) async {
+    final loginResult = await _sources[sourceName]?.validateLoginQr() ??
+        SourceLoginResult.failed;
+    if (loginResult == SourceLoginResult.success) {
+      _refreshAccount();
+    }
+    return loginResult;
   }
 }
