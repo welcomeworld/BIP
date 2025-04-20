@@ -68,16 +68,10 @@ class MediaPageDetailBloc extends Bloc {
       mediaInfoSubject.add(mediaResult.result);
       //todo select different resolution and audio
       await _player.open(
-          Media(
-            mediaResult.result.mediaQualities.values.first,
-            httpHeaders: mediaResult.result.headers,
-          ),
-          play: false);
-      var audioEntry = mediaResult.result.additionAudios.entries.first;
-      await _player.setAudioTrack(
-        AudioTrack.uri(audioEntry.value, title: "Dash Audio"),
-      );
-      _player.play();
+          Media(mediaResult.result.mediaPath,
+              httpHeaders: mediaResult.result.headers,
+              extras: mediaResult.result.additionAudios),
+          play: true);
     }
   }
 

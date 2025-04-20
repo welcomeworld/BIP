@@ -8,6 +8,7 @@ class MediaInfo {
   int recordPosition = 0;
   int duration = 0;
   String topDec = "";
+  String mediaPath = "";
   Map<String, String> mediaQualities = {};
   String qualityKey = "";
   Map<String, String> additionSubtitles = {};
