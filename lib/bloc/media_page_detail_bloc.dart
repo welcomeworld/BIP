@@ -12,6 +12,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../data/model/media_page_detail.dart';
+import '../player/bip_constant.dart';
 
 class MediaPageDetailBloc extends Bloc {
   MediaPageDetailBloc({MediaManager? mediaManager, Player? player}) {
@@ -66,11 +67,11 @@ class MediaPageDetailBloc extends Bloc {
       );
     } else {
       mediaInfoSubject.add(mediaResult.result);
-      //todo select different resolution and audio
       await _player.open(
           Media(mediaResult.result.mediaPath,
               httpHeaders: mediaResult.result.headers,
-              extras: mediaResult.result.additionAudios),
+              extras: {PlayerConstant.titleExtraKey: mediaResult.result.title}
+                ..addAll(mediaResult.result.additionAudios)),
           play: true);
     }
   }

@@ -5,9 +5,9 @@ import 'package:bip/data/model/media_page_preview.dart';
 import 'package:bip/ui/widgets/media_preview_card.dart';
 import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:flutter/material.dart';
-import 'package:media_kit_video/media_kit_video.dart';
 
 import '../../data/model/media_info.dart';
+import '../../player/bip_video.dart';
 import '../../utils/common_util.dart';
 import '../theme/theme_colors.dart';
 import '../widgets/simple_svg.dart';
@@ -76,7 +76,7 @@ class _MediaPageDetailPageState
                 fit: BoxFit.cover,
               );
             }
-            return Video(controller: bloc.controller);
+            return BipVideo(controller: bloc.controller);
           }),
     );
   }
