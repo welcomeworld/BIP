@@ -1,5 +1,3 @@
-import 'bili_search_video_type.dart';
-
 class BiliTypeSearchResponse {
   final int? code;
   final String? message;
@@ -28,13 +26,35 @@ class BiliTypeSearchResponse {
       };
 }
 
+class BiliSearchAllType {
+  final String resultType;
+  final List<dynamic>? data;
+
+  BiliSearchAllType({
+    required this.resultType,
+    this.data,
+  });
+
+  factory BiliSearchAllType.fromJson(Map<String, dynamic> json) {
+    return BiliSearchAllType(
+      resultType: json['result_type'] as String,
+      data: json['data'] as List<dynamic>?,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'result_type': resultType,
+        'data': data,
+      };
+}
+
 class Data {
   final String? seid;
   final int? page;
   final int? pagesize;
   final int? numResults;
   final int? numPages;
-  final List<BiliSearchVideoType>? result;
+  final List<dynamic>? result;
 
   Data({
     this.seid,
@@ -52,11 +72,7 @@ class Data {
       pagesize: json['pagesize'] as int?,
       numResults: json['numResults'] as int?,
       numPages: json['numPages'] as int?,
-      result: json['result'] != null
-          ? (json['result'] as List)
-              .map((e) => BiliSearchVideoType.fromJson(e))
-              .toList()
-          : null,
+      result: json['result'],
     );
   }
 
@@ -66,6 +82,6 @@ class Data {
         'pagesize': pagesize,
         'numResults': numResults,
         'numPages': numPages,
-        'result': result?.map((e) => e.toJson()).toList(),
+        'result': result,
       };
 }

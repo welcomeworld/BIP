@@ -3,6 +3,8 @@ import 'package:bip/data/model/media_page_detail.dart';
 import 'package:bip/data/model/media_page_preview.dart';
 import 'package:bip/data/source/source.dart';
 
+import '../../model/media_type.dart';
+
 class BimiSource extends Source {
   @override
   String get sourceName => "哔咪动漫";
@@ -21,7 +23,9 @@ class BimiSource extends Source {
   }
 
   @override
-  Future<SourceApiResult<List<MediaPagePreview>>> search(String keyword, int pageNumber) {
+  Future<SourceApiResult<List<MediaPagePreview>>> search(
+      String keyword, int pageNumber,
+      {MediaType searchType = MediaType.video}) {
     // TODO: implement search
     throw UnimplementedError();
   }

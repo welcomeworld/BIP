@@ -1,4 +1,5 @@
 import 'package:bip/data/model/media_info.dart';
+import 'package:bip/data/model/media_type.dart';
 import 'package:bip/data/model/user_info.dart';
 
 import '../model/media_page_detail.dart';
@@ -12,7 +13,8 @@ abstract class Source {
   }
 
   Future<SourceApiResult<List<MediaPagePreview>>> search(
-      String keyword, int pageNumber);
+      String keyword, int pageNumber,
+      {MediaType searchType = MediaType.video});
 
   Future<SourceApiResult<List<String>>> requestSearchHot() async {
     return SourceApiResult(

@@ -1,8 +1,11 @@
+import 'package:bip/data/model/media_type.dart';
 import 'package:bip/data/model/user_info.dart';
 
 class MediaPagePreview {
   String sourceName = "";
   Map<String, dynamic> extras = {};
+  MediaType mediaType = MediaType.video;
+
   late UserInfo owner;
   String title = "";
   //seconds
@@ -15,4 +18,8 @@ class MediaPagePreview {
   List<String> tags = [];
   String topDec = "";
   int playCount = 0;
+
+  // bangumi only
+  double score = 0.0;
+  String indexShow = "";
 }

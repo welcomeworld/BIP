@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:bip/data/model/media_page_detail.dart';
+import 'package:bip/data/model/media_type.dart';
 import 'package:bip/data/model/user_info.dart';
 import 'package:bip/data/net/web_net.dart';
 import 'package:bip/data/persistence/kv_store.dart';
@@ -24,6 +26,8 @@ import '../../model/media_info.dart';
 import '../../model/media_page_preview.dart';
 import 'model/bili_av_detail_response.dart';
 import 'model/bili_login_qr_validate_response.dart';
+import 'model/bili_search_bangumi_type.dart';
+import 'model/bili_search_video_type.dart';
 import 'model/bili_type_search_response.dart';
 
 class BiliSource extends Source {
@@ -71,6 +75,9 @@ class BiliSource extends Source {
     }
   }
 
+  String _searchQvId = "";
+  static const String _searchAllPath =
+      "${_apiUrl}x/web-interface/wbi/search/all/v2";
   static const String _searchTypePath =
       "${_apiUrl}x/web-interface/wbi/search/type";
 
@@ -233,49 +240,117 @@ class BiliSource extends Source {
 
   @override
   Future<SourceApiResult<List<MediaPagePreview>>> search(
-      String keyword, int pageNumber) async {
+      String keyword, int pageNumber,
+      {MediaType searchType = MediaType.video}) async {
     List<MediaPagePreview> exploreResult = [];
+    final bool searchAll = searchType == MediaType.video && pageNumber == 1;
     try {
       Map<String, dynamic> extraParameters = {};
-      extraParameters["search_type"] = "video";
+      if (searchAll) {
+        _searchQvId = _randomId(length: 32);
+      } else {
+        extraParameters["search_type"] = searchType.typeString;
+        extraParameters["page"] = pageNumber;
+        extraParameters["dynamic_offset"] = (pageNumber - 1) * 20;
+      }
       extraParameters["keyword"] = keyword;
-      extraParameters["page"] = pageNumber;
+      extraParameters["qv_id"] = _searchQvId;
+
       Options options = Options(headers: {
         "Referer": "https://www.bilibili.com/",
         "Origin": "https://www.bilibili.com/",
       });
-      var response = await WbiNet().get(_searchTypePath,
-          queryParameters: extraParameters, options: options);
+      var response = await WbiNet().get(
+          searchAll ? _searchAllPath : _searchTypePath,
+          queryParameters: extraParameters,
+          options: options);
       BiliTypeSearchResponse searchResponse =
           BiliTypeSearchResponse.fromJson(response.data);
-      searchResponse.data?.result?.forEach((avItem) {
-        MediaPagePreview pagePreview = MediaPagePreview();
-        pagePreview.sourceName = sourceName;
-        pagePreview.title = avItem.title!;
-        UserInfo owner = UserInfo();
-        owner.name = avItem.author ?? "";
-        pagePreview.owner = owner;
-        pagePreview.coverPortrait = false;
-        pagePreview.cover = "${avItem.pic}@640w_400h_1e_1c.webp";
-        pagePreview.extras[SourceExtraKey.videoType] = _typeAv;
-        pagePreview.extras[SourceExtraKey.bvid] = avItem.bvid;
-        pagePreview.pageTime = avItem.pubdate! * 1000;
-        pagePreview.topDec = avItem.isChargeVideo == 1 ? "充电专属" : "";
-        pagePreview.duration = _parseDuration(
-            avItem.duration?.isNotEmpty == true ? avItem.duration! : "0");
-        if (avItem.typename?.isNotEmpty == true) {
-          pagePreview.tags.add(avItem.typename ?? "");
+      if (searchAll) {
+        searchResponse.data?.result?.forEach((allItem) {
+          BiliSearchAllType allTypeSearchResponse =
+              BiliSearchAllType.fromJson(allItem);
+          if (allTypeSearchResponse.resultType == MediaType.video.typeString) {
+            allTypeSearchResponse.data
+                ?.map((item) => BiliSearchVideoType.fromJson(item))
+                .forEach((avItem) {
+              exploreResult.add(_mapVideoItem(avItem));
+            });
+          } else if (allTypeSearchResponse.resultType ==
+              MediaType.bangumi.typeString) {
+            allTypeSearchResponse.data
+                ?.map((item) => BiliSearchBangumiType.fromJson(item))
+                .forEach((avItem) {
+              exploreResult.add(_mapBangumiItem(avItem));
+            });
+          }
+        });
+      } else {
+        if (searchType == MediaType.video) {
+          searchResponse.data?.result
+              ?.map((item) => BiliSearchVideoType.fromJson(item))
+              .forEach((avItem) {
+            exploreResult.add(_mapVideoItem(avItem));
+          });
+        } else if (searchType == MediaType.bangumi) {
+          searchResponse.data?.result
+              ?.map((item) => BiliSearchBangumiType.fromJson(item))
+              .forEach((avItem) {
+            exploreResult.add(_mapBangumiItem(avItem));
+          });
         }
-        if (avItem.type == _typeKeTang) {
-          pagePreview.tags.add("课堂");
-        }
-        pagePreview.playCount = avItem.play ?? 0;
-        exploreResult.add(pagePreview);
-      });
+      }
     } catch (message) {
       Logger.logConsole("bili search err:$message");
     }
     return SourceApiResult(exploreResult);
+  }
+
+  MediaPagePreview _mapVideoItem(BiliSearchVideoType item) {
+    MediaPagePreview pagePreview = MediaPagePreview();
+    pagePreview.sourceName = sourceName;
+    pagePreview.title = item.title!;
+    UserInfo owner = UserInfo();
+    owner.name = item.author ?? "";
+    pagePreview.owner = owner;
+    pagePreview.coverPortrait = false;
+    pagePreview.cover = "${item.pic}@640w_400h_1e_1c.webp";
+    pagePreview.extras[SourceExtraKey.videoType] = _typeAv;
+    pagePreview.extras[SourceExtraKey.bvid] = item.bvid;
+    pagePreview.pageTime = item.pubdate! * 1000;
+    pagePreview.topDec = item.isChargeVideo == 1 ? "充电专属" : "";
+    pagePreview.duration = _parseDuration(
+        item.duration?.isNotEmpty == true ? item.duration! : "0");
+    if (item.typename?.isNotEmpty == true) {
+      pagePreview.tags.add(item.typename ?? "");
+    }
+    if (item.type == _typeKeTang) {
+      pagePreview.tags.add("课堂");
+    }
+    pagePreview.playCount = item.play ?? 0;
+    return pagePreview;
+  }
+
+  MediaPagePreview _mapBangumiItem(BiliSearchBangumiType item) {
+    MediaPagePreview pagePreview = MediaPagePreview();
+    pagePreview.mediaType = MediaType.bangumi;
+    pagePreview.sourceName = sourceName;
+    pagePreview.title = item.title!;
+    UserInfo owner = UserInfo();
+    owner.name = item.author ?? "";
+    pagePreview.owner = owner;
+    pagePreview.coverPortrait = true;
+    pagePreview.cover = "${item.pic}@480w_640h_1e_1c.webp";
+    pagePreview.extras[SourceExtraKey.videoType] = _typeBangumi;
+    pagePreview.extras[SourceExtraKey.ssid] = item.ssid;
+    pagePreview.pageTime = (item.pubtime ?? 0) * 1000;
+    pagePreview.topDec = item.angleTitle ?? item.typename ?? "";
+    if (item.styles?.isNotEmpty == true) {
+      pagePreview.tags.add(item.styles ?? "");
+    }
+    pagePreview.score = item.score;
+    pagePreview.indexShow = item.indexShow;
+    return pagePreview;
   }
 
   @override
@@ -627,5 +702,14 @@ class BiliSource extends Source {
     } else {
       return int.parse(durationList[0]);
     }
+  }
+
+  String _randomId(
+      {int length = 32,
+      String charset =
+          '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'}) {
+    final random = Random();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
   }
 }
