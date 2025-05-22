@@ -52,6 +52,7 @@ class _MediaPageDetailPageState
                           _ownerCard(pageInfo),
                           _descContent(pageInfo),
                           _mediaPlayLists(pageInfo.playlists),
+                          _mediaPlayLists(pageInfo.additionPlaylists),
                           _relatedList(pageInfo.relatedMediaList),
                         ],
                       ),

@@ -1,5 +1,8 @@
+import 'media_type.dart';
+
 class MediaInfo {
   String sourceName = "";
+  MediaType mediaType = MediaType.video;
   Map<String, dynamic> extras = {};
   Map<String, String> headers = {};
   String title = "";

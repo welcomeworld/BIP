@@ -8,6 +8,7 @@ import 'package:bip/data/net/web_net.dart';
 import 'package:bip/data/persistence/kv_store.dart';
 import 'package:bip/data/source/bilibili/bili_explore_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart';
+import 'package:bip/data/source/bilibili/model/bili_bangumi_detail_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_login_qr_request_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_mpd_info.dart';
 import 'package:bip/data/source/bilibili/model/bili_search_hot_response.dart';
@@ -25,6 +26,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../model/media_info.dart';
 import '../../model/media_page_preview.dart';
 import 'model/bili_av_detail_response.dart';
+import 'model/bili_bangumi_recommend_response.dart';
 import 'model/bili_login_qr_validate_response.dart';
 import 'model/bili_search_bangumi_type.dart';
 import 'model/bili_search_video_type.dart';
@@ -85,6 +87,11 @@ class BiliSource extends Source {
   static const _avDetailPath = "${_apiUrl}x/web-interface/wbi/view/detail";
   final List<String> _exploreLastShow = [];
 
+  static const _bangumiPagePrefix = "${_homeUrl}bangumi/play/ss";
+  static const _bangumiDetailPath = "${_apiUrl}pgc/view/web/season";
+  static const _bangumiRecommendPath =
+      "${_apiUrl}pgc/season/web/related/recommend";
+
   static const _avMediaInfoPath = "${_apiUrl}x/player/wbi/playurl";
   static final Map<String, dynamic> _avMediaInfoConstQueries = {
     "qn": 0,
@@ -143,13 +150,13 @@ class BiliSource extends Source {
       }).forEach((avItem) {
         MediaPagePreview pagePreview = MediaPagePreview();
         pagePreview.sourceName = sourceName;
+        pagePreview.mediaType = _mapMediaType(avItem.gotoX);
         pagePreview.title = avItem.title;
         UserInfo owner = UserInfo();
         owner.name = avItem.owner?.name ?? "";
         pagePreview.owner = owner;
         pagePreview.coverPortrait = false;
         pagePreview.cover = "${avItem.pic}@640w_400h_1e_1c.webp";
-        pagePreview.extras[SourceExtraKey.videoType] = avItem.gotoX;
         pagePreview.extras[SourceExtraKey.bvid] = avItem.bvid;
         pagePreview.extras[SourceExtraKey.cid] = avItem.cid;
         pagePreview.pageTime = avItem.pubDate * 1000;
@@ -309,13 +316,13 @@ class BiliSource extends Source {
   MediaPagePreview _mapVideoItem(BiliSearchVideoType item) {
     MediaPagePreview pagePreview = MediaPagePreview();
     pagePreview.sourceName = sourceName;
+    pagePreview.mediaType = MediaType.video;
     pagePreview.title = item.title!;
     UserInfo owner = UserInfo();
     owner.name = item.author ?? "";
     pagePreview.owner = owner;
     pagePreview.coverPortrait = false;
     pagePreview.cover = "${item.pic}@640w_400h_1e_1c.webp";
-    pagePreview.extras[SourceExtraKey.videoType] = _typeAv;
     pagePreview.extras[SourceExtraKey.bvid] = item.bvid;
     pagePreview.pageTime = item.pubdate! * 1000;
     pagePreview.topDec = item.isChargeVideo == 1 ? "充电专属" : "";
@@ -341,7 +348,6 @@ class BiliSource extends Source {
     pagePreview.owner = owner;
     pagePreview.coverPortrait = true;
     pagePreview.cover = "${item.pic}@480w_640h_1e_1c.webp";
-    pagePreview.extras[SourceExtraKey.videoType] = _typeBangumi;
     pagePreview.extras[SourceExtraKey.ssid] = item.ssid;
     pagePreview.pageTime = (item.pubtime ?? 0) * 1000;
     pagePreview.topDec = item.angleTitle ?? item.typename ?? "";
@@ -387,7 +393,7 @@ class BiliSource extends Source {
   @override
   Future<SourceApiResult<MediaPageDetail>> requestDetail(
       MediaPagePreview preview) async {
-    if (preview.extras[SourceExtraKey.videoType] == _typeBangumi) {
+    if (preview.mediaType == MediaType.bangumi) {
       return await _requestBangumiDetail(preview);
     } else {
       return await _requestAvDetail(preview);
@@ -456,7 +462,7 @@ class BiliSource extends Source {
         MediaPagePreview relatedPreview = MediaPagePreview();
         relatedPreview.extras[SourceExtraKey.aid] = related.aid;
         relatedPreview.extras[SourceExtraKey.bvid] = related.bvid;
-        relatedPreview.extras[SourceExtraKey.videoType] = _typeAv;
+        relatedPreview.mediaType = MediaType.video;
         relatedPreview.sourceName = sourceName;
         relatedPreview.title = related.title;
         UserInfo owner = UserInfo();
@@ -475,12 +481,12 @@ class BiliSource extends Source {
       for (var media in pageData.pages) {
         MediaInfo mediaInfo = MediaInfo();
         mediaInfo.sourceName = sourceName;
+        mediaInfo.mediaType = MediaType.video;
         mediaInfo.headers["User-Agent"] =
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
         mediaInfo.headers["Referer"] = _homeUrl;
         mediaInfo.extras[SourceExtraKey.bvid] = bvid;
         mediaInfo.extras[SourceExtraKey.cid] = media.cid;
-        mediaInfo.extras[SourceExtraKey.videoType] = _typeAv;
         mediaInfo.title = media.part;
         mediaInfo.cover = pageData.pic;
         mediaInfo.barrageUrl = "http://comment.bilibili.com/${media.cid}.xml";
@@ -500,17 +506,145 @@ class BiliSource extends Source {
 
   Future<SourceApiResult<MediaPageDetail>> _requestBangumiDetail(
       MediaPagePreview preview) async {
-    throw UnimplementedError();
+    MediaPageDetail result = MediaPageDetail.fromPreview(preview);
+
+    final extraData = preview.extras;
+    int? ssId = extraData[SourceExtraKey.ssid];
+    final pageUrl = "$_bangumiPagePrefix$ssId";
+    // await WebNet().get(Uri.parse(pageUrl)); //maybe need when api denied by risk management.
+    Map<String, dynamic> extraParameters = {};
+    extraParameters["season_id"] = ssId;
+    Options options = Options(headers: {
+      "Referer": pageUrl,
+      "Origin": "https://www.bilibili.com/",
+    });
+    try {
+      var response = await WbiNet().get(_bangumiDetailPath,
+          queryParameters: extraParameters, options: options);
+      if (response.data == null || response.statusCode != 200) {
+        return SourceApiResult(
+          result,
+          resultCode: SourceApiResult.resultNetworkFailed,
+        );
+      }
+      BiliBangumiDetailResponse detailResponse =
+          BiliBangumiDetailResponse.fromJson(response.data);
+      if (detailResponse.code != 0) {
+        return SourceApiResult(result, resultCode: detailResponse.code);
+      }
+
+      // map BiliBangumiDetailResponse to MediaPageDetail
+      var bangumiData = detailResponse.result;
+
+      // map owner
+      result.owner.name = bangumiData.upInfo.uname;
+      result.owner.avatar = bangumiData.upInfo.avatar;
+
+      // map basic info
+      result.title = bangumiData.title;
+      result.desc = bangumiData.evaluate;
+      result.pageTime = bangumiData.pubTime * 1000;
+      result.cover = bangumiData.cover;
+      result.coverPortrait = true;
+      result.tags = bangumiData.styles;
+      result.playCount = bangumiData.stat.views;
+      result.score = bangumiData.rating.score;
+      result.indexShow = bangumiData.newEp.desc;
+
+      // map pages to MediaInfo
+      for (var media in bangumiData.episodes) {
+        MediaInfo mediaInfo = MediaInfo();
+        mediaInfo.sourceName = sourceName;
+        mediaInfo.mediaType = MediaType.bangumi;
+        mediaInfo.headers["User-Agent"] =
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
+        mediaInfo.headers["Referer"] = _homeUrl;
+        mediaInfo.extras[SourceExtraKey.bvid] = media.bvid;
+        mediaInfo.extras[SourceExtraKey.cid] = media.cid;
+        mediaInfo.title = media.showTitle;
+        mediaInfo.cover = media.cover;
+        mediaInfo.barrageUrl = "http://comment.bilibili.com/${media.cid}.xml";
+        mediaInfo.duration = media.duration;
+        result.playlists.putIfAbsent("选集", () => []).add(mediaInfo);
+      }
+
+      // map sections to MediaInfo
+      for (var section in bangumiData.section) {
+        final sectionTitle = section.title;
+        for (var media in section.episodes) {
+          MediaInfo mediaInfo = MediaInfo();
+          mediaInfo.sourceName = sourceName;
+          mediaInfo.mediaType = MediaType.bangumi;
+          mediaInfo.headers["User-Agent"] =
+              "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
+          mediaInfo.headers["Referer"] = _homeUrl;
+          mediaInfo.extras[SourceExtraKey.bvid] = media.bvid;
+          mediaInfo.extras[SourceExtraKey.cid] = media.cid;
+          mediaInfo.title = media.showTitle;
+          mediaInfo.cover = media.cover;
+          mediaInfo.barrageUrl = "http://comment.bilibili.com/${media.cid}.xml";
+          mediaInfo.duration = media.duration;
+          result.additionPlaylists
+              .putIfAbsent(sectionTitle, () => [])
+              .add(mediaInfo);
+        }
+      }
+
+      // map recommend to MediaPagePreview
+      var recommendNetResponse = await WbiNet().get(_bangumiRecommendPath,
+          queryParameters: extraParameters, options: options);
+      if (recommendNetResponse.data == null || recommendNetResponse.statusCode != 200) {
+        return SourceApiResult(
+          result,
+          resultCode: SourceApiResult.resultNetworkFailed,
+        );
+      }
+      BiliBangumiRecommendResponse recommendResponse =
+      BiliBangumiRecommendResponse.fromJson(recommendNetResponse.data);
+      if (detailResponse.code != 0) {
+        return SourceApiResult(result, resultCode: detailResponse.code);
+      }
+      for (var related in recommendResponse.data.season) {
+        MediaPagePreview relatedPreview = MediaPagePreview();
+        relatedPreview.sourceName = sourceName;
+        relatedPreview.mediaType = MediaType.bangumi;
+        relatedPreview.extras[SourceExtraKey.ssid] = related.seasonId;
+        relatedPreview.title = related.title;
+        UserInfo owner = UserInfo();
+        owner.name = "哔哩哔哩番剧";
+        relatedPreview.owner = owner;
+        relatedPreview.coverPortrait = true;
+        relatedPreview.cover = "${related.cover}@480w_640h_1e_1c.webp";
+
+        relatedPreview.topDec = related.badge;
+        relatedPreview.tags = related.styles.map((tag) => tag.name).toList();
+        relatedPreview.score = related.rating.score;
+        relatedPreview.indexShow = related.newEp.indexShow;
+
+        relatedPreview.playCount = related.stat.view;
+        result.relatedMediaList.add(relatedPreview);
+      }
+
+
+    } catch (e, stack) {
+      Logger.logConsole(stack.toString());
+      Logger.logConsole(e.toString());
+      return SourceApiResult(
+        result,
+        resultCode: SourceApiResult.resultInnerFailed,
+      );
+    }
+    return SourceApiResult(result);
   }
 
   @override
   Future<SourceApiResult<MediaInfo>> requestMediaInfo(
       MediaInfo mediaInfo) async {
-    if (mediaInfo.extras[SourceExtraKey.videoType] == _typeBangumi) {
-      return await _requestBangumiMediaInfo(mediaInfo);
-    } else {
-      return await _requestAvMediaInfo(mediaInfo);
-    }
+    // if (mediaInfo.mediaType == MediaType.bangumi) {
+    //   return await _requestBangumiMediaInfo(mediaInfo);
+    // } else {
+    return await _requestAvMediaInfo(mediaInfo);
+    // }
   }
 
   String _getResolutionDesc(int resolutionId) {
@@ -711,5 +845,18 @@ class BiliSource extends Source {
     final random = Random();
     return List.generate(length, (_) => charset[random.nextInt(charset.length)])
         .join();
+  }
+
+  MediaType _mapMediaType(String type) {
+    switch (type) {
+      case _typeBangumi:
+        return MediaType.bangumi;
+      case _typeAv:
+        return MediaType.video;
+      case _typeOgv:
+        return MediaType.article;
+      default:
+        return MediaType.video;
+    }
   }
 }

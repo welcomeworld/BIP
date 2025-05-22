@@ -340,18 +340,19 @@ Widget _bangumiPreviewCard(
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                          "${previewDetail.score}",
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 26,
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.w600,
+                      if (previewDetail.score != 0)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            "${previewDetail.score}",
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 26,
+                              color: colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                   const Spacer(),
@@ -372,19 +373,20 @@ Widget _bangumiPreviewCard(
                       const SizedBox(
                         width: 8,
                       ),
-                      Text(
-                        CommonUtil.formatDateShow(
-                          DateTime.fromMillisecondsSinceEpoch(
-                            previewDetail.pageTime,
+                      if (previewDetail.pageTime != 0)
+                        Text(
+                          CommonUtil.formatDateShow(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              previewDetail.pageTime,
+                            ),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            color: colorScheme.onSurfaceVariant,
                           ),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
                     ],
                   ),
                 ],

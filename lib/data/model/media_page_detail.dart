@@ -2,9 +2,12 @@ import 'package:bip/data/model/media_info.dart';
 import 'package:bip/data/model/media_page_preview.dart';
 import 'package:bip/data/model/user_info.dart';
 
+import 'media_type.dart';
+
 class MediaPageDetail {
   String sourceName = "";
   Map<String, dynamic> extras = {};
+  MediaType mediaType = MediaType.video;
   late UserInfo owner;
   String title = "";
   String desc = "";
@@ -18,6 +21,10 @@ class MediaPageDetail {
   List<MediaPagePreview> relatedMediaList = [];
   List<MediaPagePreview> seasonMediaList = [];
 
+  // bangumi only
+  double score = 0.0;
+  String indexShow = "";
+
   MediaPageDetail();
 
   MediaPageDetail.fromPreview(MediaPagePreview preview) {
@@ -30,5 +37,8 @@ class MediaPageDetail {
     coverPortrait = preview.coverPortrait;
     tags = preview.tags;
     playCount = preview.playCount;
+    mediaType = preview.mediaType;
+    score = preview.score;
+    indexShow = preview.indexShow;
   }
 }
