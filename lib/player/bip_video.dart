@@ -1,6 +1,7 @@
 import 'package:bip/player/bip_controls.dart';
 import 'package:bip/ui/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
 class BipVideo extends StatelessWidget {
@@ -13,7 +14,20 @@ class BipVideo extends StatelessWidget {
     return MaterialVideoControlsTheme(
         normal: _normalTheme(context),
         fullscreen: _fullTheme(context),
-        child: Video(controller: controller));
+        child: Video(
+          controller: controller,
+          onEnterFullscreen: () async {
+            // hide system bar
+            final horizontal = controller.player.state.videoParams.w! >
+                controller.player.state.videoParams.h!;
+
+            if (horizontal) {
+              await defaultEnterNativeFullscreen();
+            }else{
+              await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+            }
+          },
+        ));
   }
 
   MaterialVideoControlsThemeData _normalTheme(BuildContext context) {
