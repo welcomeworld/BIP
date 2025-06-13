@@ -55,6 +55,31 @@ Widget _videoPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
                     ),
                   ),
                 ),
+                if (previewDetail.topDec.isNotEmpty)
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: colorScheme.primary,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 4, right: 4, top: 1, bottom: 2),
+                        child: Text(
+                          previewDetail.topDec,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: colorScheme.onPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 Positioned.fill(
                   child: DecoratedBox(
                     decoration: BoxDecoration(
