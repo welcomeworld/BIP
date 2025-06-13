@@ -94,7 +94,7 @@ class BiliSource extends Source {
 
   static const _avMediaInfoPath = "${_apiUrl}x/player/wbi/playurl";
   static final Map<String, dynamic> _avMediaInfoConstQueries = {
-    "qn": 0,
+    "qn": 116,
     "fnver": 0,
     "fourk": 1,
     "fnval": 4048,
@@ -593,14 +593,15 @@ class BiliSource extends Source {
       // map recommend to MediaPagePreview
       var recommendNetResponse = await WbiNet().get(_bangumiRecommendPath,
           queryParameters: extraParameters, options: options);
-      if (recommendNetResponse.data == null || recommendNetResponse.statusCode != 200) {
+      if (recommendNetResponse.data == null ||
+          recommendNetResponse.statusCode != 200) {
         return SourceApiResult(
           result,
           resultCode: SourceApiResult.resultNetworkFailed,
         );
       }
       BiliBangumiRecommendResponse recommendResponse =
-      BiliBangumiRecommendResponse.fromJson(recommendNetResponse.data);
+          BiliBangumiRecommendResponse.fromJson(recommendNetResponse.data);
       if (detailResponse.code != 0) {
         return SourceApiResult(result, resultCode: detailResponse.code);
       }
@@ -624,8 +625,6 @@ class BiliSource extends Source {
         relatedPreview.playCount = related.stat.view;
         result.relatedMediaList.add(relatedPreview);
       }
-
-
     } catch (e, stack) {
       Logger.logConsole(stack.toString());
       Logger.logConsole(e.toString());
@@ -778,30 +777,38 @@ class BiliSource extends Source {
       if (mediaInfoResponse.code != 0) {
         return SourceApiResult(mediaInfo, resultCode: mediaInfoResponse.code);
       }
-      var tempDir = (await getTemporaryDirectory()).path;
-      final mpdPath = "$tempDir/bili/$cid.mpd";
-      // map videoUrl
-      final videoList =
-          mediaInfoResponse.data.dash.video.indexed.map((mediaEntry) {
-        final index = mediaEntry.$1;
-        final media = mediaEntry.$2;
-        mediaInfo.mediaQualities["${index + 1}"] = _getResolutionDesc(media.id);
-        return BiliMpdInfo(_wrapMediaUrl(media.baseUrl),
-            _getResolutionDesc(media.id), _getRecommendedBandwidth(media.id));
-      }).toList();
+      var dash = mediaInfoResponse.data.dash;
+      if (dash == null) {
+        //todo map durl list into mpd file
+        mediaInfo.mediaQualities["${1}"] =
+            _getResolutionDesc(mediaInfoResponse.data.quality);
+        mediaInfo.mediaPath = mediaInfoResponse.data.durl![0].url;
+      } else {
+        var tempDir = (await getTemporaryDirectory()).path;
+        final mpdPath = "$tempDir/bili/$cid.mpd";
+        // map videoUrl
+        final videoList = dash.video.indexed.map((mediaEntry) {
+          final index = mediaEntry.$1;
+          final media = mediaEntry.$2;
+          mediaInfo.mediaQualities["${index + 1}"] =
+              _getResolutionDesc(media.id);
+          return BiliMpdInfo(_wrapMediaUrl(media.baseUrl),
+              _getResolutionDesc(media.id), _getRecommendedBandwidth(media.id));
+        }).toList();
 
-      // map audioUrl
-      final audioList =
-          mediaInfoResponse.data.dash.audio.indexed.map((mediaEntry) {
-        final index = mediaEntry.$1;
-        final media = mediaEntry.$2;
-        mediaInfo.additionAudios["${index + 1}"] = _getAudioDesc(media.id);
-        return BiliMpdInfo(_wrapMediaUrl(media.baseUrl),
-            _getAudioDesc(media.id), _getRecommendedAudioBandwidth(media.id));
-      }).toList();
-      final duration = mediaInfoResponse.data.dash.duration;
-      await createMpdFile(mpdPath, videoList, audioList, duration);
-      mediaInfo.mediaPath = "file://$mpdPath";
+        // map audioUrl
+        final audioList = dash.audio.indexed.map((mediaEntry) {
+          final index = mediaEntry.$1;
+          final media = mediaEntry.$2;
+          mediaInfo.additionAudios["${index + 1}"] = _getAudioDesc(media.id);
+          return BiliMpdInfo(_wrapMediaUrl(media.baseUrl),
+              _getAudioDesc(media.id), _getRecommendedAudioBandwidth(media.id));
+        }).toList();
+        final duration = dash.duration;
+        await createMpdFile(mpdPath, videoList, audioList, duration);
+        //todo fix player play mpd file slowly
+        mediaInfo.mediaPath = "file://$mpdPath";
+      }
     } catch (e, stack) {
       Logger.logConsole(stack.toString());
       Logger.logConsole(e.toString());

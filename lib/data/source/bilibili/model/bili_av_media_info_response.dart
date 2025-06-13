@@ -18,14 +18,21 @@ class BiliAvMediaInfoResponse {
 
 class VideoData {
   final int videoCodecId;
-  final Dash dash;
+  final Dash? dash;
+  final int quality;
+  final List<DurlMedia>? durl;
 
-  VideoData._(this.videoCodecId, this.dash);
+  VideoData._(this.videoCodecId, this.dash, this.durl,this.quality);
 
   factory VideoData.fromJson(Map<String, dynamic> json) {
     return VideoData._(
       json['video_codecid'] ?? 0,
-      Dash.fromJson(json['dash'] ?? {}),
+      json['dash'] == null ? null : Dash.fromJson(json['dash'] ?? {}),
+      (json['durl'] as List?)
+              ?.map((durl) => DurlMedia.fromJson(durl as Map<String, dynamic>))
+              .toList() ??
+          [],
+      json['quality'] ?? 0,
     );
   }
 }
@@ -46,6 +53,22 @@ class Dash {
       (json['audio'] as List?)?.map((a) => Media.fromJson(a)).toList() ?? [],
       json['dolby'] == null ? null : DolbyAudio.fromJson(json['dolby']),
       json['flac'] == null ? null : FlacAudio.fromJson(json['flac']),
+    );
+  }
+}
+
+class DurlMedia {
+  final String url;
+  final int size;
+  final int order;
+
+  DurlMedia._(this.url, this.size, this.order);
+
+  factory DurlMedia.fromJson(Map<String, dynamic> json) {
+    return DurlMedia._(
+      json['url'] ?? "",
+      json['size'] ?? 0,
+      json['order'] ?? 0,
     );
   }
 }
