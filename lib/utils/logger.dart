@@ -5,7 +5,7 @@ class Logger {
 
   static void logConsole(String log) {
     if (kDebugMode) {
-      print(log);
+      debugPrint("Local Logger:$log",wrapWidth: 100);
     }
   }
 }
