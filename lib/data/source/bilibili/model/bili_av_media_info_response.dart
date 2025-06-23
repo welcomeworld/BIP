@@ -22,7 +22,7 @@ class VideoData {
   final int quality;
   final List<DurlMedia>? durl;
 
-  VideoData._(this.videoCodecId, this.dash, this.durl,this.quality);
+  VideoData._(this.videoCodecId, this.dash, this.durl, this.quality);
 
   factory VideoData.fromJson(Map<String, dynamic> json) {
     return VideoData._(
@@ -154,4 +154,9 @@ class SegmentBase {
       json['indexRange'] ?? "",
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'Initialization': initialization,
+        'indexRange': indexRange,
+      };
 }

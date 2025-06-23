@@ -8,8 +8,11 @@ String _generateMpdContent(
   String videoRepresentations = '';
   for (int i = 0; i < videoInfos.length; i++) {
     videoRepresentations += '''
-      <Representation id="${videoInfos[i].id}" bandwidth="${videoInfos[i].bandwidth}">
+      <Representation id="${videoInfos[i].id}" bandwidth="${videoInfos[i].bandwidth}" width="${videoInfos[i].width}" height="${videoInfos[i].height}" frameRate="${videoInfos[i].frameRate}" startWithSAP="${videoInfos[i].startWithSap}" codecs="${videoInfos[i].codecs}">
         <BaseURL>${_escapeXml(videoInfos[i].url)}</BaseURL>
+        <SegmentBase indexRange="${videoInfos[i].segmentBase.indexRange}">
+          <Initialization range="${videoInfos[i].segmentBase.initialization}"/>
+        </SegmentBase>
       </Representation>
     ''';
   }
@@ -17,7 +20,8 @@ String _generateMpdContent(
   String audioRepresentations = '';
   for (int i = 0; i < audioInfos.length; i++) {
     audioRepresentations += '''
-      <Representation id="${audioInfos[i].id}" bandwidth="${audioInfos[i].bandwidth}">
+      <Representation id="${audioInfos[i].id}" bandwidth="${audioInfos[i]
+        .bandwidth}"  codecs="${audioInfos[i].codecs}">
         <BaseURL>${_escapeXml(audioInfos[i].url)}</BaseURL>
       </Representation>
     ''';

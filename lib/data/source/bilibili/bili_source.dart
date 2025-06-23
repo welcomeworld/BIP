@@ -792,8 +792,19 @@ class BiliSource extends Source {
           final media = mediaEntry.$2;
           mediaInfo.mediaQualities["${index + 1}"] =
               _getResolutionDesc(media.id);
-          return BiliMpdInfo(_wrapMediaUrl(media.baseUrl),
-              _getResolutionDesc(media.id), _getRecommendedBandwidth(media.id));
+          return BiliMpdInfo(
+            _wrapMediaUrl(media.baseUrl),
+            _getResolutionDesc(media.id),
+            _getRecommendedBandwidth(media.id),
+            media.mimeType,
+            media.codecs,
+            media.width,
+            media.height,
+            media.frameRate,
+            media.sar,
+            media.startWithSap,
+            MpdSegmentBase.fromJson(media.segmentBase.toJson()),
+          );
         }).toList();
 
         // map audioUrl
@@ -801,8 +812,19 @@ class BiliSource extends Source {
           final index = mediaEntry.$1;
           final media = mediaEntry.$2;
           mediaInfo.additionAudios["${index + 1}"] = _getAudioDesc(media.id);
-          return BiliMpdInfo(_wrapMediaUrl(media.baseUrl),
-              _getAudioDesc(media.id), _getRecommendedAudioBandwidth(media.id));
+          return BiliMpdInfo(
+            _wrapMediaUrl(media.baseUrl),
+            _getAudioDesc(media.id),
+            _getRecommendedAudioBandwidth(media.id),
+            media.mimeType,
+            media.codecs,
+            media.width,
+            media.height,
+            media.frameRate,
+            media.sar,
+            media.startWithSap,
+            MpdSegmentBase.fromJson(media.segmentBase.toJson()),
+          );
         }).toList();
         final duration = dash.duration;
         await createMpdFile(mpdPath, videoList, audioList, duration);
