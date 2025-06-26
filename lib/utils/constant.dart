@@ -8,4 +8,7 @@ class Constant {
 
   static const int maxCompactSize = 600;
   static const int maxMediumSize = 840;
+
+  // settings keys
+  static const String kvSettingsMediaQuality = "kv_settings_media_quality";
 }

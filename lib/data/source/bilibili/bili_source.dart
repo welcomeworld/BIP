@@ -10,10 +10,8 @@ import 'package:bip/data/source/bilibili/bili_explore_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_bangumi_detail_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_login_qr_request_response.dart';
-import 'package:bip/data/source/bilibili/model/bili_mpd_info.dart';
 import 'package:bip/data/source/bilibili/model/bili_search_hot_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_user_nav_info_response.dart';
-import 'package:bip/data/source/bilibili/mpd_util.dart';
 import 'package:bip/data/source/bilibili/wbi_net.dart';
 import 'package:bip/data/source/source.dart';
 import 'package:bip/data/source/source_extra_key.dart';
@@ -21,7 +19,6 @@ import 'package:bip/utils/common_util.dart';
 import 'package:bip/utils/constant.dart';
 import 'package:bip/utils/logger.dart';
 import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../model/media_info.dart';
 import '../../model/media_page_preview.dart';
@@ -677,37 +674,6 @@ class BiliSource extends Source {
     }
   }
 
-  int _getRecommendedBandwidth(int resolutionId) {
-    switch (resolutionId) {
-      case 0: // 自动
-        return 0; // 自动模式不固定带宽
-      case 16: // 360P
-        return 500000; // 0.5 Mbps
-      case 32: // 480P
-        return 1000000; // 1 Mbps
-      case 64: // 720P
-        return 2500000; // 2.5 Mbps
-      case 74: // 720P60
-        return 3500000; // 3.5 Mbps
-      case 80: // 1080P
-        return 4500000; // 4.5 Mbps
-      case 112: // 1080P+
-        return 6000000; // 6 Mbps
-      case 116: // 1080P60
-        return 7000000; // 7 Mbps
-      case 120: // 4K
-        return 15000000; // 15 Mbps
-      case 125: // HDR
-        return 20000000; // 20 Mbps
-      case 126: // 杜比视界
-        return 25000000; // 25 Mbps
-      case 127: // 8K
-        return 50000000; // 50 Mbps
-      default: // 未知分辨率
-        return 0; // 返回负数表示未知分辨率
-    }
-  }
-
   String _getAudioDesc(int qualityId) {
     switch (qualityId) {
       case 30216:
@@ -722,23 +688,6 @@ class BiliSource extends Source {
         return "Hi-Res无损";
       default:
         return "未知";
-    }
-  }
-
-  int _getRecommendedAudioBandwidth(int qualityId) {
-    switch (qualityId) {
-      case 30216: // 64K
-        return 64000; // 64 kbps
-      case 30232: // 132K
-        return 132000; // 132 kbps
-      case 30280: // 192K
-        return 192000; // 192 kbps
-      case 30250: // 杜比全景声
-        return 768000; // 假设杜比全景声的平均比特率为 768 kbps
-      case 30251: // Hi-Res无损
-        return 1411000; // 假设 Hi-Res 无损音频的平均比特率为 1411 kbps（CD 音质）
-      default: // 未知
-        return 0;
     }
   }
 
@@ -780,56 +729,38 @@ class BiliSource extends Source {
       var dash = mediaInfoResponse.data.dash;
       if (dash == null) {
         //todo map durl list into mpd file
-        mediaInfo.mediaQualities["${1}"] =
-            _getResolutionDesc(mediaInfoResponse.data.quality);
-        mediaInfo.mediaPath = mediaInfoResponse.data.durl![0].url;
+        mediaInfo.mediaQualities[
+                _getResolutionDesc(mediaInfoResponse.data.quality)] =
+            mediaInfoResponse.data.durl![0].url;
       } else {
-        var tempDir = (await getTemporaryDirectory()).path;
-        final mpdPath = "$tempDir/bili/$cid.mpd";
+        var selectedVideoKey = "";
+        var mediaId = 0;
+        var needBestMedia = _needBestMedia;
         // map videoUrl
-        final videoList = dash.video.indexed.map((mediaEntry) {
-          final index = mediaEntry.$1;
-          final media = mediaEntry.$2;
-          mediaInfo.mediaQualities["${index + 1}"] =
-              _getResolutionDesc(media.id);
-          return BiliMpdInfo(
-            _wrapMediaUrl(media.baseUrl),
-            _getResolutionDesc(media.id),
-            _getRecommendedBandwidth(media.id),
-            media.mimeType,
-            media.codecs,
-            media.width,
-            media.height,
-            media.frameRate,
-            media.sar,
-            media.startWithSap,
-            MpdSegmentBase.fromJson(media.segmentBase.toJson()),
-          );
-        }).toList();
+        for (var media in dash.video) {
+          mediaInfo.mediaQualities[_getResolutionDesc(media.id)] =
+              media.baseUrl;
+          if (mediaId == 0 ||
+              (needBestMedia && mediaId < media.id) ||
+              (!needBestMedia && mediaId > media.id)) {
+            mediaId = media.id;
+            selectedVideoKey = _getResolutionDesc(media.id);
+          }
+        }
+        mediaInfo.qualityKey = selectedVideoKey;
 
         // map audioUrl
-        final audioList = dash.audio.indexed.map((mediaEntry) {
-          final index = mediaEntry.$1;
-          final media = mediaEntry.$2;
-          mediaInfo.additionAudios["${index + 1}"] = _getAudioDesc(media.id);
-          return BiliMpdInfo(
-            _wrapMediaUrl(media.baseUrl),
-            _getAudioDesc(media.id),
-            _getRecommendedAudioBandwidth(media.id),
-            media.mimeType,
-            media.codecs,
-            media.width,
-            media.height,
-            media.frameRate,
-            media.sar,
-            media.startWithSap,
-            MpdSegmentBase.fromJson(media.segmentBase.toJson()),
-          );
-        }).toList();
-        final duration = dash.duration;
-        await createMpdFile(mpdPath, videoList, audioList, duration);
-        //todo fix player play mpd file slowly
-        mediaInfo.mediaPath = "file://$mpdPath";
+        mediaId = 0;
+        for (var media in dash.audio) {
+          mediaInfo.additionAudios[_getAudioDesc(media.id)] = media.baseUrl;
+          if (mediaId == 0 ||
+              (needBestMedia && mediaId < media.id) ||
+              (!needBestMedia && mediaId > media.id)) {
+            mediaId = media.id;
+            selectedVideoKey = _getAudioDesc(media.id);
+          }
+        }
+        mediaInfo.additionAudioKey = selectedVideoKey;
       }
     } catch (e, stack) {
       Logger.logConsole(stack.toString());
@@ -840,11 +771,6 @@ class BiliSource extends Source {
       );
     }
     return SourceApiResult(mediaInfo);
-  }
-
-  Future<SourceApiResult<MediaInfo>> _requestBangumiMediaInfo(
-      MediaInfo mediaInfo) async {
-    throw UnimplementedError();
   }
 
   String _wrapMediaUrl(String mediaUrl) {
@@ -886,6 +812,17 @@ class BiliSource extends Source {
         return MediaType.article;
       default:
         return MediaType.video;
+    }
+  }
+
+  bool get _needBestMedia {
+    var setting = KvStore.getSp().getInt(Constant.kvSettingsMediaQuality) ?? 0;
+    if (setting == 0) {
+      return true; // 0表示自动
+    } else if (setting == 1) {
+      return true; // 1表示最佳画质
+    } else {
+      return false; // 其他值表示不需要最佳画质
     }
   }
 }

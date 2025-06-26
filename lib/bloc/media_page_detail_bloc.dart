@@ -13,11 +13,12 @@ import 'package:rxdart/subjects.dart';
 
 import '../data/model/media_page_detail.dart';
 import '../player/bip_constant.dart';
+import '../player/bip_player.dart';
 
 class MediaPageDetailBloc extends Bloc {
   MediaPageDetailBloc({MediaManager? mediaManager, Player? player}) {
     _mediaManager = mediaManager ?? MediaManager();
-    _player = player ?? Player();
+    _player = player ?? BipPlayer();
     controller = VideoController(_player);
   }
 
@@ -66,13 +67,23 @@ class MediaPageDetailBloc extends Bloc {
         ),
       );
     } else {
-      mediaInfoSubject.add(mediaResult.result);
+      var resultInfo = mediaResult.result;
+      mediaInfoSubject.add(resultInfo);
       await _player.open(
-          Media(mediaResult.result.mediaPath,
-              httpHeaders: mediaResult.result.headers,
-              extras: {PlayerConstant.titleExtraKey: mediaResult.result.title}
-                ..addAll(mediaResult.result.additionAudios)),
-          play: true);
+        Media(
+          resultInfo.mediaQualities[resultInfo.qualityKey]!,
+          httpHeaders: resultInfo.headers,
+          extras: {
+            PlayerConstant.titleExtraKey: resultInfo.title,
+            PlayerConstant.audioTrackListExtraKey: resultInfo.additionAudios,
+            PlayerConstant.videoTrackListExtraKey: resultInfo.mediaQualities,
+            PlayerConstant.selectedAudioTrackExtraKey:
+                resultInfo.additionAudioKey,
+            PlayerConstant.selectedVideoTrackExtraKey: resultInfo.qualityKey,
+          },
+        ),
+        play: true,
+      );
     }
   }
 

@@ -18,48 +18,53 @@ class _ResolutionButtonState extends State<ResolutionButton> {
 
   @override
   Widget build(BuildContext context) {
-    var tracks = _player.state.tracks.video;
-
-    var selectedTrack = _player.state.track.video;
-    if (tracks.length <= 1) {
+    var media = _player.state.playlist.medias.firstOrNull;
+    if (media == null) {
       return const SizedBox.shrink();
     }
+    var extras = media.extras;
+    final trackList = (extras?[PlayerConstant.videoTrackListExtraKey]
+            as Map<String, String>?) ??
+        <String, String>{};
+    final trackKeyList = [PlayerConstant.disableVideoKey, ...trackList.keys];
+    final selectedTrackKey = extras?[PlayerConstant.selectedVideoTrackExtraKey];
+
     return TextButton(
         onPressed: () {
           _showItemListDialog(
             context,
-            tracks.map((track) => _getResolutionName(track)).toList(),
-            tracks.indexOf(selectedTrack),
-            (index) {
-              _player.setVideoTrack(tracks[index]);
+            trackKeyList,
+            trackKeyList.indexOf(selectedTrackKey),
+            (index) async {
+              final key = trackKeyList[index];
+              if (key == PlayerConstant.disableVideoKey) {
+                extras?[PlayerConstant.selectedVideoTrackExtraKey] =
+                    PlayerConstant.disableVideoKey;
+                _player.setVideoTrack(VideoTrack.no());
+                return;
+              } else if (key == selectedTrackKey) {
+                return;
+              } else {
+                final trackUri = trackList[key];
+                if (trackUri == null) {
+                  return;
+                }
+                extras?[PlayerConstant.selectedVideoTrackExtraKey] = key;
+                _player.open(
+                    media.copyWith(
+                      uri: trackUri,
+                      start: _player.state.position,
+                    ),
+                    play: true);
+              }
             },
           );
         },
         child: Text(
-          _getResolutionName(selectedTrack),
+          selectedTrackKey,
           style: const TextStyle(
               color: ThemeColors.playerContent, fontWeight: FontWeight.w600),
         ));
-  }
-
-  String _getResolutionName(VideoTrack video) {
-    if (video.title != null) {
-      return video.title!;
-    }
-    if (video.id == "auto") {
-      return "自动分辨率";
-    }
-    if (video.id == "no") {
-      return "禁用视频";
-    }
-    final fpsSuffix = (video.fps ?? 0) >= 59 ? "60帧" : "";
-    final minResolution = min<int>(video.w ?? 0, video.h ?? 0);
-    final resolutionPrefix = minResolution >= 2160 ? "4K" : "${minResolution}P";
-    if (video.codec != null) {
-      return "$resolutionPrefix(${video.codec}) $fpsSuffix";
-    } else {
-      return "$resolutionPrefix $fpsSuffix";
-    }
   }
 }
 
@@ -75,44 +80,48 @@ class _AudioButtonState extends State<AudioButton> {
 
   @override
   Widget build(BuildContext context) {
-    var tracks = _player.state.tracks.audio;
+    var media = _player.state.playlist.medias.firstOrNull;
 
-    var selectedTrack = _player.state.track.audio;
-    if (tracks.length <= 1) {
+    var extras = media?.extras;
+    final trackList = (extras?[PlayerConstant.audioTrackListExtraKey]
+            as Map<String, String>?) ??
+        <String, String>{};
+    final trackKeyList = [PlayerConstant.disableAudioKey, ...trackList.keys];
+    final selectedTrackKey = extras?[PlayerConstant.selectedAudioTrackExtraKey];
+    if (media == null || selectedTrackKey == null) {
       return const SizedBox.shrink();
     }
-    var media = _player.state.playlist.medias.firstOrNull;
     return TextButton(
         onPressed: () {
           _showItemListDialog(
             context,
-            tracks
-                .map((track) => _getAudioQualityName(track, media?.extras))
-                .toList(),
-            tracks.indexOf(selectedTrack),
+            trackKeyList,
+            trackKeyList.indexOf(selectedTrackKey),
             (index) {
-              _player.setAudioTrack(tracks[index]);
+              final key = trackKeyList[index];
+              if (key == PlayerConstant.disableAudioKey) {
+                extras?[PlayerConstant.selectedAudioTrackExtraKey] =
+                    PlayerConstant.disableAudioKey;
+                _player.setAudioTrack(AudioTrack.no());
+                return;
+              } else if (key == selectedTrackKey) {
+                return;
+              } else {
+                final trackUri = trackList[key];
+                if (trackUri == null) {
+                  return;
+                }
+                extras?[PlayerConstant.selectedAudioTrackExtraKey] = key;
+                _player.setAudioTrack(AudioTrack.uri(trackUri));
+              }
             },
           );
         },
         child: Text(
-          _getAudioQualityName(selectedTrack, media?.extras),
+          selectedTrackKey,
           style: const TextStyle(
               color: ThemeColors.playerContent, fontWeight: FontWeight.w600),
         ));
-  }
-
-  String _getAudioQualityName(AudioTrack audio, Map<String, dynamic>? extras) {
-    if (audio.title != null) {
-      return audio.title!;
-    }
-    if (audio.id == "auto") {
-      return "自动音轨";
-    }
-    if (audio.id == "no") {
-      return "禁用音频";
-    }
-    return extras?[audio.id] ?? "${(audio.bitrate ?? 0) / 1000}bps";
   }
 }
 
@@ -217,8 +226,7 @@ void _showItemListDialog(
                         const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                     child: FilledButton(
                         style: FilledButton.styleFrom(
-                            backgroundColor:
-                                ThemeColors.playerPanelContainer,
+                            backgroundColor: ThemeColors.playerPanelContainer,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
