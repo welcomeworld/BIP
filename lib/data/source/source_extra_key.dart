@@ -4,4 +4,5 @@ class SourceExtraKey{
   static const String aid = "aid";
   static const String cid = "cid";
   static const String ssid = "season_id";
+  static const String url = "url";
 }

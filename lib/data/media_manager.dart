@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bip/data/model/media_page_preview.dart';
 import 'package:bip/data/model/user_info.dart';
 import 'package:bip/data/source/bilibili/bili_source.dart';
+import 'package:bip/data/source/gugufan/gugufan_source.dart';
 import 'package:bip/data/source/source.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -15,7 +16,12 @@ class MediaManager {
   MediaManager._({Source? mainSource, Map<String, Source>? sources}) {
     _ins = this;
     _mainSource = mainSource ?? BiliSource();
-    _sources = sources ?? {_mainSource.sourceName: _mainSource};
+    var gugufanSource = GugufanSource();
+    _sources = sources ??
+        {
+          _mainSource.sourceName: _mainSource,
+          gugufanSource.sourceName: gugufanSource
+        };
     _refreshAccount();
   }
 
