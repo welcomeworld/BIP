@@ -729,8 +729,11 @@ class BiliSource extends Source {
       var dash = mediaInfoResponse.data.dash;
       if (dash == null) {
         //todo map durl list into mpd file
-        mediaInfo.mediaQualities[
-                _getResolutionDesc(mediaInfoResponse.data.quality)] =
+        var selectedVideoKey =
+            _getResolutionDesc(mediaInfoResponse.data.quality);
+        mediaInfo.qualityKey = selectedVideoKey;
+
+        mediaInfo.mediaQualities[selectedVideoKey] =
             mediaInfoResponse.data.durl![0].url;
       } else {
         var selectedVideoKey = "";
