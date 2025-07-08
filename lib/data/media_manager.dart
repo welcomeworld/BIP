@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bip/data/model/media_page_preview.dart';
 import 'package:bip/data/model/user_info.dart';
 import 'package:bip/data/source/bilibili/bili_source.dart';
+import 'package:bip/data/source/bimi/bimi_source.dart';
 import 'package:bip/data/source/gugufan/gugufan_source.dart';
 import 'package:bip/data/source/source.dart';
 import 'package:rxdart/rxdart.dart';
@@ -17,10 +18,12 @@ class MediaManager {
     _ins = this;
     _mainSource = mainSource ?? BiliSource();
     var gugufanSource = GugufanSource();
+    var bimiSource = BimiSource();
     _sources = sources ??
         {
           _mainSource.sourceName: _mainSource,
-          gugufanSource.sourceName: gugufanSource
+          gugufanSource.sourceName: gugufanSource,
+          bimiSource.sourceName: bimiSource
         };
     _refreshAccount();
   }
