@@ -6,18 +6,16 @@ class CommonUtil {
   static String formatDateShow(DateTime date) {
     var now = DateTime.now();
     var difference = now.difference(date);
-    if (difference.inDays == 0) {
-      if (difference.inHours == 0) {
-        return "${difference.inMinutes}分钟前";
-      } else {
-        return "${difference.inHours}小时前";
-      }
-    } else if (difference.inDays == 1) {
-      return "昨天";
-    } else {
-      var year = date.year != now.year ? "${date.year}年" : "";
-      return "$year${date.month}月${date.day}日";
-    }
+
+    return switch (difference) {
+      Duration(inDays: 0, inHours: 0, inMinutes: 0) => '刚刚',
+      Duration(inDays: 0, inHours: 0) => '${difference.inMinutes}分钟前',
+      Duration(inDays: 0) => '${difference.inHours}小时前',
+      Duration(inDays: 1) => '昨天',
+      _ => date.year != now.year
+          ? '${date.year}年${date.month}月${date.day}日'
+          : '${date.month}月${date.day}日',
+    };
   }
 
   static String formatDurationShow(int seconds) {
