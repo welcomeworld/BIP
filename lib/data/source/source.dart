@@ -1,7 +1,9 @@
 import 'package:bip/data/model/media_info.dart';
 import 'package:bip/data/model/media_type.dart';
+import 'package:bip/data/model/reply.dart';
 import 'package:bip/data/model/user_info.dart';
 
+import '../../utils/constant.dart';
 import '../model/media_page_detail.dart';
 import '../model/media_page_preview.dart';
 
@@ -36,6 +38,30 @@ abstract class Source {
     return SourceLoginResult.failed;
   }
 
+  Future<SourceApiResult<List<Reply>>> requestReplies(
+      MediaPageDetail page, int pageNumber) async {
+    return SourceApiResult(
+      List.empty(),
+      resultCode: SourceApiResult.resultSourceEmpty,
+    );
+  }
+
+  Future<SourceApiResult<List<Reply>>> requestSubReplies(
+      Reply parentReply, int pageNumber) async {
+    return SourceApiResult(
+      List.empty(),
+      resultCode: SourceApiResult.resultSourceEmpty,
+    );
+  }
+
+  Future<SourceApiResult<Reply>> replyAction(
+      Reply reply, ReplyAction action) async {
+    return SourceApiResult(
+      reply,
+      resultCode: SourceApiResult.resultSuccess,
+    );
+  }
+
   bool get hasAccount => false;
 
   UserInfo? get accountInfo => null;
@@ -48,8 +74,9 @@ class SourceApiResult<T> {
   static const resultSourceEmpty = -3;
   T result;
   int resultCode;
+  String resultMsg;
 
-  SourceApiResult(this.result, {this.resultCode = 0});
+  SourceApiResult(this.result, {this.resultCode = 0, this.resultMsg = ""});
 }
 
 enum SourceLoginResult {

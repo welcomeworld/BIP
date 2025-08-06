@@ -4,6 +4,8 @@ class UserInfo {
   String avatar = "";
   int videoCount = 0;
   int fansCount = 0;
+  int level = -1;
+  bool isVip = false; // Indicates if the user is a VIP member
 
   // Constructor
   UserInfo({
@@ -12,6 +14,8 @@ class UserInfo {
     this.avatar = "",
     this.videoCount = 0,
     this.fansCount = 0,
+    this.level = -1,
+    this.isVip = false,
   });
 
   // Method to create a UserInfo object from a map (JSON)
@@ -24,6 +28,8 @@ class UserInfo {
       avatar: json['avatar'] as String? ?? "",
       videoCount: json['videoCount'] as int? ?? 0,
       fansCount: json['fansCount'] as int? ?? 0,
+      level: json['level'] as int? ?? -1,
+      isVip: json['isVip'] as bool? ?? false,
     );
   }
 
@@ -35,6 +41,8 @@ class UserInfo {
       'avatar': avatar,
       'videoCount': videoCount,
       'fansCount': fansCount,
+      'level': level,
+      'isVip': isVip,
     };
   }
 }

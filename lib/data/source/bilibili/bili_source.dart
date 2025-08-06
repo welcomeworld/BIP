@@ -10,6 +10,7 @@ import 'package:bip/data/source/bilibili/bili_explore_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_bangumi_detail_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_login_qr_request_response.dart';
+import 'package:bip/data/source/bilibili/model/bili_reply_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_search_hot_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_user_nav_info_response.dart';
 import 'package:bip/data/source/bilibili/wbi_net.dart';
@@ -22,6 +23,7 @@ import 'package:dio/dio.dart';
 
 import '../../model/media_info.dart';
 import '../../model/media_page_preview.dart';
+import '../../model/reply.dart';
 import 'model/bili_av_detail_response.dart';
 import 'model/bili_bangumi_recommend_response.dart';
 import 'model/bili_login_qr_validate_response.dart';
@@ -108,6 +110,9 @@ class BiliSource extends Source {
   static const _userNavInfoPath = "${_apiUrl}x/web-interface/nav";
 
   UserInfo? _userInfo;
+
+  static const _replyPath = "${_apiUrl}x/v2/reply";
+  static const _subReplyPath = "${_apiUrl}x/v2/reply/reply";
 
   Future<void> _initHome() async {
     await WebNet().get(_homeUrl);
@@ -643,6 +648,86 @@ class BiliSource extends Source {
     // }
   }
 
+  @override
+  Future<SourceApiResult<List<Reply>>> requestReplies(
+      MediaPageDetail page, int pageNumber) async {
+    List<Reply> result = [];
+    final replyType = _mapReplyType(page.mediaType);
+    final oid = page.extras[SourceExtraKey.aid] ??
+        page.extras[SourceExtraKey.bvid] ??
+        page.extras[SourceExtraKey.ssid] ??
+        "";
+    try {
+      Map<String, dynamic> extraParameters = {};
+      extraParameters["type"] = replyType;
+      extraParameters["pn"] = pageNumber;
+      extraParameters["oid"] = oid;
+
+      Options options = Options(headers: {
+        "Referer": "https://www.bilibili.com/",
+        "Origin": "https://www.bilibili.com/",
+      });
+      var response = await WebNet()
+          .get(_replyPath, queryParameters: extraParameters, options: options);
+      BiliReplyResponse biliResponse =
+          BiliReplyResponse.fromJson(response.data);
+      for (var item in biliResponse.data.hots) {
+        result.add(_mapReplyItem(item));
+      }
+      for (var item in biliResponse.data.replies) {
+        result.add(_mapReplyItem(item));
+      }
+      if (result.isEmpty) {
+        return SourceApiResult(result,
+            resultCode: SourceApiResult.resultSourceEmpty);
+      }
+    } catch (message) {
+      Logger.logConsole("bili requestReplies err:$message");
+      return SourceApiResult(
+          resultCode: SourceApiResult.resultInnerFailed, result);
+    }
+    return SourceApiResult(result);
+  }
+
+  @override
+  Future<SourceApiResult<List<Reply>>> requestSubReplies(
+      Reply parentReply, int pageNumber) async {
+    List<Reply> result = [];
+    final replyType = parentReply.extras[SourceExtraKey.type];
+    final oid = parentReply.extras[SourceExtraKey.oid] ?? "";
+    try {
+      Map<String, dynamic> extraParameters = {};
+      extraParameters["type"] = replyType;
+      extraParameters["pn"] = pageNumber;
+      extraParameters["oid"] = oid;
+      extraParameters["root"] = parentReply.replyId;
+
+      Options options = Options(headers: {
+        "Referer": "https://www.bilibili.com/",
+        "Origin": "https://www.bilibili.com/",
+      });
+      var response = await WebNet().get(_subReplyPath,
+          queryParameters: extraParameters, options: options);
+      BiliReplyResponse biliResponse =
+          BiliReplyResponse.fromJson(response.data);
+      for (var item in biliResponse.data.hots) {
+        result.add(_mapReplyItem(item));
+      }
+      for (var item in biliResponse.data.replies) {
+        result.add(_mapReplyItem(item));
+      }
+      if (result.isEmpty) {
+        return SourceApiResult(result,
+            resultCode: SourceApiResult.resultSourceEmpty);
+      }
+    } catch (message) {
+      Logger.logConsole("bili requestSubReplies err:$message");
+      return SourceApiResult(
+          resultCode: SourceApiResult.resultInnerFailed, result);
+    }
+    return SourceApiResult(result);
+  }
+
   String _getResolutionDesc(int resolutionId) {
     switch (resolutionId) {
       case 0:
@@ -816,6 +901,57 @@ class BiliSource extends Source {
       default:
         return MediaType.video;
     }
+  }
+
+  int _mapReplyType(MediaType type) {
+    switch (type) {
+      case MediaType.video:
+        return 1; // 视频评论
+      case MediaType.bangumi:
+        return 1; // 番剧评论
+      case MediaType.movie:
+        return 1;
+      case MediaType.user:
+        return 1;
+      case MediaType.live:
+        return 8;
+      case MediaType.article:
+        return 12; // 专栏评论
+      default:
+        return 1; // 默认视频评论
+    }
+  }
+
+  Reply _mapReplyItem(ReplyResponse item) {
+    var result = Reply(item.rpidStr);
+    result.extras[SourceExtraKey.type] = item.type;
+    result.extras[SourceExtraKey.oid] = item.oid;
+    result.sourceName = sourceName;
+    result.rootReplyId = item.rootStr;
+    result.replyParentId = item.parentStr;
+    result.content = item.content.message;
+    result.likeCount = item.like;
+    result.replyTime = item.ctime * 1000;
+    result.replyIp = item.replyControl.location;
+    result.device = item.content.device;
+
+    result.isLiked = item.action == 1;
+    result.isHated = item.action == 2;
+    result.subReplyCount = item.rcount;
+    result.subReplies =
+        (item.replies).map((subReply) => _mapReplyItem(subReply)).toList();
+    result.replyDec = item.upAction.like
+        ? "UP主觉得很赞"
+        : (item.upAction.reply
+            ? "UP主回复"
+            : ""); // No direct mapping, set to empty
+    result.owner = UserInfo(
+      name: item.member.uname,
+      avatar: item.member.avatar,
+      level: item.member.levelInfo.currentLevel,
+      isVip: item.member.vip.vipType != 0,
+    );
+    return result;
   }
 
   bool get _needBestMedia {

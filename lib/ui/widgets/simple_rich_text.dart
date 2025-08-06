@@ -13,7 +13,6 @@ TextSpan buildTextSpans(String text, BuildContext context, {TextStyle? style}) {
         text: match.group(1),
         style: style?.copyWith(
               color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
             ) ??
             TextStyle(
               color: Theme.of(context).colorScheme.primary,

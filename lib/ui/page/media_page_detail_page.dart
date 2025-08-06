@@ -2,8 +2,10 @@ import 'package:bip/bloc/bloc_state.dart';
 import 'package:bip/bloc/media_page_detail_bloc.dart';
 import 'package:bip/data/model/media_page_detail.dart';
 import 'package:bip/data/model/media_page_preview.dart';
+import 'package:bip/ui/page/media_page_detail_reply_page.dart';
 import 'package:bip/ui/widgets/media_preview_card.dart';
 import 'package:bip/ui/widgets/simple_rich_text.dart';
+import 'package:bip/utils/bip_navigator.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/model/media_info.dart';
@@ -11,6 +13,7 @@ import '../../player/bip_video.dart';
 import '../../utils/common_util.dart';
 import '../theme/theme_colors.dart';
 import '../widgets/simple_svg.dart';
+import '../widgets/top_icon_button.dart';
 
 class MediaPageDetailPage extends StatefulWidget {
   const MediaPageDetailPage(this.preview, {super.key});
@@ -46,18 +49,42 @@ class _MediaPageDetailPageState
                 children: [
                   _mediaView(pageInfo.cover),
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          _ownerCard(pageInfo),
-                          _descContent(pageInfo),
-                          _mediaPlayLists(pageInfo.playlists),
-                          _mediaPlayLists(pageInfo.additionPlaylists),
-                          _relatedList(pageInfo.relatedMediaList),
-                        ],
-                      ),
+                    child: StreamBuilder<bool>(
+                      stream: bloc.showingReply.stream,
+                      builder: (context, snapshot) {
+                        var showingReply = snapshot.data ?? false;
+                        return BipNavigator(
+                          canPop: !showingReply,
+                          onPopInvoked: (result) {
+                            if (result) {
+                              return;
+                            }
+                            bloc.showingReply.add(false);
+                          },
+                          child: Stack(
+                            children: [
+                              SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    _ownerCard(pageInfo),
+                                    _descContent(pageInfo),
+                                    _actionBar(pageInfo),
+                                    _mediaPlayLists(pageInfo.playlists),
+                                    _mediaPlayLists(pageInfo.additionPlaylists),
+                                    _relatedList(pageInfo.relatedMediaList),
+                                  ],
+                                ),
+                              ),
+                              Offstage(
+                                offstage: !showingReply,
+                                child: MediaPageDetailReplyPage(pageInfo),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
-                  )
+                  ),
                 ],
               );
             }),
@@ -226,6 +253,108 @@ class _MediaPageDetailPageState
           ),
         ),
       ],
+    );
+  }
+
+  Widget _actionBar(MediaPageDetail pageInfo) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: SizedBox(
+        height: 72,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            topIconButton(
+              SimpleSvg(
+                "assets/img/ic_appreciate_filled.svg",
+                size: 30,
+                color: colorScheme.tertiary,
+              ),
+              Text(
+                localeString.appreciate,
+                style: TextStyle(color: colorScheme.onSurface),
+              ),
+              IconButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                minimumSize: const Size(72, 72),
+              ),
+              () {},
+            ),
+            topIconButton(
+              SimpleSvg(
+                "assets/img/ic_favorite_filled.svg",
+                size: 30,
+                color: colorScheme.tertiary,
+              ),
+              Text(
+                localeString.favorite,
+                style: TextStyle(color: colorScheme.onSurface),
+              ),
+              IconButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                minimumSize: const Size(72, 72),
+              ),
+              () {},
+            ),
+            topIconButton(
+              SimpleSvg(
+                "assets/img/ic_coin_filled.svg",
+                size: 30,
+                color: colorScheme.tertiary,
+              ),
+              Text(
+                localeString.coin,
+                style: TextStyle(color: colorScheme.onSurface),
+              ),
+              IconButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                minimumSize: const Size(72, 72),
+              ),
+              () {},
+            ),
+            topIconButton(
+              SimpleSvg(
+                "assets/img/ic_download_filled.svg",
+                size: 30,
+                color: colorScheme.tertiary,
+              ),
+              Text(
+                localeString.download2,
+                style: TextStyle(color: colorScheme.onSurface),
+              ),
+              IconButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                minimumSize: const Size(72, 72),
+              ),
+              () {},
+            ),
+            topIconButton(
+              SimpleSvg(
+                "assets/img/ic_comment_filled.svg",
+                size: 30,
+                color: colorScheme.tertiary,
+              ),
+              Text(
+                localeString.comment,
+                style: TextStyle(color: colorScheme.onSurface),
+              ),
+              IconButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                minimumSize: const Size(72, 72),
+              ),
+              () {
+                bloc.showingReply.add(true);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 

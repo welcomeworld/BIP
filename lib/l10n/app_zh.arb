@@ -12,5 +12,14 @@
  "message": "聊天私信",
  "settings": "设置",
  "theme": "主题",
- "login": "登录"
+ "login": "登录",
+ "appreciate": "点赞",
+ "favorite":"收藏",
+ "coin":"投币",
+ "comment":"评论",
+ "download2":"下载",
+ "commentHint":"发表评论，请遵守社区规范",
+ "replyHint":"回复评论",
+ "replyDetail":"评论详情",
+ "noMoreData":"再怎么找也没有啦"
 }

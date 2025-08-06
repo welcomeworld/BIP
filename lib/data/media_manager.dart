@@ -10,6 +10,7 @@ import 'package:rxdart/rxdart.dart';
 
 import 'model/media_info.dart';
 import 'model/media_page_detail.dart';
+import 'model/reply.dart';
 
 class MediaManager {
   static MediaManager? _ins;
@@ -117,5 +118,24 @@ class MediaManager {
       _refreshAccount();
     }
     return loginResult;
+  }
+
+  Future<SourceApiResult<List<Reply>>> requestReplies(
+      MediaPageDetail page, int pageNumber) async {
+    return await _sources[page.sourceName]?.requestReplies(page, pageNumber) ??
+        SourceApiResult(
+          [],
+          resultCode: SourceApiResult.resultSourceEmpty,
+        );
+  }
+
+  Future<SourceApiResult<List<Reply>>> requestSubReplies(
+      Reply reply, int pageNumber) async {
+    return await _sources[reply.sourceName]
+            ?.requestSubReplies(reply, pageNumber) ??
+        SourceApiResult(
+          [],
+          resultCode: SourceApiResult.resultSourceEmpty,
+        );
   }
 }

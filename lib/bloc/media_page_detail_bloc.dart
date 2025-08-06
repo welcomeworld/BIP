@@ -28,6 +28,7 @@ class MediaPageDetailBloc extends Bloc {
 
   BehaviorSubject<MediaPageDetail> detailSubject = BehaviorSubject();
   BehaviorSubject<MediaInfo> mediaInfoSubject = BehaviorSubject();
+  BehaviorSubject<bool> showingReply = BehaviorSubject();
 
   @override
   void initState(BuildContext context) {
@@ -96,6 +97,7 @@ class MediaPageDetailBloc extends Bloc {
   void dispose() async {
     detailSubject.close();
     mediaInfoSubject.close();
+    showingReply.close();
     await _player.dispose();
     super.dispose();
   }

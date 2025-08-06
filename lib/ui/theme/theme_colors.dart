@@ -14,4 +14,5 @@ class ThemeColors {
 
 extension ColorSchemeExt on ColorScheme {
   Color get onSurfaceLow => onSurface.withOpacity(0.8);
+  Color get vipGold => const Color(0xFFFFD700);
 }

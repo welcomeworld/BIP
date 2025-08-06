@@ -12,3 +12,13 @@ class Constant {
   // settings keys
   static const String kvSettingsMediaQuality = "kv_settings_media_quality";
 }
+
+class ReplyAction {
+  ReplyAction._();
+
+  static const int like = 1;
+  static const int dislike = 2;
+  static const int report = 3;
+  static const int reply = 4;
+  static const int delete = 5;
+}
