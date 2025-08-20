@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../bloc/bloc_state.dart';
 import '../../bloc/main_mine_sub_bloc.dart';
+import '../../utils/bip_router.dart';
+import '../../utils/page_info.dart';
 
 class MainMineSubPage extends StatefulWidget {
   const MainMineSubPage({super.key});
@@ -55,7 +57,9 @@ class _MainMineSubPageState
                 _topIconButton(
                   "assets/img/ic_history_outline.svg",
                   localeString.history,
-                  () {},
+                  () {
+                    BipRouter.of(context).push(PageNames.history);
+                  },
                 ),
                 _topIconButton(
                   "assets/img/ic_message.svg",

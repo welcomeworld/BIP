@@ -1,6 +1,7 @@
 import 'package:bip/bloc/bloc.dart';
 import 'package:bip/data/media_manager.dart';
 import 'package:bip/data/model/media_info.dart';
+import 'package:bip/data/model/media_page_history.dart';
 import 'package:bip/data/model/media_page_preview.dart';
 import 'package:bip/data/source/source.dart';
 import 'package:bip/utils/bip_router.dart';
@@ -11,19 +12,26 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
+import '../data/drift_database.dart';
 import '../data/model/media_page_detail.dart';
 import '../player/bip_constant.dart';
 import '../player/bip_player.dart';
 
 class MediaPageDetailBloc extends Bloc {
-  MediaPageDetailBloc({MediaManager? mediaManager, Player? player}) {
+  MediaPageDetailBloc({
+    MediaManager? mediaManager,
+    Player? player,
+    BipDatabase? database,
+  }) {
     _mediaManager = mediaManager ?? MediaManager();
     _player = player ?? BipPlayer();
     controller = VideoController(_player);
+    _database = database ?? BipDatabase();
   }
 
   late final MediaManager _mediaManager;
   late final Player _player;
+  late final BipDatabase _database;
   late final VideoController controller;
 
   BehaviorSubject<MediaPageDetail> detailSubject = BehaviorSubject();
@@ -39,6 +47,7 @@ class MediaPageDetailBloc extends Bloc {
   }
 
   Future<void> setPreview(MediaPagePreview preview) async {
+    _database.saveMediaPageHistory(MediaPageHistory(preview));
     detailSubject.add(MediaPageDetail.fromPreview(preview));
     final detailResult = await _mediaManager.requestDetail(preview);
     detailSubject.add(detailResult.result);

@@ -1,3 +1,4 @@
+import 'package:bip/ui/page/history_page.dart';
 import 'package:bip/ui/page/login_page.dart';
 import 'package:bip/ui/page/main_page.dart';
 import 'package:bip/ui/page/media_page_detail_page.dart';
@@ -88,6 +89,11 @@ class BipRouter extends RouterDelegate<String>
         return MaterialPage(
           name: PageNames.login,
           child: LoginPage(page.extras["data"]!),
+        );
+      case PageNames.history:
+        return const MaterialPage(
+          name: PageNames.history,
+          child: HistoryPage(),
         );
     }
     return MaterialPage(name: page.pageName, child: const SizedBox.shrink());
