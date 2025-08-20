@@ -22,4 +22,23 @@ enum MediaType {
         return "bili_user";
     }
   }
+
+  static MediaType fromString(String value) {
+    switch (value) {
+      case "video":
+        return MediaType.video;
+      case "media_bangumi":
+        return MediaType.bangumi;
+      case "media_ft":
+        return MediaType.movie;
+      case "live":
+        return MediaType.live;
+      case "article":
+        return MediaType.article;
+      case "bili_user":
+        return MediaType.user;
+      default:
+        throw Exception("Unknown MediaType: $value");
+    }
+  }
 }

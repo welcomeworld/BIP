@@ -115,6 +115,7 @@ class GugufanSource extends Source {
           MediaInfo mediaInfo = MediaInfo();
           mediaInfo.sourceName = sourceName;
           mediaInfo.mediaType = MediaType.bangumi;
+          mediaInfo.mediaId = media.attributes["href"] ?? "";
           mediaInfo.headers["User-Agent"] =
               "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
           mediaInfo.headers["Referer"] = _homeUrl;
@@ -137,6 +138,7 @@ class GugufanSource extends Source {
         relatedPreview.extras[SourceExtraKey.url] =
             "$_homeUrl${related.attributes["href"] ?? ""}";
         relatedPreview.title = related.attributes["title"] ?? "";
+        relatedPreview.mediaPageId = relatedPreview.title;
         UserInfo owner = UserInfo();
         owner.name = sourceName;
         relatedPreview.owner = owner;
@@ -266,6 +268,7 @@ class GugufanSource extends Source {
     pagePreview.title =
         item.querySelector("div.right div.thumb-content div.thumb-txt")?.text ??
             "";
+    pagePreview.mediaPageId = pagePreview.title;
     UserInfo owner = UserInfo();
     owner.name = sourceName;
     pagePreview.owner = owner;

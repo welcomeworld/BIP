@@ -135,6 +135,7 @@ class BimiSource extends Source {
           MediaInfo mediaInfo = MediaInfo();
           mediaInfo.sourceName = sourceName;
           mediaInfo.mediaType = MediaType.bangumi;
+          mediaInfo.mediaId = media.attributes["href"] ?? "";
           mediaInfo.headers["User-Agent"] =
               "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
           mediaInfo.headers["Referer"] = _homeUrl;
@@ -158,6 +159,7 @@ class BimiSource extends Source {
             "$_homeUrl${related.querySelector("a.img")?.attributes["href"] ?? ""}";
         relatedPreview.title =
             related.querySelector("a.img")?.attributes["title"] ?? "";
+        relatedPreview.mediaPageId = relatedPreview.title;
         UserInfo owner = UserInfo();
         owner.name = sourceName;
         relatedPreview.owner = owner;
@@ -266,8 +268,8 @@ class BimiSource extends Source {
       final htmlResponse = await WebNet().get(
           "$_homeUrl/index.php/vod/search/page/$pageNumber/wd/$keyword.html");
       Logger.logConsole("$sourceName search content:${htmlResponse.data}");
-      final searchItemList =
-          parse(htmlResponse.data).querySelectorAll("div.main div.v_tb ul li.item");
+      final searchItemList = parse(htmlResponse.data)
+          .querySelectorAll("div.main div.v_tb ul li.item");
       if (searchItemList.isEmpty) {
         Logger.logConsole("$sourceName search empty");
         return SourceApiResult([],
@@ -284,6 +286,7 @@ class BimiSource extends Source {
     return SourceApiResult(exploreResult);
   }
 
+  // https://www.bimiacg14.net/static/player/${fromKey}.js?2023918
   String _genPath(String fromKey, String urlKey, String pageUrl) {
     String fromResult = "play";
 
@@ -306,7 +309,6 @@ class BimiSource extends Source {
           fromResult = "m3u8";
         }
         break;
-      case "aliplay":
       case "kzyun":
         fromResult = "kzyun";
         break;
@@ -353,6 +355,7 @@ class BimiSource extends Source {
       case "copyright":
       case "qihoo":
       case "qzone":
+      case "aliplay":
         break;
     }
 
@@ -364,6 +367,7 @@ class BimiSource extends Source {
     pagePreview.mediaType = MediaType.bangumi;
     pagePreview.sourceName = sourceName;
     pagePreview.title = item.querySelector("div.info a")?.text ?? "";
+    pagePreview.mediaPageId = pagePreview.title;
     UserInfo owner = UserInfo();
     owner.name = sourceName;
     pagePreview.owner = owner;

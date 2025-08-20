@@ -2,6 +2,7 @@ import 'media_type.dart';
 
 class MediaInfo {
   String sourceName = "";
+  String mediaId = "";
   MediaType mediaType = MediaType.video;
   Map<String, dynamic> extras = {};
   Map<String, String> headers = {};

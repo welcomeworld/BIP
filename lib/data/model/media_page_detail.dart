@@ -6,6 +6,7 @@ import 'media_type.dart';
 
 class MediaPageDetail {
   String sourceName = "";
+  String mediaPageId = "";
   Map<String, dynamic> extras = {};
   MediaType mediaType = MediaType.video;
   late UserInfo owner;
@@ -29,6 +30,7 @@ class MediaPageDetail {
 
   MediaPageDetail.fromPreview(MediaPagePreview preview) {
     sourceName = preview.sourceName;
+    mediaPageId = preview.mediaPageId;
     extras = preview.extras;
     owner = preview.owner;
     title = preview.title;

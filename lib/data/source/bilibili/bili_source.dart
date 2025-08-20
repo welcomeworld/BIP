@@ -153,6 +153,7 @@ class BiliSource extends Source {
         MediaPagePreview pagePreview = MediaPagePreview();
         pagePreview.sourceName = sourceName;
         pagePreview.mediaType = _mapMediaType(avItem.gotoX);
+        pagePreview.mediaPageId = avItem.bvid;
         pagePreview.title = avItem.title;
         UserInfo owner = UserInfo();
         owner.name = avItem.owner?.name ?? "";
@@ -172,7 +173,7 @@ class BiliSource extends Source {
         pagePreview.playCount = avItem.stat?.view ?? 0;
         exploreResult.add(pagePreview);
       });
-    } catch (message) {
+    } catch (err, message) {
       Logger.logConsole("bili explore err:$message");
     }
     return exploreResult;
@@ -318,6 +319,7 @@ class BiliSource extends Source {
   MediaPagePreview _mapVideoItem(BiliSearchVideoType item) {
     MediaPagePreview pagePreview = MediaPagePreview();
     pagePreview.sourceName = sourceName;
+    pagePreview.mediaPageId = item.bvid ?? "";
     pagePreview.mediaType = MediaType.video;
     pagePreview.title = item.title!;
     UserInfo owner = UserInfo();
@@ -344,6 +346,7 @@ class BiliSource extends Source {
     MediaPagePreview pagePreview = MediaPagePreview();
     pagePreview.mediaType = MediaType.bangumi;
     pagePreview.sourceName = sourceName;
+    pagePreview.mediaPageId = "${item.ssid}";
     pagePreview.title = item.title!;
     UserInfo owner = UserInfo();
     owner.name = item.author ?? "";
@@ -466,6 +469,7 @@ class BiliSource extends Source {
         relatedPreview.extras[SourceExtraKey.bvid] = related.bvid;
         relatedPreview.mediaType = MediaType.video;
         relatedPreview.sourceName = sourceName;
+        relatedPreview.mediaPageId = related.bvid;
         relatedPreview.title = related.title;
         UserInfo owner = UserInfo();
         owner.name = related.owner.name;
@@ -484,6 +488,7 @@ class BiliSource extends Source {
         MediaInfo mediaInfo = MediaInfo();
         mediaInfo.sourceName = sourceName;
         mediaInfo.mediaType = MediaType.video;
+        mediaInfo.mediaId = "${media.cid}";
         mediaInfo.headers["User-Agent"] =
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
         mediaInfo.headers["Referer"] = _homeUrl;
@@ -558,6 +563,7 @@ class BiliSource extends Source {
         MediaInfo mediaInfo = MediaInfo();
         mediaInfo.sourceName = sourceName;
         mediaInfo.mediaType = MediaType.bangumi;
+        mediaInfo.mediaId = "${media.cid}";
         mediaInfo.headers["User-Agent"] =
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
         mediaInfo.headers["Referer"] = _homeUrl;
@@ -577,6 +583,7 @@ class BiliSource extends Source {
           MediaInfo mediaInfo = MediaInfo();
           mediaInfo.sourceName = sourceName;
           mediaInfo.mediaType = MediaType.bangumi;
+          mediaInfo.mediaId = "${media.cid}";
           mediaInfo.headers["User-Agent"] =
               "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
           mediaInfo.headers["Referer"] = _homeUrl;
