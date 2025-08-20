@@ -1,8 +1,20 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
 class PageInfo {
   final String pageName;
   final Map<String, dynamic> extras;
 
+  Future<dynamic> get popped => _popCompleter.future;
+  final Completer<dynamic> _popCompleter = Completer<dynamic>();
+
   PageInfo(this.pageName, {this.extras = const {}});
+
+  @mustCallSuper
+  void didComplete<T>(T? result) {
+    _popCompleter.complete(result);
+  }
 }
 
 class PageNames {

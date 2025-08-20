@@ -22,6 +22,9 @@ class BipRouter extends RouterDelegate<String>
 
   @override
   Future<void> setNewRoutePath(String configuration) {
+    for (var page in _stack) {
+      page.didComplete(null);
+    }
     _stack
       ..clear()
       ..add(PageInfo(configuration));
@@ -48,24 +51,24 @@ class BipRouter extends RouterDelegate<String>
     if (_stack.isNotEmpty) {
       var top = getTopPageInfo();
       if (top?.pageName == route.settings.name) {
-        _stack.removeLast();
+        _stack.removeLast().didComplete(result);
         notifyListeners();
       }
     }
     return route.didPop(result);
   }
 
-  bool pop() {
+  bool pop<T extends Object?>([T? result]) {
     if (_stack.isNotEmpty) {
-      _stack.removeLast();
+      _stack.removeLast().didComplete(result);
       notifyListeners();
       return true;
     }
     return false;
   }
 
-  Future<bool> maybePop() async {
-    return await navigatorKey.currentState?.maybePop() ?? false;
+  Future<bool> maybePop<T extends Object?>([T? result]) async {
+    return await navigatorKey.currentState?.maybePop(result) ?? false;
   }
 
   Page createPage(PageInfo page) {
@@ -99,12 +102,13 @@ class BipRouter extends RouterDelegate<String>
     return MaterialPage(name: page.pageName, child: const SizedBox.shrink());
   }
 
-  void push(String newRoute) {
-    pushPageInfo(PageInfo(newRoute));
+  Future<dynamic> push(String newRoute) {
+    return pushPageInfo(PageInfo(newRoute));
   }
 
-  void pushPageInfo(PageInfo pageInfo) {
+  Future<dynamic> pushPageInfo(PageInfo pageInfo) {
     _stack.add(pageInfo);
     notifyListeners();
+    return pageInfo.popped;
   }
 }
