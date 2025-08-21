@@ -8,29 +8,36 @@ import '../../utils/bip_router.dart';
 import '../../utils/common_util.dart';
 import '../../utils/page_info.dart';
 
-Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
+Widget mediaPreviewCard(BuildContext context, MediaPagePreview previewDetail,
+    {void Function(MediaPagePreview previewDetail)? onPressed}) {
   return switch (previewDetail.mediaType) {
-    MediaType.video => _videoPreviewCard(context, previewDetail),
-    MediaType.bangumi => _bangumiPreviewCard(context, previewDetail),
-    MediaType.movie => _videoPreviewCard(context, previewDetail),
-    MediaType.live => _videoPreviewCard(context, previewDetail),
-    MediaType.article => _videoPreviewCard(context, previewDetail),
-    MediaType.user => _videoPreviewCard(context, previewDetail),
-    _ => const SizedBox(),
+    MediaType.video => _videoPreviewCard(context, previewDetail, onPressed),
+    MediaType.bangumi => _bangumiPreviewCard(context, previewDetail, onPressed),
+    MediaType.movie => _videoPreviewCard(context, previewDetail, onPressed),
+    MediaType.live => _videoPreviewCard(context, previewDetail, onPressed),
+    MediaType.article => _videoPreviewCard(context, previewDetail, onPressed),
+    MediaType.user => _videoPreviewCard(context, previewDetail, onPressed),
   };
 }
 
-Widget _videoPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
+Widget _videoPreviewCard(BuildContext context, MediaPagePreview previewDetail,
+    void Function(MediaPagePreview previewDetail)? onPressed) {
   final colorScheme = Theme.of(context).colorScheme;
   return AspectRatio(
     aspectRatio: 3,
     child: FilledButton.tonal(
-      onPressed: () => BipRouter.of(context).pushPageInfo(
-        PageInfo(
-          PageNames.mediaPageDetail,
-          extras: {"data": previewDetail},
-        ),
-      ),
+      onPressed: () {
+        if (onPressed != null) {
+          onPressed(previewDetail);
+          return;
+        }
+        BipRouter.of(context).pushPageInfo(
+          PageInfo(
+            PageNames.mediaPageDetail,
+            extras: {"data": previewDetail},
+          ),
+        );
+      },
       style: FilledButton.styleFrom(
         padding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -229,18 +236,24 @@ Widget _videoPreviewCard(BuildContext context, MediaPagePreview previewDetail) {
   );
 }
 
-Widget _bangumiPreviewCard(
-    BuildContext context, MediaPagePreview previewDetail) {
+Widget _bangumiPreviewCard(BuildContext context, MediaPagePreview previewDetail,
+    void Function(MediaPagePreview previewDetail)? onPressed) {
   final colorScheme = Theme.of(context).colorScheme;
   return AspectRatio(
     aspectRatio: 3,
     child: FilledButton.tonal(
-      onPressed: () => BipRouter.of(context).pushPageInfo(
-        PageInfo(
-          PageNames.mediaPageDetail,
-          extras: {"data": previewDetail},
-        ),
-      ),
+      onPressed: () {
+        if (onPressed != null) {
+          onPressed(previewDetail);
+          return;
+        }
+        BipRouter.of(context).pushPageInfo(
+          PageInfo(
+            PageNames.mediaPageDetail,
+            extras: {"data": previewDetail},
+          ),
+        );
+      },
       style: FilledButton.styleFrom(
         padding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

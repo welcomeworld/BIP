@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 
 import '../../data/model/media_info.dart';
 import '../../player/bip_video.dart';
+import '../../utils/bip_router.dart';
 import '../../utils/common_util.dart';
+import '../../utils/page_info.dart';
 import '../theme/theme_colors.dart';
 import '../widgets/simple_svg.dart';
 import '../widgets/top_icon_button.dart';
@@ -456,7 +458,17 @@ class _MediaPageDetailPageState
               top: 8,
               bottom: 8,
             ),
-            child: mediaPreviewCard(context, previewDetail),
+            child: mediaPreviewCard(context, previewDetail,
+                onPressed: (preview) async {
+              bloc.controller.player.pause();
+              await BipRouter.rootRouter.pushPageInfo(
+                PageInfo(
+                  PageNames.mediaPageDetail,
+                  extras: {"data": previewDetail},
+                ),
+              );
+              bloc.controller.player.play();
+            }),
           );
         },
       );
