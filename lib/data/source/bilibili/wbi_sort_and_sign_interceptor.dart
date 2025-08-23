@@ -34,7 +34,7 @@ class WbiSortAndSignInterceptor extends Interceptor {
     }
 
     String queryString = namesAndValues.join('&');
-    queryString = WbiManager().signWithWbi(queryString);
+    queryString = await WbiManager().signWithWbi(queryString);
 
     if (method.toUpperCase() == 'POST') {
       options.data = queryString;

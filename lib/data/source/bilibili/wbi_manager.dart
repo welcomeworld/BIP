@@ -71,10 +71,9 @@ class WbiManager {
     44,
     52
   ];
-  static const String _wbiUrl =
-      'https://api.bilibili.com/x/web-interface/nav';
+  static const String _wbiUrl = 'https://api.bilibili.com/x/web-interface/nav';
 
-  static const int _timeOut = 1000 * 60 * 60 * 12; // 12 hours
+  static const int _timeOut = 1000 * 60 * 60 * 6; // 12 hours
 
   WbiManager._();
 
@@ -139,10 +138,11 @@ class WbiManager {
     return wbiBuilder.toString();
   }
 
-  String signWithWbi(String queryString) {
+  Future<String> signWithWbi(String queryString) async {
     String wts = '&wts=${DateTime.now().millisecondsSinceEpoch ~/ 1000}';
     String result = '$queryString$wts';
-    String hash = _md5('$result${_getWbiKey()}');
+    String wbiKey = await _getWbiKey();
+    String hash = _md5('$result$wbiKey');
     // 确保md5字符串长度为32位
     String paddedHash = hash.padLeft(32, '0');
     return '$queryString&w_rid=$paddedHash$wts';
