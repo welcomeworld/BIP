@@ -24,9 +24,10 @@ class BiliReplyResponse {
 
 // Data class containing page, replies, and other fields
 class BiliReplyData {
-  final Page page;
+  final Cursor cursor;
   final List<ReplyResponse> replies;
   final List<ReplyResponse> hots;
+  final List<ReplyResponse> topReplies;
   final Upper upper;
   final dynamic top;
   final dynamic notice;
@@ -40,9 +41,10 @@ class BiliReplyData {
   final Control control;
 
   const BiliReplyData({
-    required this.page,
+    required this.cursor,
     required this.replies,
     required this.hots,
+    required this.topReplies,
     required this.upper,
     this.top,
     this.notice,
@@ -58,27 +60,35 @@ class BiliReplyData {
 
   factory BiliReplyData.fromJson(Map<String, dynamic> json) {
     return BiliReplyData(
-      page: Page.fromJson(json['page'] as Map<String, dynamic>? ?? {}),
+      cursor: Cursor.fromJson(json['cursor'] as Map<String, dynamic>? ?? {}),
       replies: (json['replies'] as List<dynamic>?)
-          ?.map((e) => ReplyResponse.fromJson(e as Map<String, dynamic>))
-          .toList() ??
+              ?.map((e) => ReplyResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
           [],
       hots: (json['hots'] as List<dynamic>?)
-          ?.map((e) => ReplyResponse.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-          [], // Nullable
+              ?.map((e) => ReplyResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      topReplies: (json['top_replies'] as List<dynamic>?)
+              ?.map((e) => ReplyResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      // Nullable
       upper: Upper.fromJson(json['upper'] as Map<String, dynamic>? ?? {}),
-      top: json['top'], // Nullable
-      notice: json['notice'], // Nullable
+      top: json['top'],
+      // Nullable
+      notice: json['notice'],
+      // Nullable
       vote: json['vote'] as int? ?? 0,
       blacklist: json['blacklist'] as int? ?? 0,
       assist: json['assist'] as int? ?? 0,
       mode: json['mode'] as int? ?? 0,
       supportMode: (json['support_mode'] as List<dynamic>?)
-          ?.map((e) => e as int)
-          .toList() ??
+              ?.map((e) => e as int)
+              .toList() ??
           [],
-      lotteryCard: json['lottery_card'], // Nullable
+      lotteryCard: json['lottery_card'],
+      // Nullable
       showBvid: json['show_bvid'] as bool? ?? false,
       control: Control.fromJson(json['control'] as Map<String, dynamic>? ?? {}),
     );
@@ -86,25 +96,24 @@ class BiliReplyData {
 }
 
 // Page class
-class Page {
-  final int num;
-  final int size;
-  final int count;
-  final int acount;
+class Cursor {
+  final int allCount;
+  final bool isEnd;
+  final String nextOffset;
 
-  const Page({
-    required this.num,
-    required this.size,
-    required this.count,
-    required this.acount,
+  const Cursor({
+    required this.allCount,
+    required this.isEnd,
+    required this.nextOffset,
   });
 
-  factory Page.fromJson(Map<String, dynamic> json) {
-    return Page(
-      num: json['num'] as int? ?? 0,
-      size: json['size'] as int? ?? 0,
-      count: json['count'] as int? ?? 0,
-      acount: json['acount'] as int? ?? 0,
+  factory Cursor.fromJson(Map<String, dynamic> json) {
+    return Cursor(
+      allCount: json['all_count'] as int? ?? 0,
+      isEnd: json['is_end'] as bool? ?? false,
+      nextOffset:
+          (json['pagination_reply'] as Map<String, dynamic>?)?['next_offset'] ??
+              "",
     );
   }
 }
@@ -189,15 +198,17 @@ class ReplyResponse {
       action: json['action'] as int? ?? 0,
       member: Member.fromJson(json['member'] as Map<String, dynamic>? ?? {}),
       content: Content.fromJson(json['content'] as Map<String, dynamic>? ?? {}),
-      replies:  (json['replies'] as List<dynamic>?)
-          ?.map((e) => ReplyResponse.fromJson(e as Map<String, dynamic>))
-          .toList() ??
+      replies: (json['replies'] as List<dynamic>?)
+              ?.map((e) => ReplyResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
           [],
       assist: json['assist'] as int? ?? 0,
-      upAction: UpAction.fromJson(json['up_action'] as Map<String, dynamic>? ?? {}),
+      upAction:
+          UpAction.fromJson(json['up_action'] as Map<String, dynamic>? ?? {}),
       showFollow: json['show_follow'] as bool? ?? false,
       invisible: json['invisible'] as bool? ?? false,
-      replyControl: ReplyControl.fromJson(json['reply_control'] as Map<String, dynamic>? ?? {}),
+      replyControl: ReplyControl.fromJson(
+          json['reply_control'] as Map<String, dynamic>? ?? {}),
     );
   }
 }
@@ -259,15 +270,20 @@ class Member {
       displayRank: json['DisplayRank'] as String? ?? '',
       faceNftNew: json['face_nft_new'] as int? ?? 0,
       isSeniorMember: json['is_senior_member'] as int? ?? 0,
-      levelInfo: LevelInfo.fromJson(json['level_info'] as Map<String, dynamic>? ?? {}),
+      levelInfo:
+          LevelInfo.fromJson(json['level_info'] as Map<String, dynamic>? ?? {}),
       pendant: Pendant.fromJson(json['pendant'] as Map<String, dynamic>? ?? {}),
-      nameplate: Nameplate.fromJson(json['nameplate'] as Map<String, dynamic>? ?? {}),
-      officialVerify: OfficialVerify.fromJson(json['official_verify'] as Map<String, dynamic>? ?? {}),
+      nameplate:
+          Nameplate.fromJson(json['nameplate'] as Map<String, dynamic>? ?? {}),
+      officialVerify: OfficialVerify.fromJson(
+          json['official_verify'] as Map<String, dynamic>? ?? {}),
       vip: Vip.fromJson(json['vip'] as Map<String, dynamic>? ?? {}),
-      fansDetail: json['fans_detail'], // Nullable
+      fansDetail: json['fans_detail'],
+      // Nullable
       following: json['following'] as int? ?? 0,
       isFollowed: json['is_followed'] as int? ?? 0,
-      userSailing: UserSailing.fromJson(json['user_sailing'] as Map<String, dynamic>? ?? {}),
+      userSailing: UserSailing.fromJson(
+          json['user_sailing'] as Map<String, dynamic>? ?? {}),
       isContractor: json['is_contractor'] as bool? ?? false,
       contractDesc: json['contract_desc'] as String? ?? '',
     );
@@ -480,10 +496,11 @@ class Content {
   final String message;
   final int plat;
   final String device;
-  final List<dynamic> members;
+  final List<Member> members;
   final Map<String, Emote> emote;
   final Map<String, dynamic> jumpUrl;
   final int maxLine;
+  final List<Picture> pictures;
 
   const Content({
     required this.message,
@@ -493,22 +510,31 @@ class Content {
     required this.emote,
     required this.jumpUrl,
     required this.maxLine,
+    required this.pictures,
   });
 
   factory Content.fromJson(Map<String, dynamic> json) {
     final emoteJson = json['emote'] as Map<String, dynamic>? ?? {};
     final emotes = emoteJson.map(
-          (key, value) => MapEntry(key, Emote.fromJson(value as Map<String, dynamic>)),
+      (key, value) =>
+          MapEntry(key, Emote.fromJson(value as Map<String, dynamic>)),
     );
 
     return Content(
       message: json['message'] as String? ?? '',
       plat: json['plat'] as int? ?? 0,
       device: json['device'] as String? ?? '',
-      members: json['members'] as List<dynamic>? ?? [],
+      members: (json['members'] as List<dynamic>?)
+              ?.map((member) => Member.fromJson(member))
+              .toList() ??
+          [],
       emote: emotes,
       jumpUrl: json['jump_url'] as Map<String, dynamic>? ?? {},
       maxLine: json['max_line'] as int? ?? 0,
+      pictures: (json['pictures'] as List<dynamic>?)
+              ?.map((e) => Picture.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 }
@@ -553,6 +579,21 @@ class Emote {
       jumpTitle: json['jump_title'] as String? ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'package_id': packageId,
+      'state': state,
+      'type': type,
+      'attr': attr,
+      'text': text,
+      'url': url,
+      'meta': meta.toJson(),
+      'mtime': mtime,
+      'jump_title': jumpTitle,
+    };
+  }
 }
 
 // Meta class
@@ -567,6 +608,40 @@ class Meta {
     return Meta(
       size: json['size'] as int? ?? 0,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'size': size,
+    };
+  }
+}
+
+class Picture {
+  final String imgSrc;
+  final int imgWidth;
+  final int imgHeight;
+
+  const Picture({
+    required this.imgSrc,
+    required this.imgWidth,
+    required this.imgHeight,
+  });
+
+  factory Picture.fromJson(Map<String, dynamic> json) {
+    return Picture(
+      imgSrc: json['img_src'] as String? ?? '',
+      imgWidth: json['img_width'] as int? ?? 0,
+      imgHeight: json['img_height'] as int? ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'img_src': imgSrc,
+      'img_width': imgWidth,
+      'img_height': imgHeight,
+    };
   }
 }
 

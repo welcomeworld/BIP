@@ -13,14 +13,15 @@ class SubReplyPreview extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return RichText(
-      text: buildTextSpans(
-        "<em>${reply.owner.name}</em>:${reply.content}",
+      text: buildReplySpans(
+        reply,
         context,
         style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w500,
           color: colorScheme.onSurfaceVariant,
         ),
+        subReply: true
       ),
       maxLines: 2,
       overflow: TextOverflow.ellipsis,

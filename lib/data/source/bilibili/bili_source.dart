@@ -111,8 +111,9 @@ class BiliSource extends Source {
 
   UserInfo? _userInfo;
 
-  static const _replyPath = "${_apiUrl}x/v2/reply";
+  static const _replyPath = "${_apiUrl}x/v2/reply/wbi/main";
   static const _subReplyPath = "${_apiUrl}x/v2/reply/reply";
+  static final Map<String, dynamic> _replyNextKey = {};
 
   Future<void> _initHome() async {
     await WebNet().get(_homeUrl);
@@ -160,6 +161,7 @@ class BiliSource extends Source {
         pagePreview.owner = owner;
         pagePreview.coverPortrait = false;
         pagePreview.cover = "${avItem.pic}@640w_400h_1e_1c.webp";
+        pagePreview.extras[SourceExtraKey.aid] = avItem.id;
         pagePreview.extras[SourceExtraKey.bvid] = avItem.bvid;
         pagePreview.extras[SourceExtraKey.cid] = avItem.cid;
         pagePreview.pageTime = avItem.pubDate * 1000;
@@ -660,24 +662,34 @@ class BiliSource extends Source {
       MediaPageDetail page, int pageNumber) async {
     List<Reply> result = [];
     final replyType = _mapReplyType(page.mediaType);
-    final oid = page.extras[SourceExtraKey.aid] ??
-        page.extras[SourceExtraKey.bvid] ??
-        page.extras[SourceExtraKey.ssid] ??
-        "";
+    final oid =
+        "${page.extras[SourceExtraKey.aid] ?? page.extras[SourceExtraKey.bvid] ?? page.extras[SourceExtraKey.ssid] ?? ""}";
+    if (pageNumber == 1) {
+      _replyNextKey[oid] = "";
+    }
     try {
       Map<String, dynamic> extraParameters = {};
       extraParameters["type"] = replyType;
-      extraParameters["pn"] = pageNumber;
+      extraParameters["pagination_str"] =
+          "{\"offset\":\"${_replyNextKey[oid] ?? ''}\"}";
       extraParameters["oid"] = oid;
+      extraParameters["mode"] = 3;
+      extraParameters["plat"] = 1;
+      extraParameters["seek_rpid"] = '';
+      extraParameters["web_location"] = 1315875;
 
       Options options = Options(headers: {
         "Referer": "https://www.bilibili.com/",
         "Origin": "https://www.bilibili.com/",
       });
-      var response = await WebNet()
+      var response = await WbiNet()
           .get(_replyPath, queryParameters: extraParameters, options: options);
       BiliReplyResponse biliResponse =
           BiliReplyResponse.fromJson(response.data);
+      _replyNextKey[oid] = biliResponse.data.cursor.nextOffset;
+      for (var item in biliResponse.data.topReplies) {
+        result.add(_mapReplyItem(item));
+      }
       for (var item in biliResponse.data.hots) {
         result.add(_mapReplyItem(item));
       }
@@ -688,7 +700,7 @@ class BiliSource extends Source {
         return SourceApiResult(result,
             resultCode: SourceApiResult.resultSourceEmpty);
       }
-    } catch (message) {
+    } catch (err, message) {
       Logger.logConsole("bili requestReplies err:$message");
       return SourceApiResult(
           resultCode: SourceApiResult.resultInnerFailed, result);
@@ -930,13 +942,37 @@ class BiliSource extends Source {
   }
 
   Reply _mapReplyItem(ReplyResponse item) {
-    var result = Reply(item.rpidStr);
+    final replyContent = ReplyContent();
+    replyContent.message = item.content.message;
+    replyContent.emote = item.content.emote.map((key, value) {
+      final emote = ContentEmote.fromJson(value.toJson());
+      emote.size = value.meta.size == 1 ? 24 : 48;
+      return MapEntry(key, emote);
+    });
+    replyContent.pictures = item.content.pictures
+        .map((picture) => ContentPicture.fromJson(picture.toJson()))
+        .toList();
+    replyContent.members = item.content.members
+        .map((member) => UserInfo(
+              name: member.uname,
+              avatar: member.avatar,
+              level: member.levelInfo.currentLevel,
+              isVip: member.vip.vipType != 0,
+            ))
+        .toList();
+    var result = Reply(item.rpidStr,
+        owner: UserInfo(
+          name: item.member.uname,
+          avatar: item.member.avatar,
+          level: item.member.levelInfo.currentLevel,
+          isVip: item.member.vip.vipType != 0,
+        ),
+        content: replyContent);
     result.extras[SourceExtraKey.type] = item.type;
     result.extras[SourceExtraKey.oid] = item.oid;
     result.sourceName = sourceName;
     result.rootReplyId = item.rootStr;
     result.replyParentId = item.parentStr;
-    result.content = item.content.message;
     result.likeCount = item.like;
     result.replyTime = item.ctime * 1000;
     result.replyIp = item.replyControl.location;
@@ -952,12 +988,6 @@ class BiliSource extends Source {
         : (item.upAction.reply
             ? "UP主回复"
             : ""); // No direct mapping, set to empty
-    result.owner = UserInfo(
-      name: item.member.uname,
-      avatar: item.member.avatar,
-      level: item.member.levelInfo.currentLevel,
-      isVip: item.member.vip.vipType != 0,
-    );
     return result;
   }
 

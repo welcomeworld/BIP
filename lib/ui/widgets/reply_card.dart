@@ -128,8 +128,8 @@ class ReplyCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 4, bottom: 4),
                   child: RichText(
-                    text: buildTextSpans(
-                      reply.content,
+                    text: buildReplySpans(
+                      reply,
                       context,
                       style: TextStyle(
                         fontSize: 16,
@@ -209,35 +209,12 @@ class ReplyCard extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        if (showSub &&
-                            reply.subReplyCount > 0 &&
-                            reply.subReplies.isEmpty) {
-                          pushPop(context);
-                        } else {
-                          //todo focus on reply input
-                        }
+                        //todo focus on reply input
                       },
-                      icon: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SimpleSvg(
-                            "assets/img/ic_comment_outline.svg",
-                            size: 18,
-                            color: colorScheme.tertiary.withOpacity(0.8),
-                          ),
-                          if (reply.subReplyCount > 0 &&
-                              reply.subReplies.isEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 2),
-                              child: Text(
-                                "${reply.subReplyCount}",
-                                style: TextStyle(
-                                    color:
-                                        colorScheme.tertiary.withOpacity(0.8)),
-                              ),
-                            ),
-                        ],
+                      icon: SimpleSvg(
+                        "assets/img/ic_comment_outline.svg",
+                        size: 18,
+                        color: colorScheme.tertiary.withOpacity(0.8),
                       ),
                       style: IconButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -268,7 +245,7 @@ class ReplyCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                if (showSub && reply.subReplies.isNotEmpty)
+                if (showSub && reply.subReplyCount > 0)
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: FilledButton(
@@ -292,19 +269,20 @@ class ReplyCard extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SubReplyPreview(reply: reply.subReplies[0]),
-                              if (reply.subReplyCount > 1)
+                              if (reply.subReplies.isNotEmpty)
+                                SubReplyPreview(reply: reply.subReplies[0]),
+                              if (reply.subReplies.length > 1)
                                 SubReplyPreview(
                                   reply: reply.subReplies[1],
                                 ),
-                              if (reply.subReplyCount > 2)
+                              if (reply.subReplyCount > reply.subReplies.length)
                                 TextButton(
                                   onPressed: () {
                                     pushPop(context);
                                   },
                                   style: TextButton.styleFrom(
-                                    padding:
-                                        const EdgeInsets.only(top: 2, bottom: 2),
+                                    padding: const EdgeInsets.only(
+                                        top: 2, bottom: 2),
                                     minimumSize: const Size(0, 0),
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
