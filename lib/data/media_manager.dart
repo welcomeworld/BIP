@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:bip/data/model/media_page_preview.dart';
 import 'package:bip/data/model/user_info.dart';
-import 'package:bip/data/source/bilibili/bili_source.dart';
-import 'package:bip/data/source/bimi/bimi_source.dart';
-import 'package:bip/data/source/gugufan/gugufan_source.dart';
 import 'package:bip/data/source/source.dart';
+import 'package:bip/data/source_manager.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'model/media_info.dart';
@@ -15,30 +13,21 @@ import 'model/reply.dart';
 class MediaManager {
   static MediaManager? _ins;
 
-  MediaManager._({Source? mainSource, Map<String, Source>? sources}) {
+  MediaManager._({SourceManager? sourceManager})
+      : _sourceManager = sourceManager ?? SourceManager() {
     _ins = this;
-    _mainSource = mainSource ?? BiliSource();
-    var gugufanSource = GugufanSource();
-    var bimiSource = BimiSource();
-    _sources = sources ??
-        {
-          _mainSource.sourceName: _mainSource,
-          gugufanSource.sourceName: gugufanSource,
-          bimiSource.sourceName: bimiSource
-        };
     _refreshAccount();
   }
 
-  factory MediaManager({Source? mainSource, Map<String, Source>? sources}) =>
-      _ins ?? MediaManager._(mainSource: mainSource, sources: sources);
+  factory MediaManager({SourceManager? sourceManager}) =>
+      _ins ?? MediaManager._(sourceManager: sourceManager);
 
   ///  usually only use for test
   static void reset() {
     _ins = null;
   }
 
-  late final Source _mainSource;
-  late final Map<String, Source> _sources;
+  SourceManager _sourceManager;
   int _explorePageNumber = 1;
 
   final List<MediaPagePreview> _homeExploreList = [];
@@ -46,7 +35,7 @@ class MediaManager {
   BehaviorSubject<Map<String, UserInfo?>> accounts = BehaviorSubject();
 
   Future<void> explore() async {
-    var result = await _mainSource.explore(_explorePageNumber++);
+    var result = await _sourceManager.mainSource.explore(_explorePageNumber++);
     if (_explorePageNumber == 2) {
       _homeExploreList.clear();
     }
@@ -63,7 +52,7 @@ class MediaManager {
     final controller = StreamController<List<MediaPagePreview>>();
     final List<Future<void>> searchFutures = [];
 
-    for (final source in _sources.values) {
+    for (final source in _sourceManager.activeSources.values) {
       final searchFuture = source.search(keyword, pageNumber).then((result) {
         controller.add(result.result);
       }).catchError((error) {
@@ -77,12 +66,13 @@ class MediaManager {
   }
 
   Future<SourceApiResult<List<String>>> requestSearchHot() async {
-    return await _mainSource.requestSearchHot();
+    return await _sourceManager.mainSource.requestSearchHot();
   }
 
   Future<SourceApiResult<MediaPageDetail>> requestDetail(
       MediaPagePreview preview) async {
-    return await _sources[preview.sourceName]?.requestDetail(preview) ??
+    return await _sourceManager.activeSources[preview.sourceName]
+            ?.requestDetail(preview) ??
         SourceApiResult(
           MediaPageDetail.fromPreview(preview),
           resultCode: SourceApiResult.resultSourceEmpty,
@@ -91,7 +81,8 @@ class MediaManager {
 
   Future<SourceApiResult<MediaInfo>> requestMediaInfo(
       MediaInfo mediaInfo) async {
-    return await _sources[mediaInfo.sourceName]?.requestMediaInfo(mediaInfo) ??
+    return await _sourceManager.activeSources[mediaInfo.sourceName]
+            ?.requestMediaInfo(mediaInfo) ??
         SourceApiResult(
           mediaInfo,
           resultCode: SourceApiResult.resultSourceEmpty,
@@ -100,7 +91,7 @@ class MediaManager {
 
   void _refreshAccount() {
     final accountMap = Map.fromEntries(
-      _sources.entries
+      _sourceManager.activeSources.entries
           .where((entry) => entry.value.hasAccount)
           .map((entry) => MapEntry(entry.key, entry.value.accountInfo)),
     );
@@ -108,12 +99,14 @@ class MediaManager {
   }
 
   Future<String> requestLoginQr(String sourceName) async {
-    return await _sources[sourceName]?.requestLoginQr() ?? "";
+    return await _sourceManager.activeSources[sourceName]?.requestLoginQr() ??
+        "";
   }
 
   Future<SourceLoginResult> validateLoginQr(String sourceName) async {
-    final loginResult = await _sources[sourceName]?.validateLoginQr() ??
-        SourceLoginResult.failed;
+    final loginResult =
+        await _sourceManager.activeSources[sourceName]?.validateLoginQr() ??
+            SourceLoginResult.failed;
     if (loginResult == SourceLoginResult.success) {
       _refreshAccount();
     }
@@ -122,7 +115,8 @@ class MediaManager {
 
   Future<SourceApiResult<List<Reply>>> requestReplies(
       MediaPageDetail page, int pageNumber) async {
-    return await _sources[page.sourceName]?.requestReplies(page, pageNumber) ??
+    return await _sourceManager.activeSources[page.sourceName]
+            ?.requestReplies(page, pageNumber) ??
         SourceApiResult(
           [],
           resultCode: SourceApiResult.resultSourceEmpty,
@@ -131,7 +125,7 @@ class MediaManager {
 
   Future<SourceApiResult<List<Reply>>> requestSubReplies(
       Reply reply, int pageNumber) async {
-    return await _sources[reply.sourceName]
+    return await _sourceManager.activeSources[reply.sourceName]
             ?.requestSubReplies(reply, pageNumber) ??
         SourceApiResult(
           [],
