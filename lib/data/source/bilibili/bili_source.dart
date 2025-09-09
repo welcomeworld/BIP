@@ -4,9 +4,11 @@ import 'dart:math';
 import 'package:bip/data/model/media_page_detail.dart';
 import 'package:bip/data/model/media_type.dart';
 import 'package:bip/data/model/user_info.dart';
+import 'package:bip/data/net/bip_cookie_manager.dart';
 import 'package:bip/data/net/web_net.dart';
 import 'package:bip/data/persistence/kv_store.dart';
 import 'package:bip/data/source/bilibili/bili_explore_response.dart';
+import 'package:bip/data/source/bilibili/bili_ticket.dart';
 import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_bangumi_detail_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_login_qr_request_response.dart';
@@ -69,6 +71,8 @@ class BiliSource extends Source {
     "platform": "web",
   };
 
+  static const String _buvidPath = "${_apiUrl}x/frontend/finger/spi";
+
   BiliSource() {
     final userCache = KvStore.getSp().getString(Constant.kvKeyBiliUser);
     if (userCache != null) {
@@ -117,6 +121,29 @@ class BiliSource extends Source {
 
   Future<void> _initHome() async {
     await WebNet().get(_homeUrl);
+    final buvid4 = await BipCookieManager.getCookie("bilibili.com", "buvid4");
+    final biliTicket = await BiliTicket.getBiliTicket("");
+    await BipCookieManager.saveCookie(
+        name: "bili_ticket", value: biliTicket, domain: "bilibili.com");
+    if (buvid4.isEmpty) {
+      final idResponse = await WebNet().get(_buvidPath);
+      await saveBuvidFromResponse(idResponse.data);
+    }
+  }
+
+  Future<void> saveBuvidFromResponse(Map<String, dynamic> response) async {
+    try {
+      if (response['code'] == 0 && response['data'] != null) {
+        final String b3Value = response['data']['b_3'];
+        final String b4Value = response['data']['b_4'];
+        await BipCookieManager.saveCookie(
+            name: "buvid3", value: b3Value, domain: "bilibili.com");
+        await BipCookieManager.saveCookie(
+            name: "buvid4", value: b4Value, domain: "bilibili.com");
+      }
+    } catch (e) {
+      Logger.logConsole("bili save buvid err:$e");
+    }
   }
 
   @override
@@ -312,9 +339,13 @@ class BiliSource extends Source {
           });
         }
       }
+      if (exploreResult.isEmpty) {
+        Logger.logConsole("bili search empty response:${response.data}");
+      }
     } catch (message) {
       Logger.logConsole("bili search err:$message");
     }
+
     return SourceApiResult(exploreResult);
   }
 
