@@ -1,3 +1,4 @@
+import 'package:bip/ui/page/collections_page.dart';
 import 'package:bip/ui/page/history_page.dart';
 import 'package:bip/ui/page/login_page.dart';
 import 'package:bip/ui/page/main_page.dart';
@@ -6,6 +7,8 @@ import 'package:bip/ui/page/search_page.dart';
 import 'package:bip/utils/page_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import '../ui/page/collection_detail_page.dart';
 
 class BipRouter extends RouterDelegate<String>
     with PopNavigatorRouterDelegateMixin, ChangeNotifier {
@@ -97,6 +100,18 @@ class BipRouter extends RouterDelegate<String>
         return const MaterialPage(
           name: PageNames.history,
           child: HistoryPage(),
+        );
+      case PageNames.collections:
+        return const MaterialPage(
+          name: PageNames.collections,
+          child: CollectionsPage(),
+        );
+      case PageNames.collectionDetail:
+        return MaterialPage(
+          name: PageNames.collectionDetail,
+          child: CollectionDetailPage(
+            page.extras["data"],
+          ),
         );
     }
     return MaterialPage(name: page.pageName, child: const SizedBox.shrink());

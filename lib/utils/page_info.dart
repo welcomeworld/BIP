@@ -25,4 +25,6 @@ class PageNames {
   static const String mediaPageDetail = "/media/page/detail";
   static const String login = "/login";
   static const String history = "/history";
+  static const String collections = "/collections";
+  static const String collectionDetail = "/collection/detail";
 }

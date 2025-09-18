@@ -1,5 +1,7 @@
 import 'package:bip/bloc/bloc.dart';
+import 'package:bip/data/collection_manager.dart';
 import 'package:bip/data/media_manager.dart';
+import 'package:bip/data/model/media_collection.dart';
 import 'package:bip/data/model/media_info.dart';
 import 'package:bip/data/model/media_page_history.dart';
 import 'package:bip/data/model/media_page_preview.dart';
@@ -22,21 +24,27 @@ class MediaPageDetailBloc extends Bloc {
     MediaManager? mediaManager,
     Player? player,
     BipDatabase? database,
-  }) {
-    _mediaManager = mediaManager ?? MediaManager();
-    _player = player ?? BipPlayer();
+    CollectionManager? collectionManager,
+  })  : _mediaManager = mediaManager ?? MediaManager(),
+        _player = player ?? BipPlayer(),
+        _database = database ?? BipDatabase(),
+        _collectionManager = collectionManager ?? CollectionManager() {
     controller = VideoController(_player);
-    _database = database ?? BipDatabase();
   }
 
   late final MediaManager _mediaManager;
   late final Player _player;
   late final BipDatabase _database;
   late final VideoController controller;
+  final CollectionManager _collectionManager;
 
   BehaviorSubject<MediaPageDetail> detailSubject = BehaviorSubject();
   BehaviorSubject<MediaInfo> mediaInfoSubject = BehaviorSubject();
   BehaviorSubject<bool> showingReply = BehaviorSubject();
+  BehaviorSubject<bool> inCollection = BehaviorSubject.seeded(false);
+  List<MediaCollection> mediaCollections = [];
+  BehaviorSubject<Set<MediaCollection>> selectedCollections =
+      BehaviorSubject.seeded({});
 
   @override
   void initState(BuildContext context) {
@@ -63,6 +71,13 @@ class MediaPageDetailBloc extends Bloc {
       //todo select playlist and list item
       queryMediaInfo(detailResult.result.playlists.values.first.first);
     }
+    _checkInCollection(preview);
+    _requestCollections();
+  }
+
+  Future<void> _checkInCollection(MediaPagePreview preview) async {
+    final result = await _collectionManager.isInMediaCollection(preview);
+    inCollection.add(result);
   }
 
   Future<void> queryMediaInfo(MediaInfo mediaInfo) async {
@@ -102,12 +117,60 @@ class MediaPageDetailBloc extends Bloc {
     queryMediaInfo(mediaInfo);
   }
 
+  Future<void> _requestCollections() async {
+    final resultStream = _collectionManager.requestMediaCollections();
+    mediaCollections.clear();
+    await for (final result in resultStream) {
+      mediaCollections.addAll(result);
+    }
+  }
+
+  void clearSelectedCollections() {
+    selectedCollections.add({});
+  }
+
   @override
   void dispose() async {
     detailSubject.close();
     mediaInfoSubject.close();
     showingReply.close();
+    selectedCollections.close();
     await _player.dispose();
     super.dispose();
+  }
+
+  void onCollectionChecked(MediaCollection collection, bool bool) {
+    final selectedCollections = this.selectedCollections.value;
+    if (bool) {
+      selectedCollections.add(collection);
+    } else {
+      selectedCollections.remove(collection);
+    }
+    this.selectedCollections.add(Set.from(selectedCollections));
+  }
+
+  Future<bool> addToCollections(MediaPagePreview preview) async {
+    if (selectedCollections.valueOrNull?.isEmpty ?? true) {
+      return false;
+    }
+    bool allSuccess = true;
+    for (final collection in selectedCollections.value) {
+      final success =
+          await _collectionManager.addToMediaCollection(collection, preview);
+      if (!success) {
+        allSuccess = false;
+      }
+    }
+    inCollection.add(allSuccess);
+    return allSuccess;
+  }
+
+  Future<bool> removeFromCollections(MediaPagePreview preview) async {
+    final result =
+        await _collectionManager.removeFromAllMediaCollection(preview);
+    if (result) {
+      inCollection.add(false);
+    }
+    return result;
   }
 }

@@ -284,23 +284,117 @@ class _MediaPageDetailPageState
               ),
               () {},
             ),
-            topIconButton(
-              SimpleSvg(
-                "assets/img/ic_favorite_filled.svg",
-                size: 30,
-                color: colorScheme.tertiary,
-              ),
-              Text(
-                localeString.favorite,
-                style: TextStyle(color: colorScheme.onSurface),
-              ),
-              IconButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                minimumSize: const Size(72, 72),
-              ),
-              () {},
-            ),
+            StreamBuilder<bool>(
+                stream: bloc.inCollection.stream,
+                builder: (streamContext, snapshot) {
+                  final inCollection = snapshot.data ?? false;
+                  return topIconButton(
+                    SimpleSvg(
+                      "assets/img/ic_favorite_filled.svg",
+                      size: 30,
+                      color: inCollection
+                          ? colorScheme.primary
+                          : colorScheme.tertiary,
+                    ),
+                    Text(
+                      localeString.favorite,
+                      style: TextStyle(color: colorScheme.onSurface),
+                    ),
+                    IconButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      minimumSize: const Size(72, 72),
+                    ),
+                    () async {
+                      if (inCollection) {
+                        bloc.removeFromCollections(widget.preview);
+                        return;
+                      }
+                      bloc.clearSelectedCollections();
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        elevation: 10,
+                        enableDrag: true,
+                        showDragHandle: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20)),
+                        ),
+                        constraints: const BoxConstraints(
+                          maxHeight: 600,
+                          minHeight: 400,
+                        ),
+                        builder: (context) {
+                          return SafeArea(
+                            top: false,
+                            bottom: true,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
+                                  child: Text(
+                                    localeString.collection,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: StreamBuilder(
+                                      stream: bloc.selectedCollections.stream,
+                                      builder: (context, snapshot) {
+                                        final selected = snapshot.data ?? {};
+                                        return ListView.builder(
+                                            itemCount:
+                                                bloc.mediaCollections.length,
+                                            itemBuilder: (context, index) {
+                                              final collection =
+                                                  bloc.mediaCollections[index];
+                                              return CheckboxListTile(
+                                                title: Text(collection.title),
+                                                onChanged: (value) {
+                                                  bloc.onCollectionChecked(
+                                                      collection,
+                                                      value ?? false);
+                                                },
+                                                value: selected
+                                                    .contains(collection),
+                                              );
+                                            });
+                                      }),
+                                ),
+                                SizedBox(
+                                  height: 72,
+                                  child: Center(
+                                    child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24),
+                                          ),
+                                          minimumSize: const Size(200, 48),
+                                        ),
+                                        onPressed: () {
+                                          bloc.addToCollections(widget.preview);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(localeString.confirm)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                }),
             topIconButton(
               SimpleSvg(
                 "assets/img/ic_coin_filled.svg",

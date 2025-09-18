@@ -21,5 +21,24 @@
  "commentHint":"发表评论，请遵守社区规范",
  "replyHint":"回复评论",
  "replyDetail":"评论详情",
- "noMoreData":"再怎么找也没有啦"
+ "noMoreData":"再怎么找也没有啦",
+ "collection":"收藏夹",
+ "createCollection":"新建收藏夹",
+ "title":"标题",
+ "description":"简介",
+ "localCollection":"本地收藏夹",
+ "public":"公开",
+ "cancel":"取消",
+ "confirm":"确认",
+ "titleHint":"请输入标题",
+ "deleteConfirmation": "您确定要删除 \"{title}\" 吗？此操作无法撤销，所有内容将被永久删除。",
+ "@deleteConfirmation": {
+   "description": "删除确认对话框消息",
+   "placeholders": {
+     "title": {
+       "type": "String",
+       "example": "默认收藏夹"
+     }
+   }
+ }
 }

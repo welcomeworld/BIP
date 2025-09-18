@@ -492,6 +492,573 @@ class DatabaseMediaPageHistoriesCompanion
   }
 }
 
+class $DatabaseMediaCollectionsTable extends DatabaseMediaCollections
+    with TableInfo<$DatabaseMediaCollectionsTable, DatabaseMediaCollection> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DatabaseMediaCollectionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _sourceNameMeta =
+      const VerificationMeta('sourceName');
+  @override
+  late final GeneratedColumn<String> sourceName = GeneratedColumn<String>(
+      'source_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _extrasMeta = const VerificationMeta('extras');
+  @override
+  late final GeneratedColumnWithTypeConverter<Map<String, dynamic>, String>
+      extras = GeneratedColumn<String>('extras', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<Map<String, dynamic>>(
+              $DatabaseMediaCollectionsTable.$converterextras);
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
+  @override
+  late final GeneratedColumnWithTypeConverter<UserInfo, String> owner =
+      GeneratedColumn<String>('owner', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<UserInfo>(
+              $DatabaseMediaCollectionsTable.$converterowner);
+  static const VerificationMeta _createTimeMeta =
+      const VerificationMeta('createTime');
+  @override
+  late final GeneratedColumn<DateTime> createTime = GeneratedColumn<DateTime>(
+      'create_time', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _itemCountMeta =
+      const VerificationMeta('itemCount');
+  @override
+  late final GeneratedColumn<int> itemCount = GeneratedColumn<int>(
+      'item_count', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _coverMeta = const VerificationMeta('cover');
+  @override
+  late final GeneratedColumn<String> cover = GeneratedColumn<String>(
+      'cover', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _visibleMeta =
+      const VerificationMeta('visible');
+  @override
+  late final GeneratedColumn<bool> visible = GeneratedColumn<bool>(
+      'visible', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("visible" IN (0, 1))'));
+  static const VerificationMeta _localMeta = const VerificationMeta('local');
+  @override
+  late final GeneratedColumn<bool> local = GeneratedColumn<bool>(
+      'local', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("local" IN (0, 1))'));
+  @override
+  List<GeneratedColumn> get $columns => [
+        sourceName,
+        id,
+        extras,
+        owner,
+        createTime,
+        itemCount,
+        title,
+        cover,
+        description,
+        visible,
+        local
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'database_media_collections';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<DatabaseMediaCollection> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('source_name')) {
+      context.handle(
+          _sourceNameMeta,
+          sourceName.isAcceptableOrUnknown(
+              data['source_name']!, _sourceNameMeta));
+    } else if (isInserting) {
+      context.missing(_sourceNameMeta);
+    }
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    context.handle(_extrasMeta, const VerificationResult.success());
+    context.handle(_ownerMeta, const VerificationResult.success());
+    if (data.containsKey('create_time')) {
+      context.handle(
+          _createTimeMeta,
+          createTime.isAcceptableOrUnknown(
+              data['create_time']!, _createTimeMeta));
+    } else if (isInserting) {
+      context.missing(_createTimeMeta);
+    }
+    if (data.containsKey('item_count')) {
+      context.handle(_itemCountMeta,
+          itemCount.isAcceptableOrUnknown(data['item_count']!, _itemCountMeta));
+    } else if (isInserting) {
+      context.missing(_itemCountMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('cover')) {
+      context.handle(
+          _coverMeta, cover.isAcceptableOrUnknown(data['cover']!, _coverMeta));
+    } else if (isInserting) {
+      context.missing(_coverMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('visible')) {
+      context.handle(_visibleMeta,
+          visible.isAcceptableOrUnknown(data['visible']!, _visibleMeta));
+    } else if (isInserting) {
+      context.missing(_visibleMeta);
+    }
+    if (data.containsKey('local')) {
+      context.handle(
+          _localMeta, local.isAcceptableOrUnknown(data['local']!, _localMeta));
+    } else if (isInserting) {
+      context.missing(_localMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DatabaseMediaCollection map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DatabaseMediaCollection(
+      sourceName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source_name'])!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      extras: $DatabaseMediaCollectionsTable.$converterextras.fromSql(
+          attachedDatabase.typeMapping
+              .read(DriftSqlType.string, data['${effectivePrefix}extras'])!),
+      owner: $DatabaseMediaCollectionsTable.$converterowner.fromSql(
+          attachedDatabase.typeMapping
+              .read(DriftSqlType.string, data['${effectivePrefix}owner'])!),
+      createTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}create_time'])!,
+      itemCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}item_count'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      cover: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}cover'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      visible: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}visible'])!,
+      local: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}local'])!,
+    );
+  }
+
+  @override
+  $DatabaseMediaCollectionsTable createAlias(String alias) {
+    return $DatabaseMediaCollectionsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<Map<String, dynamic>, String> $converterextras =
+      const MapConverter();
+  static TypeConverter<UserInfo, String> $converterowner =
+      const UserInfoConverter();
+}
+
+class DatabaseMediaCollection extends DataClass
+    implements Insertable<DatabaseMediaCollection> {
+  final String sourceName;
+  final String id;
+  final Map<String, dynamic> extras;
+  final UserInfo owner;
+  final DateTime createTime;
+  final int itemCount;
+  final String title;
+  final String cover;
+  final String description;
+  final bool visible;
+  final bool local;
+  const DatabaseMediaCollection(
+      {required this.sourceName,
+      required this.id,
+      required this.extras,
+      required this.owner,
+      required this.createTime,
+      required this.itemCount,
+      required this.title,
+      required this.cover,
+      required this.description,
+      required this.visible,
+      required this.local});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['source_name'] = Variable<String>(sourceName);
+    map['id'] = Variable<String>(id);
+    {
+      map['extras'] = Variable<String>(
+          $DatabaseMediaCollectionsTable.$converterextras.toSql(extras));
+    }
+    {
+      map['owner'] = Variable<String>(
+          $DatabaseMediaCollectionsTable.$converterowner.toSql(owner));
+    }
+    map['create_time'] = Variable<DateTime>(createTime);
+    map['item_count'] = Variable<int>(itemCount);
+    map['title'] = Variable<String>(title);
+    map['cover'] = Variable<String>(cover);
+    map['description'] = Variable<String>(description);
+    map['visible'] = Variable<bool>(visible);
+    map['local'] = Variable<bool>(local);
+    return map;
+  }
+
+  DatabaseMediaCollectionsCompanion toCompanion(bool nullToAbsent) {
+    return DatabaseMediaCollectionsCompanion(
+      sourceName: Value(sourceName),
+      id: Value(id),
+      extras: Value(extras),
+      owner: Value(owner),
+      createTime: Value(createTime),
+      itemCount: Value(itemCount),
+      title: Value(title),
+      cover: Value(cover),
+      description: Value(description),
+      visible: Value(visible),
+      local: Value(local),
+    );
+  }
+
+  factory DatabaseMediaCollection.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DatabaseMediaCollection(
+      sourceName: serializer.fromJson<String>(json['sourceName']),
+      id: serializer.fromJson<String>(json['id']),
+      extras: serializer.fromJson<Map<String, dynamic>>(json['extras']),
+      owner: serializer.fromJson<UserInfo>(json['owner']),
+      createTime: serializer.fromJson<DateTime>(json['createTime']),
+      itemCount: serializer.fromJson<int>(json['itemCount']),
+      title: serializer.fromJson<String>(json['title']),
+      cover: serializer.fromJson<String>(json['cover']),
+      description: serializer.fromJson<String>(json['description']),
+      visible: serializer.fromJson<bool>(json['visible']),
+      local: serializer.fromJson<bool>(json['local']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'sourceName': serializer.toJson<String>(sourceName),
+      'id': serializer.toJson<String>(id),
+      'extras': serializer.toJson<Map<String, dynamic>>(extras),
+      'owner': serializer.toJson<UserInfo>(owner),
+      'createTime': serializer.toJson<DateTime>(createTime),
+      'itemCount': serializer.toJson<int>(itemCount),
+      'title': serializer.toJson<String>(title),
+      'cover': serializer.toJson<String>(cover),
+      'description': serializer.toJson<String>(description),
+      'visible': serializer.toJson<bool>(visible),
+      'local': serializer.toJson<bool>(local),
+    };
+  }
+
+  DatabaseMediaCollection copyWith(
+          {String? sourceName,
+          String? id,
+          Map<String, dynamic>? extras,
+          UserInfo? owner,
+          DateTime? createTime,
+          int? itemCount,
+          String? title,
+          String? cover,
+          String? description,
+          bool? visible,
+          bool? local}) =>
+      DatabaseMediaCollection(
+        sourceName: sourceName ?? this.sourceName,
+        id: id ?? this.id,
+        extras: extras ?? this.extras,
+        owner: owner ?? this.owner,
+        createTime: createTime ?? this.createTime,
+        itemCount: itemCount ?? this.itemCount,
+        title: title ?? this.title,
+        cover: cover ?? this.cover,
+        description: description ?? this.description,
+        visible: visible ?? this.visible,
+        local: local ?? this.local,
+      );
+  DatabaseMediaCollection copyWithCompanion(
+      DatabaseMediaCollectionsCompanion data) {
+    return DatabaseMediaCollection(
+      sourceName:
+          data.sourceName.present ? data.sourceName.value : this.sourceName,
+      id: data.id.present ? data.id.value : this.id,
+      extras: data.extras.present ? data.extras.value : this.extras,
+      owner: data.owner.present ? data.owner.value : this.owner,
+      createTime:
+          data.createTime.present ? data.createTime.value : this.createTime,
+      itemCount: data.itemCount.present ? data.itemCount.value : this.itemCount,
+      title: data.title.present ? data.title.value : this.title,
+      cover: data.cover.present ? data.cover.value : this.cover,
+      description:
+          data.description.present ? data.description.value : this.description,
+      visible: data.visible.present ? data.visible.value : this.visible,
+      local: data.local.present ? data.local.value : this.local,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DatabaseMediaCollection(')
+          ..write('sourceName: $sourceName, ')
+          ..write('id: $id, ')
+          ..write('extras: $extras, ')
+          ..write('owner: $owner, ')
+          ..write('createTime: $createTime, ')
+          ..write('itemCount: $itemCount, ')
+          ..write('title: $title, ')
+          ..write('cover: $cover, ')
+          ..write('description: $description, ')
+          ..write('visible: $visible, ')
+          ..write('local: $local')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(sourceName, id, extras, owner, createTime,
+      itemCount, title, cover, description, visible, local);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DatabaseMediaCollection &&
+          other.sourceName == this.sourceName &&
+          other.id == this.id &&
+          other.extras == this.extras &&
+          other.owner == this.owner &&
+          other.createTime == this.createTime &&
+          other.itemCount == this.itemCount &&
+          other.title == this.title &&
+          other.cover == this.cover &&
+          other.description == this.description &&
+          other.visible == this.visible &&
+          other.local == this.local);
+}
+
+class DatabaseMediaCollectionsCompanion
+    extends UpdateCompanion<DatabaseMediaCollection> {
+  final Value<String> sourceName;
+  final Value<String> id;
+  final Value<Map<String, dynamic>> extras;
+  final Value<UserInfo> owner;
+  final Value<DateTime> createTime;
+  final Value<int> itemCount;
+  final Value<String> title;
+  final Value<String> cover;
+  final Value<String> description;
+  final Value<bool> visible;
+  final Value<bool> local;
+  final Value<int> rowid;
+  const DatabaseMediaCollectionsCompanion({
+    this.sourceName = const Value.absent(),
+    this.id = const Value.absent(),
+    this.extras = const Value.absent(),
+    this.owner = const Value.absent(),
+    this.createTime = const Value.absent(),
+    this.itemCount = const Value.absent(),
+    this.title = const Value.absent(),
+    this.cover = const Value.absent(),
+    this.description = const Value.absent(),
+    this.visible = const Value.absent(),
+    this.local = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DatabaseMediaCollectionsCompanion.insert({
+    required String sourceName,
+    required String id,
+    required Map<String, dynamic> extras,
+    required UserInfo owner,
+    required DateTime createTime,
+    required int itemCount,
+    required String title,
+    required String cover,
+    required String description,
+    required bool visible,
+    required bool local,
+    this.rowid = const Value.absent(),
+  })  : sourceName = Value(sourceName),
+        id = Value(id),
+        extras = Value(extras),
+        owner = Value(owner),
+        createTime = Value(createTime),
+        itemCount = Value(itemCount),
+        title = Value(title),
+        cover = Value(cover),
+        description = Value(description),
+        visible = Value(visible),
+        local = Value(local);
+  static Insertable<DatabaseMediaCollection> custom({
+    Expression<String>? sourceName,
+    Expression<String>? id,
+    Expression<String>? extras,
+    Expression<String>? owner,
+    Expression<DateTime>? createTime,
+    Expression<int>? itemCount,
+    Expression<String>? title,
+    Expression<String>? cover,
+    Expression<String>? description,
+    Expression<bool>? visible,
+    Expression<bool>? local,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (sourceName != null) 'source_name': sourceName,
+      if (id != null) 'id': id,
+      if (extras != null) 'extras': extras,
+      if (owner != null) 'owner': owner,
+      if (createTime != null) 'create_time': createTime,
+      if (itemCount != null) 'item_count': itemCount,
+      if (title != null) 'title': title,
+      if (cover != null) 'cover': cover,
+      if (description != null) 'description': description,
+      if (visible != null) 'visible': visible,
+      if (local != null) 'local': local,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DatabaseMediaCollectionsCompanion copyWith(
+      {Value<String>? sourceName,
+      Value<String>? id,
+      Value<Map<String, dynamic>>? extras,
+      Value<UserInfo>? owner,
+      Value<DateTime>? createTime,
+      Value<int>? itemCount,
+      Value<String>? title,
+      Value<String>? cover,
+      Value<String>? description,
+      Value<bool>? visible,
+      Value<bool>? local,
+      Value<int>? rowid}) {
+    return DatabaseMediaCollectionsCompanion(
+      sourceName: sourceName ?? this.sourceName,
+      id: id ?? this.id,
+      extras: extras ?? this.extras,
+      owner: owner ?? this.owner,
+      createTime: createTime ?? this.createTime,
+      itemCount: itemCount ?? this.itemCount,
+      title: title ?? this.title,
+      cover: cover ?? this.cover,
+      description: description ?? this.description,
+      visible: visible ?? this.visible,
+      local: local ?? this.local,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (sourceName.present) {
+      map['source_name'] = Variable<String>(sourceName.value);
+    }
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (extras.present) {
+      map['extras'] = Variable<String>(
+          $DatabaseMediaCollectionsTable.$converterextras.toSql(extras.value));
+    }
+    if (owner.present) {
+      map['owner'] = Variable<String>(
+          $DatabaseMediaCollectionsTable.$converterowner.toSql(owner.value));
+    }
+    if (createTime.present) {
+      map['create_time'] = Variable<DateTime>(createTime.value);
+    }
+    if (itemCount.present) {
+      map['item_count'] = Variable<int>(itemCount.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (cover.present) {
+      map['cover'] = Variable<String>(cover.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (visible.present) {
+      map['visible'] = Variable<bool>(visible.value);
+    }
+    if (local.present) {
+      map['local'] = Variable<bool>(local.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DatabaseMediaCollectionsCompanion(')
+          ..write('sourceName: $sourceName, ')
+          ..write('id: $id, ')
+          ..write('extras: $extras, ')
+          ..write('owner: $owner, ')
+          ..write('createTime: $createTime, ')
+          ..write('itemCount: $itemCount, ')
+          ..write('title: $title, ')
+          ..write('cover: $cover, ')
+          ..write('description: $description, ')
+          ..write('visible: $visible, ')
+          ..write('local: $local, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BipDatabase extends GeneratedDatabase {
   _$BipDatabase(QueryExecutor e) : super(e);
   $BipDatabaseManager get managers => $BipDatabaseManager(this);
@@ -499,12 +1066,17 @@ abstract class _$BipDatabase extends GeneratedDatabase {
       $DatabaseSearchHistoriesTable(this);
   late final $DatabaseMediaPageHistoriesTable databaseMediaPageHistories =
       $DatabaseMediaPageHistoriesTable(this);
+  late final $DatabaseMediaCollectionsTable databaseMediaCollections =
+      $DatabaseMediaCollectionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [databaseSearchHistories, databaseMediaPageHistories];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        databaseSearchHistories,
+        databaseMediaPageHistories,
+        databaseMediaCollections
+      ];
 }
 
 typedef $$DatabaseSearchHistoriesTableCreateCompanionBuilder
@@ -811,6 +1383,281 @@ typedef $$DatabaseMediaPageHistoriesTableProcessedTableManager
         ),
         DatabaseMediaPageHistory,
         PrefetchHooks Function()>;
+typedef $$DatabaseMediaCollectionsTableCreateCompanionBuilder
+    = DatabaseMediaCollectionsCompanion Function({
+  required String sourceName,
+  required String id,
+  required Map<String, dynamic> extras,
+  required UserInfo owner,
+  required DateTime createTime,
+  required int itemCount,
+  required String title,
+  required String cover,
+  required String description,
+  required bool visible,
+  required bool local,
+  Value<int> rowid,
+});
+typedef $$DatabaseMediaCollectionsTableUpdateCompanionBuilder
+    = DatabaseMediaCollectionsCompanion Function({
+  Value<String> sourceName,
+  Value<String> id,
+  Value<Map<String, dynamic>> extras,
+  Value<UserInfo> owner,
+  Value<DateTime> createTime,
+  Value<int> itemCount,
+  Value<String> title,
+  Value<String> cover,
+  Value<String> description,
+  Value<bool> visible,
+  Value<bool> local,
+  Value<int> rowid,
+});
+
+class $$DatabaseMediaCollectionsTableFilterComposer
+    extends Composer<_$BipDatabase, $DatabaseMediaCollectionsTable> {
+  $$DatabaseMediaCollectionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get sourceName => $composableBuilder(
+      column: $table.sourceName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<Map<String, dynamic>, Map<String, dynamic>,
+          String>
+      get extras => $composableBuilder(
+          column: $table.extras,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnWithTypeConverterFilters<UserInfo, UserInfo, String> get owner =>
+      $composableBuilder(
+          column: $table.owner,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<DateTime> get createTime => $composableBuilder(
+      column: $table.createTime, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get itemCount => $composableBuilder(
+      column: $table.itemCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get cover => $composableBuilder(
+      column: $table.cover, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get visible => $composableBuilder(
+      column: $table.visible, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get local => $composableBuilder(
+      column: $table.local, builder: (column) => ColumnFilters(column));
+}
+
+class $$DatabaseMediaCollectionsTableOrderingComposer
+    extends Composer<_$BipDatabase, $DatabaseMediaCollectionsTable> {
+  $$DatabaseMediaCollectionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get sourceName => $composableBuilder(
+      column: $table.sourceName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get extras => $composableBuilder(
+      column: $table.extras, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+      column: $table.owner, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createTime => $composableBuilder(
+      column: $table.createTime, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get itemCount => $composableBuilder(
+      column: $table.itemCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get cover => $composableBuilder(
+      column: $table.cover, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get visible => $composableBuilder(
+      column: $table.visible, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get local => $composableBuilder(
+      column: $table.local, builder: (column) => ColumnOrderings(column));
+}
+
+class $$DatabaseMediaCollectionsTableAnnotationComposer
+    extends Composer<_$BipDatabase, $DatabaseMediaCollectionsTable> {
+  $$DatabaseMediaCollectionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get sourceName => $composableBuilder(
+      column: $table.sourceName, builder: (column) => column);
+
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<Map<String, dynamic>, String> get extras =>
+      $composableBuilder(column: $table.extras, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<UserInfo, String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createTime => $composableBuilder(
+      column: $table.createTime, builder: (column) => column);
+
+  GeneratedColumn<int> get itemCount =>
+      $composableBuilder(column: $table.itemCount, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get cover =>
+      $composableBuilder(column: $table.cover, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<bool> get visible =>
+      $composableBuilder(column: $table.visible, builder: (column) => column);
+
+  GeneratedColumn<bool> get local =>
+      $composableBuilder(column: $table.local, builder: (column) => column);
+}
+
+class $$DatabaseMediaCollectionsTableTableManager extends RootTableManager<
+    _$BipDatabase,
+    $DatabaseMediaCollectionsTable,
+    DatabaseMediaCollection,
+    $$DatabaseMediaCollectionsTableFilterComposer,
+    $$DatabaseMediaCollectionsTableOrderingComposer,
+    $$DatabaseMediaCollectionsTableAnnotationComposer,
+    $$DatabaseMediaCollectionsTableCreateCompanionBuilder,
+    $$DatabaseMediaCollectionsTableUpdateCompanionBuilder,
+    (
+      DatabaseMediaCollection,
+      BaseReferences<_$BipDatabase, $DatabaseMediaCollectionsTable,
+          DatabaseMediaCollection>
+    ),
+    DatabaseMediaCollection,
+    PrefetchHooks Function()> {
+  $$DatabaseMediaCollectionsTableTableManager(
+      _$BipDatabase db, $DatabaseMediaCollectionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DatabaseMediaCollectionsTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DatabaseMediaCollectionsTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DatabaseMediaCollectionsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> sourceName = const Value.absent(),
+            Value<String> id = const Value.absent(),
+            Value<Map<String, dynamic>> extras = const Value.absent(),
+            Value<UserInfo> owner = const Value.absent(),
+            Value<DateTime> createTime = const Value.absent(),
+            Value<int> itemCount = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> cover = const Value.absent(),
+            Value<String> description = const Value.absent(),
+            Value<bool> visible = const Value.absent(),
+            Value<bool> local = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              DatabaseMediaCollectionsCompanion(
+            sourceName: sourceName,
+            id: id,
+            extras: extras,
+            owner: owner,
+            createTime: createTime,
+            itemCount: itemCount,
+            title: title,
+            cover: cover,
+            description: description,
+            visible: visible,
+            local: local,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String sourceName,
+            required String id,
+            required Map<String, dynamic> extras,
+            required UserInfo owner,
+            required DateTime createTime,
+            required int itemCount,
+            required String title,
+            required String cover,
+            required String description,
+            required bool visible,
+            required bool local,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              DatabaseMediaCollectionsCompanion.insert(
+            sourceName: sourceName,
+            id: id,
+            extras: extras,
+            owner: owner,
+            createTime: createTime,
+            itemCount: itemCount,
+            title: title,
+            cover: cover,
+            description: description,
+            visible: visible,
+            local: local,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$DatabaseMediaCollectionsTableProcessedTableManager
+    = ProcessedTableManager<
+        _$BipDatabase,
+        $DatabaseMediaCollectionsTable,
+        DatabaseMediaCollection,
+        $$DatabaseMediaCollectionsTableFilterComposer,
+        $$DatabaseMediaCollectionsTableOrderingComposer,
+        $$DatabaseMediaCollectionsTableAnnotationComposer,
+        $$DatabaseMediaCollectionsTableCreateCompanionBuilder,
+        $$DatabaseMediaCollectionsTableUpdateCompanionBuilder,
+        (
+          DatabaseMediaCollection,
+          BaseReferences<_$BipDatabase, $DatabaseMediaCollectionsTable,
+              DatabaseMediaCollection>
+        ),
+        DatabaseMediaCollection,
+        PrefetchHooks Function()>;
 
 class $BipDatabaseManager {
   final _$BipDatabase _db;
@@ -822,4 +1669,7 @@ class $BipDatabaseManager {
       get databaseMediaPageHistories =>
           $$DatabaseMediaPageHistoriesTableTableManager(
               _db, _db.databaseMediaPageHistories);
+  $$DatabaseMediaCollectionsTableTableManager get databaseMediaCollections =>
+      $$DatabaseMediaCollectionsTableTableManager(
+          _db, _db.databaseMediaCollections);
 }

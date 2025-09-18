@@ -1,3 +1,4 @@
+import 'package:bip/data/model/media_collection.dart';
 import 'package:bip/data/model/media_info.dart';
 import 'package:bip/data/model/media_type.dart';
 import 'package:bip/data/model/reply.dart';
@@ -60,6 +61,47 @@ abstract class Source {
       reply,
       resultCode: SourceApiResult.resultSuccess,
     );
+  }
+
+  Future<SourceApiResult<List<MediaCollection>>>
+      requestMediaCollections() async {
+    return SourceApiResult(
+      List.empty(),
+      resultCode: SourceApiResult.resultSourceEmpty,
+    );
+  }
+
+  Future<bool> saveMediaCollection(MediaCollection collection) async {
+    return true;
+  }
+
+  Future<bool> deleteMediaCollection(MediaCollection collection) async {
+    return true;
+  }
+
+  Future<bool> addToMediaCollection(
+      MediaCollection collection, MediaPagePreview preview) async {
+    return true;
+  }
+
+  Future<bool> removeFromMediaCollection(
+      MediaCollection collection, MediaPagePreview preview) async {
+    return true;
+  }
+
+  Future<bool> removeFromAllMediaCollection(MediaPagePreview preview) async {
+    return true;
+  }
+
+  Future<bool> isInMediaCollection(MediaPagePreview preview) async {
+    return false;
+  }
+
+  Future<SourceApiResult<List<MediaPagePreview>>> requestMediaCollectionDetail(
+      MediaCollection collection,
+      {String key = "",
+      int pageNumber = 1}) async {
+    return SourceApiResult([], resultCode: SourceApiResult.resultSourceEmpty);
   }
 
   bool get hasAccount => false;

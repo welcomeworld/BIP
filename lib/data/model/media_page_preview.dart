@@ -4,6 +4,7 @@ import 'package:bip/data/model/user_info.dart';
 class MediaPagePreview {
   String sourceName = "";
   String mediaPageId = "";
+  String get uniqueId => sourceName + mediaPageId;
   Map<String, dynamic> extras = {};
   MediaType mediaType = MediaType.video;
 

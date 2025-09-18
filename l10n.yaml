@@ -3,3 +3,4 @@ template-arb-file: app_zh.arb
 output-localization-file: app_locale.dart
 output-class: AppLocale
 use-escaping: true
+synthetic-package: false
