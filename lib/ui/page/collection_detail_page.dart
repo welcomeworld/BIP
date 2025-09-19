@@ -90,19 +90,22 @@ class _CollectionDetailPageState
                           backgroundColor: colorScheme.surface,
                           elevation: 0,
                           actions: [
-                            IconButton(
-                              icon: searchOpen
-                                  ? Icon(
-                                      Icons.close,
-                                      size: 24,
-                                      color: colorScheme.onSurface,
-                                    )
-                                  : SimpleSvg(
-                                      "assets/img/ic_search.svg",
-                                      size: 24,
-                                      color: colorScheme.onSurface,
-                                    ),
-                              onPressed: bloc.handleSearchClick,
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: IconButton(
+                                icon: searchOpen
+                                    ? Icon(
+                                        Icons.close,
+                                        size: 24,
+                                        color: colorScheme.onSurface,
+                                      )
+                                    : SimpleSvg(
+                                        "assets/img/ic_search.svg",
+                                        size: 24,
+                                        color: colorScheme.onSurface,
+                                      ),
+                                onPressed: bloc.handleSearchClick,
+                              ),
                             )
                           ],
                           floating: false,

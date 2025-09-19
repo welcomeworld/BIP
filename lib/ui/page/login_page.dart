@@ -25,6 +25,16 @@ class _LoginPageState extends BlocState<LoginPage, LoginBloc> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).maybePop();
+          },
+          padding: EdgeInsets.zero,
+          icon: const Icon(Icons.arrow_back),
+        ),
+        title: Text(localeString.login),
+      ),
       body: SafeArea(
         child: Center(
           child: StreamBuilder(

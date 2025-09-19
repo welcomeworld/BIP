@@ -254,3 +254,21 @@ void _showItemListDialog(
     },
   );
 }
+
+class BipBackButton extends StatelessWidget {
+  const BipBackButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        Navigator.of(context).maybePop();
+      },
+      padding: EdgeInsets.zero,
+      icon: const Icon(
+        Icons.arrow_back,
+        color: Colors.white,
+      ),
+    );
+  }
+}

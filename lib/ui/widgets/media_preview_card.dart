@@ -126,18 +126,20 @@ Widget _videoPreviewCard(BuildContext context, MediaPagePreview previewDetail,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  RichText(
-                    text: buildTextSpans(
-                      previewDetail.title,
-                      context,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: colorScheme.onSurfaceVariant,
+                  Expanded(
+                    child: RichText(
+                      text: buildTextSpans(
+                        previewDetail.title,
+                        context,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                       ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
                   ),
                   Column(
                     children: [

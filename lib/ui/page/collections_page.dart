@@ -52,26 +52,29 @@ class _CollectionsPageState
                   backgroundColor: colorScheme.surface,
                   elevation: 0,
                   actions: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.add,
-                        size: 24,
-                        color: colorScheme.onSurface,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.add,
+                          size: 24,
+                          color: colorScheme.onSurface,
+                        ),
+                        onPressed: () {
+                          // directly push a dialog to input collection name and visibility
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const CollectionCreateDialog();
+                            },
+                          ).then((value) {
+                            if (value != null) {
+                              bloc.addCollection(value);
+                              bloc.refresh();
+                            }
+                          });
+                        },
                       ),
-                      onPressed: () {
-                        // directly push a dialog to input collection name and visibility
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const CollectionCreateDialog();
-                          },
-                        ).then((value) {
-                          if (value != null) {
-                            bloc.addCollection(value);
-                            bloc.refresh();
-                          }
-                        });
-                      },
                     )
                   ],
                   floating: false,

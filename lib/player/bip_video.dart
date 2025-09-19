@@ -16,6 +16,7 @@ class BipVideo extends StatelessWidget {
         fullscreen: _fullTheme(context),
         child: Video(
           controller: controller,
+          controls: MaterialVideoControls,
           onEnterFullscreen: () async {
             // hide system bar
             final horizontal = controller.player.state.videoParams.w! >
@@ -23,8 +24,9 @@ class BipVideo extends StatelessWidget {
 
             if (horizontal) {
               await defaultEnterNativeFullscreen();
-            }else{
-              await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+            } else {
+              await SystemChrome.setEnabledSystemUIMode(
+                  SystemUiMode.immersiveSticky);
             }
           },
         ));
@@ -57,8 +59,10 @@ class BipVideo extends StatelessWidget {
       // seekIndicatorBuilder,
       // speedUpIndicatorBuilder,
       primaryButtonBar: [],
-      topButtonBar: [],
-      topButtonBarMargin: const EdgeInsets.symmetric(horizontal: 16.0),
+      topButtonBar: const [
+        BipBackButton(),
+      ],
+      topButtonBarMargin: const EdgeInsets.symmetric(horizontal: 4),
       bottomButtonBar: const [
         MaterialPlayOrPauseButton(iconSize: 32.0),
         Expanded(child: MaterialSeekBar()),
@@ -111,13 +115,14 @@ class BipVideo extends StatelessWidget {
       // speedUpIndicatorBuilder,
       primaryButtonBar: [],
       topButtonBar: const [
+        BipBackButton(),
         Expanded(flex: 1, child: TitleView()),
         Expanded(
           flex: 1,
           child: SizedBox.shrink(),
         )
       ],
-      topButtonBarMargin: const EdgeInsets.symmetric(horizontal: 8.0),
+      topButtonBarMargin: const EdgeInsets.symmetric(horizontal: 4),
       bottomButtonBar: const [
         Expanded(
           child: Column(
