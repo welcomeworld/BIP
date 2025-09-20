@@ -52,7 +52,7 @@ class _MediaPageDetailReplyPageState
                   controller: bloc.scrollController,
                   slivers: [
                     SliverPersistentHeader(
-                      delegate: ReplyListDelegate(),
+                      delegate: ReplyListDelegate(widget.pageDetail.replyCount),
                       pinned: true,
                     ),
                     SliverToBoxAdapter(
@@ -210,6 +210,9 @@ class ReplyListDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => 40; // 进度条的最小高度
   @override
   double get maxExtent => 40; // 进度条的最大高度
+  final int replyCount;
+
+  ReplyListDelegate(this.replyCount);
 
   @override
   Widget build(
@@ -222,7 +225,7 @@ class ReplyListDelegate extends SliverPersistentHeaderDelegate {
           Expanded(
             child: Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
@@ -236,6 +239,18 @@ class ReplyListDelegate extends SliverPersistentHeaderDelegate {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: Text(
+                    "$replyCount",
+                    style: TextStyle(
+                      color: colorScheme.onSurface,
+                      fontWeight: FontWeight.w300,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const Spacer(),
                 IconButton(
                   onPressed: () {
                     BipRouter.rootRouter.maybePop();

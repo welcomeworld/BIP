@@ -251,6 +251,7 @@ class BiliSource extends Source {
         _userInfo = UserInfo();
         _userInfo?.name = userData.uname!;
         _userInfo?.avatar = userData.face!;
+        _userInfo?.level = userData.levelInfo?.currentLevel ?? 0;
         KvStore.getSp()
             .setString(Constant.kvKeyBiliUser, jsonEncode(_userInfo));
       }
@@ -495,6 +496,7 @@ class BiliSource extends Source {
       result.coverPortrait = false;
       result.tags = tagData.map((tag) => tag.tagName).toList();
       result.playCount = pageData.stat.view;
+      result.replyCount = pageData.stat.reply;
       // map relatedData to MediaPagePreview
       for (var related in relatedData) {
         MediaPagePreview relatedPreview = MediaPagePreview();
@@ -588,6 +590,7 @@ class BiliSource extends Source {
       result.coverPortrait = true;
       result.tags = bangumiData.styles;
       result.playCount = bangumiData.stat.views;
+      result.replyCount = bangumiData.stat.reply;
       result.score = bangumiData.rating.score;
       result.indexShow = bangumiData.newEp.desc;
 
@@ -697,6 +700,10 @@ class BiliSource extends Source {
         "${page.extras[SourceExtraKey.aid] ?? page.extras[SourceExtraKey.bvid] ?? page.extras[SourceExtraKey.ssid] ?? ""}";
     if (pageNumber == 1) {
       _replyNextKey[oid] = "";
+    }
+    if ((_replyNextKey[oid]?.isEmpty ?? true) && pageNumber != 1) {
+      return SourceApiResult(result,
+          resultCode: SourceApiResult.resultSourceEmpty);
     }
     try {
       Map<String, dynamic> extraParameters = {};

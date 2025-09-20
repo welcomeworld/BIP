@@ -17,6 +17,7 @@ class MediaPageDetail {
   bool coverPortrait = false;
   List<String> tags = [];
   int playCount = 0;
+  int replyCount = 0;
   Map<String, List<MediaInfo>> playlists = {};
   Map<String, List<MediaInfo>> additionPlaylists = {};
   List<MediaPagePreview> relatedMediaList = [];
