@@ -7,6 +7,7 @@ import 'package:bip/data/model/user_info.dart';
 import '../../utils/constant.dart';
 import '../model/media_page_detail.dart';
 import '../model/media_page_preview.dart';
+import '../model/index_configuration.dart';
 
 abstract class Source {
   String get sourceName;
@@ -107,6 +108,16 @@ abstract class Source {
   bool get hasAccount => false;
 
   UserInfo? get accountInfo => null;
+
+  // bangumi index default implementations
+  Future<IndexConfiguration> requestBangumiIndexConfiguration() async {
+    return IndexConfiguration(availableCategories: []);
+  }
+
+  Future<SourceApiResult<List<MediaPagePreview>>> requestBangumiIndex(
+      IndexConfiguration configuration, int pageNumber) async {
+    return SourceApiResult([], resultCode: SourceApiResult.resultSourceEmpty);
+  }
 }
 
 class SourceApiResult<T> {

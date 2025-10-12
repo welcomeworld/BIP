@@ -7,6 +7,7 @@ import 'package:bip/data/source_manager.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'model/media_info.dart';
+import 'model/index_configuration.dart';
 import 'model/media_page_detail.dart';
 import 'model/reply.dart';
 
@@ -67,6 +68,17 @@ class MediaManager {
 
   Future<SourceApiResult<List<String>>> requestSearchHot() async {
     return await _sourceManager.mainSource.requestSearchHot();
+  }
+
+  // bangumi index
+  Future<IndexConfiguration> requestBangumiIndexConfiguration() async {
+    return await _sourceManager.mainSource.requestBangumiIndexConfiguration();
+  }
+
+  Future<SourceApiResult<List<MediaPagePreview>>> requestBangumiIndex(
+      IndexConfiguration configuration, int pageNumber) async {
+    return await _sourceManager.mainSource
+        .requestBangumiIndex(configuration, pageNumber);
   }
 
   Future<SourceApiResult<MediaPageDetail>> requestDetail(
