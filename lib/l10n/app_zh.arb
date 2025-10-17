@@ -41,5 +41,7 @@
      }
    }
  },
- "login":"登录"
+ "login":"登录",
+ "dynamicTheme":"系统动态主题",
+ "customTheme":"自定义颜色"
 }

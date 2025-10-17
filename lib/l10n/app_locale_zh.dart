@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_locale.dart';
 
 // ignore_for_file: type=lint
@@ -105,4 +106,10 @@ class AppLocaleZh extends AppLocale {
   String deleteConfirmation(String title) {
     return '您确定要删除 \"$title\" 吗？此操作无法撤销，所有内容将被永久删除。';
   }
+
+  @override
+  String get dynamicTheme => '系统动态主题';
+
+  @override
+  String get customTheme => '自定义颜色';
 }

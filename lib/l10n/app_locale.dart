@@ -284,6 +284,18 @@ abstract class AppLocale {
   /// In zh, this message translates to:
   /// **'您确定要删除 \"{title}\" 吗？此操作无法撤销，所有内容将被永久删除。'**
   String deleteConfirmation(String title);
+
+  /// No description provided for @dynamicTheme.
+  ///
+  /// In zh, this message translates to:
+  /// **'系统动态主题'**
+  String get dynamicTheme;
+
+  /// No description provided for @customTheme.
+  ///
+  /// In zh, this message translates to:
+  /// **'自定义颜色'**
+  String get customTheme;
 }
 
 class _AppLocaleDelegate extends LocalizationsDelegate<AppLocale> {

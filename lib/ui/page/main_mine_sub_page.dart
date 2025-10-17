@@ -75,7 +75,9 @@ class _MainMineSubPageState
         _listTileItem(
           "assets/img/ic_theme.svg",
           localeString.theme,
-          () {},
+          () {
+            BipRouter.of(context).push(PageNames.themes);
+          },
         ),
         _listTileItem(
           "assets/img/ic_settings.svg",

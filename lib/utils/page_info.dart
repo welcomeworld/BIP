@@ -27,4 +27,5 @@ class PageNames {
   static const String history = "/history";
   static const String collections = "/collections";
   static const String collectionDetail = "/collection/detail";
+  static const String themes = "/themes";
 }

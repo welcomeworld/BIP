@@ -31,6 +31,7 @@ dependencies:
   drift: ^2.21.0
   drift_flutter: ^0.2.4
   barcode_widget: ^2.0.4
+  flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
   flutter_test:

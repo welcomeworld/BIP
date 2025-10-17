@@ -1,7 +1,7 @@
 import 'package:bip/data/media_manager.dart';
 import 'package:bip/data/persistence/kv_store.dart';
 import 'package:bip/gen_auto_import.dart';
-import 'package:bip/ui/theme/theme_colors.dart';
+import 'package:bip/ui/theme/theme_notifier.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:bip/utils/constant.dart';
 import 'package:bip/utils/proxy_server.dart';
@@ -17,6 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
   await _initMainIsolate();
+  await initThemeNotifier();
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
@@ -47,25 +48,45 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return DynamicColorBuilder(
-        builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-      ColorScheme lightColorScheme = ColorScheme.fromSeed(
-        brightness: Brightness.light,
-        seedColor: lightDynamic?.primary ?? ThemeColors.brandColor,
-      ).harmonized();
-      ColorScheme darkColorScheme = ColorScheme.fromSeed(
-        brightness: Brightness.dark,
-        seedColor: darkDynamic?.primary ?? ThemeColors.brandColor,
-      ).harmonized();
-      return MaterialApp.router(
-        title: 'BIP',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(colorScheme: lightColorScheme, useMaterial3: true),
-        darkTheme: ThemeData(colorScheme: darkColorScheme, useMaterial3: true),
-        localizationsDelegates: AppLocale.localizationsDelegates,
-        supportedLocales: AppLocale.supportedLocales,
-        routerDelegate: BipRouter.rootRouter,
-      );
-    });
+    return ValueListenableBuilder<Color>(
+      valueListenable: themeNotifier,
+      builder: (context, themeColor, _) {
+        return DynamicColorBuilder(
+          builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+            themeNotifier.setDynamicColor(lightDynamic?.primary);
+            final useDynamic = themeNotifier.isDynamicTheme;
+            ColorScheme lightColorScheme = (useDynamic && lightDynamic != null)
+                ? lightDynamic
+                : ColorScheme.fromSeed(
+                    brightness: Brightness.light,
+                    seedColor: themeColor,
+                    primary: themeColor,
+                  ).harmonized();
+            ColorScheme darkColorScheme = (useDynamic && darkDynamic != null)
+                ? darkDynamic
+                : ColorScheme.fromSeed(
+                    brightness: Brightness.dark,
+                    seedColor: themeColor,
+                    primary: themeColor,
+                  ).harmonized();
+            return MaterialApp.router(
+              title: 'BIP',
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                colorScheme: lightColorScheme,
+                useMaterial3: true,
+              ),
+              darkTheme: ThemeData(
+                colorScheme: darkColorScheme,
+                useMaterial3: true,
+              ),
+              localizationsDelegates: AppLocale.localizationsDelegates,
+              supportedLocales: AppLocale.supportedLocales,
+              routerDelegate: BipRouter.rootRouter,
+            );
+          },
+        );
+      },
+    );
   }
 }

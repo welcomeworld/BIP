@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../ui/page/collection_detail_page.dart';
+import '../ui/page/theme_settings_page.dart';
 
 class BipRouter extends RouterDelegate<String>
     with PopNavigatorRouterDelegateMixin, ChangeNotifier {
@@ -112,6 +113,11 @@ class BipRouter extends RouterDelegate<String>
           child: CollectionDetailPage(
             page.extras["data"],
           ),
+        );
+      case PageNames.themes:
+        return const MaterialPage(
+          name: PageNames.themes,
+          child: ThemeSettingsPage(),
         );
     }
     return MaterialPage(name: page.pageName, child: const SizedBox.shrink());
