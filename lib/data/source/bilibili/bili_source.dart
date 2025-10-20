@@ -1153,9 +1153,7 @@ class BiliSource extends Source {
       case MediaType.live:
         return 8;
       case MediaType.article:
-        return 12; // 专栏评论
-      default:
-        return 1; // 默认视频评论
+        return 12; // 默认视频评论
     }
   }
 
