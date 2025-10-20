@@ -296,6 +296,42 @@ abstract class AppLocale {
   /// In zh, this message translates to:
   /// **'自定义颜色'**
   String get customTheme;
+
+  /// No description provided for @bestMedia.
+  ///
+  /// In zh, this message translates to:
+  /// **'优先最佳画质'**
+  String get bestMedia;
+
+  /// No description provided for @enterFull.
+  ///
+  /// In zh, this message translates to:
+  /// **'播放页面默认全屏'**
+  String get enterFull;
+
+  /// No description provided for @about.
+  ///
+  /// In zh, this message translates to:
+  /// **'关于'**
+  String get about;
+
+  /// No description provided for @license.
+  ///
+  /// In zh, this message translates to:
+  /// **'许可'**
+  String get license;
+
+  /// No description provided for @feedback.
+  ///
+  /// In zh, this message translates to:
+  /// **'反馈/建议'**
+  String get feedback;
+
+  /// No description provided for @version.
+  ///
+  /// In zh, this message translates to:
+  /// **'版本'**
+  String get version;
 }
 
 class _AppLocaleDelegate extends LocalizationsDelegate<AppLocale> {

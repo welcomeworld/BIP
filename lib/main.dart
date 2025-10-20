@@ -1,5 +1,6 @@
 import 'package:bip/data/media_manager.dart';
 import 'package:bip/data/persistence/kv_store.dart';
+import 'package:bip/data/settings_manager.dart';
 import 'package:bip/gen_auto_import.dart';
 import 'package:bip/ui/theme/theme_notifier.dart';
 import 'package:bip/utils/bip_router.dart';
@@ -38,6 +39,7 @@ Future<void> _initMainIsolate() async {
   defaultIsolateConfig["rootToken"] = ServicesBinding.rootIsolateToken;
   Constant.cookiePath = (await getApplicationCacheDirectory()).path;
   await KvStore.init();
+  await SettingsManager().init();
   MediaManager().refreshExplore();
   startProxyIso();
 }

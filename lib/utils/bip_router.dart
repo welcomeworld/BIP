@@ -1,9 +1,11 @@
+import 'package:bip/ui/page/about_page.dart';
 import 'package:bip/ui/page/collections_page.dart';
 import 'package:bip/ui/page/history_page.dart';
 import 'package:bip/ui/page/login_page.dart';
 import 'package:bip/ui/page/main_page.dart';
 import 'package:bip/ui/page/media_page_detail_page.dart';
 import 'package:bip/ui/page/search_page.dart';
+import 'package:bip/ui/page/settings_page.dart';
 import 'package:bip/utils/page_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -118,6 +120,16 @@ class BipRouter extends RouterDelegate<String>
         return const MaterialPage(
           name: PageNames.themes,
           child: ThemeSettingsPage(),
+        );
+      case PageNames.settings:
+        return const MaterialPage(
+          name: PageNames.settings,
+          child: SettingsPage(),
+        );
+      case PageNames.about:
+        return const MaterialPage(
+          name: PageNames.about,
+          child: AboutPage(),
         );
     }
     return MaterialPage(name: page.pageName, child: const SizedBox.shrink());

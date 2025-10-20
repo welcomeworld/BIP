@@ -82,7 +82,9 @@ class _MainMineSubPageState
         _listTileItem(
           "assets/img/ic_settings.svg",
           localeString.settings,
-          () {},
+          () {
+            BipRouter.of(context).push(PageNames.settings);
+          },
         ),
         const SizedBox(height: 24),
       ],

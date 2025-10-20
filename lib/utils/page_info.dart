@@ -28,4 +28,6 @@ class PageNames {
   static const String collections = "/collections";
   static const String collectionDetail = "/collection/detail";
   static const String themes = "/themes";
+  static const String settings = "/settings";
+  static const String about = "/about";
 }

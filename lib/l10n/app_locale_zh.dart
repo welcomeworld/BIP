@@ -112,4 +112,22 @@ class AppLocaleZh extends AppLocale {
 
   @override
   String get customTheme => '自定义颜色';
+
+  @override
+  String get bestMedia => '优先最佳画质';
+
+  @override
+  String get enterFull => '播放页面默认全屏';
+
+  @override
+  String get about => '关于';
+
+  @override
+  String get license => '许可';
+
+  @override
+  String get feedback => '反馈/建议';
+
+  @override
+  String get version => '版本';
 }

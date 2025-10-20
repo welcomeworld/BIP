@@ -3,10 +3,12 @@ import 'dart:math';
 
 import 'package:bip/data/model/media_page_detail.dart';
 import 'package:bip/data/model/media_type.dart';
+import 'package:bip/data/model/setting_item.dart';
 import 'package:bip/data/model/user_info.dart';
 import 'package:bip/data/net/bip_cookie_manager.dart';
 import 'package:bip/data/net/web_net.dart';
 import 'package:bip/data/persistence/kv_store.dart';
+import 'package:bip/data/settings_manager.dart';
 import 'package:bip/data/source/bilibili/bili_explore_response.dart';
 import 'package:bip/data/source/bilibili/bili_ticket.dart';
 import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart';
@@ -23,6 +25,7 @@ import 'package:bip/utils/constant.dart';
 import 'package:bip/utils/logger.dart';
 import 'package:dio/dio.dart';
 
+import '../../model/index_configuration.dart';
 import '../../model/media_info.dart';
 import '../../model/media_page_preview.dart';
 import '../../model/reply.dart';
@@ -33,7 +36,6 @@ import 'model/bili_login_qr_validate_response.dart';
 import 'model/bili_search_bangumi_type.dart';
 import 'model/bili_search_video_type.dart';
 import 'model/bili_type_search_response.dart';
-import '../../model/index_configuration.dart';
 
 class BiliSource extends Source {
   @override
@@ -101,16 +103,22 @@ class BiliSource extends Source {
         IndexOption(displayText: "电影", paramValue: "2"),
         IndexOption(displayText: "其他", paramValue: "3"),
       ]),
-      IndexCategory(paramKey: "spoken_language_type", displayName: "配音", options: [
-        IndexOption(displayText: "配音类型", paramValue: "-1"),
-        IndexOption(displayText: "原声", paramValue: "1"),
-        IndexOption(displayText: "中文配音", paramValue: "2"),
-      ]),
+      IndexCategory(
+          paramKey: "spoken_language_type",
+          displayName: "配音",
+          options: [
+            IndexOption(displayText: "配音类型", paramValue: "-1"),
+            IndexOption(displayText: "原声", paramValue: "1"),
+            IndexOption(displayText: "中文配音", paramValue: "2"),
+          ]),
       IndexCategory(paramKey: "area", displayName: "地区", options: [
         IndexOption(displayText: "全部地区", paramValue: "-1"),
         IndexOption(displayText: "日本", paramValue: "2"),
         IndexOption(displayText: "美国", paramValue: "3"),
-        IndexOption(displayText: "其它", paramValue: "1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70"),
+        IndexOption(
+            displayText: "其它",
+            paramValue:
+                "1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70"),
       ]),
       IndexCategory(paramKey: "is_finish", displayName: "状态", options: [
         IndexOption(displayText: "完结状态", paramValue: "-1"),
@@ -211,7 +219,8 @@ class BiliSource extends Source {
     queryParameters["sort"] = 0;
 
     try {
-      var response = await WebNet().get(_indexPath, queryParameters: queryParameters);
+      var response =
+          await WebNet().get(_indexPath, queryParameters: queryParameters);
       if (response.data == null || response.statusCode != 200) {
         return SourceApiResult(
           [],
@@ -233,7 +242,8 @@ class BiliSource extends Source {
         preview.cover = "${item.cover}@480w_640h_1e_1c.webp";
         preview.extras[SourceExtraKey.ssid] = item.seasonId;
         preview.topDec = item.badge;
-        preview.tags = [item.orderType, item.order].where((e) => e.isNotEmpty).toList();
+        preview.tags =
+            [item.orderType, item.order].where((e) => e.isNotEmpty).toList();
         preview.score = double.tryParse(item.score) ?? 0.0;
         preview.indexShow = item.indexShow;
         preview.playCount = 0; // API does not provide play count here
@@ -1200,13 +1210,6 @@ class BiliSource extends Source {
   }
 
   bool get _needBestMedia {
-    var setting = KvStore.getSp().getInt(Constant.kvSettingsMediaQuality) ?? 0;
-    if (setting == 0) {
-      return true; // 0表示自动
-    } else if (setting == 1) {
-      return true; // 1表示最佳画质
-    } else {
-      return false; // 其他值表示不需要最佳画质
-    }
+    return SettingsManager().getValue<bool>(AppSetting.bestMedia);
   }
 }

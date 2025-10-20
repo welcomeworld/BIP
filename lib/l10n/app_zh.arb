@@ -43,5 +43,11 @@
  },
  "login":"登录",
  "dynamicTheme":"系统动态主题",
- "customTheme":"自定义颜色"
+ "customTheme":"自定义颜色",
+ "bestMedia":"优先最佳画质",
+ "enterFull":"播放页面默认全屏",
+ "about":"关于",
+ "license":"许可",
+ "feedback":"反馈/建议",
+ "version":"版本"
 }
