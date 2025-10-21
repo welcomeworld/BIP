@@ -126,7 +126,14 @@ class _MainMineSubPageState
     final isLogin = userInfo != null;
     return IconButton(
       onPressed: () {
-        if (!isLogin) {
+        if (isLogin) {
+          BipRouter.of(context).pushPageInfo(
+            PageInfo(
+              PageNames.userDetail,
+              extras: {"data": userInfo},
+            ),
+          );
+        } else {
           bloc.login(sourceName);
         }
       },

@@ -139,7 +139,7 @@ class GugufanSource extends Source {
             "$_homeUrl${related.attributes["href"] ?? ""}";
         relatedPreview.title = related.attributes["title"] ?? "";
         relatedPreview.mediaPageId = relatedPreview.title;
-        UserInfo owner = UserInfo();
+        UserInfo owner = UserInfo(sourceName: sourceName);
         owner.name = sourceName;
         relatedPreview.owner = owner;
         relatedPreview.coverPortrait = true;
@@ -269,7 +269,7 @@ class GugufanSource extends Source {
         item.querySelector("div.right div.thumb-content div.thumb-txt")?.text ??
             "";
     pagePreview.mediaPageId = pagePreview.title;
-    UserInfo owner = UserInfo();
+    UserInfo owner = UserInfo(sourceName: sourceName);
     owner.name = sourceName;
     pagePreview.owner = owner;
     pagePreview.coverPortrait = true;

@@ -58,8 +58,10 @@ class _CollectionCreateDialogState extends State<CollectionCreateDialog> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12), // MD3 输入框圆角
                   ),
-                  filled: true, // MD3 推荐填充背景
-                  fillColor: theme.colorScheme.surfaceContainerHighest, // MD3 容器颜色
+                  filled: true,
+                  // MD3 推荐填充背景
+                  fillColor: theme.colorScheme.surfaceContainerHighest,
+                  // MD3 容器颜色
                   prefixIcon: Icon(
                     Icons.title,
                     color: theme.colorScheme.onSurfaceVariant,
@@ -113,7 +115,8 @@ class _CollectionCreateDialogState extends State<CollectionCreateDialog> {
                       });
                     },
                     activeColor: theme.colorScheme.primary, // MD3 主色
-                    inactiveTrackColor: theme.colorScheme.surfaceContainerHighest,
+                    inactiveTrackColor:
+                        theme.colorScheme.surfaceContainerHighest,
                   ),
                 ],
               ),
@@ -135,7 +138,8 @@ class _CollectionCreateDialogState extends State<CollectionCreateDialog> {
                     child: Text(localeString.cancel),
                   ),
                   const SizedBox(width: 8),
-                  FilledButton( // 使用 FilledButton 替换 ElevatedButton，符合 MD3
+                  FilledButton(
+                    // 使用 FilledButton 替换 ElevatedButton，符合 MD3
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         Navigator.of(context).pop(
@@ -146,7 +150,9 @@ class _CollectionCreateDialogState extends State<CollectionCreateDialog> {
                             sourceName: '',
                             local: true,
                             createTime: DateTime.now(),
-                            owner: UserInfo(name: localeString.localCollection),
+                            owner: UserInfo(
+                                sourceName: "local",
+                                name: localeString.localCollection),
                           ),
                         );
                       }

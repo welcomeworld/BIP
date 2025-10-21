@@ -332,6 +332,12 @@ abstract class AppLocale {
   /// In zh, this message translates to:
   /// **'版本'**
   String get version;
+
+  /// No description provided for @logout.
+  ///
+  /// In zh, this message translates to:
+  /// **'退出登录'**
+  String get logout;
 }
 
 class _AppLocaleDelegate extends LocalizationsDelegate<AppLocale> {

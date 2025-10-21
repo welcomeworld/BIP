@@ -5,9 +5,9 @@ import 'package:bip/data/model/reply.dart';
 import 'package:bip/data/model/user_info.dart';
 
 import '../../utils/constant.dart';
+import '../model/index_configuration.dart';
 import '../model/media_page_detail.dart';
 import '../model/media_page_preview.dart';
-import '../model/index_configuration.dart';
 
 abstract class Source {
   String get sourceName;
@@ -38,6 +38,10 @@ abstract class Source {
 
   Future<SourceLoginResult> validateLoginQr() async {
     return SourceLoginResult.failed;
+  }
+
+  Future<SourceApiResult<bool>> logout() async {
+    return SourceApiResult(false);
   }
 
   Future<SourceApiResult<List<Reply>>> requestReplies(

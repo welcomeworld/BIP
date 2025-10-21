@@ -6,6 +6,7 @@ import 'package:bip/ui/page/main_page.dart';
 import 'package:bip/ui/page/media_page_detail_page.dart';
 import 'package:bip/ui/page/search_page.dart';
 import 'package:bip/ui/page/settings_page.dart';
+import 'package:bip/ui/page/user_detail_page.dart';
 import 'package:bip/utils/page_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -130,6 +131,13 @@ class BipRouter extends RouterDelegate<String>
         return const MaterialPage(
           name: PageNames.about,
           child: AboutPage(),
+        );
+      case PageNames.userDetail:
+        return MaterialPage(
+          name: PageNames.userDetail,
+          child: UserDetailPage(
+            page.extras["data"],
+          ),
         );
     }
     return MaterialPage(name: page.pageName, child: const SizedBox.shrink());

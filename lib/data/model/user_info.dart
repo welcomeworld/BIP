@@ -1,4 +1,5 @@
 class UserInfo {
+  String sourceName;
   Map<String, dynamic> extras = {};
   String name = "";
   String avatar = "";
@@ -9,6 +10,7 @@ class UserInfo {
 
   // Constructor
   UserInfo({
+    required this.sourceName,
     this.extras = const {},
     this.name = "",
     this.avatar = "",
@@ -21,6 +23,7 @@ class UserInfo {
   // Method to create a UserInfo object from a map (JSON)
   factory UserInfo.fromJson(Map<String, dynamic> json) {
     return UserInfo(
+      sourceName: json['sourceName'] as String? ?? "",
       extras: json['extras'] != null
           ? Map<String, dynamic>.from(json['extras'])
           : {},
@@ -36,6 +39,7 @@ class UserInfo {
   // Method to convert a UserInfo object to a map (JSON)
   Map<String, dynamic> toJson() {
     return {
+      'sourceName': sourceName,
       'extras': extras,
       'name': name,
       'avatar': avatar,

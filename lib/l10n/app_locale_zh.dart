@@ -130,4 +130,7 @@ class AppLocaleZh extends AppLocale {
 
   @override
   String get version => '版本';
+
+  @override
+  String get logout => '退出登录';
 }

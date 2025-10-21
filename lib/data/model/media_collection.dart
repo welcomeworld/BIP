@@ -33,5 +33,5 @@ class MediaCollection {
         extras = extras ?? {},
         createTime = createTime ?? DateTime.now(),
         items = items ?? [],
-        owner = owner ?? UserInfo();
+        owner = owner ?? UserInfo(sourceName: sourceName);
 }

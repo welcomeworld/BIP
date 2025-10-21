@@ -160,7 +160,7 @@ class BimiSource extends Source {
         relatedPreview.title =
             related.querySelector("a.img")?.attributes["title"] ?? "";
         relatedPreview.mediaPageId = relatedPreview.title;
-        UserInfo owner = UserInfo();
+        UserInfo owner = UserInfo(sourceName: sourceName);
         owner.name = sourceName;
         relatedPreview.owner = owner;
         relatedPreview.coverPortrait = true;
@@ -368,7 +368,7 @@ class BimiSource extends Source {
     pagePreview.sourceName = sourceName;
     pagePreview.title = item.querySelector("div.info a")?.text ?? "";
     pagePreview.mediaPageId = pagePreview.title;
-    UserInfo owner = UserInfo();
+    UserInfo owner = UserInfo(sourceName: sourceName);
     owner.name = sourceName;
     pagePreview.owner = owner;
     pagePreview.coverPortrait = true;

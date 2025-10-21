@@ -81,7 +81,7 @@ class BiliSource extends Source {
 
   BiliSource() {
     final userCache = KvStore.getSp().getString(Constant.kvKeyBiliUser);
-    if (userCache != null) {
+    if (userCache != null && userCache.isNotEmpty) {
       _userInfo = UserInfo.fromJson(jsonDecode(userCache));
     }
   }
@@ -363,7 +363,7 @@ class BiliSource extends Source {
         pagePreview.mediaType = _mapMediaType(avItem.gotoX);
         pagePreview.mediaPageId = avItem.bvid;
         pagePreview.title = avItem.title;
-        UserInfo owner = UserInfo();
+        UserInfo owner = UserInfo(sourceName: sourceName);
         owner.name = avItem.owner?.name ?? "";
         pagePreview.owner = owner;
         pagePreview.coverPortrait = false;
@@ -428,7 +428,7 @@ class BiliSource extends Source {
           BiliUserNavInfoResponse.fromJson(navResponse.data);
       if (biliUserNavInfoResponse.data != null) {
         final userData = biliUserNavInfoResponse.data!;
-        _userInfo = UserInfo();
+        _userInfo = UserInfo(sourceName: sourceName);
         _userInfo?.name = userData.uname!;
         _userInfo?.avatar = userData.face!;
         _userInfo?.level = userData.levelInfo?.currentLevel ?? 0;
@@ -437,6 +437,13 @@ class BiliSource extends Source {
       }
     }
     return loginResult;
+  }
+
+  @override
+  Future<SourceApiResult<bool>> logout() async {
+    _userInfo = null;
+    KvStore.getSp().remove(Constant.kvKeyBiliUser);
+    return SourceApiResult(true);
   }
 
   String _getLastShowQuery() {
@@ -536,7 +543,7 @@ class BiliSource extends Source {
     pagePreview.mediaPageId = item.bvid ?? "";
     pagePreview.mediaType = MediaType.video;
     pagePreview.title = item.title!;
-    UserInfo owner = UserInfo();
+    UserInfo owner = UserInfo(sourceName: sourceName);
     owner.name = item.author ?? "";
     pagePreview.owner = owner;
     pagePreview.coverPortrait = false;
@@ -562,7 +569,7 @@ class BiliSource extends Source {
     pagePreview.sourceName = sourceName;
     pagePreview.mediaPageId = "${item.ssid}";
     pagePreview.title = item.title!;
-    UserInfo owner = UserInfo();
+    UserInfo owner = UserInfo(sourceName: sourceName);
     owner.name = item.author ?? "";
     pagePreview.owner = owner;
     pagePreview.coverPortrait = true;
@@ -686,7 +693,7 @@ class BiliSource extends Source {
         relatedPreview.sourceName = sourceName;
         relatedPreview.mediaPageId = related.bvid;
         relatedPreview.title = related.title;
-        UserInfo owner = UserInfo();
+        UserInfo owner = UserInfo(sourceName: sourceName);
         owner.name = related.owner.name;
         owner.avatar = related.owner.face;
         relatedPreview.owner = owner;
@@ -836,7 +843,7 @@ class BiliSource extends Source {
         relatedPreview.mediaType = MediaType.bangumi;
         relatedPreview.extras[SourceExtraKey.ssid] = related.seasonId;
         relatedPreview.title = related.title;
-        UserInfo owner = UserInfo();
+        UserInfo owner = UserInfo(sourceName: sourceName);
         owner.name = "哔哩哔哩番剧";
         relatedPreview.owner = owner;
         relatedPreview.coverPortrait = true;
@@ -1170,6 +1177,7 @@ class BiliSource extends Source {
         .toList();
     replyContent.members = item.content.members
         .map((member) => UserInfo(
+              sourceName: sourceName,
               name: member.uname,
               avatar: member.avatar,
               level: member.levelInfo.currentLevel,
@@ -1178,6 +1186,7 @@ class BiliSource extends Source {
         .toList();
     var result = Reply(item.rpidStr,
         owner: UserInfo(
+          sourceName: sourceName,
           name: item.member.uname,
           avatar: item.member.avatar,
           level: item.member.levelInfo.currentLevel,

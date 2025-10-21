@@ -46,7 +46,7 @@ class MediaPagePreview {
     this.indexShow = "",
   })  : extras = extras ?? {},
         tags = tags ?? [],
-        owner = owner ?? UserInfo();
+        owner = owner ?? UserInfo(sourceName: sourceName);
 
   factory MediaPagePreview.fromJson(Map<String, dynamic> json) {
     return MediaPagePreview(

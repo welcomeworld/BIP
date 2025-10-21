@@ -30,4 +30,5 @@ class PageNames {
   static const String themes = "/themes";
   static const String settings = "/settings";
   static const String about = "/about";
+  static const String userDetail = "/user/detail";
 }

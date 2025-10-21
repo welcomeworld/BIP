@@ -49,5 +49,6 @@
  "about":"关于",
  "license":"许可",
  "feedback":"反馈/建议",
- "version":"版本"
+ "version":"版本",
+ "logout":"退出登录"
 }
