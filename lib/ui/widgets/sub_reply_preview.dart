@@ -1,7 +1,7 @@
 import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/model/reply.dart';
+import '../../domain/model/reply.dart';
 
 class SubReplyPreview extends StatelessWidget {
   const SubReplyPreview({super.key, required this.reply});

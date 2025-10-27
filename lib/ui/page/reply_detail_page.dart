@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 
 import '../../bloc/bloc_state.dart';
 import '../../bloc/reply_detail_bloc.dart';
-import '../../data/model/reply.dart';
+import '../../domain/model/reply.dart';
 import '../../gen_auto_import.dart';
 import '../../utils/bip_router.dart';
 import '../widgets/reply_card.dart';

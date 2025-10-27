@@ -1,13 +1,14 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:bip/utils/page_info.dart';
 
-import '../data/media_manager.dart';
-import '../data/model/user_info.dart';
+import '../domain/model/user_info.dart';
 import 'bloc.dart';
 
 class MainMineSubBloc extends Bloc {
   MainMineSubBloc({MediaManager? mediaManager}) {
-    _mediaManager = mediaManager ?? MediaManager();
+    _mediaManager = mediaManager ?? getIt<MediaManager>();
   }
 
   late final MediaManager _mediaManager;

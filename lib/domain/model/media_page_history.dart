@@ -1,4 +1,4 @@
-import 'package:bip/data/model/media_page_preview.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
 
 class MediaPageHistory {
   final MediaPagePreview mediaPagePreview;

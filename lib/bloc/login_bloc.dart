@@ -1,15 +1,16 @@
 import 'dart:async';
 
-import 'package:bip/data/source/source.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
+import 'package:bip/domain/interfaces/source.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../data/media_manager.dart';
 import 'bloc.dart';
 
 class LoginBloc extends Bloc {
   LoginBloc({MediaManager? mediaManager}) {
-    _mediaManager = mediaManager ?? MediaManager();
+    _mediaManager = mediaManager ?? getIt<MediaManager>();
   }
 
   late final MediaManager _mediaManager;

@@ -1,5 +1,5 @@
-import 'package:bip/data/model/media_collection.dart';
-import 'package:bip/data/model/user_info.dart';
+import 'package:bip/domain/model/media_collection.dart';
+import 'package:bip/domain/model/user_info.dart';
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_locale.dart';

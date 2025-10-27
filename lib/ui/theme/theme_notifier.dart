@@ -1,4 +1,4 @@
-import 'package:bip/data/persistence/kv_store.dart';
+import 'package:bip/domain/interfaces/kv_store.dart';
 import 'package:bip/ui/theme/theme_colors.dart';
 import 'package:bip/utils/constant.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +12,8 @@ class ThemeNotifier extends ValueNotifier<Color> {
     {'name': '宝石蓝', 'color': Color(0xFF29B6F6)},
     {'name': '罗兰紫', 'color': Color(0xFF9B59B6)},
   ];
+
+  final KvStore _kvStore;
 
   bool _isDynamicTheme = false;
 
@@ -37,32 +39,32 @@ class ThemeNotifier extends ValueNotifier<Color> {
     return false;
   }
 
-  ThemeNotifier(super.value, {bool isDynamic = true}) {
+  ThemeNotifier(super.value, this._kvStore, {bool isDynamic = true}) {
     _isDynamicTheme = isDynamic;
   }
 
-  static Future<ThemeNotifier> load() async {
-    final sp = KvStore.getSp();
-    final isDynamic = sp.getBool(Constant.kvKeyDynamicTheme) ?? true;
+  static ThemeNotifier load(KvStore kvStore) {
+    final isDynamic = kvStore.getBool(Constant.kvKeyDynamicTheme) ?? true;
     if (isDynamic) {
       // 动态主题色，value 可用默认色
-      return ThemeNotifier(presetColors[0]['color'] as Color, isDynamic: true);
+      return ThemeNotifier(presetColors[0]['color'] as Color, kvStore,
+          isDynamic: true);
     } else {
-      int? colorValue = sp.getInt(Constant.kvKeyThemeColor);
+      int? colorValue = kvStore.getInt(Constant.kvKeyThemeColor);
       return ThemeNotifier(
         colorValue != null
             ? Color(colorValue)
             : presetColors[0]['color'] as Color,
+        kvStore,
         isDynamic: false,
       );
     }
   }
 
   Future<void> setThemeColor(Color color, {bool dynamic = false}) async {
-    final sp = KvStore.getSp();
-    await sp.setBool(Constant.kvKeyDynamicTheme, dynamic);
+    await _kvStore.setBool(Constant.kvKeyDynamicTheme, dynamic);
     if (!dynamic) {
-      await sp.setInt(Constant.kvKeyThemeColor, color.toARGB32());
+      await _kvStore.setInt(Constant.kvKeyThemeColor, color.toARGB32());
       value = color;
     }
     _isDynamicTheme = dynamic;
@@ -70,8 +72,7 @@ class ThemeNotifier extends ValueNotifier<Color> {
   }
 
   Future<void> setDynamicTheme(bool enable) async {
-    final sp = KvStore.getSp();
-    await sp.setBool(Constant.kvKeyDynamicTheme, enable);
+    await _kvStore.setBool(Constant.kvKeyDynamicTheme, enable);
     _isDynamicTheme = enable;
     notifyListeners();
   }
@@ -79,7 +80,3 @@ class ThemeNotifier extends ValueNotifier<Color> {
 
 // 全局单例
 late final ThemeNotifier themeNotifier;
-
-Future<void> initThemeNotifier() async {
-  themeNotifier = await ThemeNotifier.load();
-}

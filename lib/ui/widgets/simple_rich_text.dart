@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../data/model/reply.dart';
+import '../../domain/model/reply.dart';
 
 TextSpan buildTextSpans(String text, BuildContext context, {TextStyle? style}) {
   final List<TextSpan> spans = [];

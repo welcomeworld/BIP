@@ -2,8 +2,8 @@ import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../data/model/media_page_preview.dart';
-import '../../data/model/media_type.dart';
+import '../../domain/model/media_page_preview.dart';
+import '../../domain/model/media_type.dart';
 import '../../utils/bip_router.dart';
 import '../../utils/common_util.dart';
 import '../../utils/page_info.dart';

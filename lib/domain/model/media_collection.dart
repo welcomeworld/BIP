@@ -1,5 +1,5 @@
-import 'package:bip/data/model/media_page_preview.dart';
-import 'package:bip/data/model/user_info.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
+import 'package:bip/domain/model/user_info.dart';
 
 class MediaCollection {
   static const String localIdsKey = "local_ids";

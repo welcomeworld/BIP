@@ -1,14 +1,14 @@
 import 'package:bip/data/drift_tables.dart';
-import 'package:bip/utils/logger.dart';
+import 'package:bip/domain/interfaces/database.dart';
+import 'package:bip/domain/model/media_collection.dart';
+import 'package:bip/domain/model/media_page_history.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
+import 'package:bip/domain/model/search_history.dart';
+import 'package:bip/domain/model/user_info.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
 import 'drift_converter.dart';
-import 'model/media_collection.dart';
-import 'model/media_page_history.dart';
-import 'model/media_page_preview.dart';
-import 'model/search_history.dart';
-import 'model/user_info.dart';
 
 part 'drift_database.g.dart';
 
@@ -17,7 +17,7 @@ part 'drift_database.g.dart';
   DatabaseMediaPageHistories,
   DatabaseMediaCollections,
 ])
-class BipDatabase extends _$BipDatabase {
+class BipDatabase extends _$BipDatabase implements Database {
   static BipDatabase? _ins;
 
   BipDatabase._() : super(_openConnection()) {
@@ -48,6 +48,7 @@ class BipDatabase extends _$BipDatabase {
     );
   }
 
+  @override
   Future<void> saveSearchHistory(SearchHistory history) async {
     await into(databaseSearchHistories).insertOnConflictUpdate(
       DatabaseSearchHistoriesCompanion(
@@ -57,6 +58,7 @@ class BipDatabase extends _$BipDatabase {
     );
   }
 
+  @override
   Stream<List<SearchHistory>> get searchHistoryStream =>
       (select(databaseSearchHistories)
             ..orderBy([(history) => OrderingTerm.desc(history.searchTime)])
@@ -68,10 +70,12 @@ class BipDatabase extends _$BipDatabase {
         );
       }).watch();
 
+  @override
   Future<void> clearSearchHistories() async {
     await delete(databaseSearchHistories).go();
   }
 
+  @override
   Future<List<MediaPageHistory>> queryMediaPageHistory(
       {String key = "", int pageNumber = 1}) async {
     const pageSize = 20;
@@ -88,6 +92,7 @@ class BipDatabase extends _$BipDatabase {
     }).get();
   }
 
+  @override
   Future<void> saveMediaPageHistory(MediaPageHistory history) async {
     await into(databaseMediaPageHistories).insertOnConflictUpdate(
       DatabaseMediaPageHistoriesCompanion(
@@ -119,6 +124,7 @@ class BipDatabase extends _$BipDatabase {
     }).getSingleOrNull();
   }
 
+  @override
   Future<List<MediaCollection>> queryMediaCollections({String key = ""}) async {
     return (select(databaseMediaCollections)
           ..where((collection) => collection.title.like("%$key%"))
@@ -140,6 +146,7 @@ class BipDatabase extends _$BipDatabase {
     }).get();
   }
 
+  @override
   Future<bool> saveMediaCollection(MediaCollection collection) async {
     final result = await into(databaseMediaCollections).insertOnConflictUpdate(
       DatabaseMediaCollectionsCompanion(
@@ -159,6 +166,7 @@ class BipDatabase extends _$BipDatabase {
     return result > 0;
   }
 
+  @override
   Future<bool> deleteMediaCollection(MediaCollection collection) async {
     final result = await delete(databaseMediaCollections)
         .delete(DatabaseMediaCollectionsCompanion(
@@ -167,6 +175,7 @@ class BipDatabase extends _$BipDatabase {
     return result > 0;
   }
 
+  @override
   Future<bool> addToMediaCollection(
       MediaCollection collection, MediaPagePreview preview) async {
     if (collection.extras.containsKey(MediaCollection.localIdsKey)) {
@@ -187,6 +196,7 @@ class BipDatabase extends _$BipDatabase {
     return await saveMediaCollection(collection);
   }
 
+  @override
   Future<bool> removeFromMediaCollection(
       MediaCollection collection, MediaPagePreview preview) async {
     if (collection.extras.containsKey(MediaCollection.localIdsKey)) {
@@ -204,6 +214,7 @@ class BipDatabase extends _$BipDatabase {
     return false;
   }
 
+  @override
   Future<bool> isInMediaCollection(MediaPagePreview preview) async {
     final collections = await queryMediaCollections();
     for (final collection in collections) {
@@ -215,6 +226,7 @@ class BipDatabase extends _$BipDatabase {
     return false;
   }
 
+  @override
   Future<List<MediaPagePreview>> queryMediaCollectionDetail(
       MediaCollection collection,
       {String key = "",

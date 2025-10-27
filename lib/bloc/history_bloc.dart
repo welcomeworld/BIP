@@ -1,17 +1,18 @@
-import 'package:bip/data/model/media_page_history.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/database.dart';
+import 'package:bip/domain/model/media_page_history.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../data/drift_database.dart';
 import 'bloc.dart';
 
 class HistoryBloc extends Bloc {
-  HistoryBloc({BipDatabase? database}) {
-    _database = database ?? BipDatabase();
+  HistoryBloc({Database? database}) {
+    _database = database ?? getIt<Database>();
   }
 
-  late final BipDatabase _database;
+  late final Database _database;
 
   final ScrollController scrollController = ScrollController();
   final List<MediaPageHistory> _listData = [];

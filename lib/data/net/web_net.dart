@@ -1,15 +1,14 @@
 import 'package:bip/data/net/chrome_header_interceptor.dart';
-import 'package:bip/utils/constant.dart';
+import 'package:bip/domain/interfaces/web_net.dart';
 import 'package:dio/dio.dart';
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 import 'bip_cookie_manager.dart';
 
-class WebNet {
-  static WebNet? _ins;
+class WebNetImpl implements WebNet {
+  static WebNetImpl? _ins;
 
-  WebNet._() {
+  WebNetImpl._() {
     _ins = this;
     _dio.interceptors.add(
       CookieManager(BipCookieManager.cookieJar),
@@ -18,16 +17,18 @@ class WebNet {
     _dio.interceptors.add(LogInterceptor());
   }
 
-  factory WebNet() => _ins ?? WebNet._();
+  factory WebNetImpl() => _ins ?? WebNetImpl._();
 
   final _dio = Dio();
 
+  @override
   Future<Response<T>> get<T>(String path,
       {Map<String, dynamic>? queryParameters, Options? options}) async {
     return await _dio.get(path,
         queryParameters: queryParameters, options: options);
   }
 
+  @override
   Future<Response<T>> post<T>(String path,
       {Map<String, dynamic>? queryParameters, Options? options}) async {
     return await _dio.post(path,

@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:bip/data/model/media_info.dart';
-import 'package:bip/data/model/media_page_detail.dart';
-import 'package:bip/data/model/media_page_preview.dart';
-import 'package:bip/data/model/media_type.dart';
-import 'package:bip/data/net/web_net.dart';
-import 'package:bip/data/source/source.dart';
+import 'package:bip/domain/interfaces/source.dart';
+import 'package:bip/domain/interfaces/web_net.dart';
+import 'package:bip/domain/model/media_info.dart';
+import 'package:bip/domain/model/media_page_detail.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
+import 'package:bip/domain/model/media_type.dart';
+import 'package:bip/domain/model/user_info.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
 import '../../../utils/logger.dart';
-import '../../model/user_info.dart';
 import '../source_extra_key.dart';
 
 class GugufanSource extends Source {
@@ -19,13 +19,15 @@ class GugufanSource extends Source {
   static const String publishUrl = "https://www.gugufan.xyz/";
   static String _homeUrl = "https://www.gugu3.com";
 
-  GugufanSource() {
+  final WebNet _webNet;
+
+  GugufanSource(this._webNet) {
     _refreshHomeUrl();
   }
 
   Future<void> _refreshHomeUrl() async {
     try {
-      final htmlResponse = await WebNet().get(publishUrl);
+      final htmlResponse = await _webNet.get(publishUrl);
       if (htmlResponse.data != null && htmlResponse.statusCode == 200) {
         final document = parse(htmlResponse.data);
         var anchorElements = document.querySelectorAll('a.modal__button');
@@ -39,7 +41,7 @@ class GugufanSource extends Source {
         }
       }
     } catch (e) {
-      Logger.logConsole("Failed to refresh home URL: $e");
+      appLogger.debug("Failed to refresh home URL: $e");
     }
   }
 
@@ -51,7 +53,7 @@ class GugufanSource extends Source {
     final extraData = preview.extras;
     final pageUrl = extraData[SourceExtraKey.url];
     try {
-      final htmlResponse = await WebNet().get(pageUrl);
+      final htmlResponse = await _webNet.get(pageUrl);
       if (htmlResponse.data == null || htmlResponse.statusCode != 200) {
         return SourceApiResult(
           result,
@@ -157,8 +159,8 @@ class GugufanSource extends Source {
         result.relatedMediaList.add(relatedPreview);
       }
     } catch (e, stack) {
-      Logger.logConsole(stack.toString());
-      Logger.logConsole(e.toString());
+      appLogger.debug(stack.toString());
+      appLogger.debug(e.toString());
       return SourceApiResult(
         result,
         resultCode: SourceApiResult.resultInnerFailed,
@@ -173,7 +175,7 @@ class GugufanSource extends Source {
     final extraData = mediaInfo.extras;
     final pageUrl = extraData[SourceExtraKey.url];
     try {
-      final htmlResponse = await WebNet().get(pageUrl);
+      final htmlResponse = await _webNet.get(pageUrl);
       if (htmlResponse.data == null || htmlResponse.statusCode != 200) {
         return SourceApiResult(
           mediaInfo,
@@ -212,7 +214,7 @@ class GugufanSource extends Source {
 
       final playerUrl =
           "$_homeUrl/addons/dp/player/dp.php?key=0&id=${configMap["id"]}&url=${configMap["url"]}";
-      final playerResponse = await WebNet().get(playerUrl);
+      final playerResponse = await _webNet.get(playerUrl);
       String playerString = playerResponse.data;
       final urlStartIndex = playerString.indexOf("url\":") + 7;
       final urlEndIndex = playerString.indexOf("\"", urlStartIndex);
@@ -223,8 +225,8 @@ class GugufanSource extends Source {
           "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
       mediaInfo.headers["Referer"] = _homeUrl;
     } catch (e, stack) {
-      Logger.logConsole(stack.toString());
-      Logger.logConsole(e.toString());
+      appLogger.debug(stack.toString());
+      appLogger.debug(e.toString());
       return SourceApiResult(
         mediaInfo,
         resultCode: SourceApiResult.resultInnerFailed,
@@ -244,7 +246,7 @@ class GugufanSource extends Source {
     }
     List<MediaPagePreview> exploreResult = [];
     try {
-      final htmlResponse = await WebNet().get(
+      final htmlResponse = await _webNet.get(
           "$_homeUrl/index.php/vod/search/page/$pageNumber/wd/$keyword.html");
       final searchItemList =
           parse(htmlResponse.data).querySelectorAll("div.public-list-box");
@@ -256,7 +258,7 @@ class GugufanSource extends Source {
         exploreResult.add(_mapBangumiItem(avItem));
       }
     } catch (message) {
-      Logger.logConsole("$sourceName search err:$message");
+      appLogger.debug("$sourceName search err:$message");
     }
     return SourceApiResult(exploreResult);
   }

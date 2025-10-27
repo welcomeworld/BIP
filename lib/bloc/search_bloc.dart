@@ -1,19 +1,19 @@
 import 'package:bip/bloc/bloc.dart';
-import 'package:bip/data/media_manager.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/database.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
+import 'package:bip/domain/model/search_history.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../data/drift_database.dart';
-import '../data/model/media_page_preview.dart';
-import '../data/model/search_history.dart';
-
 class SearchBloc extends Bloc {
-  SearchBloc({BipDatabase? database, MediaManager? mediaManager}) {
-    _database = database ?? BipDatabase();
-    _mediaManager = mediaManager ?? MediaManager();
+  SearchBloc({Database? database, MediaManager? mediaManager}) {
+    _database = database ?? getIt<Database>();
+    _mediaManager = mediaManager ?? getIt<MediaManager>();
   }
 
-  late final BipDatabase _database;
+  late final Database _database;
   late final MediaManager _mediaManager;
   BehaviorSubject<bool> showResultSubject = BehaviorSubject();
   TextEditingController searchTextController = TextEditingController();

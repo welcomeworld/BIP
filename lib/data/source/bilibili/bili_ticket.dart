@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:bip/data/net/web_net.dart';
+
+import 'package:bip/domain/interfaces/web_net.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 
@@ -34,7 +35,7 @@ class BiliTicket {
   /// Returns The Bilibili web ticket raw response for the given CSRF token.
   ///
   /// See: https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/misc/sign/bili_ticket.md
-  static Future<String> getBiliTicket(String csrf) async {
+  static Future<String> getBiliTicket(WebNet webNet, String csrf) async {
     // params
     int ts = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     String hexSign = _hmacSha256("XgwSnGZ1p", "ts" + ts.toString());
@@ -55,8 +56,8 @@ class BiliTicket {
 
     try {
       // request
-      final response = (await WebNet()
-              .post(url, options: options, queryParameters: extraParameters))
+      final response = (await webNet.post(url,
+              options: options, queryParameters: extraParameters))
           .data as Map<String, dynamic>;
       return response['data']['ticket'];
     } catch (e) {

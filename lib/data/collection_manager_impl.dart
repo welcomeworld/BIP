@@ -1,26 +1,32 @@
 import 'dart:async';
 
-import 'package:bip/data/model/media_collection.dart';
-import 'package:bip/data/model/media_page_preview.dart';
-import 'package:bip/data/source_manager.dart';
+import 'package:bip/data/source_manager_impl.dart';
+import 'package:bip/domain/interfaces/collection_manager.dart';
+import 'package:bip/domain/interfaces/database.dart';
+import 'package:bip/domain/interfaces/source_manager.dart';
+import 'package:bip/domain/model/media_collection.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
 
 import 'drift_database.dart';
 
-class CollectionManager {
+class CollectionManagerImpl implements CollectionManager {
   SourceManager _sourceManager;
-  final BipDatabase _database;
+  final Database _database;
 
-  static CollectionManager? _ins;
+  static CollectionManagerImpl? _ins;
 
-  CollectionManager._({SourceManager? sourceManager, BipDatabase? database})
-      : _sourceManager = sourceManager ?? SourceManager(),
+  CollectionManagerImpl._({SourceManager? sourceManager, Database? database})
+      : _sourceManager = sourceManager ?? SourceManagerImpl(),
         _database = database ?? BipDatabase() {
     _ins = this;
   }
 
-  factory CollectionManager({SourceManager? sourceManager}) =>
-      _ins ?? CollectionManager._(sourceManager: sourceManager);
+  factory CollectionManagerImpl(
+          {SourceManager? sourceManager, Database? database}) =>
+      _ins ??
+      CollectionManagerImpl._(sourceManager: sourceManager, database: database);
 
+  @override
   Stream<List<MediaCollection>> requestMediaCollections({String? sourceName}) {
     final controller = StreamController<List<MediaCollection>>();
     final List<Future<void>> futures = [];
@@ -50,6 +56,7 @@ class CollectionManager {
     return await _database.queryMediaCollections();
   }
 
+  @override
   Future<bool> saveMediaCollection(MediaCollection collection) async {
     if (collection.local) {
       return await _database.saveMediaCollection(collection);
@@ -63,6 +70,7 @@ class CollectionManager {
     }
   }
 
+  @override
   Future<bool> deleteMediaCollection(MediaCollection collection) async {
     if (collection.local) {
       return await _database.deleteMediaCollection(collection);
@@ -76,6 +84,7 @@ class CollectionManager {
     }
   }
 
+  @override
   Future<bool> addToMediaCollection(
       MediaCollection collection, MediaPagePreview preview) async {
     if (collection.local) {
@@ -90,6 +99,7 @@ class CollectionManager {
     }
   }
 
+  @override
   Future<bool> removeFromMediaCollection(
       MediaCollection collection, MediaPagePreview preview) async {
     if (collection.local) {
@@ -104,6 +114,7 @@ class CollectionManager {
     }
   }
 
+  @override
   Future<bool> isInMediaCollection(MediaPagePreview preview) async {
     final localResult = await _database.isInMediaCollection(preview);
     if (localResult) {
@@ -117,6 +128,7 @@ class CollectionManager {
     }
   }
 
+  @override
   Future<bool> removeFromAllMediaCollection(MediaPagePreview preview) async {
     bool success = true;
     final collections = await _localMediaCollections();
@@ -142,6 +154,7 @@ class CollectionManager {
     return success;
   }
 
+  @override
   Future<List<MediaPagePreview>> requestMediaCollectionDetail(
       MediaCollection collection,
       {String key = "",

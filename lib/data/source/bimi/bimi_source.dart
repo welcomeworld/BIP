@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:bip/data/model/media_info.dart';
-import 'package:bip/data/model/media_page_detail.dart';
-import 'package:bip/data/model/media_page_preview.dart';
-import 'package:bip/data/source/source.dart';
+import 'package:bip/domain/interfaces/source.dart';
+import 'package:bip/domain/interfaces/web_net.dart';
+import 'package:bip/domain/model/media_info.dart';
+import 'package:bip/domain/model/media_page_detail.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
+import 'package:bip/domain/model/media_type.dart';
+import 'package:bip/domain/model/user_info.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
 import '../../../utils/logger.dart';
-import '../../model/media_type.dart';
-import '../../model/user_info.dart';
-import '../../net/web_net.dart';
 import '../source_extra_key.dart';
 
 class BimiSource extends Source {
@@ -19,13 +19,15 @@ class BimiSource extends Source {
   static const String publishUrl = "https://www.bimiacg.icu";
   static String _homeUrl = "https://www.bimiacg14.net";
 
-  BimiSource() {
+  final WebNet _webNet;
+
+  BimiSource(this._webNet) {
     _refreshHomeUrl();
   }
 
   Future<void> _refreshHomeUrl() async {
     try {
-      final htmlResponse = await WebNet().get(publishUrl);
+      final htmlResponse = await _webNet.get(publishUrl);
       if (htmlResponse.data != null && htmlResponse.statusCode == 200) {
         final document = parse(htmlResponse.data);
         var anchorElements = document.querySelectorAll('ul > li > a');
@@ -38,7 +40,7 @@ class BimiSource extends Source {
         }
       }
     } catch (e) {
-      Logger.logConsole("Failed to refresh home URL: $e");
+      appLogger.debug("Failed to refresh home URL: $e");
     }
   }
 
@@ -50,7 +52,7 @@ class BimiSource extends Source {
     final extraData = preview.extras;
     final pageUrl = extraData[SourceExtraKey.url];
     try {
-      final htmlResponse = await WebNet().get(pageUrl);
+      final htmlResponse = await _webNet.get(pageUrl);
       if (htmlResponse.data == null || htmlResponse.statusCode != 200) {
         return SourceApiResult(
           result,
@@ -175,8 +177,8 @@ class BimiSource extends Source {
         result.relatedMediaList.add(relatedPreview);
       }
     } catch (e, stack) {
-      Logger.logConsole(stack.toString());
-      Logger.logConsole(e.toString());
+      appLogger.debug(stack.toString());
+      appLogger.debug(e.toString());
       return SourceApiResult(
         result,
         resultCode: SourceApiResult.resultInnerFailed,
@@ -191,7 +193,7 @@ class BimiSource extends Source {
     final extraData = mediaInfo.extras;
     final pageUrl = extraData[SourceExtraKey.url];
     try {
-      final htmlResponse = await WebNet().get(pageUrl);
+      final htmlResponse = await _webNet.get(pageUrl);
       if (htmlResponse.data == null || htmlResponse.statusCode != 200) {
         return SourceApiResult(
           mediaInfo,
@@ -229,7 +231,7 @@ class BimiSource extends Source {
       final configMap = jsonDecode(configString) as Map<String, dynamic>;
 
       final playerUrl = _genPath(configMap["from"], configMap["url"], pageUrl);
-      final playerResponse = await WebNet().get(playerUrl);
+      final playerResponse = await _webNet.get(playerUrl);
       final playerDoc = parse(playerResponse.data);
       var mediaUrl =
           playerDoc.querySelector("video#video source")?.attributes["src"] ??
@@ -244,8 +246,8 @@ class BimiSource extends Source {
           "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
       mediaInfo.headers["Referer"] = _homeUrl;
     } catch (e, stack) {
-      Logger.logConsole(stack.toString());
-      Logger.logConsole(e.toString());
+      appLogger.debug(stack.toString());
+      appLogger.debug(e.toString());
       return SourceApiResult(
         mediaInfo,
         resultCode: SourceApiResult.resultInnerFailed,
@@ -265,23 +267,23 @@ class BimiSource extends Source {
     }
     List<MediaPagePreview> exploreResult = [];
     try {
-      final htmlResponse = await WebNet().get(
+      final htmlResponse = await _webNet.get(
           "$_homeUrl/index.php/vod/search/page/$pageNumber/wd/$keyword.html");
-      Logger.logConsole("$sourceName search content:${htmlResponse.data}");
+      appLogger.debug("$sourceName search content:${htmlResponse.data}");
       final searchItemList = parse(htmlResponse.data)
           .querySelectorAll("div.main div.v_tb ul li.item");
       if (searchItemList.isEmpty) {
-        Logger.logConsole("$sourceName search empty");
+        appLogger.debug("$sourceName search empty");
         return SourceApiResult([],
             resultCode: SourceApiResult.resultSourceEmpty);
       }
-      Logger.logConsole("$sourceName search ${searchItemList.length}");
+      appLogger.debug("$sourceName search ${searchItemList.length}");
 
       for (var avItem in searchItemList) {
         exploreResult.add(_mapBangumiItem(avItem));
       }
     } catch (message) {
-      Logger.logConsole("$sourceName search err:$message");
+      appLogger.debug("$sourceName search err:$message");
     }
     return SourceApiResult(exploreResult);
   }

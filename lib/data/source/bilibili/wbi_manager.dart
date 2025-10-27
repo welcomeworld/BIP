@@ -1,8 +1,10 @@
 import 'dart:convert';
-import 'package:bip/data/net/web_net.dart';
-import 'package:crypto/crypto.dart';
-import 'package:bip/data/persistence/kv_store.dart';
+
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/kv_store.dart';
+import 'package:bip/domain/interfaces/web_net.dart';
 import 'package:bip/utils/constant.dart';
+import 'package:crypto/crypto.dart';
 
 class WbiManager {
   static const List<int> _mixinKey = [
@@ -75,35 +77,33 @@ class WbiManager {
 
   static const int _timeOut = 1000 * 60 * 60 * 6; // 12 hours
 
-  WbiManager._();
+  WbiManager(this._kvStore);
 
-  static final WbiManager _instance = WbiManager._();
-
-  factory WbiManager() => _instance;
+  final KvStore _kvStore;
 
   Future<void> _saveWbiKey(String wbi) async {
-    KvStore.getSp().setString(Constant.kvKeyWbi, wbi);
+    _kvStore.setString(Constant.kvKeyWbi, wbi);
   }
 
   Future<String> _getWbiKey() async {
     await _checkWbiKey();
-    return KvStore.getSp().getString(Constant.kvKeyWbi) ?? '';
+    return _kvStore.getString(Constant.kvKeyWbi) ?? '';
   }
 
   Future<void> _saveUpdateTime() async {
-    KvStore.getSp().setInt(
+    _kvStore.setInt(
         Constant.kvKeyUpdateTime, DateTime.now().millisecondsSinceEpoch);
   }
 
   Future<int> _getUpdateTime() async {
-    return KvStore.getSp().getInt(Constant.kvKeyUpdateTime) ?? 0;
+    return _kvStore.getInt(Constant.kvKeyUpdateTime) ?? 0;
   }
 
   Future<void> _checkWbiKey() async {
     if (await _isWbiAvailable()) {
       return;
     }
-    final response = await WebNet().get(_wbiUrl);
+    final response = await getIt<WebNet>().get(_wbiUrl);
 
     if (response.statusCode == 200) {
       Map<String, dynamic> json = response.data;

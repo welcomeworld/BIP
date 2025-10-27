@@ -1,14 +1,14 @@
 import 'package:bip/bloc/bloc_state.dart';
 import 'package:bip/bloc/media_page_detail_bloc.dart';
-import 'package:bip/data/model/media_page_detail.dart';
-import 'package:bip/data/model/media_page_preview.dart';
+import 'package:bip/domain/model/media_page_detail.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
 import 'package:bip/ui/page/media_page_detail_reply_page.dart';
 import 'package:bip/ui/widgets/media_preview_card.dart';
 import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:bip/utils/bip_navigator.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/model/media_info.dart';
+import '../../domain/model/media_info.dart';
 import '../../player/bip_video.dart';
 import '../../utils/bip_router.dart';
 import '../../utils/common_util.dart';

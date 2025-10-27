@@ -1,14 +1,15 @@
-import 'package:bip/data/collection_manager.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/collection_manager.dart';
+import 'package:bip/domain/model/media_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../data/model/media_collection.dart';
 import 'bloc.dart';
 
 class CollectionsBloc extends Bloc {
   CollectionsBloc({CollectionManager? collectionManager})
-      : _collectionManager = collectionManager ?? CollectionManager();
+      : _collectionManager = collectionManager ?? getIt<CollectionManager>();
 
   final CollectionManager _collectionManager;
 

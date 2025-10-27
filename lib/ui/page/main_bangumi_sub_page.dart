@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../bloc/bloc_state.dart';
 import '../../bloc/main_bangumi_sub_bloc.dart';
-import '../../data/model/index_configuration.dart';
+import '../../domain/model/index_configuration.dart';
 import '../widgets/media_preview_grid_item.dart';
 
 class MainBangumiSubPage extends StatefulWidget {

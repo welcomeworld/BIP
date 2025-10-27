@@ -1,11 +1,14 @@
 import 'package:bip/bloc/bloc.dart';
-import 'package:bip/data/collection_manager.dart';
-import 'package:bip/data/media_manager.dart';
-import 'package:bip/data/model/media_collection.dart';
-import 'package:bip/data/model/media_info.dart';
-import 'package:bip/data/model/media_page_history.dart';
-import 'package:bip/data/model/media_page_preview.dart';
-import 'package:bip/data/source/source.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/collection_manager.dart';
+import 'package:bip/domain/interfaces/database.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
+import 'package:bip/domain/interfaces/source.dart';
+import 'package:bip/domain/model/media_collection.dart';
+import 'package:bip/domain/model/media_info.dart';
+import 'package:bip/domain/model/media_page_detail.dart';
+import 'package:bip/domain/model/media_page_history.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:bip/utils/logger.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +17,6 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../data/drift_database.dart';
-import '../data/model/media_page_detail.dart';
 import '../player/bip_constant.dart';
 import '../player/bip_player.dart';
 
@@ -23,18 +24,18 @@ class MediaPageDetailBloc extends Bloc {
   MediaPageDetailBloc({
     MediaManager? mediaManager,
     Player? player,
-    BipDatabase? database,
+    Database? database,
     CollectionManager? collectionManager,
-  })  : _mediaManager = mediaManager ?? MediaManager(),
+  })  : _mediaManager = mediaManager ?? getIt<MediaManager>(),
         _player = player ?? BipPlayer(),
-        _database = database ?? BipDatabase(),
-        _collectionManager = collectionManager ?? CollectionManager() {
+        _database = database ?? getIt<Database>(),
+        _collectionManager = collectionManager ?? getIt<CollectionManager>() {
     controller = VideoController(_player);
   }
 
   late final MediaManager _mediaManager;
   late final Player _player;
-  late final BipDatabase _database;
+  late final Database _database;
   late final VideoController controller;
   final CollectionManager _collectionManager;
 
@@ -50,7 +51,7 @@ class MediaPageDetailBloc extends Bloc {
   void initState(BuildContext context) {
     super.initState(context);
     _player.stream.log.listen((log) {
-      Logger.logConsole("Player log:$log");
+      appLogger.debug("Player log:$log");
     });
   }
 

@@ -1,9 +1,9 @@
-import 'package:bip/data/model/setting_item.dart';
+import 'package:bip/bloc/bloc_state.dart';
+import 'package:bip/domain/model/setting_item.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:bip/utils/page_info.dart';
 import 'package:flutter/material.dart';
 
-import '../../bloc/bloc_state.dart';
 import '../../bloc/settings_bloc.dart';
 
 class SettingsPage extends StatefulWidget {

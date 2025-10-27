@@ -1,7 +1,7 @@
 import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/model/media_collection.dart';
+import '../../domain/model/media_collection.dart';
 
 class CollectionListItem extends StatelessWidget {
   final MediaCollection collection;

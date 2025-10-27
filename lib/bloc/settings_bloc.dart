@@ -1,12 +1,11 @@
 import 'package:bip/bloc/bloc.dart';
-import 'package:bip/data/model/setting_item.dart';
-import 'package:bip/data/settings_manager.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/settings_manager.dart';
+import 'package:bip/domain/model/setting_item.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SettingsBloc extends Bloc {
-  SettingsBloc({SettingsManager? settingsManager}) {
-    _settingsManager = settingsManager ?? SettingsManager();
-  }
+  SettingsBloc() : _settingsManager = getIt<SettingsManager>();
 
   late final SettingsManager _settingsManager;
   final BehaviorSubject<Map<AppSetting, dynamic>> _settingItemsController =

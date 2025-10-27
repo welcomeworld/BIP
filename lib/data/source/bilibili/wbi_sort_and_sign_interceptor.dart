@@ -1,4 +1,6 @@
 import 'package:bip/data/source/bilibili/wbi_manager.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/kv_store.dart';
 import 'package:dio/dio.dart';
 
 class WbiSortAndSignInterceptor extends Interceptor {
@@ -34,7 +36,7 @@ class WbiSortAndSignInterceptor extends Interceptor {
     }
 
     String queryString = namesAndValues.join('&');
-    queryString = await WbiManager().signWithWbi(queryString);
+    queryString = await WbiManager(getIt<KvStore>()).signWithWbi(queryString);
 
     if (method.toUpperCase() == 'POST') {
       options.data = queryString;

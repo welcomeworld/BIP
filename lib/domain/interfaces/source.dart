@@ -1,13 +1,13 @@
-import 'package:bip/data/model/media_collection.dart';
-import 'package:bip/data/model/media_info.dart';
-import 'package:bip/data/model/media_type.dart';
-import 'package:bip/data/model/reply.dart';
-import 'package:bip/data/model/user_info.dart';
+import 'package:bip/domain/model/index_configuration.dart';
+import 'package:bip/domain/model/media_collection.dart';
+import 'package:bip/domain/model/media_info.dart';
+import 'package:bip/domain/model/media_page_detail.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
+import 'package:bip/domain/model/media_type.dart';
+import 'package:bip/domain/model/reply.dart';
+import 'package:bip/domain/model/user_info.dart';
 
 import '../../utils/constant.dart';
-import '../model/index_configuration.dart';
-import '../model/media_page_detail.dart';
-import '../model/media_page_preview.dart';
 
 abstract class Source {
   String get sourceName;

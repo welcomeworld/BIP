@@ -1,5 +1,5 @@
-import 'package:bip/data/model/reply.dart';
-import 'package:bip/data/model/user_info.dart';
+import 'package:bip/domain/model/reply.dart';
+import 'package:bip/domain/model/user_info.dart';
 import 'package:bip/ui/page/reply_detail_page.dart';
 import 'package:bip/ui/theme/theme_colors.dart';
 import 'package:bip/ui/widgets/level_badge.dart';

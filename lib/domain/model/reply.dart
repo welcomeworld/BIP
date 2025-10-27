@@ -1,4 +1,4 @@
-import 'package:bip/data/model/user_info.dart';
+import 'package:bip/domain/model/user_info.dart';
 
 class Reply {
   String sourceName = "";

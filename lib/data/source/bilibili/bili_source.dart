@@ -1,14 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:bip/data/model/media_page_detail.dart';
-import 'package:bip/data/model/media_type.dart';
-import 'package:bip/data/model/setting_item.dart';
-import 'package:bip/data/model/user_info.dart';
 import 'package:bip/data/net/bip_cookie_manager.dart';
-import 'package:bip/data/net/web_net.dart';
-import 'package:bip/data/persistence/kv_store.dart';
-import 'package:bip/data/settings_manager.dart';
 import 'package:bip/data/source/bilibili/bili_explore_response.dart';
 import 'package:bip/data/source/bilibili/bili_ticket.dart';
 import 'package:bip/data/source/bilibili/model/bili_av_media_info_response.dart';
@@ -18,17 +11,24 @@ import 'package:bip/data/source/bilibili/model/bili_reply_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_search_hot_response.dart';
 import 'package:bip/data/source/bilibili/model/bili_user_nav_info_response.dart';
 import 'package:bip/data/source/bilibili/wbi_net.dart';
-import 'package:bip/data/source/source.dart';
 import 'package:bip/data/source/source_extra_key.dart';
-import 'package:bip/utils/common_util.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/kv_store.dart';
+import 'package:bip/domain/interfaces/settings_manager.dart';
+import 'package:bip/domain/interfaces/source.dart';
+import 'package:bip/domain/interfaces/web_net.dart';
+import 'package:bip/domain/model/index_configuration.dart';
+import 'package:bip/domain/model/media_info.dart';
+import 'package:bip/domain/model/media_page_detail.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
+import 'package:bip/domain/model/media_type.dart';
+import 'package:bip/domain/model/reply.dart';
+import 'package:bip/domain/model/setting_item.dart';
+import 'package:bip/domain/model/user_info.dart';
 import 'package:bip/utils/constant.dart';
 import 'package:bip/utils/logger.dart';
 import 'package:dio/dio.dart';
 
-import '../../model/index_configuration.dart';
-import '../../model/media_info.dart';
-import '../../model/media_page_preview.dart';
-import '../../model/reply.dart';
 import 'model/bili_av_detail_response.dart';
 import 'model/bili_bangumi_recommend_response.dart';
 import 'model/bili_index_response.dart';
@@ -79,8 +79,11 @@ class BiliSource extends Source {
 
   static const String _indexPath = "${_apiUrl}pgc/season/index/result";
 
-  BiliSource() {
-    final userCache = KvStore.getSp().getString(Constant.kvKeyBiliUser);
+  final KvStore _kvStore;
+  final WebNet _webNet;
+
+  BiliSource(this._kvStore, this._webNet) {
+    final userCache = _kvStore.getString(Constant.kvKeyBiliUser);
     if (userCache != null && userCache.isNotEmpty) {
       _userInfo = UserInfo.fromJson(jsonDecode(userCache));
     }
@@ -220,7 +223,7 @@ class BiliSource extends Source {
 
     try {
       var response =
-          await WebNet().get(_indexPath, queryParameters: queryParameters);
+          await _webNet.get(_indexPath, queryParameters: queryParameters);
       if (response.data == null || response.statusCode != 200) {
         return SourceApiResult(
           [],
@@ -251,8 +254,8 @@ class BiliSource extends Source {
       }
       return SourceApiResult(result);
     } catch (e, stack) {
-      Logger.logConsole(stack.toString());
-      Logger.logConsole(e.toString());
+      appLogger.debug(stack.toString());
+      appLogger.debug(e.toString());
       return SourceApiResult(
         [],
         resultCode: SourceApiResult.resultInnerFailed,
@@ -300,13 +303,13 @@ class BiliSource extends Source {
   static final Map<String, dynamic> _replyNextKey = {};
 
   Future<void> _initHome() async {
-    await WebNet().get(_homeUrl);
+    await _webNet.get(_homeUrl);
     final buvid4 = await BipCookieManager.getCookie("bilibili.com", "buvid4");
-    final biliTicket = await BiliTicket.getBiliTicket("");
+    final biliTicket = await BiliTicket.getBiliTicket(_webNet, "");
     await BipCookieManager.saveCookie(
         name: "bili_ticket", value: biliTicket, domain: "bilibili.com");
     if (buvid4.isEmpty) {
-      final idResponse = await WebNet().get(_buvidPath);
+      final idResponse = await _webNet.get(_buvidPath);
       await saveBuvidFromResponse(idResponse.data);
     }
   }
@@ -322,7 +325,7 @@ class BiliSource extends Source {
             name: "buvid4", value: b4Value, domain: "bilibili.com");
       }
     } catch (e) {
-      Logger.logConsole("bili save buvid err:$e");
+      appLogger.debug("bili save buvid err:$e");
     }
   }
 
@@ -383,7 +386,7 @@ class BiliSource extends Source {
         exploreResult.add(pagePreview);
       });
     } catch (err, message) {
-      Logger.logConsole("bili explore err:$message");
+      appLogger.debug("bili explore err:$message");
     }
     return exploreResult;
   }
@@ -398,7 +401,7 @@ class BiliSource extends Source {
 
   @override
   Future<String> requestLoginQr() async {
-    var response = await WebNet().get(_loginQrRequestPath);
+    var response = await _webNet.get(_loginQrRequestPath);
     BiliLoginQrRequestResponse loginQrRequestResponse =
         BiliLoginQrRequestResponse.fromJson(response.data);
     _qrLoginTempAuth = loginQrRequestResponse.data?.qrcodeKey ?? "";
@@ -409,8 +412,8 @@ class BiliSource extends Source {
   Future<SourceLoginResult> validateLoginQr() async {
     Map<String, dynamic> extraParameters = {};
     extraParameters["qrcode_key"] = _qrLoginTempAuth;
-    var response = await WebNet()
-        .get(_loginQrValidatePath, queryParameters: extraParameters);
+    var response = await _webNet.get(_loginQrValidatePath,
+        queryParameters: extraParameters);
 
     BiliLoginQrValidateResponse loginQrValidateResponse =
         BiliLoginQrValidateResponse.fromJson(response.data);
@@ -423,7 +426,7 @@ class BiliSource extends Source {
       int() => SourceLoginResult.failed,
     };
     if (loginResult == SourceLoginResult.success) {
-      var navResponse = await WebNet().get(_userNavInfoPath);
+      var navResponse = await _webNet.get(_userNavInfoPath);
       BiliUserNavInfoResponse biliUserNavInfoResponse =
           BiliUserNavInfoResponse.fromJson(navResponse.data);
       if (biliUserNavInfoResponse.data != null) {
@@ -432,8 +435,7 @@ class BiliSource extends Source {
         _userInfo?.name = userData.uname!;
         _userInfo?.avatar = userData.face!;
         _userInfo?.level = userData.levelInfo?.currentLevel ?? 0;
-        KvStore.getSp()
-            .setString(Constant.kvKeyBiliUser, jsonEncode(_userInfo));
+        _kvStore.setString(Constant.kvKeyBiliUser, jsonEncode(_userInfo));
       }
     }
     return loginResult;
@@ -442,7 +444,7 @@ class BiliSource extends Source {
   @override
   Future<SourceApiResult<bool>> logout() async {
     _userInfo = null;
-    KvStore.getSp().remove(Constant.kvKeyBiliUser);
+    _kvStore.remove(Constant.kvKeyBiliUser);
     return SourceApiResult(true);
   }
 
@@ -528,10 +530,10 @@ class BiliSource extends Source {
         }
       }
       if (exploreResult.isEmpty) {
-        Logger.logConsole("bili search empty response:${response.data}");
+        appLogger.debug("bili search empty response:${response.data}");
       }
     } catch (message) {
-      Logger.logConsole("bili search err:$message");
+      appLogger.debug("bili search err:$message");
     }
 
     return SourceApiResult(exploreResult);
@@ -604,7 +606,7 @@ class BiliSource extends Source {
         return SourceApiResult(searchHot!);
       }
     } catch (message) {
-      Logger.logConsole(message.toString());
+      appLogger.debug(message.toString());
       return SourceApiResult(
         List.empty(),
         resultCode: SourceApiResult.resultInnerFailed,
@@ -634,7 +636,7 @@ class BiliSource extends Source {
     int? aid = extraData[SourceExtraKey.aid];
     String? bvid = extraData[SourceExtraKey.bvid];
     final pageUrl = "$_avDetailPagePrefix${bvid ?? "av$aid"}";
-    // await WebNet().get(Uri.parse(pageUrl)); //maybe need when api denied by risk management.
+    // await _webNet.get(Uri.parse(pageUrl)); //maybe need when api denied by risk management.
     Map<String, dynamic> extraParameters = {
       "web_location": 1315873,
       "isGaiaAvoided": false,
@@ -723,8 +725,8 @@ class BiliSource extends Source {
         result.playlists.putIfAbsent("选集", () => []).add(mediaInfo);
       }
     } catch (e, stack) {
-      Logger.logConsole(stack.toString());
-      Logger.logConsole(e.toString());
+      appLogger.debug(stack.toString());
+      appLogger.debug(e.toString());
       return SourceApiResult(
         result,
         resultCode: SourceApiResult.resultInnerFailed,
@@ -740,7 +742,7 @@ class BiliSource extends Source {
     final extraData = preview.extras;
     int? ssId = extraData[SourceExtraKey.ssid];
     final pageUrl = "$_bangumiPagePrefix$ssId";
-    // await WebNet().get(Uri.parse(pageUrl)); //maybe need when api denied by risk management.
+    // await _webNet.get(Uri.parse(pageUrl)); //maybe need when api denied by risk management.
     Map<String, dynamic> extraParameters = {};
     extraParameters["season_id"] = ssId;
     Options options = Options(headers: {
@@ -858,8 +860,8 @@ class BiliSource extends Source {
         result.relatedMediaList.add(relatedPreview);
       }
     } catch (e, stack) {
-      Logger.logConsole(stack.toString());
-      Logger.logConsole(e.toString());
+      appLogger.debug(stack.toString());
+      appLogger.debug(e.toString());
       return SourceApiResult(
         result,
         resultCode: SourceApiResult.resultInnerFailed,
@@ -926,7 +928,7 @@ class BiliSource extends Source {
             resultCode: SourceApiResult.resultSourceEmpty);
       }
     } catch (err, message) {
-      Logger.logConsole("bili requestReplies err:$message");
+      appLogger.debug("bili requestReplies err:$message");
       return SourceApiResult(
           resultCode: SourceApiResult.resultInnerFailed, result);
     }
@@ -950,7 +952,7 @@ class BiliSource extends Source {
         "Referer": "https://www.bilibili.com/",
         "Origin": "https://www.bilibili.com/",
       });
-      var response = await WebNet().get(_subReplyPath,
+      var response = await _webNet.get(_subReplyPath,
           queryParameters: extraParameters, options: options);
       BiliReplyResponse biliResponse =
           BiliReplyResponse.fromJson(response.data);
@@ -965,7 +967,7 @@ class BiliSource extends Source {
             resultCode: SourceApiResult.resultSourceEmpty);
       }
     } catch (message) {
-      Logger.logConsole("bili requestSubReplies err:$message");
+      appLogger.debug("bili requestSubReplies err:$message");
       return SourceApiResult(
           resultCode: SourceApiResult.resultInnerFailed, result);
     }
@@ -1095,18 +1097,14 @@ class BiliSource extends Source {
         mediaInfo.additionAudioKey = selectedVideoKey;
       }
     } catch (e, stack) {
-      Logger.logConsole(stack.toString());
-      Logger.logConsole(e.toString());
+      appLogger.debug(stack.toString());
+      appLogger.debug(e.toString());
       return SourceApiResult(
         mediaInfo,
         resultCode: SourceApiResult.resultInnerFailed,
       );
     }
     return SourceApiResult(mediaInfo);
-  }
-
-  String _wrapMediaUrl(String mediaUrl) {
-    return "http://localhost:8080/?url=${CommonUtil.encode64(mediaUrl)}";
   }
 
   int _parseDuration(String duration) {
@@ -1217,6 +1215,6 @@ class BiliSource extends Source {
   }
 
   bool get _needBestMedia {
-    return SettingsManager().getValue<bool>(AppSetting.bestMedia);
+    return getIt<SettingsManager>().getValue<bool>(AppSetting.bestMedia);
   }
 }

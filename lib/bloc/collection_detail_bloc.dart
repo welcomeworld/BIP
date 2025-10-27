@@ -1,21 +1,17 @@
-import 'package:bip/data/collection_manager.dart';
-import 'package:bip/data/model/media_collection.dart';
-import 'package:bip/data/model/media_page_preview.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/collection_manager.dart';
+import 'package:bip/domain/model/media_collection.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../data/drift_database.dart';
 import 'bloc.dart';
 
 class CollectionDetailBloc extends Bloc {
-  CollectionDetailBloc(
-      {BipDatabase? database, CollectionManager? collectionManager})
-      : _collectionManager = collectionManager ?? CollectionManager() {
-    _database = database ?? BipDatabase();
-  }
+  CollectionDetailBloc({CollectionManager? collectionManager})
+      : _collectionManager = collectionManager ?? getIt<CollectionManager>();
 
-  late final BipDatabase _database;
   final CollectionManager _collectionManager;
 
   final ScrollController scrollController = ScrollController();

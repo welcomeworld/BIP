@@ -1,5 +1,5 @@
-import 'package:bip/data/model/media_type.dart';
-import 'package:bip/data/model/user_info.dart';
+import 'package:bip/domain/model/media_type.dart';
+import 'package:bip/domain/model/user_info.dart';
 
 class MediaPagePreview {
   String sourceName = "";

@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 
 import '../../bloc/bloc_state.dart';
 import '../../bloc/media_page_detail_reply_bloc.dart';
-import '../../data/model/media_page_detail.dart';
+import '../../domain/model/media_page_detail.dart';
 import '../../gen_auto_import.dart';
 import '../widgets/reply_card.dart';
 

@@ -1,24 +1,17 @@
-import 'package:bip/data/media_manager.dart';
-import 'package:bip/data/persistence/kv_store.dart';
-import 'package:bip/data/settings_manager.dart';
+import 'package:bip/app_initialzer.dart';
+import 'package:bip/di/get_it.dart';
 import 'package:bip/gen_auto_import.dart';
 import 'package:bip/ui/theme/theme_notifier.dart';
 import 'package:bip/utils/bip_router.dart';
-import 'package:bip/utils/constant.dart';
-import 'package:bip/utils/proxy_server.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:path_provider/path_provider.dart';
-
-final defaultIsolateConfig = <String, dynamic>{};
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
-  await _initMainIsolate();
-  await initThemeNotifier();
+  await AppInitializer.initialize();
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
@@ -29,27 +22,14 @@ void main() async {
   ));
 }
 
-Future<void> initChildIsolate(Map<String, dynamic> config) async {
-  BackgroundIsolateBinaryMessenger.ensureInitialized(config["rootToken"]);
-  Constant.cookiePath = (await getApplicationCacheDirectory()).path;
-  await KvStore.init();
-}
-
-Future<void> _initMainIsolate() async {
-  defaultIsolateConfig["rootToken"] = ServicesBinding.rootIsolateToken;
-  Constant.cookiePath = (await getApplicationCacheDirectory()).path;
-  await KvStore.init();
-  await SettingsManager().init();
-  MediaManager().refreshExplore();
-  startProxyIso();
-}
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = getIt<ThemeNotifier>();
+
     return ValueListenableBuilder<Color>(
       valueListenable: themeNotifier,
       builder: (context, themeColor, _) {

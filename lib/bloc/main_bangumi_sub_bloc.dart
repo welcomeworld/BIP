@@ -1,14 +1,15 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
+import 'package:bip/domain/model/index_configuration.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../data/media_manager.dart';
-import '../data/model/index_configuration.dart';
-import '../data/model/media_page_preview.dart';
 import 'bloc.dart';
 
 class MainBangumiSubBloc extends Bloc {
   MainBangumiSubBloc({MediaManager? mediaManager}) {
-    _mediaManager = mediaManager ?? MediaManager();
+    _mediaManager = mediaManager ?? getIt<MediaManager>();
   }
 
   late final MediaManager _mediaManager;

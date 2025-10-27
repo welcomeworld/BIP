@@ -1,9 +1,8 @@
 import 'dart:convert';
 
+import 'package:bip/domain/model/media_page_preview.dart';
+import 'package:bip/domain/model/user_info.dart';
 import 'package:drift/drift.dart';
-
-import 'model/media_page_preview.dart';
-import 'model/user_info.dart';
 
 class MediaPagePreviewConverter
     extends TypeConverter<MediaPagePreview, String> {

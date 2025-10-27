@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../data/model/media_page_preview.dart';
+import '../../domain/model/media_page_preview.dart';
 import '../../utils/bip_router.dart';
 import '../../utils/page_info.dart';
 

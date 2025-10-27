@@ -1,4 +1,4 @@
-import 'package:bip/data/model/user_info.dart';
+import 'package:bip/domain/model/user_info.dart';
 import 'package:bip/ui/widgets/simple_svg.dart';
 import 'package:flutter/material.dart';
 

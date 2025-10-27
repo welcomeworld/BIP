@@ -1,29 +1,35 @@
 import 'dart:ui';
 
 import 'package:bip/bloc/bloc.dart';
+import 'package:bip/di/get_it.dart';
 
 import '../ui/theme/theme_notifier.dart';
 
 class ThemeSettingsBloc extends Bloc {
+  final ThemeNotifier _themeNotifier;
+
+  ThemeSettingsBloc({ThemeNotifier? themeNotifier})
+      : _themeNotifier = themeNotifier ?? getIt<ThemeNotifier>();
+
   bool isDynamic() {
-    return themeNotifier.isDynamicTheme;
+    return _themeNotifier.isDynamicTheme;
   }
 
-  Color get dynamicColor => themeNotifier.getDynamicColor();
+  Color get dynamicColor => _themeNotifier.getDynamicColor();
 
   Future<void> enableDynamic() async {
-    await themeNotifier.setDynamicTheme(true);
+    await _themeNotifier.setDynamicTheme(true);
   }
 
   bool isCustomColor() {
-    return !isDynamic() && !themeNotifier.isPresetColor(currentColor);
+    return !isDynamic() && !_themeNotifier.isPresetColor(currentColor);
   }
 
   Color get currentColor {
-    return themeNotifier.value;
+    return _themeNotifier.value;
   }
 
   Future<void> setStaticColor(Color color) async {
-    await themeNotifier.setThemeColor(color, dynamic: false);
+    await _themeNotifier.setThemeColor(color, dynamic: false);
   }
 }

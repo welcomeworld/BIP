@@ -1,17 +1,16 @@
-import 'package:bip/data/model/reply.dart';
-import 'package:bip/utils/logger.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
+import 'package:bip/domain/interfaces/source.dart';
+import 'package:bip/domain/model/reply.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../data/media_manager.dart';
-import '../data/model/media_page_detail.dart';
-import '../data/source/source.dart';
 import '../utils/bip_router.dart';
 import 'bloc.dart';
 
 class ReplyDetailBloc extends Bloc {
   ReplyDetailBloc({MediaManager? mediaManager}) {
-    _mediaManager = mediaManager ?? MediaManager();
+    _mediaManager = mediaManager ?? getIt<MediaManager>();
   }
 
   late final MediaManager _mediaManager;
