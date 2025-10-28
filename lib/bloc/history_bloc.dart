@@ -10,6 +10,7 @@ import 'bloc.dart';
 class HistoryBloc extends Bloc {
   HistoryBloc({Database? database}) {
     _database = database ?? getIt<Database>();
+    refresh();
   }
 
   late final Database _database;
@@ -27,12 +28,6 @@ class HistoryBloc extends Bloc {
   int _cachePage = 1;
   double _cacheOffset = 0;
   String _searchKey = "";
-
-  @override
-  void initState(BuildContext context) {
-    super.initState(context);
-    refresh();
-  }
 
   @override
   void dispose() {

@@ -31,6 +31,9 @@ class MediaPageDetailBloc extends Bloc {
         _database = database ?? getIt<Database>(),
         _collectionManager = collectionManager ?? getIt<CollectionManager>() {
     controller = VideoController(_player);
+    _player.stream.log.listen((log) {
+      appLogger.debug("Player log:$log");
+    });
   }
 
   late final MediaManager _mediaManager;
@@ -46,14 +49,6 @@ class MediaPageDetailBloc extends Bloc {
   List<MediaCollection> mediaCollections = [];
   BehaviorSubject<Set<MediaCollection>> selectedCollections =
       BehaviorSubject.seeded({});
-
-  @override
-  void initState(BuildContext context) {
-    super.initState(context);
-    _player.stream.log.listen((log) {
-      appLogger.debug("Player log:$log");
-    });
-  }
 
   Future<void> setPreview(MediaPagePreview preview) async {
     _database.saveMediaPageHistory(MediaPageHistory(preview));

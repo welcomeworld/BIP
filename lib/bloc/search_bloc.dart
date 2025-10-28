@@ -11,6 +11,13 @@ class SearchBloc extends Bloc {
   SearchBloc({Database? database, MediaManager? mediaManager}) {
     _database = database ?? getIt<Database>();
     _mediaManager = mediaManager ?? getIt<MediaManager>();
+    _requestSearchHot();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent - 256) {
+        onSearchMore();
+      }
+    });
   }
 
   late final Database _database;
@@ -86,18 +93,6 @@ class SearchBloc extends Bloc {
       }
     }
     _isLoading = false;
-  }
-
-  @override
-  void initState(BuildContext context) {
-    super.initState(context);
-    _requestSearchHot();
-    scrollController.addListener(() {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 256) {
-        onSearchMore();
-      }
-    });
   }
 
   void _requestSearchHot() {

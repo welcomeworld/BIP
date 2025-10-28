@@ -9,7 +9,9 @@ import 'bloc.dart';
 
 class CollectionsBloc extends Bloc {
   CollectionsBloc({CollectionManager? collectionManager})
-      : _collectionManager = collectionManager ?? getIt<CollectionManager>();
+      : _collectionManager = collectionManager ?? getIt<CollectionManager>() {
+    refresh();
+  }
 
   final CollectionManager _collectionManager;
 
@@ -18,12 +20,6 @@ class CollectionsBloc extends Bloc {
   BehaviorSubject<List<MediaCollection>> listSubject = BehaviorSubject();
   BehaviorSubject<bool> listEnd = BehaviorSubject();
   bool _isRefreshing = false;
-
-  @override
-  void initState(BuildContext context) {
-    super.initState(context);
-    refresh();
-  }
 
   @override
   void dispose() {

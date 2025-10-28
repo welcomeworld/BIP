@@ -10,6 +10,13 @@ import 'bloc.dart';
 class MainBangumiSubBloc extends Bloc {
   MainBangumiSubBloc({MediaManager? mediaManager}) {
     _mediaManager = mediaManager ?? getIt<MediaManager>();
+    _loadConfiguration();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent - 256) {
+        loadMore();
+      }
+    });
   }
 
   late final MediaManager _mediaManager;
@@ -23,18 +30,6 @@ class MainBangumiSubBloc extends Bloc {
   bool _isRefreshing = false;
   bool _isLoading = false;
   int _pageNumber = 1;
-
-  @override
-  void initState(BuildContext context) {
-    super.initState(context);
-    _loadConfiguration();
-    scrollController.addListener(() {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 256) {
-        loadMore();
-      }
-    });
-  }
 
   @override
   void dispose() {

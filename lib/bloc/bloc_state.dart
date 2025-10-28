@@ -19,12 +19,6 @@ abstract class BlocState<T extends StatefulWidget, B extends Bloc>
   }
 
   @override
-  void initState() {
-    super.initState();
-    bloc.initState(context);
-  }
-
-  @override
   void dispose() {
     bloc.dispose();
     super.dispose();

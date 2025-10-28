@@ -1,13 +1,20 @@
 import 'package:bip/di/get_it.dart';
 import 'package:bip/domain/interfaces/media_manager.dart';
+import 'package:bip/domain/model/media_page_preview.dart';
 import 'package:flutter/material.dart';
 
-import '../domain/model/media_page_preview.dart';
 import 'bloc.dart';
 
 class MainHomeSubBloc extends Bloc {
   MainHomeSubBloc({MediaManager? mediaManager}) {
     _mediaManager = mediaManager ?? getIt<MediaManager>();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent - 256) {
+        explore();
+      }
+    });
+    refresh();
   }
 
   late final MediaManager _mediaManager;
@@ -18,18 +25,6 @@ class MainHomeSubBloc extends Bloc {
       _mediaManager.homeExploreList;
   bool _isRefreshing = false;
   bool _isLoading = false;
-
-  @override
-  void initState(BuildContext context) {
-    super.initState(context);
-    scrollController.addListener(() {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 256) {
-        explore();
-      }
-    });
-    refresh();
-  }
 
   @override
   void dispose() {
