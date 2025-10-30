@@ -9,7 +9,7 @@ class BipNavigator extends StatefulWidget {
   });
 
   final Widget child;
-  final PopInvokedCallback? onPopInvoked;
+  final PopInvokedWithResultCallback? onPopInvoked;
   final bool canPop;
 
   @override
@@ -23,7 +23,7 @@ class _BipNavigatorState extends State<BipNavigator> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: widget.canPop && !(_navigatorKey.currentState?.canPop() ?? false),
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, result) async {
         if (didPop) {
           return;
         }
@@ -31,7 +31,7 @@ class _BipNavigatorState extends State<BipNavigator> {
         if (result) {
           return;
         }
-        widget.onPopInvoked?.call(didPop);
+        widget.onPopInvoked?.call(didPop, result);
       },
       child: Navigator(
         key: _navigatorKey,

@@ -152,7 +152,7 @@ class ReplyCard extends StatelessWidget {
                           SimpleSvg(
                             "assets/img/ic_appreciate_outline.svg",
                             size: 18,
-                            color: colorScheme.tertiary.withOpacity(0.8),
+                            color: colorScheme.tertiary.withAlpha(204),
                           ),
                           if (reply.likeCount > 0)
                             Padding(
@@ -160,8 +160,7 @@ class ReplyCard extends StatelessWidget {
                               child: Text(
                                 "${reply.likeCount}",
                                 style: TextStyle(
-                                    color:
-                                        colorScheme.tertiary.withOpacity(0.8)),
+                                    color: colorScheme.tertiary.withAlpha(204)),
                               ),
                             ),
                         ],
@@ -180,7 +179,7 @@ class ReplyCard extends StatelessWidget {
                       icon: SimpleSvg(
                         "assets/img/ic_oppose_outline.svg",
                         size: 18,
-                        color: colorScheme.tertiary.withOpacity(0.8),
+                        color: colorScheme.tertiary.withAlpha(204),
                       ),
                       style: IconButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -196,7 +195,7 @@ class ReplyCard extends StatelessWidget {
                       icon: SimpleSvg(
                         "assets/img/ic_warn_outline.svg",
                         size: 18,
-                        color: colorScheme.tertiary.withOpacity(0.8),
+                        color: colorScheme.tertiary.withAlpha(204),
                       ),
                       style: IconButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -214,7 +213,7 @@ class ReplyCard extends StatelessWidget {
                       icon: SimpleSvg(
                         "assets/img/ic_comment_outline.svg",
                         size: 18,
-                        color: colorScheme.tertiary.withOpacity(0.8),
+                        color: colorScheme.tertiary.withAlpha(204),
                       ),
                       style: IconButton.styleFrom(
                         padding: EdgeInsets.zero,

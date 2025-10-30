@@ -57,8 +57,8 @@ class _MediaPageDetailPageState
                         var showingReply = snapshot.data ?? false;
                         return BipNavigator(
                           canPop: !showingReply,
-                          onPopInvoked: (result) {
-                            if (result) {
+                          onPopInvoked: (didPop, result) {
+                            if (didPop) {
                               return;
                             }
                             bloc.showingReply.add(false);

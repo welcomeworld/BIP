@@ -1,5 +1,3 @@
-import 'package:bip/utils/logger.dart';
-
 class BiliSearchBangumiType {
   final String? type;
   final int? ssid;
@@ -42,7 +40,7 @@ class BiliSearchBangumiType {
       styles: json['styles'] as String?,
       angleTitle: json['angle_title'] as String?,
       pubtime: json['pubtime'] as int?,
-      score: (json['media_score']['score']?? 0.0).toDouble(),
+      score: (json['media_score']['score'] ?? 0.0).toDouble(),
       indexShow: json['index_show'] as String? ?? "",
     );
   }

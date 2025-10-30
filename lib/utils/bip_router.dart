@@ -41,7 +41,7 @@ class BipRouter extends RouterDelegate<String>
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      onPopPage: _onPopPage,
+      onDidRemovePage: _onDidRemovePage,
       key: navigatorKey,
       pages: [for (var page in _stack) createPage(page)],
     );
@@ -54,15 +54,14 @@ class BipRouter extends RouterDelegate<String>
     return _stack.last;
   }
 
-  bool _onPopPage(Route<dynamic> route, dynamic result) {
+  void _onDidRemovePage(Page page) {
     if (_stack.isNotEmpty) {
       var top = getTopPageInfo();
-      if (top?.pageName == route.settings.name) {
-        _stack.removeLast().didComplete(result);
+      if (top?.pageName == page.name) {
+        _stack.removeLast();
         notifyListeners();
       }
     }
-    return route.didPop(result);
   }
 
   bool pop<T extends Object?>([T? result]) {
@@ -79,68 +78,33 @@ class BipRouter extends RouterDelegate<String>
   }
 
   Page createPage(PageInfo page) {
-    switch (page.pageName) {
-      case PageNames.home:
-        return const MaterialPage(
-          name: PageNames.home,
-          child: MainPage(),
-        );
-      case PageNames.search:
-        return const MaterialPage(
-          name: PageNames.search,
-          child: SearchPage(),
-        );
-      case PageNames.mediaPageDetail:
-        return MaterialPage(
-          name: PageNames.mediaPageDetail,
-          child: MediaPageDetailPage(page.extras["data"]!),
-        );
-      case PageNames.login:
-        return MaterialPage(
-          name: PageNames.login,
-          child: LoginPage(page.extras["data"]!),
-        );
-      case PageNames.history:
-        return const MaterialPage(
-          name: PageNames.history,
-          child: HistoryPage(),
-        );
-      case PageNames.collections:
-        return const MaterialPage(
-          name: PageNames.collections,
-          child: CollectionsPage(),
-        );
-      case PageNames.collectionDetail:
-        return MaterialPage(
-          name: PageNames.collectionDetail,
-          child: CollectionDetailPage(
-            page.extras["data"],
-          ),
-        );
-      case PageNames.themes:
-        return const MaterialPage(
-          name: PageNames.themes,
-          child: ThemeSettingsPage(),
-        );
-      case PageNames.settings:
-        return const MaterialPage(
-          name: PageNames.settings,
-          child: SettingsPage(),
-        );
-      case PageNames.about:
-        return const MaterialPage(
-          name: PageNames.about,
-          child: AboutPage(),
-        );
-      case PageNames.userDetail:
-        return MaterialPage(
-          name: PageNames.userDetail,
-          child: UserDetailPage(
-            page.extras["data"],
-          ),
-        );
-    }
-    return MaterialPage(name: page.pageName, child: const SizedBox.shrink());
+    final pageChild = switch (page.pageName) {
+      PageNames.home => const MainPage(),
+      PageNames.search => const SearchPage(),
+      PageNames.mediaPageDetail => MediaPageDetailPage(page.extras["data"]!),
+      PageNames.login => LoginPage(page.extras["data"]!),
+      PageNames.history => const HistoryPage(),
+      PageNames.collections => const CollectionsPage(),
+      PageNames.collectionDetail => CollectionDetailPage(
+          page.extras["data"],
+        ),
+      PageNames.themes => const ThemeSettingsPage(),
+      PageNames.settings => const SettingsPage(),
+      PageNames.about => const AboutPage(),
+      PageNames.userDetail => UserDetailPage(
+          page.extras["data"],
+        ),
+      String() => const SizedBox.shrink(),
+    };
+    return MaterialPage(
+      name: page.pageName,
+      onPopInvoked: (didPop, result) {
+        if (didPop) {
+          page.didComplete(result);
+        }
+      },
+      child: pageChild,
+    );
   }
 
   Future<dynamic> push(String newRoute) {

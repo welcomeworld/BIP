@@ -180,7 +180,7 @@ class _CollectionsPageState
           content: Text(
             localeString.deleteConfirmation(item.title),
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+              color: Theme.of(context).colorScheme.onSurface.withAlpha(178),
             ),
           ),
           actions: [

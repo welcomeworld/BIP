@@ -36,7 +36,7 @@ class _CollectionDetailPageState
           final searchOpen = snapshot.data ?? false;
           return PopScope(
             canPop: !searchOpen,
-            onPopInvoked: (didPop) {
+            onPopInvokedWithResult: (didPop, result) {
               if (didPop) {
                 return;
               }

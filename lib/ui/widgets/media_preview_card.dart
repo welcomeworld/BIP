@@ -97,7 +97,7 @@ Widget _videoPreviewCard(BuildContext context, MediaPagePreview previewDetail,
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
-                          Colors.black.withOpacity(0.6),
+                          Colors.black.withAlpha(153),
                           Colors.transparent
                         ],
                         stops: const [0.0, 0.3], // 从底部到1/3位置

@@ -222,7 +222,7 @@ class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
   Widget _searchResultPage() {
     return PopScope(
       canPop: false,
-      onPopInvoked: (hasInvoked) {
+      onPopInvokedWithResult: (hasInvoked, result) {
         if (hasInvoked) {
           return;
         }

@@ -15,10 +15,10 @@ class SourceManagerImpl implements SourceManager {
 
   SourceManagerImpl._({Source? mainSource, Map<String, Source>? sources}) {
     _ins = this;
-    final WebNet _webNet = getIt<WebNet>();
-    _mainSource = mainSource ?? BiliSource(getIt<KvStore>(), _webNet);
-    var gugufanSource = GugufanSource(_webNet);
-    var bimiSource = BimiSource(_webNet);
+    final WebNet webNet = getIt<WebNet>();
+    _mainSource = mainSource ?? BiliSource(getIt<KvStore>(), webNet);
+    var gugufanSource = GugufanSource(webNet);
+    var bimiSource = BimiSource(webNet);
     _sources = sources ??
         {
           _mainSource.sourceName: _mainSource,

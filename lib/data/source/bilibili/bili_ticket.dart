@@ -38,7 +38,7 @@ class BiliTicket {
   static Future<String> getBiliTicket(WebNet webNet, String csrf) async {
     // params
     int ts = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    String hexSign = _hmacSha256("XgwSnGZ1p", "ts" + ts.toString());
+    String hexSign = _hmacSha256("XgwSnGZ1p", "ts$ts");
 
     String url =
         "https://api.bilibili.com/bapis/bilibili.api.ticket.v1.Ticket/GenWebTicket";

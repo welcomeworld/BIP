@@ -6,17 +6,17 @@ class IndexConfiguration {
   final Map<String, String> selectedValues;
 
   IndexConfiguration({
-    required List<IndexCategory> availableCategories,
+    required this.availableCategories,
     Map<String, String>? selectedValues,
-  })  : availableCategories = availableCategories,
-        selectedValues = _ensureSelections(availableCategories, selectedValues);
+  }) : selectedValues = _ensureSelections(availableCategories, selectedValues);
 
   // 保证每个类别都有选中项，默认选第一个
   static Map<String, String> _ensureSelections(
       List<IndexCategory> categories, Map<String, String>? selected) {
     final result = <String, String>{};
     for (var cat in categories) {
-      result[cat.paramKey] = selected?[cat.paramKey] ?? cat.options.first.paramValue;
+      result[cat.paramKey] =
+          selected?[cat.paramKey] ?? cat.options.first.paramValue;
     }
     return result;
   }
@@ -24,7 +24,10 @@ class IndexConfiguration {
   // 添加索引类别
   IndexConfiguration addCategory(IndexCategory category) {
     final newCategories = [...availableCategories, category];
-    final newSelected = {...selectedValues, category.paramKey: category.options.first.paramValue};
+    final newSelected = {
+      ...selectedValues,
+      category.paramKey: category.options.first.paramValue
+    };
     return IndexConfiguration(
       availableCategories: newCategories,
       selectedValues: newSelected,
@@ -36,7 +39,8 @@ class IndexConfiguration {
     final newCategories = availableCategories
         .where((category) => category.paramKey != paramKey)
         .toList();
-    final newSelected = Map<String, String>.from(selectedValues)..remove(paramKey);
+    final newSelected = Map<String, String>.from(selectedValues)
+      ..remove(paramKey);
     return IndexConfiguration(
       availableCategories: newCategories,
       selectedValues: newSelected,
@@ -54,8 +58,12 @@ class IndexConfiguration {
 
   // 取消选择索引值时重置为第一个可选项
   IndexConfiguration unselectValue(String paramKey) {
-    final category = availableCategories.firstWhere((cat) => cat.paramKey == paramKey);
-    final newSelected = {...selectedValues, paramKey: category.options.first.paramValue};
+    final category =
+        availableCategories.firstWhere((cat) => cat.paramKey == paramKey);
+    final newSelected = {
+      ...selectedValues,
+      paramKey: category.options.first.paramValue
+    };
     return IndexConfiguration(
       availableCategories: availableCategories,
       selectedValues: newSelected,
@@ -83,7 +91,8 @@ class IndexConfiguration {
   // 清空所有选择时重置为每个类别的第一个可选项
   IndexConfiguration clearAllSelections() {
     final newSelected = {
-      for (var cat in availableCategories) cat.paramKey: cat.options.first.paramValue
+      for (var cat in availableCategories)
+        cat.paramKey: cat.options.first.paramValue
     };
     return IndexConfiguration(
       availableCategories: availableCategories,

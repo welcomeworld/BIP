@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class KvStoreImpl implements KvStore {
   KvStoreImpl._(this._pref);
 
-  SharedPreferences _pref;
+  final SharedPreferences _pref;
 
   static Future<KvStoreImpl> create() async {
     final pref = await SharedPreferences.getInstance();

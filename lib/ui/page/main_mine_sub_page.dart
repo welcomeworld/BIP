@@ -178,7 +178,7 @@ class _MainMineSubPageState
         SimpleSvg(
           "assets/img/ic_right_arrow.svg",
           size: 16,
-          color: colorScheme.onSurface.withOpacity(0.6),
+          color: colorScheme.onSurface.withAlpha(153),
         ),
       ]),
     );
@@ -203,7 +203,7 @@ class _MainMineSubPageState
       trailing: SimpleSvg(
         "assets/img/ic_right_arrow.svg",
         size: 16,
-        color: colorScheme.onSurface.withOpacity(0.6),
+        color: colorScheme.onSurface.withAlpha(153),
       ),
     );
   }

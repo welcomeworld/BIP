@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bip/player/bip_constant.dart';
 import 'package:bip/ui/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
