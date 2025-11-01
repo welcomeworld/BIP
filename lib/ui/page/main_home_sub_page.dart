@@ -1,3 +1,5 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../../bloc/bloc_state.dart';
@@ -16,7 +18,7 @@ class MainHomeSubPage extends StatefulWidget {
 
 class _MainHomeSubPageState
     extends BlocState<MainHomeSubPage, MainHomeSubBloc> {
-  _MainHomeSubPageState() : super(MainHomeSubBloc());
+  _MainHomeSubPageState() : super(MainHomeSubBloc(getIt<MediaManager>()));
 
   @override
   Widget build(BuildContext context) {

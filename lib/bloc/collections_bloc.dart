@@ -1,4 +1,3 @@
-import 'package:bip/di/get_it.dart';
 import 'package:bip/domain/interfaces/collection_manager.dart';
 import 'package:bip/domain/model/media_collection.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +7,7 @@ import 'package:rxdart/subjects.dart';
 import 'bloc.dart';
 
 class CollectionsBloc extends Bloc {
-  CollectionsBloc({CollectionManager? collectionManager})
-      : _collectionManager = collectionManager ?? getIt<CollectionManager>() {
+  CollectionsBloc(this._collectionManager) {
     refresh();
   }
 

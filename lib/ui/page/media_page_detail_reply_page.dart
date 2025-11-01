@@ -1,3 +1,5 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/ui/widgets/simple_svg.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,8 @@ class MediaPageDetailReplyPage extends StatefulWidget {
 
 class _MediaPageDetailReplyPageState
     extends BlocState<MediaPageDetailReplyPage, MediaPageDetailReplyBloc> {
-  _MediaPageDetailReplyPageState() : super(MediaPageDetailReplyBloc());
+  _MediaPageDetailReplyPageState()
+      : super(MediaPageDetailReplyBloc(getIt<MediaManager>()));
 
   @override
   void initState() {

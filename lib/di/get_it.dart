@@ -5,6 +5,7 @@ import 'package:bip/data/net/web_net.dart';
 import 'package:bip/data/persistence/kv_store_impl.dart';
 import 'package:bip/data/settings_manager_impl.dart';
 import 'package:bip/data/source_manager_impl.dart';
+import 'package:bip/domain/interfaces/bip_player.dart';
 import 'package:bip/domain/interfaces/collection_manager.dart';
 import 'package:bip/domain/interfaces/database.dart';
 import 'package:bip/domain/interfaces/kv_store.dart';
@@ -12,6 +13,7 @@ import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/domain/interfaces/settings_manager.dart';
 import 'package:bip/domain/interfaces/source_manager.dart';
 import 'package:bip/domain/interfaces/web_net.dart';
+import 'package:bip/player/bip_player_impl.dart';
 import 'package:bip/ui/theme/theme_notifier.dart';
 import 'package:get_it/get_it.dart';
 
@@ -27,4 +29,5 @@ Future<void> setupLocator() async {
   getIt.registerSingleton<MediaManager>(MediaManagerImpl());
   getIt.registerSingleton<Database>(BipDatabase());
   getIt.registerSingleton<CollectionManager>(CollectionManagerImpl());
+  getIt.registerFactory<BipPlayer>(() => BipPlayerImpl());
 }

@@ -1,5 +1,4 @@
 import 'package:bip/bloc/bloc.dart';
-import 'package:bip/di/get_it.dart';
 import 'package:bip/domain/interfaces/database.dart';
 import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/domain/model/media_page_preview.dart';
@@ -8,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SearchBloc extends Bloc {
-  SearchBloc({Database? database, MediaManager? mediaManager}) {
-    _database = database ?? getIt<Database>();
-    _mediaManager = mediaManager ?? getIt<MediaManager>();
+  SearchBloc(this._database, this._mediaManager) {
     _requestSearchHot();
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
@@ -20,8 +17,8 @@ class SearchBloc extends Bloc {
     });
   }
 
-  late final Database _database;
-  late final MediaManager _mediaManager;
+  final Database _database;
+  final MediaManager _mediaManager;
   BehaviorSubject<bool> showResultSubject = BehaviorSubject();
   TextEditingController searchTextController = TextEditingController();
   final ScrollController scrollController = ScrollController();

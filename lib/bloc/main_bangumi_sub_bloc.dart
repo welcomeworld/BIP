@@ -1,4 +1,3 @@
-import 'package:bip/di/get_it.dart';
 import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/domain/model/index_configuration.dart';
 import 'package:bip/domain/model/media_page_preview.dart';
@@ -8,8 +7,7 @@ import 'package:rxdart/rxdart.dart';
 import 'bloc.dart';
 
 class MainBangumiSubBloc extends Bloc {
-  MainBangumiSubBloc({MediaManager? mediaManager}) {
-    _mediaManager = mediaManager ?? getIt<MediaManager>();
+  MainBangumiSubBloc(this._mediaManager) {
     _loadConfiguration();
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
@@ -19,7 +17,7 @@ class MainBangumiSubBloc extends Bloc {
     });
   }
 
-  late final MediaManager _mediaManager;
+  final MediaManager _mediaManager;
 
   final ScrollController scrollController = ScrollController();
 

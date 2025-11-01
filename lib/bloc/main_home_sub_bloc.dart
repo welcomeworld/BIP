@@ -1,4 +1,3 @@
-import 'package:bip/di/get_it.dart';
 import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/domain/model/media_page_preview.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'bloc.dart';
 
 class MainHomeSubBloc extends Bloc {
-  MainHomeSubBloc({MediaManager? mediaManager}) {
-    _mediaManager = mediaManager ?? getIt<MediaManager>();
+  MainHomeSubBloc(this._mediaManager) {
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent - 256) {
@@ -17,7 +15,7 @@ class MainHomeSubBloc extends Bloc {
     refresh();
   }
 
-  late final MediaManager _mediaManager;
+  final MediaManager _mediaManager;
 
   final ScrollController scrollController = ScrollController();
 

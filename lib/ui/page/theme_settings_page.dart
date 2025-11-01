@@ -1,3 +1,4 @@
+import 'package:bip/di/get_it.dart';
 import 'package:bip/ui/theme/theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -16,7 +17,7 @@ class ThemeSettingsPage extends StatefulWidget {
 
 class _ThemeSettingsPageState
     extends BlocState<ThemeSettingsPage, ThemeSettingsBloc> {
-  _ThemeSettingsPageState() : super(ThemeSettingsBloc());
+  _ThemeSettingsPageState() : super(ThemeSettingsBloc(getIt<ThemeNotifier>()));
 
   @override
   Widget build(BuildContext context) {

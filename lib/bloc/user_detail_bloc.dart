@@ -1,4 +1,3 @@
-import 'package:bip/di/get_it.dart';
 import 'package:bip/domain/interfaces/source_manager.dart';
 import 'package:bip/domain/model/user_info.dart';
 import 'package:rxdart/rxdart.dart';
@@ -6,11 +5,9 @@ import 'package:rxdart/rxdart.dart';
 import 'bloc.dart';
 
 class UserDetailBloc extends Bloc {
-  UserDetailBloc({SourceManager? sourceManager}) {
-    _sourceManager = sourceManager ?? getIt<SourceManager>();
-  }
+  UserDetailBloc(this._sourceManager);
 
-  late final SourceManager _sourceManager;
+  final SourceManager _sourceManager;
 
   String _sourceName = "";
 

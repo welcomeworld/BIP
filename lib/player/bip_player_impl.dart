@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import 'package:bip/domain/interfaces/bip_player.dart';
 import 'package:media_kit/media_kit.dart';
 
 import 'bip_constant.dart';
 
-class BipPlayer extends Player {
+class BipPlayerImpl extends BipPlayer {
   @override
   Future<void> open(
     Playable playable, {

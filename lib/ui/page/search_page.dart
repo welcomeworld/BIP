@@ -1,4 +1,7 @@
 import 'package:bip/bloc/search_bloc.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/database.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +17,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends BlocState<SearchPage, SearchBloc> {
-  _SearchPageState() : super(SearchBloc());
+  _SearchPageState()
+      : super(SearchBloc(getIt<Database>(), getIt<MediaManager>()));
 
   @override
   Widget build(BuildContext context) {

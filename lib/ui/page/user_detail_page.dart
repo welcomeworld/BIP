@@ -1,3 +1,5 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/source_manager.dart';
 import 'package:bip/domain/model/user_info.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +16,7 @@ class UserDetailPage extends StatefulWidget {
 }
 
 class _UserDetailPageState extends BlocState<UserDetailPage, UserDetailBloc> {
-  _UserDetailPageState() : super(UserDetailBloc());
+  _UserDetailPageState() : super(UserDetailBloc(getIt<SourceManager>()));
 
   @override
   void initState() {

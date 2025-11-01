@@ -1,3 +1,5 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../../bloc/bloc_state.dart';
@@ -14,7 +16,7 @@ class MainBangumiSubPage extends StatefulWidget {
 
 class _MainBangumiSubPageState
     extends BlocState<MainBangumiSubPage, MainBangumiSubBloc> {
-  _MainBangumiSubPageState() : super(MainBangumiSubBloc());
+  _MainBangumiSubPageState() : super(MainBangumiSubBloc(getIt<MediaManager>()));
 
   @override
   Widget build(BuildContext context) {

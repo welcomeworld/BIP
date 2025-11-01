@@ -1,5 +1,5 @@
 import 'package:bip/bloc/bloc.dart';
-import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/bip_player.dart';
 import 'package:bip/domain/interfaces/collection_manager.dart';
 import 'package:bip/domain/interfaces/database.dart';
 import 'package:bip/domain/interfaces/media_manager.dart';
@@ -18,27 +18,23 @@ import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../player/bip_constant.dart';
-import '../player/bip_player.dart';
 
 class MediaPageDetailBloc extends Bloc {
-  MediaPageDetailBloc({
-    MediaManager? mediaManager,
-    Player? player,
-    Database? database,
-    CollectionManager? collectionManager,
-  })  : _mediaManager = mediaManager ?? getIt<MediaManager>(),
-        _player = player ?? BipPlayer(),
-        _database = database ?? getIt<Database>(),
-        _collectionManager = collectionManager ?? getIt<CollectionManager>() {
+  MediaPageDetailBloc(
+    this._mediaManager,
+    this._player,
+    this._database,
+    this._collectionManager,
+  ) {
     controller = VideoController(_player);
     _player.stream.log.listen((log) {
       appLogger.debug("Player log:$log");
     });
   }
 
-  late final MediaManager _mediaManager;
-  late final Player _player;
-  late final Database _database;
+  final MediaManager _mediaManager;
+  final BipPlayer _player;
+  final Database _database;
   late final VideoController controller;
   final CollectionManager _collectionManager;
 

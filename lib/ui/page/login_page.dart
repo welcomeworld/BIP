@@ -1,8 +1,10 @@
+import 'package:barcode_widget/barcode_widget.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../../bloc/bloc_state.dart';
 import '../../bloc/login_bloc.dart';
-import 'package:barcode_widget/barcode_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage(this.sourceName, {super.key});
@@ -14,7 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends BlocState<LoginPage, LoginBloc> {
-  _LoginPageState() : super(LoginBloc());
+  _LoginPageState() : super(LoginBloc(getIt<MediaManager>()));
 
   @override
   void initState() {

@@ -1,15 +1,13 @@
 import 'dart:ui';
 
 import 'package:bip/bloc/bloc.dart';
-import 'package:bip/di/get_it.dart';
 
 import '../ui/theme/theme_notifier.dart';
 
 class ThemeSettingsBloc extends Bloc {
-  final ThemeNotifier _themeNotifier;
+  ThemeSettingsBloc(this._themeNotifier);
 
-  ThemeSettingsBloc({ThemeNotifier? themeNotifier})
-      : _themeNotifier = themeNotifier ?? getIt<ThemeNotifier>();
+  final ThemeNotifier _themeNotifier;
 
   bool isDynamic() {
     return _themeNotifier.isDynamicTheme;

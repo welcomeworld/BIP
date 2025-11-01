@@ -1,3 +1,5 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/collection_manager.dart';
 import 'package:bip/domain/model/media_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -20,7 +22,8 @@ class CollectionDetailPage extends StatefulWidget {
 
 class _CollectionDetailPageState
     extends BlocState<CollectionDetailPage, CollectionDetailBloc> {
-  _CollectionDetailPageState() : super(CollectionDetailBloc());
+  _CollectionDetailPageState()
+      : super(CollectionDetailBloc(getIt<CollectionManager>()));
 
   @override
   void initState() {

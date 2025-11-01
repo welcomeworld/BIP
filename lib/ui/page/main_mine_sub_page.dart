@@ -1,3 +1,5 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/domain/model/user_info.dart';
 import 'package:bip/ui/widgets/simple_svg.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,7 @@ class MainMineSubPage extends StatefulWidget {
 
 class _MainMineSubPageState
     extends BlocState<MainMineSubPage, MainMineSubBloc> {
-  _MainMineSubPageState() : super(MainMineSubBloc());
+  _MainMineSubPageState() : super(MainMineSubBloc(getIt<MediaManager>()));
 
   @override
   Widget build(BuildContext context) {

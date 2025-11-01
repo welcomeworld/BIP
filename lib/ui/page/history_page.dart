@@ -1,3 +1,5 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -16,7 +18,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends BlocState<HistoryPage, HistoryBloc> {
-  _HistoryPageState() : super(HistoryBloc());
+  _HistoryPageState() : super(HistoryBloc(getIt<Database>()));
 
   @override
   Widget build(BuildContext context) {

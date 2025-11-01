@@ -1,5 +1,10 @@
 import 'package:bip/bloc/bloc_state.dart';
 import 'package:bip/bloc/media_page_detail_bloc.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/bip_player.dart';
+import 'package:bip/domain/interfaces/collection_manager.dart';
+import 'package:bip/domain/interfaces/database.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/domain/model/media_page_detail.dart';
 import 'package:bip/domain/model/media_page_preview.dart';
 import 'package:bip/ui/page/media_page_detail_reply_page.dart';
@@ -28,7 +33,13 @@ class MediaPageDetailPage extends StatefulWidget {
 
 class _MediaPageDetailPageState
     extends BlocState<MediaPageDetailPage, MediaPageDetailBloc> {
-  _MediaPageDetailPageState() : super(MediaPageDetailBloc());
+  _MediaPageDetailPageState()
+      : super(MediaPageDetailBloc(
+          getIt<MediaManager>(),
+          getIt<BipPlayer>(),
+          getIt<Database>(),
+          getIt<CollectionManager>(),
+        ));
 
   @override
   void initState() {

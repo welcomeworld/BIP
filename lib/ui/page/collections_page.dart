@@ -1,3 +1,5 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/collection_manager.dart';
 import 'package:bip/domain/model/media_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -19,7 +21,7 @@ class CollectionsPage extends StatefulWidget {
 
 class _CollectionsPageState
     extends BlocState<CollectionsPage, CollectionsBloc> {
-  _CollectionsPageState() : super(CollectionsBloc());
+  _CollectionsPageState() : super(CollectionsBloc(getIt<CollectionManager>()));
 
   @override
   Widget build(BuildContext context) {

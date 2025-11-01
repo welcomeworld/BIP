@@ -1,4 +1,3 @@
-import 'package:bip/di/get_it.dart';
 import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/domain/interfaces/source.dart';
 import 'package:bip/domain/model/reply.dart';
@@ -9,11 +8,9 @@ import '../utils/bip_router.dart';
 import 'bloc.dart';
 
 class ReplyDetailBloc extends Bloc {
-  ReplyDetailBloc({MediaManager? mediaManager}) {
-    _mediaManager = mediaManager ?? getIt<MediaManager>();
-  }
+  ReplyDetailBloc(this._mediaManager);
 
-  late final MediaManager _mediaManager;
+  final MediaManager _mediaManager;
 
   final ScrollController scrollController = ScrollController();
 

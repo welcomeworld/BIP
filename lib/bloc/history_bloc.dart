@@ -1,4 +1,3 @@
-import 'package:bip/di/get_it.dart';
 import 'package:bip/domain/interfaces/database.dart';
 import 'package:bip/domain/model/media_page_history.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +7,11 @@ import 'package:rxdart/subjects.dart';
 import 'bloc.dart';
 
 class HistoryBloc extends Bloc {
-  HistoryBloc({Database? database}) {
-    _database = database ?? getIt<Database>();
+  HistoryBloc(this._database) {
     refresh();
   }
 
-  late final Database _database;
+  final Database _database;
 
   final ScrollController scrollController = ScrollController();
   final List<MediaPageHistory> _listData = [];

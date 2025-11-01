@@ -1,4 +1,6 @@
 import 'package:bip/bloc/bloc_state.dart';
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/settings_manager.dart';
 import 'package:bip/domain/model/setting_item.dart';
 import 'package:bip/utils/bip_router.dart';
 import 'package:bip/utils/page_info.dart';
@@ -14,7 +16,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends BlocState<SettingsPage, SettingsBloc> {
-  _SettingsPageState() : super(SettingsBloc());
+  _SettingsPageState() : super(SettingsBloc(getIt<SettingsManager>()));
 
   @override
   Widget build(BuildContext context) {

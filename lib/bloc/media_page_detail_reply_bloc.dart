@@ -1,4 +1,3 @@
-import 'package:bip/di/get_it.dart';
 import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/domain/model/reply.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +9,9 @@ import '../utils/bip_router.dart';
 import 'bloc.dart';
 
 class MediaPageDetailReplyBloc extends Bloc {
-  MediaPageDetailReplyBloc({MediaManager? mediaManager}) {
-    _mediaManager = mediaManager ?? getIt<MediaManager>();
-  }
+  MediaPageDetailReplyBloc(this._mediaManager);
 
-  late final MediaManager _mediaManager;
+  final MediaManager _mediaManager;
 
   final ScrollController scrollController = ScrollController();
 

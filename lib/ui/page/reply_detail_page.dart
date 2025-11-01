@@ -1,3 +1,5 @@
+import 'package:bip/di/get_it.dart';
+import 'package:bip/domain/interfaces/media_manager.dart';
 import 'package:bip/ui/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -21,7 +23,7 @@ class ReplyDetailPage extends StatefulWidget {
 
 class _ReplyDetailPageState
     extends BlocState<ReplyDetailPage, ReplyDetailBloc> {
-  _ReplyDetailPageState() : super(ReplyDetailBloc());
+  _ReplyDetailPageState() : super(ReplyDetailBloc(getIt<MediaManager>()));
 
   @override
   void initState() {
