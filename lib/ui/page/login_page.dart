@@ -21,7 +21,7 @@ class _LoginPageState extends BlocState<LoginPage, LoginBloc> {
   @override
   void initState() {
     super.initState();
-    bloc.setSourceName(widget.sourceName);
+    bloc.refreshLoginQr(widget.sourceName);
   }
 
   @override

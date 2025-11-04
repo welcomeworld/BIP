@@ -12,8 +12,6 @@ class LoginBloc extends Bloc {
 
   final MediaManager _mediaManager;
 
-  String _sourceName = "";
-
   BehaviorSubject<String> loginQr = BehaviorSubject();
   Timer? validateTimer;
 
@@ -24,25 +22,20 @@ class LoginBloc extends Bloc {
     super.dispose();
   }
 
-  void setSourceName(String sourceName) {
-    _sourceName = sourceName;
-    refreshLoginQr();
+  Future<void> refreshLoginQr(String sourceName) async {
+    loginQr.add(await _mediaManager.requestLoginQr(sourceName));
+    validateLogin(sourceName);
   }
 
-  void refreshLoginQr() async {
-    loginQr.add(await _mediaManager.requestLoginQr(_sourceName));
-    validateLogin();
-  }
-
-  void validateLogin() {
+  void validateLogin(String sourceName) {
     validateTimer?.cancel();
     validateTimer = Timer.periodic(const Duration(seconds: 3), (timber) async {
-      final loginResult = await _mediaManager.validateLoginQr(_sourceName);
+      final loginResult = await _mediaManager.validateLoginQr(sourceName);
       if (loginResult == SourceLoginResult.success) {
         validateTimer?.cancel();
         await BipRouter.rootRouter.maybePop();
       } else if (loginResult == SourceLoginResult.timeout) {
-        refreshLoginQr();
+        refreshLoginQr(sourceName);
       }
     });
   }
