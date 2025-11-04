@@ -227,8 +227,6 @@ class $DatabaseMediaPageHistoriesTable extends DatabaseMediaPageHistories
   late final GeneratedColumn<DateTime> viewTime = GeneratedColumn<DateTime>(
       'view_time', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _mediaPagePreviewMeta =
-      const VerificationMeta('mediaPagePreview');
   @override
   late final GeneratedColumnWithTypeConverter<MediaPagePreview, String>
       mediaPagePreview = GeneratedColumn<String>(
@@ -266,7 +264,6 @@ class $DatabaseMediaPageHistoriesTable extends DatabaseMediaPageHistories
     } else if (isInserting) {
       context.missing(_viewTimeMeta);
     }
-    context.handle(_mediaPagePreviewMeta, const VerificationResult.success());
     return context;
   }
 
@@ -509,14 +506,12 @@ class $DatabaseMediaCollectionsTable extends DatabaseMediaCollections
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
       'id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _extrasMeta = const VerificationMeta('extras');
   @override
   late final GeneratedColumnWithTypeConverter<Map<String, dynamic>, String>
       extras = GeneratedColumn<String>('extras', aliasedName, false,
               type: DriftSqlType.string, requiredDuringInsert: true)
           .withConverter<Map<String, dynamic>>(
               $DatabaseMediaCollectionsTable.$converterextras);
-  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
   @override
   late final GeneratedColumnWithTypeConverter<UserInfo, String> owner =
       GeneratedColumn<String>('owner', aliasedName, false,
@@ -606,8 +601,6 @@ class $DatabaseMediaCollectionsTable extends DatabaseMediaCollections
     } else if (isInserting) {
       context.missing(_idMeta);
     }
-    context.handle(_extrasMeta, const VerificationResult.success());
-    context.handle(_ownerMeta, const VerificationResult.success());
     if (data.containsKey('create_time')) {
       context.handle(
           _createTimeMeta,
