@@ -25,5 +25,5 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
   Sqlite3FlutterLibsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("Sqlite3FlutterLibsPlugin"));
   UrlLauncherWindowsRegisterWithRegistrar(
-          registry->GetRegistrarForPlugin("UrlLauncherWindows"));
+      registry->GetRegistrarForPlugin("UrlLauncherWindows"));
 }
