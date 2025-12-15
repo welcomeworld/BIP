@@ -19,7 +19,6 @@ void main() {
       when(mockDatabase.queryMediaPageHistory(
               key: anyNamed('key'), pageNumber: anyNamed('pageNumber')))
           .thenAnswer((_) async {
-        print("before call queryMediaPageHistory");
         return [];
       });
       historyBloc = HistoryBloc(mockDatabase);
