@@ -61,7 +61,7 @@ class HistoryBloc extends Bloc {
     }
   }
 
-  void loadMore() async {
+  Future<void> loadMore() async {
     if (_isLoading) return;
     if (listEnd.valueOrNull == true) return;
     _isLoading = true;
@@ -94,18 +94,28 @@ class HistoryBloc extends Bloc {
 
   Future<void> handleSearchClick() async {
     if (searchOpen.value) {
-      searchTextController.clear();
-      return;
+      await _clearSearchText();
+    } else {
+      await _openSearch();
     }
+  }
+
+  Future<void> _openSearch() async {
     searchOpen.add(true);
     _cacheList.clear();
     _cacheList.addAll(_listData);
     _listData.clear();
     listSubject.add(_listData);
     _cachePage = _pageNumber;
-    _cacheOffset = scrollController.offset;
     listEnd.add(true);
-    scrollController.jumpTo(0);
+    if (scrollController.hasClients) {
+      _cacheOffset = scrollController.offset;
+      scrollController.jumpTo(0);
+    }
+  }
+
+  Future<void> _clearSearchText() async {
+    searchTextController.clear();
   }
 
   Future<void> closeSearch() async {
@@ -118,7 +128,9 @@ class HistoryBloc extends Bloc {
     _pageNumber = _cachePage;
     listEnd.add(false);
     listSubject.add(_listData);
-    scrollController.jumpTo(_cacheOffset);
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(_cacheOffset);
+    }
   }
 
   Future<void> onSearch(String key) async {

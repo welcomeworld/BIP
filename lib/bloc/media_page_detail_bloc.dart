@@ -13,7 +13,6 @@ import 'package:bip/utils/bip_router.dart';
 import 'package:bip/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -22,20 +21,18 @@ import '../player/bip_constant.dart';
 class MediaPageDetailBloc extends Bloc {
   MediaPageDetailBloc(
     this._mediaManager,
-    this._player,
+    this.player,
     this._database,
     this._collectionManager,
   ) {
-    controller = VideoController(_player);
-    _player.stream.log.listen((log) {
+    player.stream.log.listen((log) {
       appLogger.debug("Player log:$log");
     });
   }
 
   final MediaManager _mediaManager;
-  final BipPlayer _player;
+  final BipPlayer player;
   final Database _database;
-  late final VideoController controller;
   final CollectionManager _collectionManager;
 
   BehaviorSubject<MediaPageDetail> detailSubject = BehaviorSubject();
@@ -61,7 +58,9 @@ class MediaPageDetailBloc extends Bloc {
       );
     } else {
       //todo select playlist and list item
-      queryMediaInfo(detailResult.result.playlists.values.first.first);
+      if (detailResult.result.playlists.isNotEmpty) {
+        queryMediaInfo(detailResult.result.playlists.values.first.first);
+      }
     }
     _checkInCollection(preview);
     _requestCollections();
@@ -86,7 +85,7 @@ class MediaPageDetailBloc extends Bloc {
     } else {
       var resultInfo = mediaResult.result;
       mediaInfoSubject.add(resultInfo);
-      await _player.open(
+      await player.open(
         Media(
           resultInfo.mediaQualities[resultInfo.qualityKey]!,
           httpHeaders: resultInfo.headers,
@@ -105,7 +104,7 @@ class MediaPageDetailBloc extends Bloc {
   }
 
   Future<void> onMediaInfoClick(MediaInfo mediaInfo) async {
-    await _player.stop();
+    await player.stop();
     queryMediaInfo(mediaInfo);
   }
 
@@ -127,7 +126,7 @@ class MediaPageDetailBloc extends Bloc {
     mediaInfoSubject.close();
     showingReply.close();
     selectedCollections.close();
-    await _player.dispose();
+    await player.dispose();
     super.dispose();
   }
 

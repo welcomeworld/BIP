@@ -12,6 +12,7 @@ import 'package:bip/ui/widgets/media_preview_card.dart';
 import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:bip/utils/bip_navigator.dart';
 import 'package:flutter/material.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
 import '../../domain/model/media_info.dart';
 import '../../player/bip_video.dart';
@@ -41,9 +42,12 @@ class _MediaPageDetailPageState
           getIt<CollectionManager>(),
         ));
 
+  late final VideoController controller;
+
   @override
   void initState() {
     super.initState();
+    controller = VideoController(bloc.player);
     bloc.setPreview(widget.preview);
   }
 
@@ -117,7 +121,7 @@ class _MediaPageDetailPageState
                 fit: BoxFit.cover,
               );
             }
-            return BipVideo(controller: bloc.controller);
+            return BipVideo(controller: controller);
           }),
     );
   }
@@ -565,14 +569,14 @@ class _MediaPageDetailPageState
             ),
             child: mediaPreviewCard(context, previewDetail,
                 onPressed: (preview) async {
-              bloc.controller.player.pause();
+              controller.player.pause();
               await BipRouter.rootRouter.pushPageInfo(
                 PageInfo(
                   PageNames.mediaPageDetail,
                   extras: {"data": previewDetail},
                 ),
               );
-              bloc.controller.player.play();
+              controller.player.play();
             }),
           );
         },

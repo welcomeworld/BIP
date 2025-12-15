@@ -30,7 +30,7 @@ class MainHomeSubBloc extends Bloc {
     scrollController.dispose();
   }
 
-  void explore() async {
+  Future<void> explore() async {
     if (_isLoading) return;
     _isLoading = true;
     await _mediaManager.explore();

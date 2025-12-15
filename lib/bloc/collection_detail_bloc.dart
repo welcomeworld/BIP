@@ -66,7 +66,7 @@ class CollectionDetailBloc extends Bloc {
     }
   }
 
-  void loadMore() async {
+  Future<void> loadMore() async {
     if (_isLoading) return;
     if (listEnd.valueOrNull == true) return;
     _isLoading = true;

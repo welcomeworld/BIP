@@ -34,7 +34,7 @@ class UserDetailBloc extends Bloc {
     // }
   }
 
-  void logout() async {
+  Future<void> logout() async {
     await _sourceManager.activeSources[_sourceName]?.logout();
     // Implement logout functionality here
   }
