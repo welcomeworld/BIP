@@ -39,6 +39,7 @@ class _CollectionCreateDialogState extends State<CollectionCreateDialog> {
         padding: const EdgeInsets.all(24.0), // MD3 推荐更大的内边距
         child: Form(
           key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
