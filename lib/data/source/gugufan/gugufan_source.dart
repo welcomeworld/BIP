@@ -21,29 +21,7 @@ class GugufanSource extends Source {
 
   final WebNet _webNet;
 
-  GugufanSource(this._webNet) {
-    _refreshHomeUrl();
-  }
-
-  Future<void> _refreshHomeUrl() async {
-    try {
-      final htmlResponse = await _webNet.get(publishUrl);
-      if (htmlResponse.data != null && htmlResponse.statusCode == 200) {
-        final document = parse(htmlResponse.data);
-        var anchorElements = document.querySelectorAll('a.modal__button');
-
-        // 查找文本内容为“进入咕咕网页”的 <a> 标签
-        for (var anchor in anchorElements) {
-          if (anchor.text == '进入咕咕网页' && anchor.attributes["href"] != null) {
-            _homeUrl = anchor.attributes["href"]!;
-            return;
-          }
-        }
-      }
-    } catch (e) {
-      appLogger.debug("Failed to refresh home URL: $e");
-    }
-  }
+  GugufanSource(this._webNet);
 
   @override
   Future<SourceApiResult<MediaPageDetail>> requestDetail(
