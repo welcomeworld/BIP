@@ -1,3 +1,4 @@
+import 'package:bip/ui/widgets/broken_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/model/media_page_preview.dart';
@@ -27,7 +28,11 @@ class MediaPreviewGridItem extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(preview.cover, fit: BoxFit.cover),
+                  Image.network(
+                    preview.cover,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, trace) => brokenImage(48),
+                  ),
                   if (preview.topDec.isNotEmpty)
                     Positioned(
                       right: 4,

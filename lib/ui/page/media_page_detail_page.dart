@@ -20,6 +20,7 @@ import '../../utils/bip_router.dart';
 import '../../utils/common_util.dart';
 import '../../utils/page_info.dart';
 import '../theme/theme_colors.dart';
+import '../widgets/broken_image.dart';
 import '../widgets/simple_svg.dart';
 import '../widgets/top_icon_button.dart';
 
@@ -119,6 +120,7 @@ class _MediaPageDetailPageState
               return Image.network(
                 cover,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, trace) => brokenImage(56),
               );
             }
             return BipVideo(controller: controller);

@@ -1,3 +1,4 @@
+import 'package:bip/ui/widgets/broken_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/model/reply.dart';
@@ -54,8 +55,8 @@ TextSpan buildReplySpans(Reply reply, BuildContext context,
         TextSpan(
           text: match.group(1),
           style: style?.copyWith(
-            color: Theme.of(context).colorScheme.primary,
-          ) ??
+                color: Theme.of(context).colorScheme.primary,
+              ) ??
               TextStyle(
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
@@ -73,7 +74,12 @@ TextSpan buildReplySpans(Reply reply, BuildContext context,
                 child: SizedBox(
                   width: emote.size.toDouble(),
                   height: emote.size.toDouble(),
-                  child: Image.network(emote.url, fit: BoxFit.contain),
+                  child: Image.network(
+                    emote.url,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, trace) =>
+                        brokenImage(emote.size.toDouble()),
+                  ),
                 ),
               ),
               alignment: PlaceholderAlignment.bottom,
@@ -112,6 +118,8 @@ TextSpan buildReplySpans(Reply reply, BuildContext context,
           child: Image.network(
             picture.imgSrc,
             fit: BoxFit.contain,
+            errorBuilder: (context, error, trace) =>
+                brokenImage(scaledWidth / 2),
           ),
         );
       } else {
@@ -128,6 +136,8 @@ TextSpan buildReplySpans(Reply reply, BuildContext context,
           child: Image.network(
             picture.imgSrc,
             fit: BoxFit.cover, // cover实现居中剪切
+            errorBuilder: (context, error, trace) =>
+                brokenImage(scaledWidth / 2),
           ),
         );
       }

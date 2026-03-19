@@ -1,3 +1,4 @@
+import 'package:bip/ui/widgets/broken_image.dart';
 import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -59,6 +60,7 @@ Widget _videoPreviewCard(BuildContext context, MediaPagePreview previewDetail,
                     child: Image.network(
                       previewDetail.cover,
                       fit: BoxFit.fill,
+                      errorBuilder: (context, error, trace) => brokenImage(48),
                     ),
                   ),
                 ),
@@ -277,6 +279,7 @@ Widget _bangumiPreviewCard(BuildContext context, MediaPagePreview previewDetail,
                     child: Image.network(
                       previewDetail.cover,
                       fit: BoxFit.fill,
+                      errorBuilder: (context, error, trace) => brokenImage(48),
                     ),
                   ),
                 ),

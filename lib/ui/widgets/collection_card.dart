@@ -1,3 +1,4 @@
+import 'package:bip/ui/widgets/broken_image.dart';
 import 'package:bip/ui/widgets/simple_rich_text.dart';
 import 'package:flutter/material.dart';
 
@@ -98,17 +99,8 @@ class CollectionListItem extends StatelessWidget {
                               ),
                             );
                           },
-                          errorBuilder: (context, error, trace) => Container(
-                            decoration:
-                                const BoxDecoration(color: Colors.black38),
-                            child: const Center(
-                              child: Icon(
-                                Icons.collections,
-                                color: Colors.black45,
-                                size: 32,
-                              ),
-                            ),
-                          ),
+                          errorBuilder: (context, error, trace) =>
+                              brokenImage(32),
                         ),
                       ),
                     ),
