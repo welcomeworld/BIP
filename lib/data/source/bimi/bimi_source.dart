@@ -21,28 +21,7 @@ class BimiSource extends Source {
 
   final WebNet _webNet;
 
-  BimiSource(this._webNet) {
-    _refreshHomeUrl();
-  }
-
-  Future<void> _refreshHomeUrl() async {
-    try {
-      final htmlResponse = await _webNet.get(publishUrl);
-      if (htmlResponse.data != null && htmlResponse.statusCode == 200) {
-        final document = parse(htmlResponse.data);
-        var anchorElements = document.querySelectorAll('ul > li > a');
-
-        for (var anchor in anchorElements) {
-          if (anchor.attributes["href"]?.startsWith("https") == true) {
-            _homeUrl = anchor.attributes["href"]!;
-            return;
-          }
-        }
-      }
-    } catch (e) {
-      appLogger.debug("Failed to refresh home URL: $e");
-    }
-  }
+  BimiSource(this._webNet);
 
   @override
   Future<SourceApiResult<MediaPageDetail>> requestDetail(
