@@ -6,7 +6,7 @@
  "searchHint": "随便搜点什么吧",
  "searchHistory": "搜索历史",
  "searchHot": "热门搜索",
- "favorite": "我的收藏",
+ "myFavorite": "我的收藏",
  "history": "历史记录",
  "download": "离线缓存",
  "message": "聊天私信",
@@ -50,5 +50,7 @@
  "license":"许可",
  "feedback":"反馈/建议",
  "version":"版本",
- "logout":"退出登录"
+ "logout":"退出登录",
+ "loading":"加载中",
+ "back":"返回"
 }

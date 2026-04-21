@@ -80,28 +80,30 @@ class CollectionListItem extends StatelessWidget {
                         borderRadius: const BorderRadius.all(
                           Radius.circular(8),
                         ),
-                        child: Image.network(
-                          collection.cover,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, progress) {
-                            if (progress == null) {
-                              return child;
-                            }
-                            return Container(
-                              decoration:
-                                  const BoxDecoration(color: Colors.black38),
-                              child: const Center(
-                                child: Icon(
-                                  Icons.collections,
-                                  color: Colors.black45,
-                                  size: 32,
-                                ),
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, trace) =>
-                              brokenImage(32),
-                        ),
+                        child: collection.cover.isNotEmpty
+                            ? Image.network(
+                                collection.cover,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, progress) {
+                                  if (progress == null) {
+                                    return child;
+                                  }
+                                  return Container(
+                                    decoration: const BoxDecoration(
+                                        color: Colors.black38),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.collections,
+                                        color: Colors.black45,
+                                        size: 32,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorBuilder: (context, error, trace) =>
+                                    brokenImage(32),
+                              )
+                            : brokenImage(32),
                       ),
                     ),
                   ),

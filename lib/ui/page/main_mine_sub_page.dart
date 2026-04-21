@@ -53,7 +53,7 @@ class _MainMineSubPageState
                 ),
                 _topIconButton(
                   "assets/img/ic_favorite_outline.svg",
-                  localeString.favorite,
+                  localeString.myFavorite,
                   () {
                     BipRouter.of(context).push(PageNames.collections);
                   },

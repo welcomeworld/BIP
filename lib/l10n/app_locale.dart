@@ -135,11 +135,11 @@ abstract class AppLocale {
   /// **'热门搜索'**
   String get searchHot;
 
-  /// No description provided for @favorite.
+  /// No description provided for @myFavorite.
   ///
   /// In zh, this message translates to:
-  /// **'收藏'**
-  String get favorite;
+  /// **'我的收藏'**
+  String get myFavorite;
 
   /// No description provided for @history.
   ///
@@ -182,6 +182,12 @@ abstract class AppLocale {
   /// In zh, this message translates to:
   /// **'点赞'**
   String get appreciate;
+
+  /// No description provided for @favorite.
+  ///
+  /// In zh, this message translates to:
+  /// **'收藏'**
+  String get favorite;
 
   /// No description provided for @coin.
   ///
@@ -338,6 +344,18 @@ abstract class AppLocale {
   /// In zh, this message translates to:
   /// **'退出登录'**
   String get logout;
+
+  /// No description provided for @loading.
+  ///
+  /// In zh, this message translates to:
+  /// **'加载中'**
+  String get loading;
+
+  /// No description provided for @back.
+  ///
+  /// In zh, this message translates to:
+  /// **'返回'**
+  String get back;
 }
 
 class _AppLocaleDelegate extends LocalizationsDelegate<AppLocale> {

@@ -219,7 +219,7 @@ class BipDatabase extends _$BipDatabase implements Database {
     final collections = await queryMediaCollections();
     for (final collection in collections) {
       if (collection.extras[MediaCollection.localIdsKey]
-          .any((item) => item == preview.uniqueId)) {
+          ?.any((item) => item == preview.uniqueId) == true) {
         return true;
       }
     }

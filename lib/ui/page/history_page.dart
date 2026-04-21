@@ -65,6 +65,7 @@ class _HistoryPageState extends BlocState<HistoryPage, HistoryBloc> {
                             },
                             padding: EdgeInsets.zero,
                             icon: const Icon(Icons.arrow_back),
+                            tooltip: localeString.back,
                           ),
                           title: searchOpen
                               ? TextField(

@@ -88,7 +88,7 @@ class _CollectionDetailPageState
                                   textInputAction: TextInputAction.search,
                                   onSubmitted: bloc.onSearch,
                                 )
-                              : Text(localeString.collection),
+                              : Text(widget.collection.title),
                           surfaceTintColor: Colors.transparent,
                           backgroundColor: colorScheme.surface,
                           elevation: 0,

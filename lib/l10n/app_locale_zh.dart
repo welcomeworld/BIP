@@ -30,7 +30,7 @@ class AppLocaleZh extends AppLocale {
   String get searchHot => '热门搜索';
 
   @override
-  String get favorite => '收藏';
+  String get myFavorite => '我的收藏';
 
   @override
   String get history => '历史记录';
@@ -52,6 +52,9 @@ class AppLocaleZh extends AppLocale {
 
   @override
   String get appreciate => '点赞';
+
+  @override
+  String get favorite => '收藏';
 
   @override
   String get coin => '投币';
@@ -132,4 +135,10 @@ class AppLocaleZh extends AppLocale {
 
   @override
   String get logout => '退出登录';
+
+  @override
+  String get loading => '加载中';
+
+  @override
+  String get back => '返回';
 }
